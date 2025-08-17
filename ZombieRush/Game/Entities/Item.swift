@@ -20,14 +20,14 @@ enum ItemType: CaseIterable {
         }
     }
     
-    var color: SKColor {
+    var imageName: String {
         switch self {
-        case .speedBoost: return .cyan
-        case .healthRestore: return .green
-        case .ammoRestore: return .blue
-        case .invincibility: return .yellow
-        case .shotgun: return .orange
-        case .meteor: return .red
+        case .speedBoost: return GameConstants.Items.speedBoostImageName
+        case .healthRestore: return GameConstants.Items.healthRestoreImageName
+        case .ammoRestore: return GameConstants.Items.ammoRestoreImageName
+        case .invincibility: return GameConstants.Items.invincibilityImageName
+        case .shotgun: return GameConstants.Items.shotgunImageName
+        case .meteor: return GameConstants.Items.meteorImageName
         }
     }
     
@@ -61,8 +61,10 @@ class Item: SKSpriteNode {
         self.itemType = type
         self.effect = ItemEffectFactory.createEffect(for: type)
         
-        super.init(texture: nil, color: type.color, size: GameConstants.Items.size)
-        print("🎁 Item 초기화: \(type)")
+        // 텍스처 캐시를 사용한 이미지 로딩
+        let itemTexture = TextureCache.shared.getTexture(named: type.imageName)
+        super.init(texture: itemTexture, color: .clear, size: GameConstants.Items.size)
+        
         setupItem()
     }
     
@@ -75,16 +77,8 @@ class Item: SKSpriteNode {
         name = GameConstants.NodeNames.item
         zPosition = GameConstants.Items.zPosition
         
-        print("🎁 Item 설정 시작: \(itemType), color: \(itemType.color)")
-        
-        // 원형으로 만들기
-        let circle = SKShapeNode(circleOfRadius: GameConstants.Items.size.width / 2)
-        circle.fillColor = itemType.color
-        circle.strokeColor = SKColor.white
-        circle.lineWidth = 2
-        addChild(circle)
-        
-        print("🎁 Item 시각적 요소 추가 완료")
+        // 이미지 비율 유지
+        maintainAspectRatio()
         
         // 물리 설정
         setupPhysics()
@@ -94,8 +88,22 @@ class Item: SKSpriteNode {
         
         // 생명주기 관리
         setupLifetime()
+    }
+    
+    private func maintainAspectRatio() {
+        guard let texture = texture else { return }
+        let originalSize = texture.size()
+        let targetSize = GameConstants.Items.size
         
-        print("🎁 Item 설정 완료: \(itemType)")
+        // 원본 비율을 유지하면서 targetSize에 맞춤 (aspect fit)
+        let scaleX = targetSize.width / originalSize.width
+        let scaleY = targetSize.height / originalSize.height
+        let scale = min(scaleX, scaleY)
+        
+        size = CGSize(
+            width: originalSize.width * scale,
+            height: originalSize.height * scale
+        )
     }
     
     private func setupPhysics() {

@@ -16,7 +16,7 @@ class Bullet: SKSpriteNode {
     // MARK: - Initialization
     init() {
         let size = GameConstants.Bullet.size
-        super.init(texture: nil, color: .yellow, size: size)
+        super.init(texture: nil, color: .clear, size: size)
         
         setupBullet()
     }
@@ -30,8 +30,15 @@ class Bullet: SKSpriteNode {
         name = GameConstants.NodeNames.bullet
         zPosition = 5
         
-        // 물리 설정
-        physicsBody = SKPhysicsBody(rectangleOf: size)
+        // 흰색 동그라미 생성
+        let circle = SKShapeNode(circleOfRadius: size.width / 2)
+        circle.fillColor = .white
+        circle.strokeColor = .white
+        circle.lineWidth = 1
+        addChild(circle)
+        
+        // 물리 설정 (원형으로 변경)
+        physicsBody = SKPhysicsBody(circleOfRadius: size.width / 2)
         physicsBody?.isDynamic = true
         physicsBody?.allowsRotation = false
         physicsBody?.categoryBitMask = PhysicsCategory.bullet

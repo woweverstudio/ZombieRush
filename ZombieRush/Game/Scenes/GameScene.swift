@@ -40,6 +40,9 @@ class GameScene: SKScene {
         // 게임 시작
         gameStateManager.startNewGame()
         
+        // 성능 최적화: 텍스처 프리로드
+        TextureCache.shared.preloadGameTextures()
+        
         setupPhysicsWorld()
         setupWorld()
         setupPlayer()
@@ -272,7 +275,15 @@ class GameScene: SKScene {
     }
     
     func handleMeteorCollision(meteor: Meteor, zombie: Zombie) {
-        meteorSystem?.handleMeteorCollision(meteor: meteor, zombie: zombie)
+        let isDead = meteorSystem?.handleMeteorCollision(meteor: meteor, zombie: zombie) ?? false
+        
+        if isDead {
+            // 점수 추가
+            addScore()
+            
+            // 좀비 스포너에서 제거
+            removeZombie(zombie)
+        }
     }
     
     private func updatePlayerHUD() {

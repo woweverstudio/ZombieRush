@@ -100,8 +100,9 @@ class MeteorSystem {
     }
     
     // MARK: - Collision Handling
-    func handleMeteorCollision(meteor: Meteor, zombie: Zombie) {
+    func handleMeteorCollision(meteor: Meteor, zombie: Zombie) -> Bool {
         // 좀비에게 즉사 데미지
-        zombie.takeDamage(meteor.getDamage())
+        let isDead = zombie.takeDamage(meteor.getDamage())
+        return isDead
     }
 }

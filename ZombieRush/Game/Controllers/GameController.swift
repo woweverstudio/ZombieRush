@@ -119,6 +119,7 @@ class GameController {
             
             if touch == rightTouch {
                 rightTouch = nil
+                player?.stopFiring()
             }
         }
     }
@@ -193,6 +194,9 @@ class GameController {
         // 자동조준: 가장 가까운 좀비 찾기
         let direction = getAutoAimDirection() ?? CGVector(dx: 0, dy: 1)
         
+        // 플레이어 발사 방향 업데이트
+        player?.setFireDirection(direction)
+        
         worldNode.addChild(bullet)
         bullet.fire(from: position, direction: direction)
     }
@@ -206,6 +210,9 @@ class GameController {
         // 기본 방향 (자동조준 또는 위쪽)
         let baseDirection = getAutoAimDirection() ?? CGVector(dx: 0, dy: 1)
         let baseAngle = atan2(baseDirection.dy, baseDirection.dx)
+        
+        // 플레이어 발사 방향 업데이트
+        player.setFireDirection(baseDirection)
         
         // 여러 발의 총알을 부채꼴로 발사
         for i in 0..<bulletCount {

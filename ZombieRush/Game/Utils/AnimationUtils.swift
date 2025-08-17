@@ -3,11 +3,18 @@ import SpriteKit
 // MARK: - Animation Utilities
 struct AnimationUtils {
     
-    // MARK: - Color Animation Effects
+    // MARK: - Color Animation Effects (이미지 호환)
     static func createGlowEffect(primaryColor: SKColor, secondaryColor: SKColor, duration: TimeInterval = 0.5) -> SKAction {
+        // 이미지 기반 스프라이트에서는 스케일과 투명도 조합으로 글로우 효과 구현
         return SKAction.repeatForever(SKAction.sequence([
-            SKAction.colorize(with: primaryColor, colorBlendFactor: 0.5, duration: duration),
-            SKAction.colorize(with: secondaryColor, colorBlendFactor: 1.0, duration: duration)
+            SKAction.group([
+                SKAction.scale(to: 1.1, duration: duration),
+                SKAction.fadeAlpha(to: 0.8, duration: duration)
+            ]),
+            SKAction.group([
+                SKAction.scale(to: 1.0, duration: duration),
+                SKAction.fadeAlpha(to: 1.0, duration: duration)
+            ])
         ]))
     }
     

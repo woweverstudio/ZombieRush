@@ -12,6 +12,12 @@ class Player: SKSpriteNode {
     
     // MARK: - Properties
     
+    // MARK: - Image Properties
+    private var currentDirection: GameConstants.Player.PlayerDirection = GameConstants.Player.defaultDirection
+    private var lastMoveDirection: CGVector = CGVector.zero
+    private var lastFireDirection: CGVector = CGVector.zero
+    private var isFiring: Bool = false
+    
     // MARK: - Movement Properties
     private var baseMoveSpeed: CGFloat = GameConstants.Player.baseMoveSpeed
     private var currentMoveSpeed: CGFloat = GameConstants.Player.baseMoveSpeed
@@ -34,12 +40,14 @@ class Player: SKSpriteNode {
     
     // MARK: - Initialization
     init() {
-        // 이미지가 없으므로 간단한 원형 노드로 생성
+        // 텍스처 캐시를 사용한 기본 이미지 초기화
+        let defaultTexture = TextureCache.shared.getTexture(named: GameConstants.Player.defaultDirection.imageName) ?? SKTexture()
         let size = GameConstants.Player.size
-        super.init(texture: nil, color: .blue, size: size)
+        super.init(texture: defaultTexture, color: .clear, size: size)
         
         setupPhysics()
         setupProperties()
+        setupImageSystem()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -67,9 +75,74 @@ class Player: SKSpriteNode {
         zPosition = 10
     }
     
+    private func setupImageSystem() {
+        // 원본 비율 유지하면서 크기 조정
+        maintainAspectRatio()
+    }
+    
+    // MARK: - Image Management
+    private func maintainAspectRatio() {
+        guard let texture = texture else { return }
+        let originalSize = texture.size()
+        let targetSize = GameConstants.Player.size
+        
+        // 원본 비율을 유지하면서 targetSize에 맞춤 (aspect fit)
+        let scaleX = targetSize.width / originalSize.width
+        let scaleY = targetSize.height / originalSize.height
+        let scale = min(scaleX, scaleY)
+        
+        size = CGSize(
+            width: originalSize.width * scale,
+            height: originalSize.height * scale
+        )
+    }
+    
+    private func updatePlayerImage() {
+        let newDirection = determineDirection()
+        
+        if newDirection != currentDirection {
+            currentDirection = newDirection
+            
+            // 텍스처 캐시를 사용한 최적화된 이미지 로딩
+            if let cachedTexture = TextureCache.shared.getTexture(named: currentDirection.imageName) {
+                texture = cachedTexture
+                maintainAspectRatio()
+            }
+        }
+    }
+    
+    private func determineDirection() -> GameConstants.Player.PlayerDirection {
+        // 우선순위: 발사 방향 > 이동 방향 > 기본 방향
+        let directionVector: CGVector
+        
+        if isFiring && lastFireDirection != CGVector.zero {
+            directionVector = lastFireDirection
+        } else if lastMoveDirection != CGVector.zero {
+            directionVector = lastMoveDirection
+        } else {
+            return currentDirection // 변화 없음
+        }
+        
+        // 각도 계산 (라디안)
+        let angle = atan2(directionVector.dy, directionVector.dx)
+        let degrees = angle * 180 / .pi
+        
+        // 각도를 0-360도로 정규화
+        let normalizedDegrees = degrees < 0 ? degrees + 360 : degrees
+        
+        // 좌우 판단: 우측(270-90도), 좌측(90-270도)
+        // 수직일 때는 기본값(왼쪽) 사용
+        if normalizedDegrees > 270 || normalizedDegrees < 90 {
+            return .right
+        } else {
+            return .left
+        }
+    }
+    
     // MARK: - Movement Methods
     func move(direction: CGVector) {
-
+        // 이동 방향 저장
+        lastMoveDirection = direction
         
         // 방향 벡터 정규화 (360도 지원)
         let length = sqrt(direction.dx * direction.dx + direction.dy * direction.dy)
@@ -83,7 +156,9 @@ class Player: SKSpriteNode {
             )
             
             physicsBody?.velocity = velocity
-
+            
+            // 이미지 업데이트
+            updatePlayerImage()
         } else {
             stopMoving()
         }
@@ -91,6 +166,8 @@ class Player: SKSpriteNode {
     
     func stopMoving() {
         physicsBody?.velocity = CGVector.zero
+        lastMoveDirection = CGVector.zero
+        isFiring = false
     }
     
     // MARK: - Combat Methods
@@ -137,8 +214,11 @@ class Player: SKSpriteNode {
         
         currentHealth = max(0, currentHealth - damage)
         
-        // 피격 효과
-        let flashAction = AnimationUtils.createFlashEffect(flashColor: .red, originalColor: .blue, duration: 0.1)
+        // 피격 효과 (이미지와 호환되는 방식)
+        let flashAction = SKAction.sequence([
+            SKAction.fadeAlpha(to: 0.5, duration: 0.05),
+            SKAction.fadeAlpha(to: 1.0, duration: 0.05)
+        ])
         run(flashAction)
     }
     
@@ -159,14 +239,29 @@ class Player: SKSpriteNode {
     func getShotgunSpreadAngle() -> CGFloat { return shotgunSpreadAngle }
     func getIsMeteorMode() -> Bool { return meteorModeActive }
     
+    // MARK: - Fire Direction Tracking
+    func setFireDirection(_ direction: CGVector) {
+        lastFireDirection = direction
+        isFiring = true
+        updatePlayerImage()
+    }
+    
+    func stopFiring() {
+        isFiring = false
+        updatePlayerImage()
+    }
+    
     // MARK: - Item Effects
     func applySpeedBoost(multiplier: CGFloat) {
         speedBoostActive = true
         currentMoveSpeed = baseMoveSpeed * multiplier
         
-        // 시각적 효과 (파란색 글로우)
-        let glowAction = AnimationUtils.createGlowEffect(primaryColor: .cyan, secondaryColor: .blue, duration: 0.5)
-        run(glowAction, withKey: "speedBoostEffect")
+        // 시각적 효과 (속도 부스트 - 빠른 펄스 효과)
+        let speedEffect = SKAction.repeatForever(SKAction.sequence([
+            SKAction.scale(to: 1.05, duration: 0.2),
+            SKAction.scale(to: 1.0, duration: 0.2)
+        ]))
+        run(speedEffect, withKey: "speedBoostEffect")
     }
     
     func removeSpeedBoost() {
@@ -179,11 +274,12 @@ class Player: SKSpriteNode {
         let oldHealth = currentHealth
         currentHealth = min(maxHealth, currentHealth + amount)
         
-        // 회복 효과가 있었을 때만 시각적 효과
+        // 회복 효과가 있었을 때만 시각적 효과 (이미지와 호환되는 방식)
         if currentHealth > oldHealth {
+            // 스케일 효과로 대체
             let healEffect = SKAction.sequence([
-                SKAction.colorize(with: .green, colorBlendFactor: 0.5, duration: 0.2),
-                SKAction.colorize(with: .blue, colorBlendFactor: 1.0, duration: 0.2)
+                SKAction.scale(to: 1.2, duration: 0.1),
+                SKAction.scale(to: 1.0, duration: 0.1)
             ])
             run(healEffect)
         }
@@ -198,10 +294,10 @@ class Player: SKSpriteNode {
             removeAction(forKey: "reload")
         }
         
-        // 탄약 충전 효과
+        // 탄약 충전 효과 (이미지와 호환되는 방식)
         let ammoEffect = SKAction.sequence([
-            SKAction.colorize(with: .blue, colorBlendFactor: 0.5, duration: 0.2),
-            SKAction.colorize(with: .blue, colorBlendFactor: 1.0, duration: 0.2)
+            SKAction.fadeAlpha(to: 0.7, duration: 0.1),
+            SKAction.fadeAlpha(to: 1.0, duration: 0.1)
         ])
         run(ammoEffect)
     }
@@ -225,8 +321,17 @@ class Player: SKSpriteNode {
         shotgunBulletCount = bulletCount
         shotgunSpreadAngle = spreadAngle
         
-        // 샷건 모드 시각적 효과 (주황색 글로우)
-        let shotgunEffect = AnimationUtils.createGlowEffect(primaryColor: .orange, secondaryColor: .blue, duration: 0.3)
+        // 샷건 모드 시각적 효과 (강한 펄스 + 회전 효과)
+        let shotgunEffect = SKAction.repeatForever(SKAction.sequence([
+            SKAction.group([
+                SKAction.scale(to: 1.15, duration: 0.3),
+                SKAction.rotate(byAngle: .pi / 8, duration: 0.3)
+            ]),
+            SKAction.group([
+                SKAction.scale(to: 1.0, duration: 0.3),
+                SKAction.rotate(byAngle: -.pi / 8, duration: 0.3)
+            ])
+        ]))
         run(shotgunEffect, withKey: "shotgunEffect")
     }
     
@@ -240,8 +345,17 @@ class Player: SKSpriteNode {
     func enableMeteorMode() {
         meteorModeActive = true
         
-        // 메테오 모드 시각적 효과 (보라색 글로우)
-        let meteorEffect = AnimationUtils.createGlowEffect(primaryColor: .purple, secondaryColor: .blue, duration: 0.4)
+        // 메테오 모드 시각적 효과 (신비로운 떨림 + 스케일 효과)
+        let meteorEffect = SKAction.repeatForever(SKAction.sequence([
+            SKAction.group([
+                SKAction.scale(to: 1.1, duration: 0.4),
+                SKAction.fadeAlpha(to: 0.7, duration: 0.4)
+            ]),
+            SKAction.group([
+                SKAction.scale(to: 1.0, duration: 0.4),
+                SKAction.fadeAlpha(to: 1.0, duration: 0.4)
+            ])
+        ]))
         run(meteorEffect, withKey: "meteorEffect")
     }
     
