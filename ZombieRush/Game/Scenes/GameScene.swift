@@ -299,6 +299,9 @@ class GameScene: SKScene {
         // 게임 상태를 게임오버로 변경
         gameStateManager.endGame()
         
+        // 모든 UI 숨기기 (SOLID 원칙 - 단일 책임)
+        hideAllGameUI()
+        
         // 게임 통계 가져오기
         let playTime = gameStateManager.getPlayTime()
         let score = gameStateManager.getScore()
@@ -336,6 +339,9 @@ class GameScene: SKScene {
         // 게임오버 UI 숨기기
         gameOverManager?.hideGameOver()
         
+        // 게임 UI 다시 보이기 (재시작 시 UI 복원)
+        showAllGameUI()
+        
         // 씬 다시 로드
         let scene = GameScene(size: self.size)
         scene.scaleMode = self.scaleMode
@@ -345,5 +351,16 @@ class GameScene: SKScene {
     private func quitGame() {
         // 게임 뷰 닫기 (GameView에서 처리하도록 알림)
         NotificationCenter.default.post(name: NSNotification.Name(GameConstants.Notifications.quitGame), object: nil)
+    }
+    
+    // MARK: - UI Control (SOLID 원칙 - 단일 책임)
+    private func hideAllGameUI() {
+        gameController?.hideUI()
+        hudManager?.hideHUD()
+    }
+    
+    private func showAllGameUI() {
+        gameController?.showUI()
+        hudManager?.showHUD()
     }
 }

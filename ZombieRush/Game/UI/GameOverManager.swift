@@ -40,99 +40,131 @@ class GameOverManager {
         gameOverNode!.name = GameConstants.NodeNames.gameOverUI
         camera.addChild(gameOverNode!)
         
-        // 반투명 배경
-        let backgroundSize = GameConstants.UI.gameOverBackgroundSize
-        let background = SKShapeNode(rect: CGRect(x: -backgroundSize.width/2, y: -backgroundSize.height/2, width: backgroundSize.width, height: backgroundSize.height))
-        background.fillColor = SKColor.black
-        background.alpha = 0.8
-        background.strokeColor = SKColor.clear
-        gameOverNode!.addChild(background)
+        // 게임오버 배경 이미지
+        createGameOverBackground()
         
-        // 게임오버 타이틀
-        let titleLabel = SKLabelNode(text: GameConstants.Text.gameOver)
-        titleLabel.fontName = "HelveticaNeue-Bold"
-        titleLabel.fontSize = GameConstants.UI.gameOverTitleFontSize
-        titleLabel.fontColor = SKColor.red
-        titleLabel.position = CGPoint(x: 0, y: 150)
-        gameOverNode!.addChild(titleLabel)
+        // 네온 결과 정보
+        createNeonResultLabels(playTime: playTime, score: score, wave: wave)
         
-        // 결과 정보
-        createResultLabels(playTime: playTime, score: score, wave: wave)
-        
-        // 버튼들
-        createButtons()
+        // 네온 버튼들
+        createNeonButtons()
     }
     
-    private func createResultLabels(playTime: TimeInterval, score: Int, wave: Int) {
+    private func createGameOverBackground() {
         guard let gameOverNode = gameOverNode else { return }
         
-        // 플레이 시간
+        // 게임오버 배경 이미지
+        let backgroundImage = SKSpriteNode(imageNamed: "gameover")
+        backgroundImage.position = CGPoint.zero
+        backgroundImage.zPosition = -2
+        
+        // 화면에 맞게 스케일 조정
+        let screenWidth = UIScreen.main.bounds.width
+        let screenHeight = UIScreen.main.bounds.height
+        let scaleX = screenWidth / backgroundImage.size.width
+        let scaleY = screenHeight / backgroundImage.size.height
+        let scale = max(scaleX, scaleY) // 화면을 완전히 덮도록 큰 값 사용
+        
+        backgroundImage.setScale(scale)
+        gameOverNode.addChild(backgroundImage)
+        
+        // 반투명 검은색 오버레이 (가독성 향상)
+        // let overlay = SKShapeNode(rect: CGRect(
+        //     x: -screenWidth/2, y: -screenHeight/2,
+        //     width: screenWidth, height: screenHeight
+        // ))
+        // overlay.fillColor = SKColor.black.withAlphaComponent(0.2) // 20% 불투명
+        // overlay.strokeColor = SKColor.clear
+        // overlay.zPosition = -1
+        // gameOverNode.addChild(overlay)
+    }
+    
+    private func createNeonResultLabels(playTime: TimeInterval, score: Int, wave: Int) {
+        guard let gameOverNode = gameOverNode else { return }
+        
+        // 화면 너비 기준으로 계산
+        let screenWidth = UIScreen.main.bounds.width
+        let topY: CGFloat = 100  // 상단 위치
+        let margin: CGFloat = 150  // 좌우 여백
+        
+        // 3등분 위치 계산
+        let leftX = -screenWidth/2 + margin
+        let centerX: CGFloat = 0
+        let rightX = screenWidth/2 - margin
+        
+        // 플레이 시간 (왼쪽)
         let minutes = Int(playTime) / 60
         let seconds = Int(playTime) % 60
-        let timeText = String(format: "플레이 시간: %02d:%02d", minutes, seconds)
-        let timeLabel = SKLabelNode(text: timeText)
-        timeLabel.fontName = "HelveticaNeue"
-        timeLabel.fontSize = 24
-        timeLabel.fontColor = SKColor.white
-        timeLabel.position = CGPoint(x: 0, y: 50)
+        let timeText = String(format: "TIME: %02d:%02d", minutes, seconds)
+        let timeLabel = createWhiteLabel(text: timeText, fontSize: 20)
+        timeLabel.horizontalAlignmentMode = .left  // 왼쪽 정렬
+        timeLabel.position = CGPoint(x: leftX, y: topY)
         gameOverNode.addChild(timeLabel)
         
-        // 좀비 처치수
-        let scoreLabel = SKLabelNode(text: "좀비 처치: \(score)마리")
-        scoreLabel.fontName = "HelveticaNeue"
-        scoreLabel.fontSize = 24
-        scoreLabel.fontColor = SKColor.white
-        scoreLabel.position = CGPoint(x: 0, y: 10)
+        // 좀비 처치수 (중앙)
+        let scoreText = "KILLS: \(score)"
+        let scoreLabel = createWhiteLabel(text: scoreText, fontSize: 20)
+        scoreLabel.horizontalAlignmentMode = .center  // 중앙 정렬
+        scoreLabel.position = CGPoint(x: centerX, y: topY)
         gameOverNode.addChild(scoreLabel)
         
-        // 웨이브 (임시로 0)
-        let waveLabel = SKLabelNode(text: "웨이브: \(wave)")
-        waveLabel.fontName = "HelveticaNeue"
-        waveLabel.fontSize = 24
-        waveLabel.fontColor = SKColor.white
-        waveLabel.position = CGPoint(x: 0, y: -30)
+        // 웨이브 (오른쪽)
+        let waveText = "WAVE: \(wave)"
+        let waveLabel = createWhiteLabel(text: waveText, fontSize: 20)
+        waveLabel.horizontalAlignmentMode = .right  // 오른쪽 정렬
+        waveLabel.position = CGPoint(x: rightX, y: topY)
         gameOverNode.addChild(waveLabel)
     }
     
-    private func createButtons() {
+    private func createWhiteLabel(text: String, fontSize: CGFloat) -> SKLabelNode {
+        let label = SKLabelNode(text: text)
+        label.fontName = "Arial-Bold"
+        label.fontSize = fontSize
+        label.fontColor = SKColor.white
+        // horizontalAlignmentMode는 각 라벨에서 개별 설정
+        return label
+    }
+    
+    private func createNeonButtons() {
         guard let gameOverNode = gameOverNode else { return }
         
-        // 다시하기 버튼
-        let restartButton = createButton(
-            text: "다시하기",
-            position: CGPoint(x: -100, y: -120),
-            color: SKColor.green,
-            name: "RestartButton"
-        )
-        gameOverNode.addChild(restartButton)
-        
-        // 그만하기 버튼
-        let quitButton = createButton(
-            text: "그만하기",
-            position: CGPoint(x: 100, y: -120),
-            color: SKColor.red,
+        // 그만하기 버튼 (레드 배경) - 왼쪽으로 이동
+        let quitButton = createSolidButton(
+            text: "QUIT",
+            position: CGPoint(x: -120, y: -120),
+            backgroundColor: SKColor(red: 1.0, green: 0.2, blue: 0.4, alpha: 1.0),
             name: "QuitButton"
         )
         gameOverNode.addChild(quitButton)
+        
+        // 다시하기 버튼 (그린 배경) - 오른쪽으로 이동
+        let restartButton = createSolidButton(
+            text: "RESTART",
+            position: CGPoint(x: 120, y: -120),
+            backgroundColor: SKColor(red: 0.2, green: 1.0, blue: 0.4, alpha: 1.0),
+            name: "RestartButton"
+        )
+        gameOverNode.addChild(restartButton)
     }
     
-    private func createButton(text: String, position: CGPoint, color: SKColor, name: String) -> SKNode {
+    private func createSolidButton(text: String, position: CGPoint, backgroundColor: SKColor, name: String) -> SKNode {
         let buttonNode = SKNode()
         buttonNode.name = name
         buttonNode.position = position
         
-        // 버튼 배경
-        let buttonBG = SKShapeNode(rect: CGRect(x: -60, y: -20, width: 120, height: 40))
-        buttonBG.fillColor = color.withAlphaComponent(0.8)
-        buttonBG.strokeColor = SKColor.white
+        // 꽉 찬 배경 버튼
+        let buttonBG = SKShapeNode(rect: CGRect(x: -70, y: -25, width: 140, height: 50), cornerRadius: 8)
+        buttonBG.fillColor = backgroundColor
+        buttonBG.strokeColor = backgroundColor
         buttonBG.lineWidth = 2
         buttonNode.addChild(buttonBG)
         
-        // 버튼 텍스트
+        // 두꺼운 검은색 텍스트
         let buttonLabel = SKLabelNode(text: text)
-        buttonLabel.fontName = "HelveticaNeue-Bold"
-        buttonLabel.fontSize = 18
-        buttonLabel.fontColor = SKColor.white
+        buttonLabel.fontName = "Arial-Black"  // 더 두꺼운 폰트
+        buttonLabel.fontSize = 20
+        buttonLabel.fontColor = SKColor.black
+        buttonLabel.horizontalAlignmentMode = .center
         buttonLabel.verticalAlignmentMode = .center
         buttonNode.addChild(buttonLabel)
         

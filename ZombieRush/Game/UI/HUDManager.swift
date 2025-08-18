@@ -222,4 +222,13 @@ class HUDManager {
             return SKColor(red: 1.0, green: 0.2, blue: 0.2, alpha: 0.8)  // 네온 레드
         }
     }
+    
+    // MARK: - UI Visibility Control
+    func hideHUD() {
+        hudNode?.isHidden = true
+    }
+    
+    func showHUD() {
+        hudNode?.isHidden = false
+    }
 }

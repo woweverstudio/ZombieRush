@@ -294,4 +294,17 @@ class GameController {
         
         return nil
     }
+    
+    // MARK: - UI Visibility Control
+    func hideUI() {
+        joystickBase?.isHidden = true
+        joystickThumb?.isHidden = true
+        fireButton?.isHidden = true
+    }
+    
+    func showUI() {
+        joystickBase?.isHidden = false
+        joystickThumb?.isHidden = false
+        fireButton?.isHidden = false
+    }
 }
