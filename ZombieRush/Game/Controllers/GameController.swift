@@ -188,9 +188,13 @@ class GameController {
         // 샷건 모드 확인
         if player.getIsShotgunMode() {
             fireShotgunBullets(from: startPosition, worldNode: worldNode)
+            // 샷건 사운드 재생
+            AudioManager.shared.playShotgunSound()
             // 샷건 모드에서는 탄약 소모 없음
         } else {
             fireSingleBullet(from: startPosition, worldNode: worldNode)
+            // 일반 총 사운드 재생        
+            AudioManager.shared.playShootSound()
             // 일반 모드에서만 탄약 소모
             player.consumeAmmo()
         }

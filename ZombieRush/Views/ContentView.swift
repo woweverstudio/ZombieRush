@@ -31,6 +31,7 @@ struct ContentView: View {
                     
                     // 네온 설정 버튼 (우측 상단)
                     Button(action: {
+                        AudioManager.shared.playButtonSound()
                         showSettingsView = true
                     }) {
                         Image(systemName: "gearshape.fill")
@@ -74,6 +75,7 @@ struct ContentView: View {
                 VStack(spacing: 20) {
                     // 네온 게임시작 버튼
                     Button(action: {
+                        AudioManager.shared.playButtonSound()
                         showGameView = true
                     }) {
                         Text("GAME START")

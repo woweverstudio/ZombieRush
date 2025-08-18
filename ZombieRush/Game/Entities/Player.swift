@@ -138,6 +138,9 @@ class Player: SKSpriteNode {
         
         isReloading = true
         
+        // 재장전 사운드 재생
+        AudioManager.shared.playReloadSound()
+        
         let reloadAction = SKAction.sequence([
             SKAction.wait(forDuration: reloadTime),
             SKAction.run { [weak self] in

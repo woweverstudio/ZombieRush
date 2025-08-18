@@ -180,9 +180,11 @@ class GameOverManager {
         if let nodeName = touchedNode.parent?.name {
             switch nodeName {
             case "RestartButton":
+                AudioManager.shared.playButtonSound()
                 onRestart?()
                 return true
             case "QuitButton":
+                AudioManager.shared.playButtonSound()
                 onQuit?()
                 return true
             default:

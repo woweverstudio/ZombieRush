@@ -10,7 +10,6 @@ import SwiftUI
 struct SettingsView: View {
     @Environment(\.dismiss) private var dismiss
     @StateObject private var audioManager = AudioManager.shared
-    @State private var soundEnabled = true
     @State private var vibrationEnabled = true
     
     var body: some View {
@@ -30,6 +29,7 @@ struct SettingsView: View {
                 HStack {
                     // 뒤로가기 버튼 (더 크고 명확하게)
                     Button(action: {
+                        AudioManager.shared.playButtonSound()
                         dismiss()
                     }) {
                         HStack(spacing: 8) {
@@ -78,7 +78,7 @@ struct SettingsView: View {
                         SettingRow(
                             title: "효과음",
                             icon: "speaker.wave.2.fill",
-                            isOn: $soundEnabled
+                            isOn: $audioManager.isSoundEffectsEnabled
                         )
                         
                         // 음악 설정 (AudioManager와 연결)
