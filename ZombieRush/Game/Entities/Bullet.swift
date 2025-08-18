@@ -30,12 +30,8 @@ class Bullet: SKSpriteNode {
         name = GameConstants.NodeNames.bullet
         zPosition = 5
         
-        // 흰색 동그라미 생성
-        let circle = SKShapeNode(circleOfRadius: size.width / 2)
-        circle.fillColor = .white
-        circle.strokeColor = .white
-        circle.lineWidth = 1
-        addChild(circle)
+        // 네온 사이버펑크 스타일 총알 생성
+        createNeonBullet()
         
         // 물리 설정 (원형으로 변경)
         physicsBody = SKPhysicsBody(circleOfRadius: size.width / 2)
@@ -44,6 +40,41 @@ class Bullet: SKSpriteNode {
         physicsBody?.categoryBitMask = PhysicsCategory.bullet
         physicsBody?.contactTestBitMask = PhysicsCategory.enemy
         physicsBody?.collisionBitMask = PhysicsCategory.none
+    }
+    
+    private func createNeonBullet() {
+        // 네온 청록색 총알 - 둥근 사각형 스타일
+        let bulletRect = CGRect(
+            x: -size.width / 2,
+            y: -size.height / 2,
+            width: size.width,
+            height: size.height
+        )
+        
+        let neonBullet = SKShapeNode(rect: bulletRect, cornerRadius: size.width / 4)
+        
+        // 네온 청록색 설정
+        neonBullet.fillColor = GameConstants.Bullet.neonColor
+        neonBullet.strokeColor = GameConstants.Bullet.neonStrokeColor
+        neonBullet.lineWidth = 1.5
+        neonBullet.glowWidth = GameConstants.Bullet.glowWidth
+        
+        // 내부 코어 (더 밝은 중심)
+        let coreSize = CGSize(width: size.width * 0.6, height: size.height * 0.6)
+        let coreRect = CGRect(
+            x: -coreSize.width / 2,
+            y: -coreSize.height / 2,
+            width: coreSize.width,
+            height: coreSize.height
+        )
+        
+        let core = SKShapeNode(rect: coreRect, cornerRadius: coreSize.width / 4)
+        core.fillColor = GameConstants.Bullet.coreColor
+        core.strokeColor = .clear
+        core.glowWidth = GameConstants.Bullet.coreGlowWidth
+        
+        neonBullet.addChild(core)
+        addChild(neonBullet)
     }
     
     // MARK: - Fire Bullet

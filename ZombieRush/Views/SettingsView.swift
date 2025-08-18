@@ -15,10 +15,14 @@ struct SettingsView: View {
     
     var body: some View {
         ZStack {
-            // 배경 이미지
+            // 배경 이미지 (반투명 오버레이)
             Image("background")
                 .resizable()
                 .aspectRatio(contentMode: .fill)
+                .ignoresSafeArea()
+            
+            // 반투명 어두운 오버레이
+            Color.black.opacity(0.6)
                 .ignoresSafeArea()
             
             VStack(spacing: 0) {
@@ -47,6 +51,14 @@ struct SettingsView: View {
                         )
                     }
                     .buttonStyle(PlainButtonStyle())
+                    
+                    Spacer()
+                    
+                    // 설정 타이틀
+                    Text("SETTINGS")
+                        .font(.system(size: 24, weight: .bold, design: .monospaced))
+                        .foregroundColor(Color(red: 0.0, green: 0.8, blue: 1.0))
+                        .shadow(color: Color(red: 0.0, green: 0.8, blue: 1.0), radius: 10, x: 0, y: 0)
                     
                     Spacer()
                     
@@ -93,11 +105,11 @@ struct SettingsView: View {
                 
                 // 하단 영역 (고정)
                 HStack(spacing: 15) {
-                    Text("버전 1.0.0")
-                        .font(.system(size: 14))
+                    Text("version 1.0.0")
+                        .font(.system(size: 12))
                         .foregroundColor(.white)
                     
-                    Text("© 2025 ZombieRush")
+                    Text("© 2025 woweverstudio")
                         .font(.system(size: 12))
                         .foregroundColor(.white)
                 }
@@ -129,12 +141,18 @@ struct SettingRow: View {
             Spacer()
             
             Toggle("", isOn: $isOn)
-                .toggleStyle(SwitchToggleStyle(tint: .orange))
+                .toggleStyle(SwitchToggleStyle(tint: Color(red: 0.0, green: 0.8, blue: 1.0)))
         }
         .padding(.horizontal, 20)
         .padding(.vertical, 15)
-        .background(Color.black.opacity(0.6))
-        .cornerRadius(15)
+        .background(
+            RoundedRectangle(cornerRadius: 15)
+                .fill(Color.black.opacity(0.7))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 15)
+                        .stroke(Color(red: 0.0, green: 0.8, blue: 1.0).opacity(0.3), lineWidth: 1)
+                )
+        )
     }
 }
 

@@ -15,7 +15,7 @@ struct GameConstants {
     
     // MARK: - Player
     struct Player {
-        static let size = CGSize(width: 50, height: 50)
+        static let size = CGSize(width: 30, height: 30)  // 20% 축소된 사이즈
         static let maxHealth: Int = 100
         static let maxAmmo: Int = 30
         static let reloadTime: TimeInterval = 2.0
@@ -24,42 +24,47 @@ struct GameConstants {
         static let waveSpeedBonus: CGFloat = 10.0  // 웨이브당 속도 증가량
         static let maxWaveSpeedBonus: CGFloat = 100.0  // 최대 웨이브 속도 보너스
         
-        // 플레이어 이미지 설정
-        static let leftImageName = "player_left"
-        static let rightImageName = "player_right"
-        static let defaultDirection: PlayerDirection = .left
-        
-        // 방향 전환 기준각도 (도 단위)
-        static let directionThreshold: CGFloat = 90  // 90도를 기준으로 좌우 판단
-        
-        enum PlayerDirection {
-            case left
-            case right
-            
-            var imageName: String {
-                switch self {
-                case .left:
-                    return Player.leftImageName
-                case .right:
-                    return Player.rightImageName
-                }
-            }
-        }
+        // 플레이어 이미지 관련 상수들 제거됨 - 네온 사각형 사용
     }
     
     // MARK: - Bullet
     struct Bullet {
-        static let size = CGSize(width: 6, height: 12)
-        static let speed: CGFloat = 1200
+        static let size = CGSize(width: 4, height: 4)
+        static let speed: CGFloat = 1000
         static let lifetime: TimeInterval = 3.0
         static let damage: Int = 25
+        
+        // 네온 효과 설정
+        static let neonColor = SKColor(red: 0.0, green: 0.8, blue: 1.0, alpha: 0.9)
+        static let neonStrokeColor = SKColor(red: 0.4, green: 1.0, blue: 1.0, alpha: 1.0)
+        static let coreColor = SKColor(red: 0.8, green: 1.0, blue: 1.0, alpha: 1.0)
+        static let glowWidth: CGFloat = 2.0
+        static let coreGlowWidth: CGFloat = 1.0
+        
+        // 파티클 효과 설정
+        static let sparkleColor = SKColor(red: 0.4, green: 1.0, blue: 1.0, alpha: 1.0)
+        static let sparkleStrokeColor = SKColor(red: 0.8, green: 1.0, blue: 1.0, alpha: 1.0)
+        static let particleLifetime: TimeInterval = 0.5 // 파티클 효과 지속 시간
+        
+        // Impact 파티클 세부 설정
+        static let particleBirthRate: CGFloat = 500.0
+        static let particleCount: Int = 50
+        static let particleLifetimeBase: CGFloat = 0.25
+        static let particleLifetimeRange: CGFloat = 0.1
+        static let particleSpeed: CGFloat = 250
+        static let particleSpeedRange: CGFloat = 100
+        static let particleScale: CGFloat = 0.3
+        static let particleScaleRange: CGFloat = 0.2
+        static let particleScaleSpeed: CGFloat = -1.5
+        static let particleAlpha: CGFloat = 0.9
+        static let particleAlphaSpeed: CGFloat = -3.5
     }
     
     // MARK: - Zombie
     struct Zombie {
-        static let normalSize = CGSize(width: 60, height: 60)
-        static let fastSize = CGSize(width: 60, height: 60)
-        static let strongSize = CGSize(width: 80, height: 80)
+        static let normalSize = CGSize(width: 20, height: 20)  
+        static let fastSize = CGSize(width: 15, height: 15)
+        static let strongSize = CGSize(width: 30, height: 30)
         
         static let normalSpeed: CGFloat = 50
         static let fastSpeed: CGFloat = 80
@@ -74,27 +79,13 @@ struct GameConstants {
         static let minSpawnInterval: TimeInterval = 0.5
         static let spawnIntervalDecrement: TimeInterval = 0.1
         
-        // 좀비 이미지 설정
-        static let normalLeftImage = "zombie_basic_left"
-        static let normalRightImage = "zombie_basic_right"
-        static let fastLeftImage = "zombie_fast_left"
-        static let fastRightImage = "zombie_fast_right"
-        static let strongLeftImage = "zombie_strong_left"
-        static let strongRightImage = "zombie_strong_right"
-        
-        // 방향 전환 기준
-        static let directionThreshold: CGFloat = 90  // 90도를 기준으로 좌우 판단
-        
-        enum ZombieDirection {
-            case left
-            case right
-        }
+        // 좀비 이미지 관련 상수들 제거됨 - 네온 사각형 사용
     }
     
     // MARK: - Toast Message
     struct ToastMessage {
         static let fontSize: CGFloat = 20
-        static let offsetY: CGFloat = 70  // 플레이어 머리 위 거리
+        static let offsetY: CGFloat = 50  // 플레이어 머리 위 거리
         static let defaultDuration: TimeInterval = 2.0
         static let shadowOffset = CGPoint(x: 1, y: -1)
         static let zPosition: CGFloat = 500
@@ -121,12 +112,12 @@ struct GameConstants {
     
     // MARK: - Items
     struct Items {
-        static let size = CGSize(width: 35, height: 35)
-        static let baseSpawnCount: Int = 15  // 초기 아이템 수 증가
-        static let spawnCountMultiplier: Float = 1.5  // 웨이브마다 50% 증가
+        static let size = CGSize(width: 30, height: 30)
+        static let baseSpawnCount: Int = 6  // 초기 아이템 수 증가
+        static let spawnCountMultiplier: Float = 1.8  // 웨이브마다 50% 증가
         static let maxSpawnCount: Int = 80  // 최대 아이템 수 증가
-        static let spawnInterval: TimeInterval = 4.0  // 4초마다 새 아이템 스폰 (더 자주)
-        static let lifetime: TimeInterval = 35.0  // 35초 후 아이템 사라짐 (더 오래)
+        static let spawnInterval: TimeInterval = 3.0  // 4초마다 새 아이템 스폰 (더 자주)
+        static let lifetime: TimeInterval = 40.0  // 35초 후 아이템 사라짐 (더 오래)
         static let zPosition: CGFloat = 5
         static let spawnMargin: CGFloat = 100  // 맵 가장자리에서 떨어진 거리
         
@@ -135,7 +126,7 @@ struct GameConstants {
         
         // 즉시 효과 아이템 수치
         static let healthRestoreAmount: Int = 30
-        static let ammoRestoreAmount: Int = 15
+        static let ammoRestoreAmount: Int = 30
         
         // 버프 효과 수치
         static let speedMultiplier: CGFloat = 1.5
@@ -156,9 +147,9 @@ struct GameConstants {
         static let meteorLineWidth: CGFloat = 4  // 테두리 두께
         static let meteorFallDuration: TimeInterval = 0.7  // 낙하 시간
         static let meteorRotationDuration: TimeInterval = 1.0  // 회전 시간
-        static let meteorExplosionRadius: CGFloat = 80  // 폭발 반지름
+        static let meteorExplosionRadius: CGFloat = 70  // 폭발 반지름
         static let meteorInnerExplosionRadius: CGFloat = 40  // 내부 폭발 반지름
-        static let meteorExplosionDuration: TimeInterval = 0.4  // 폭발 지속시간
+        static let meteorExplosionDuration: TimeInterval = 0.2  // 폭발 지속시간
         static let meteorExplosionScale: CGFloat = 4.0  // 폭발 최대 스케일
         static let meteorRemovalScale: CGFloat = 2.0  // 제거 시 스케일
         static let meteorRemovalDuration: TimeInterval = 0.2  // 제거 애니메이션 시간
@@ -169,20 +160,12 @@ struct GameConstants {
         static let shotgunMinWave: Int = 3  // 웨이브 3부터 등장
         
         // 아이템 이미지 설정
-        static let speedBoostImageName = "item_speedBoost"
-        static let healthRestoreImageName = "item_healthRestore"
         static let ammoRestoreImageName = "item_ammoRestore"
+        static let healthRestoreImageName = "item_healthRestore"
         static let invincibilityImageName = "item_invincibility"
-        static let shotgunImageName = "item_shotgun"
         static let meteorImageName = "item_meteor"
-    }
-    
-    // MARK: - World Border (그림자 효과)
-    struct WorldBorder {
-        static let borderWidth: CGFloat = 3           // 얇은 경계선
-        static let borderAlpha: CGFloat = 0.7         // 진한 그림자 효과 (0.4 → 0.7)
-        static let lineWidth: CGFloat = 1             // 테두리 두께
-        static let shadowColor = SKColor.black        // 그림자 색상
+        static let shotgunImageName = "item_shotgun"
+        static let speedBoostImageName = "item_speedboost"
     }
     
     // MARK: - UI Layout
@@ -233,6 +216,32 @@ struct GameConstants {
         static let ammoColorReloading = "orange"
     }
     
+    // MARK: - Neon Effects
+    struct NeonEffects {
+        // Player Neon
+        static let playerNeonColor = SKColor(red: 0.0, green: 0.8, blue: 1.0, alpha: 1.0) // 네온 시안
+        static let playerGlowWidth: CGFloat = 2
+        
+        // Zombie Neon Colors
+        static let normalZombieNeonColor = SKColor(red: 0.0, green: 1.0, blue: 0.5, alpha: 1.0) // 네온 그린
+        static let fastZombieNeonColor = SKColor(red: 1.0, green: 0.0, blue: 1.0, alpha: 1.0) // 네온 마젠타
+        static let strongZombieNeonColor = SKColor(red: 1.0, green: 0.2, blue: 0.0, alpha: 1.0) // 네온 오렌지-레드
+        static let zombieGlowWidth: CGFloat = 2
+        
+        // Grid Neon
+        static let gridNeonColor = SKColor(red: 0.0, green: 0.6, blue: 0.8, alpha: 0.4) // 네온 시안 (투명)
+        static let gridHighlightColor = SKColor(red: 0.0, green: 0.8, blue: 1.0, alpha: 0.6) // 밝은 네온 시안
+        static let gridGlowWidth: CGFloat = 1
+        
+        // Border Neon
+        static let borderNeonColor = SKColor(red: 1.0, green: 0.0, blue: 1.0, alpha: 0.8) // 네온 마젠타
+        static let borderGlowColor = SKColor(red: 1.0, green: 0.0, blue: 1.0, alpha: 0.3) // 글로우 마젠타
+        static let borderGlowWidth: CGFloat = 2
+        
+        // Background
+        static let cyberpunkBackgroundColor = SKColor(red: 0.05, green: 0.05, blue: 0.15, alpha: 1.0) // 진한 네이비/블랙
+    }
+    
     // MARK: - Node Names
     struct NodeNames {
         static let world = "World"
@@ -265,7 +274,7 @@ struct GameConstants {
         static let restart = "다시하기"
         static let quit = "그만하기"
         static let score = "Score: %d"
-        static let time = "Time: %02d:%02d"
+        static let time = "%02d:%02d"
         static let health = "Health"
         static let ammo = "Ammo"
         static let reloading = "재장전 중..."
@@ -277,49 +286,22 @@ struct GameConstants {
         static let duration: TimeInterval = 30.0  // 30초마다 웨이브 증가
         static let announcementDuration: TimeInterval = 2.0  // 웨이브 알림 표시 시간
         static let zombieCountMultiplier: Float = 1.4  // 웨이브마다 좀비 수 40% 증가
-        static let speedMultiplier: Float = 1.15  // 웨이브마다 좀비 속도 15% 증가
-        static let healthMultiplier: Float = 1.25  // 웨이브마다 좀비 체력 25% 증가
+        static let speedMultiplier: Float = 1.13  // 웨이브마다 좀비 속도 13% 증가
+        static let healthMultiplier: Float = 1.15  // 웨이브마다 좀비 체력 15% 증가
         static let maxSpeedMultiplier: Float = 3.0  // 최대 속도 배수
         static let maxHealthMultiplier: Float = 5.0  // 최대 체력 배수
     }
     
-    // MARK: - Map System
+    // MARK: - Map System (Grid-based)
     struct Map {
-        static let defaultMapName = "map"
-        static let boundaryImageName = "mapBoundary"
         static let backgroundZPosition: CGFloat = -100
-        static let boundaryZPosition: CGFloat = -110  // 맵 배경보다 더 뒤에
+        static let gridZPosition: CGFloat = -90  // 그리드 라인 z-position
+        static let borderZPosition: CGFloat = -80  // 네온 테두리 z-position
         
-        // 맵 품질 설정
-        static let maxScaleFactor: CGFloat = 2.0  // 최대 확대 비율 (화질 보존)
-        static let minScaleFactor: CGFloat = 0.5  // 최소 축소 비율
-        
-        // 경계 설정
-        static let boundaryThickness: CGFloat = 1000  // 경계 영역 두께
-        static let boundaryOverflow: CGFloat = 500    // 경계가 맵 밖으로 얼마나 확장될지
-        static let useTiledBoundary: Bool = true      // 타일링 방식 사용 여부
-        static let defaultTileSize: CGFloat = 128     // 기본 타일 크기 (원본 이미지가 이 크기라고 가정)
-        
-        // 맵 타일 설정 (향후 확장용)
-        static let tileSize: CGFloat = 512  // 맵 이미지를 타일로 나누어 사용할 때
-        
-        // 맵 종류 (향후 확장용)
-        enum MapType: String, CaseIterable {
-            case jungle = "map"
-            // case desert = "desert_map"
-            // case city = "city_map"
-            
-            var imageName: String {
-                return self.rawValue
-            }
-            
-            var displayName: String {
-                switch self {
-                case .jungle:
-                    return "정글"
-                }
-            }
-        }
+        // 그리드 설정
+        static let gridSpacing: CGFloat = 100  // 그리드 간격 (기존 하드코딩 값과 동일)
+        static let gridLineWidth: CGFloat = 1.0  // 그리드 선 두께
+        static let borderLineWidth: CGFloat = 4.0  // 테두리 선 두께 (기존 하드코딩 값과 동일)
     }
     
     // MARK: - Game Balance

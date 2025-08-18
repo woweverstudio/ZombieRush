@@ -40,8 +40,7 @@ class GameScene: SKScene {
         // 게임 시작
         gameStateManager.startNewGame()
         
-        // 성능 최적화: 텍스처 프리로드
-        TextureCache.shared.preloadGameTextures()
+        // 텍스처 캐시 제거됨
         
         setupPhysicsWorld()
         setupWorld()
@@ -161,11 +160,8 @@ class GameScene: SKScene {
         guard let worldNode = worldNode, 
               let player = player,
               let toastMessageManager = toastMessageManager else { 
-            print("❌ 아이템 시스템 설정 실패: worldNode=\(worldNode != nil), player=\(player != nil), toastManager=\(toastMessageManager != nil)")
-            return 
+                        return
         }
-        
-        print("🎁 아이템 시스템 설정 시작...")
         
         // 아이템 스포너 설정
         itemSpawner = ItemSpawner(worldNode: worldNode)
@@ -185,8 +181,6 @@ class GameScene: SKScene {
                 self?.meteorSystem?.startMeteorStorm()
             }
         }
-        
-        print("🎁 아이템 시스템 설정 완료!")
     }
     
     // MARK: - Update Loop

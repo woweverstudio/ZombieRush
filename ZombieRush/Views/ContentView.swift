@@ -14,10 +14,14 @@ struct ContentView: View {
     
     var body: some View {
         ZStack {
-            // 배경 이미지
+            // 사이버펑크 배경 이미지
             Image("background")
                 .resizable()
                 .aspectRatio(contentMode: .fill)
+                .ignoresSafeArea()
+            
+            // 어두운 오버레이로 텍스트 가독성 향상
+            Color.black.opacity(0.3)
                 .ignoresSafeArea()
             
             VStack {
@@ -25,16 +29,24 @@ struct ContentView: View {
                 HStack {
                     Spacer()
                     
-                    // 설정 버튼 (우측 상단)
+                    // 네온 설정 버튼 (우측 상단)
                     Button(action: {
                         showSettingsView = true
                     }) {
                         Image(systemName: "gearshape.fill")
-                            .font(.system(size: 30))
-                            .foregroundColor(.white)
+                            .font(.system(size: 28))
+                            .foregroundColor(Color(red: 1.0, green: 0.0, blue: 1.0))
+                            .shadow(color: Color(red: 1.0, green: 0.0, blue: 1.0), radius: 8, x: 0, y: 0)
                             .padding()
-                            .background(Color.black.opacity(0.3))
-                            .clipShape(Circle())
+                            .background(
+                                Circle()
+                                    .fill(Color.black.opacity(0.7))
+                                    .overlay(
+                                        Circle()
+                                            .stroke(Color(red: 1.0, green: 0.0, blue: 1.0), lineWidth: 2)
+                                    )
+                            )
+                            .shadow(color: Color(red: 1.0, green: 0.0, blue: 1.0).opacity(0.4), radius: 15, x: 0, y: 0)
                     }
                 }
                 .padding(.top, 50) // 상단에서 충분한 간격
@@ -42,27 +54,43 @@ struct ContentView: View {
                 
                 Spacer()
                 
-                // 중앙 영역 - 게임시작 버튼만
+                // 게임 타이틀
+                VStack(spacing: 10) {
+                    Text("ATTACK ON")
+                        .font(.system(size: 32, weight: .heavy, design: .monospaced))
+                        .foregroundColor(Color(red: 1.0, green: 0.0, blue: 1.0))
+                        .shadow(color: Color(red: 1.0, green: 0.0, blue: 1.0), radius: 15, x: 0, y: 0)
+                        .shadow(color: Color(red: 1.0, green: 0.0, blue: 1.0).opacity(0.5), radius: 30, x: 0, y: 0)
+                    
+                    Text("SQUARE")
+                        .font(.system(size: 48, weight: .heavy, design: .monospaced))
+                        .foregroundColor(Color(red: 0.0, green: 0.8, blue: 1.0))
+                        .shadow(color: Color(red: 0.0, green: 0.8, blue: 1.0), radius: 20, x: 0, y: 0)
+                        .shadow(color: Color(red: 0.0, green: 0.8, blue: 1.0).opacity(0.5), radius: 40, x: 0, y: 0)
+                }
+                .padding(.bottom, 40)
+                
+                // 중앙 영역 - 게임시작 버튼
                 VStack(spacing: 20) {
-                    // 게임시작 버튼
+                    // 네온 게임시작 버튼
                     Button(action: {
                         showGameView = true
                     }) {
-                        Text("Game Start")
-                            .font(.system(size: 30, weight: .bold, design: .rounded))
-                            .foregroundColor(.white)
-                            .shadow(color: .black, radius: 2, x: 1, y: 1)
-                            .frame(width: 220, height: 54)
+                        Text("GAME START")
+                            .font(.system(size: 28, weight: .bold, design: .monospaced))
+                            .foregroundColor(Color(red: 0.0, green: 0.8, blue: 1.0))
+                            .shadow(color: Color(red: 0.0, green: 0.8, blue: 1.0), radius: 10, x: 0, y: 0)
+                            .frame(width: 240, height: 60)
                             .background(
-                                RoundedRectangle(cornerRadius: 15)
-                                    .fill(Color.black.opacity(0.6))
+                                RoundedRectangle(cornerRadius: 8)
+                                    .fill(Color.black.opacity(0.8))
                                     .overlay(
-                                        RoundedRectangle(cornerRadius: 15)
-                                            .stroke(Color.white.opacity(0.3), lineWidth: 1)
+                                        RoundedRectangle(cornerRadius: 8)
+                                            .stroke(Color(red: 0.0, green: 0.8, blue: 1.0), lineWidth: 2)
+                                            .shadow(color: Color(red: 0.0, green: 0.8, blue: 1.0), radius: 15, x: 0, y: 0)
                                     )
                             )
-                            .shadow(color: .black, radius: 12, x: 0, y: 6)
-                            .shadow(color: .black.opacity(0.6), radius: 6, x: 0, y: 3)
+                            .shadow(color: Color(red: 0.0, green: 0.8, blue: 1.0).opacity(0.5), radius: 20, x: 0, y: 0)
                     }
                     .buttonStyle(PlainButtonStyle())
                 }

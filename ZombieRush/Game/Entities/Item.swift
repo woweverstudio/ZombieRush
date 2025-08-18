@@ -61,9 +61,26 @@ class Item: SKSpriteNode {
         self.itemType = type
         self.effect = ItemEffectFactory.createEffect(for: type)
         
-        // 텍스처 캐시를 사용한 이미지 로딩
-        let itemTexture = TextureCache.shared.getTexture(named: type.imageName)
-        super.init(texture: itemTexture, color: .clear, size: GameConstants.Items.size)
+        // 안전한 이미지 로딩
+        let texture = SKTexture(imageNamed: type.imageName)
+        let textureSize = texture.size()
+        
+        if textureSize.width > 1 && textureSize.height > 1 {
+            // 이미지가 있으면 이미지 사용
+            super.init(texture: texture, color: .clear, size: GameConstants.Items.size)
+        } else {
+            // 이미지가 없으면 색상 사각형으로 대체
+            let fallbackColor: SKColor
+            switch type {
+            case .healthRestore: fallbackColor = .red
+            case .ammoRestore: fallbackColor = .orange
+            case .speedBoost: fallbackColor = .cyan
+            case .invincibility: fallbackColor = .yellow
+            case .shotgun: fallbackColor = .purple
+            case .meteor: fallbackColor = .brown
+            }
+            super.init(texture: nil, color: fallbackColor, size: GameConstants.Items.size)
+        }
         
         setupItem()
     }
@@ -91,7 +108,11 @@ class Item: SKSpriteNode {
     }
     
     private func maintainAspectRatio() {
-        guard let texture = texture else { return }
+        guard let texture = texture else { 
+            // 텍스처가 없으면 기본 사이즈 사용 (색상 사각형인 경우)
+            size = GameConstants.Items.size
+            return 
+        }
         let originalSize = texture.size()
         let targetSize = GameConstants.Items.size
         

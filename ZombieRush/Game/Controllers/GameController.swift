@@ -42,17 +42,17 @@ class GameController {
         let joystickY = -screenHeight/2 + 100
         
         joystickBase = SKShapeNode(circleOfRadius: 50)
-        joystickBase?.fillColor = SKColor.blue.withAlphaComponent(0.6)
-        joystickBase?.strokeColor = SKColor.white
-        joystickBase?.lineWidth = 3
+        joystickBase?.fillColor = SKColor.clear
+        joystickBase?.strokeColor = SKColor.white.withAlphaComponent(0.3)
+        joystickBase?.lineWidth = 2
         joystickBase?.position = CGPoint(x: joystickX, y: joystickY)
         joystickBase?.zPosition = 100
         camera.addChild(joystickBase!)
         
         joystickThumb = SKShapeNode(circleOfRadius: 20)
-        joystickThumb?.fillColor = SKColor.white.withAlphaComponent(0.9)
-        joystickThumb?.strokeColor = SKColor.black
-        joystickThumb?.lineWidth = 2
+        joystickThumb?.fillColor = SKColor.white.withAlphaComponent(0.2)
+        joystickThumb?.strokeColor = SKColor.white.withAlphaComponent(0.5)
+        joystickThumb?.lineWidth = 1.5
         joystickThumb?.position = CGPoint(x: joystickX, y: joystickY)
         joystickThumb?.zPosition = 101
         camera.addChild(joystickThumb!)
@@ -61,12 +61,24 @@ class GameController {
         let fireX = screenWidth/2 - 100
         let fireY = -screenHeight/2 + 100
         
-        fireButton = SKShapeNode(circleOfRadius: 40)
-        fireButton?.fillColor = SKColor.red.withAlphaComponent(0.8)
-        fireButton?.strokeColor = SKColor.white
-        fireButton?.lineWidth = 3
+        // 네모난 불투명 발사버튼
+        fireButton = SKShapeNode(rectOf: CGSize(width: 80, height: 80), cornerRadius: 8)
+        fireButton?.fillColor = SKColor.white.withAlphaComponent(0.1)
+        fireButton?.strokeColor = SKColor.white.withAlphaComponent(0.4)
+        fireButton?.lineWidth = 2
         fireButton?.position = CGPoint(x: fireX, y: fireY)
         fireButton?.zPosition = 100
+        
+        // FIRE 텍스트 추가
+        let fireLabel = SKLabelNode(text: "FIRE")
+        fireLabel.fontName = "Arial-Bold"
+        fireLabel.fontSize = 16
+        fireLabel.fontColor = SKColor.white.withAlphaComponent(0.8)
+        fireLabel.horizontalAlignmentMode = .center
+        fireLabel.verticalAlignmentMode = .center
+        
+        fireButton?.addChild(fireLabel)
+        
         camera.addChild(fireButton!)
     }
     
@@ -119,7 +131,7 @@ class GameController {
             
             if touch == rightTouch {
                 rightTouch = nil
-                player?.stopFiring()
+                // stopFiring 메서드 제거됨
             }
         }
     }
@@ -194,8 +206,7 @@ class GameController {
         // 자동조준: 가장 가까운 좀비 찾기
         let direction = getAutoAimDirection() ?? CGVector(dx: 0, dy: 1)
         
-        // 플레이어 발사 방향 업데이트
-        player?.setFireDirection(direction)
+        // setFireDirection 메서드 제거됨
         
         worldNode.addChild(bullet)
         bullet.fire(from: position, direction: direction)
@@ -211,8 +222,7 @@ class GameController {
         let baseDirection = getAutoAimDirection() ?? CGVector(dx: 0, dy: 1)
         let baseAngle = atan2(baseDirection.dy, baseDirection.dx)
         
-        // 플레이어 발사 방향 업데이트
-        player.setFireDirection(baseDirection)
+        // setFireDirection 메서드 제거됨
         
         // 여러 발의 총알을 부채꼴로 발사
         for i in 0..<bulletCount {

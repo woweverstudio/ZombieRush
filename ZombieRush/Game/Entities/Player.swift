@@ -12,11 +12,8 @@ class Player: SKSpriteNode {
     
     // MARK: - Properties
     
-    // MARK: - Image Properties
-    private var currentDirection: GameConstants.Player.PlayerDirection = GameConstants.Player.defaultDirection
+    // 이미지 관련 프로퍼티 제거됨 - 단순한 원형 사용
     private var lastMoveDirection: CGVector = CGVector.zero
-    private var lastFireDirection: CGVector = CGVector.zero
-    private var isFiring: Bool = false
     
     // MARK: - Movement Properties
     private var baseMoveSpeed: CGFloat = GameConstants.Player.baseMoveSpeed
@@ -40,14 +37,12 @@ class Player: SKSpriteNode {
     
     // MARK: - Initialization
     init() {
-        // 텍스처 캐시를 사용한 기본 이미지 초기화
-        let defaultTexture = TextureCache.shared.getTexture(named: GameConstants.Player.defaultDirection.imageName) ?? SKTexture()
-        let size = GameConstants.Player.size
-        super.init(texture: defaultTexture, color: .clear, size: size)
+        // 원형 플레이어로 초기화 (SKShapeNode 사용)
+        super.init(texture: nil, color: .clear, size: GameConstants.Player.size)
         
         setupPhysics()
         setupProperties()
-        setupImageSystem()
+        setupNeonCircle()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -56,9 +51,9 @@ class Player: SKSpriteNode {
     
     // MARK: - Setup Methods
     private func setupPhysics() {
-        physicsBody = SKPhysicsBody(circleOfRadius: size.width / 2)
+        physicsBody = SKPhysicsBody(rectangleOf: size)
         physicsBody?.isDynamic = true
-        physicsBody?.allowsRotation = false
+        physicsBody?.allowsRotation = false  // 회전 완전 차단
         physicsBody?.mass = 1.0
         physicsBody?.friction = 0.0
         physicsBody?.restitution = 0.0
@@ -75,68 +70,24 @@ class Player: SKSpriteNode {
         zPosition = 10
     }
     
-    private func setupImageSystem() {
-        // 원본 비율 유지하면서 크기 조정
-        maintainAspectRatio()
-    }
-    
-    // MARK: - Image Management
-    private func maintainAspectRatio() {
-        guard let texture = texture else { return }
-        let originalSize = texture.size()
-        let targetSize = GameConstants.Player.size
-        
-        // 원본 비율을 유지하면서 targetSize에 맞춤 (aspect fit)
-        let scaleX = targetSize.width / originalSize.width
-        let scaleY = targetSize.height / originalSize.height
-        let scale = min(scaleX, scaleY)
-        
-        size = CGSize(
-            width: originalSize.width * scale,
-            height: originalSize.height * scale
+    // MARK: - Neon Rectangle Setup
+    private func setupNeonCircle() {
+        // 둥근 사각형으로 변경 (좀비와 통일)
+        let rect = CGRect(
+            x: -size.width/2, 
+            y: -size.height/2, 
+            width: size.width, 
+            height: size.height
         )
-    }
-    
-    private func updatePlayerImage() {
-        let newDirection = determineDirection()
+        let neonRect = SKShapeNode(rect: rect, cornerRadius: 4)
+        neonRect.fillColor = GameConstants.NeonEffects.playerNeonColor
+        neonRect.strokeColor = GameConstants.NeonEffects.playerNeonColor
+        neonRect.lineWidth = 2
+        neonRect.glowWidth = GameConstants.NeonEffects.playerGlowWidth
+        neonRect.position = CGPoint.zero
+        neonRect.name = "PlayerShape"
         
-        if newDirection != currentDirection {
-            currentDirection = newDirection
-            
-            // 텍스처 캐시를 사용한 최적화된 이미지 로딩
-            if let cachedTexture = TextureCache.shared.getTexture(named: currentDirection.imageName) {
-                texture = cachedTexture
-                maintainAspectRatio()
-            }
-        }
-    }
-    
-    private func determineDirection() -> GameConstants.Player.PlayerDirection {
-        // 우선순위: 발사 방향 > 이동 방향 > 기본 방향
-        let directionVector: CGVector
-        
-        if isFiring && lastFireDirection != CGVector.zero {
-            directionVector = lastFireDirection
-        } else if lastMoveDirection != CGVector.zero {
-            directionVector = lastMoveDirection
-        } else {
-            return currentDirection // 변화 없음
-        }
-        
-        // 각도 계산 (라디안)
-        let angle = atan2(directionVector.dy, directionVector.dx)
-        let degrees = angle * 180 / .pi
-        
-        // 각도를 0-360도로 정규화
-        let normalizedDegrees = degrees < 0 ? degrees + 360 : degrees
-        
-        // 좌우 판단: 우측(270-90도), 좌측(90-270도)
-        // 수직일 때는 기본값(왼쪽) 사용
-        if normalizedDegrees > 270 || normalizedDegrees < 90 {
-            return .right
-        } else {
-            return .left
-        }
+        addChild(neonRect)
     }
     
     // MARK: - Movement Methods
@@ -156,9 +107,6 @@ class Player: SKSpriteNode {
             )
             
             physicsBody?.velocity = velocity
-            
-            // 이미지 업데이트
-            updatePlayerImage()
         } else {
             stopMoving()
         }
@@ -167,7 +115,6 @@ class Player: SKSpriteNode {
     func stopMoving() {
         physicsBody?.velocity = CGVector.zero
         lastMoveDirection = CGVector.zero
-        isFiring = false
     }
     
     // MARK: - Combat Methods
@@ -239,17 +186,7 @@ class Player: SKSpriteNode {
     func getShotgunSpreadAngle() -> CGFloat { return shotgunSpreadAngle }
     func getIsMeteorMode() -> Bool { return meteorModeActive }
     
-    // MARK: - Fire Direction Tracking
-    func setFireDirection(_ direction: CGVector) {
-        lastFireDirection = direction
-        isFiring = true
-        updatePlayerImage()
-    }
-    
-    func stopFiring() {
-        isFiring = false
-        updatePlayerImage()
-    }
+    // Fire Direction Tracking 메서드들 제거됨 - 단순한 원형 사용
     
     // MARK: - Item Effects
     func applySpeedBoost(multiplier: CGFloat) {
@@ -324,12 +261,10 @@ class Player: SKSpriteNode {
         // 샷건 모드 시각적 효과 (강한 펄스 + 회전 효과)
         let shotgunEffect = SKAction.repeatForever(SKAction.sequence([
             SKAction.group([
-                SKAction.scale(to: 1.15, duration: 0.3),
-                SKAction.rotate(byAngle: .pi / 8, duration: 0.3)
+                SKAction.scale(to: 1.15, duration: 0.3)
             ]),
             SKAction.group([
-                SKAction.scale(to: 1.0, duration: 0.3),
-                SKAction.rotate(byAngle: -.pi / 8, duration: 0.3)
+                SKAction.scale(to: 1.0, duration: 0.3)
             ])
         ]))
         run(shotgunEffect, withKey: "shotgunEffect")

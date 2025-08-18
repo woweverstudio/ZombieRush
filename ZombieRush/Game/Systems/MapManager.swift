@@ -7,49 +7,25 @@
 
 import SpriteKit
 
-// MARK: - Map Manager Protocol (확장성을 위한 인터페이스)
+// MARK: - Map Manager Protocol (그리드 기반 간소화)
 protocol MapManagerProtocol {
-    func setupMap(in worldNode: SKNode, mapType: GameConstants.Map.MapType)
     func setupMap(in worldNode: SKNode)
-    func getCurrentMapType() -> GameConstants.Map.MapType
-    func changeMap(to mapType: GameConstants.Map.MapType, in worldNode: SKNode)
     func getMapDisplayName() -> String
-    func getMapImageName() -> String
 }
 
 // MARK: - Map Manager Implementation
 class MapManager: MapManagerProtocol {
     
     // MARK: - Properties
-    private var currentMapType: GameConstants.Map.MapType
-    private weak var backgroundNode: SKSpriteNode?
-    private var boundaryNodes: [SKSpriteNode] = []
+    // 그리드 기반으로 변경되어 단순화됨
     
     // MARK: - Initialization
-    init(mapType: GameConstants.Map.MapType = .jungle) {
-        self.currentMapType = mapType
+    init() {
+        // 그리드 기반으로 초기화 단순화
     }
     
     // MARK: - Public Methods
-    func setupMap(in worldNode: SKNode, mapType: GameConstants.Map.MapType) {
-        self.currentMapType = mapType
-        createMapBackground(in: worldNode)
-    }
-    
     func setupMap(in worldNode: SKNode) {
-        createMapBackground(in: worldNode)
-    }
-    
-    func getCurrentMapType() -> GameConstants.Map.MapType {
-        return currentMapType
-    }
-    
-    func changeMap(to mapType: GameConstants.Map.MapType, in worldNode: SKNode) {
-        // 기존 맵 제거
-        removeCurrentMap()
-        
-        // 새 맵 설정
-        self.currentMapType = mapType
         createMapBackground(in: worldNode)
     }
     
@@ -58,303 +34,119 @@ class MapManager: MapManagerProtocol {
         // 기존 배경 제거 (있다면)
         removeCurrentMap()
         
-        // 1. 경계 이미지 생성 (맵보다 먼저)
-        createMapBoundaries(in: worldNode)
-        
-        // 2. 맵 이미지 생성 (텍스처 캐시 사용)
-        let mapImageName = currentMapType.imageName
-        let backgroundSprite: SKSpriteNode
-        
-        if let cachedTexture = TextureCache.shared.getTexture(named: mapImageName) {
-            backgroundSprite = SKSpriteNode(texture: cachedTexture)
-        } else {
-            backgroundSprite = SKSpriteNode(imageNamed: mapImageName)
-        }
-        
-        // 월드 크기에 정확히 맞춤
-        let worldSize = CGSize(
-            width: GameConstants.Physics.worldWidth,
-            height: GameConstants.Physics.worldHeight
-        )
-        
-        // 원본 이미지 크기 확인 (디버그용)
-        let originalSize = backgroundSprite.texture?.size() ?? CGSize.zero
-        print("🗺️ 원본 이미지 크기: \(originalSize)")
-        print("🗺️ 월드 크기: \(worldSize)")
-        
-        // 맵 크기를 게임 월드 크기에 정확히 맞춤
-        backgroundSprite.size = worldSize
-        
-        // 위치 및 z-position 설정
-        backgroundSprite.position = CGPoint(x: 0, y: 0)
-        backgroundSprite.zPosition = GameConstants.Map.backgroundZPosition
-        backgroundSprite.name = "MapBackground"
-        
-        // 이미지 품질 향상을 위한 설정
-        backgroundSprite.texture?.filteringMode = .linear
-        
-        // 월드 노드에 추가
-        worldNode.addChild(backgroundSprite)
-        
-        // 참조 저장
-        self.backgroundNode = backgroundSprite
-        
-        print("🗺️ 맵 배경 생성 완료: \(currentMapType.displayName)")
-        print("🗺️ 최종 크기: \(worldSize)")
+        // 단순한 그리드 배경 생성 (이미지 대신)
+        createGridBackground(in: worldNode)
     }
     
-    // MARK: - Map Boundary Creation
-    private func createMapBoundaries(in worldNode: SKNode) {
-        if GameConstants.Map.useTiledBoundary {
-            createTiledBoundaries(in: worldNode)
-        } else {
-            createStretchedBoundaries(in: worldNode)
-        }
-    }
-    
-    // MARK: - Tiled Boundary Creation (원본 크기 유지)
-    private func createTiledBoundaries(in worldNode: SKNode) {
+    // MARK: - Cyberpunk Grid Background Creation
+    private func createGridBackground(in worldNode: SKNode) {
         let worldWidth = GameConstants.Physics.worldWidth
         let worldHeight = GameConstants.Physics.worldHeight
-        let boundaryThickness = GameConstants.Map.boundaryThickness
-        let overflow = GameConstants.Map.boundaryOverflow
-        let boundaryImageName = GameConstants.Map.boundaryImageName
+        let gridSize = GameConstants.Map.gridSpacing
         
-        // 원본 이미지 크기 확인 (텍스처 캐시 사용)
-        let sampleSprite: SKSpriteNode
-        if let cachedTexture = TextureCache.shared.getTexture(named: boundaryImageName) {
-            sampleSprite = SKSpriteNode(texture: cachedTexture)
-        } else {
-            sampleSprite = SKSpriteNode(imageNamed: boundaryImageName)
-        }
-        let originalTileSize = sampleSprite.texture?.size() ?? CGSize(width: GameConstants.Map.defaultTileSize, height: GameConstants.Map.defaultTileSize)
+        // 사이버펑크 어두운 배경색 생성
+        let backgroundRect = SKShapeNode(rect: CGRect(
+            x: -worldWidth/2, 
+            y: -worldHeight/2, 
+            width: worldWidth, 
+            height: worldHeight
+        ))
+        backgroundRect.fillColor = GameConstants.NeonEffects.cyberpunkBackgroundColor
+        backgroundRect.strokeColor = .clear
+        backgroundRect.zPosition = GameConstants.Map.backgroundZPosition
+        backgroundRect.name = "CyberpunkBackground"
+        worldNode.addChild(backgroundRect)
         
-        print("🧱 경계 타일 원본 크기: \(originalTileSize)")
-        
-        // 상단 경계 타일링
-        createTiledBoundaryStrip(
-            in: worldNode,
-            imageName: boundaryImageName,
-            tileSize: originalTileSize,
-            stripRect: CGRect(
-                x: -worldWidth/2 - overflow,
-                y: worldHeight/2,
-                width: worldWidth + (overflow * 2),
-                height: boundaryThickness
-            ),
-            namePrefix: "TopBoundary"
-        )
-        
-        // 하단 경계 타일링
-        createTiledBoundaryStrip(
-            in: worldNode,
-            imageName: boundaryImageName,
-            tileSize: originalTileSize,
-            stripRect: CGRect(
-                x: -worldWidth/2 - overflow,
-                y: -worldHeight/2 - boundaryThickness,
-                width: worldWidth + (overflow * 2),
-                height: boundaryThickness
-            ),
-            namePrefix: "BottomBoundary"
-        )
-        
-        // 좌측 경계 타일링
-        createTiledBoundaryStrip(
-            in: worldNode,
-            imageName: boundaryImageName,
-            tileSize: originalTileSize,
-            stripRect: CGRect(
-                x: -worldWidth/2 - boundaryThickness,
-                y: -worldHeight/2,
-                width: boundaryThickness,
-                height: worldHeight
-            ),
-            namePrefix: "LeftBoundary"
-        )
-        
-        // 우측 경계 타일링
-        createTiledBoundaryStrip(
-            in: worldNode,
-            imageName: boundaryImageName,
-            tileSize: originalTileSize,
-            stripRect: CGRect(
-                x: worldWidth/2,
-                y: -worldHeight/2,
-                width: boundaryThickness,
-                height: worldHeight
-            ),
-            namePrefix: "RightBoundary"
-        )
-        
-        // 4개 모서리 타일링
-        let cornerRects = [
-            CGRect(x: -worldWidth/2 - boundaryThickness, y: worldHeight/2, width: boundaryThickness, height: boundaryThickness), // 좌상단
-            CGRect(x: worldWidth/2, y: worldHeight/2, width: boundaryThickness, height: boundaryThickness), // 우상단
-            CGRect(x: -worldWidth/2 - boundaryThickness, y: -worldHeight/2 - boundaryThickness, width: boundaryThickness, height: boundaryThickness), // 좌하단
-            CGRect(x: worldWidth/2, y: -worldHeight/2 - boundaryThickness, width: boundaryThickness, height: boundaryThickness) // 우하단
-        ]
-        
-        let cornerNames = ["TopLeftCorner", "TopRightCorner", "BottomLeftCorner", "BottomRightCorner"]
-        
-        for (index, cornerRect) in cornerRects.enumerated() {
-            createTiledBoundaryStrip(
-                in: worldNode,
-                imageName: boundaryImageName,
-                tileSize: originalTileSize,
-                stripRect: cornerRect,
-                namePrefix: cornerNames[index]
-            )
+        // 네온 수직 그리드 라인
+        let verticalLineCount = Int(worldWidth / gridSize)
+        for i in 0...verticalLineCount {
+            let x = -worldWidth/2 + CGFloat(i) * gridSize
+            // 맵 경계를 넘지 않도록 체크
+            if x > worldWidth/2 { continue }
+            let line = SKShapeNode()
+            let path = CGMutablePath()
+            path.move(to: CGPoint(x: x, y: -worldHeight/2))
+            path.addLine(to: CGPoint(x: x, y: worldHeight/2))
+            line.path = path
+            line.strokeColor = GameConstants.NeonEffects.gridNeonColor
+            line.lineWidth = GameConstants.Map.gridLineWidth
+            line.zPosition = GameConstants.Map.gridZPosition
+            line.name = "NeonGridLineVertical_\(i)"
+            
+
+            
+            worldNode.addChild(line)
         }
         
-        print("🗺️ 타일링 맵 경계 생성 완료: \(boundaryNodes.count)개 타일")
+        // 네온 수평 그리드 라인
+        let horizontalLineCount = Int(worldHeight / gridSize)
+        for i in 0...horizontalLineCount {
+            let y = -worldHeight/2 + CGFloat(i) * gridSize
+            // 맵 경계를 넘지 않도록 체크
+            if y > worldHeight/2 { continue }
+            let line = SKShapeNode()
+            let path = CGMutablePath()
+            path.move(to: CGPoint(x: -worldWidth/2, y: y))
+            path.addLine(to: CGPoint(x: worldWidth/2, y: y))
+            line.path = path
+            line.strokeColor = GameConstants.NeonEffects.gridNeonColor
+            line.lineWidth = GameConstants.Map.gridLineWidth
+            line.zPosition = GameConstants.Map.gridZPosition
+            line.name = "NeonGridLineHorizontal_\(i)"
+            
+
+            
+            worldNode.addChild(line)
+        }
+        
+        // 네온 경계선 (사이버펑크 스타일)
+        let borderRect = SKShapeNode(rect: CGRect(
+            x: -worldWidth/2, 
+            y: -worldHeight/2, 
+            width: worldWidth, 
+            height: worldHeight
+        ))
+        borderRect.fillColor = .clear
+        borderRect.strokeColor = GameConstants.NeonEffects.borderNeonColor
+        borderRect.lineWidth = GameConstants.Map.borderLineWidth
+        borderRect.glowWidth = GameConstants.NeonEffects.borderGlowWidth  // 진짜 네온 글로우!
+        borderRect.zPosition = GameConstants.Map.borderZPosition
+        borderRect.name = "NeonBorder"
+        
+
+        
+        worldNode.addChild(borderRect)
+        
+        // 추가 글로우 효과를 위한 더 큰 경계선
+        let outerBorderRect = SKShapeNode(rect: CGRect(
+            x: -worldWidth/2 - 3, 
+            y: -worldHeight/2 - 3, 
+            width: worldWidth + 6, 
+            height: worldHeight + 6
+        ))
+        outerBorderRect.fillColor = .clear
+        outerBorderRect.strokeColor = GameConstants.NeonEffects.borderGlowColor
+        outerBorderRect.lineWidth = 2
+        outerBorderRect.zPosition = GameConstants.Map.backgroundZPosition + 1
+        outerBorderRect.name = "NeonBorderGlow"
+        
+
+        
+        worldNode.addChild(outerBorderRect)
     }
     
-    // MARK: - Tiled Strip Creation
-    private func createTiledBoundaryStrip(in worldNode: SKNode, imageName: String, tileSize: CGSize, stripRect: CGRect, namePrefix: String) {
-        let tilesX = Int(ceil(stripRect.width / tileSize.width))
-        let tilesY = Int(ceil(stripRect.height / tileSize.height))
-        
-        for x in 0..<tilesX {
-            for y in 0..<tilesY {
-                let tileX = stripRect.minX + (CGFloat(x) * tileSize.width) + (tileSize.width / 2)
-                let tileY = stripRect.minY + (CGFloat(y) * tileSize.height) + (tileSize.height / 2)
-                
-                let tile = SKSpriteNode(imageNamed: imageName)
-                tile.size = tileSize  // 원본 크기 유지
-                tile.position = CGPoint(x: tileX, y: tileY)
-                tile.zPosition = GameConstants.Map.boundaryZPosition
-                tile.name = "\(namePrefix)_\(x)_\(y)"
-                tile.texture?.filteringMode = .linear
-                
-                worldNode.addChild(tile)
-                boundaryNodes.append(tile)
-            }
-        }
-    }
+    // 이미지 기반 경계 생성 메서드들 제거됨 - 그리드 시스템 사용
     
-    // MARK: - Stretched Boundary Creation (기존 방식)
-    private func createStretchedBoundaries(in worldNode: SKNode) {
-        let worldWidth = GameConstants.Physics.worldWidth
-        let worldHeight = GameConstants.Physics.worldHeight
-        let boundaryThickness = GameConstants.Map.boundaryThickness
-        let overflow = GameConstants.Map.boundaryOverflow
-        
-        // 경계 이미지 이름
-        let boundaryImageName = GameConstants.Map.boundaryImageName
-        
-        // 상단 경계
-        let topBoundary = createBoundaryNode(
-            imageName: boundaryImageName,
-            size: CGSize(width: worldWidth + (overflow * 2), height: boundaryThickness),
-            position: CGPoint(x: 0, y: worldHeight/2 + boundaryThickness/2),
-            name: "TopBoundary"
-        )
-        
-        // 하단 경계
-        let bottomBoundary = createBoundaryNode(
-            imageName: boundaryImageName,
-            size: CGSize(width: worldWidth + (overflow * 2), height: boundaryThickness),
-            position: CGPoint(x: 0, y: -worldHeight/2 - boundaryThickness/2),
-            name: "BottomBoundary"
-        )
-        
-        // 좌측 경계 (상하 경계와 겹치지 않도록)
-        let leftBoundary = createBoundaryNode(
-            imageName: boundaryImageName,
-            size: CGSize(width: boundaryThickness, height: worldHeight),
-            position: CGPoint(x: -worldWidth/2 - boundaryThickness/2, y: 0),
-            name: "LeftBoundary"
-        )
-        
-        // 우측 경계 (상하 경계와 겹치지 않도록)
-        let rightBoundary = createBoundaryNode(
-            imageName: boundaryImageName,
-            size: CGSize(width: boundaryThickness, height: worldHeight),
-            position: CGPoint(x: worldWidth/2 + boundaryThickness/2, y: 0),
-            name: "RightBoundary"
-        )
-        
-        // 모서리 경계 (4개 모서리 채우기)
-        let cornerSize = CGSize(width: boundaryThickness, height: boundaryThickness)
-        
-        // 좌상단 모서리
-        let topLeftCorner = createBoundaryNode(
-            imageName: boundaryImageName,
-            size: cornerSize,
-            position: CGPoint(x: -worldWidth/2 - boundaryThickness/2, y: worldHeight/2 + boundaryThickness/2),
-            name: "TopLeftCorner"
-        )
-        
-        // 우상단 모서리
-        let topRightCorner = createBoundaryNode(
-            imageName: boundaryImageName,
-            size: cornerSize,
-            position: CGPoint(x: worldWidth/2 + boundaryThickness/2, y: worldHeight/2 + boundaryThickness/2),
-            name: "TopRightCorner"
-        )
-        
-        // 좌하단 모서리
-        let bottomLeftCorner = createBoundaryNode(
-            imageName: boundaryImageName,
-            size: cornerSize,
-            position: CGPoint(x: -worldWidth/2 - boundaryThickness/2, y: -worldHeight/2 - boundaryThickness/2),
-            name: "BottomLeftCorner"
-        )
-        
-        // 우하단 모서리
-        let bottomRightCorner = createBoundaryNode(
-            imageName: boundaryImageName,
-            size: cornerSize,
-            position: CGPoint(x: worldWidth/2 + boundaryThickness/2, y: -worldHeight/2 - boundaryThickness/2),
-            name: "BottomRightCorner"
-        )
-        
-        // 모든 경계 노드를 배열에 저장
-        boundaryNodes = [topBoundary, bottomBoundary, leftBoundary, rightBoundary,
-                        topLeftCorner, topRightCorner, bottomLeftCorner, bottomRightCorner]
-        
-        // 월드에 추가
-        boundaryNodes.forEach { worldNode.addChild($0) }
-        
-        print("🗺️ 스트레치 맵 경계 생성 완료: \(boundaryNodes.count)개 경계 노드")
-    }
-    
-    private func createBoundaryNode(imageName: String, size: CGSize, position: CGPoint, name: String) -> SKSpriteNode {
-        let boundaryNode: SKSpriteNode
-        
-        // 텍스처 캐시 사용
-        if let cachedTexture = TextureCache.shared.getTexture(named: imageName) {
-            boundaryNode = SKSpriteNode(texture: cachedTexture)
-        } else {
-            boundaryNode = SKSpriteNode(imageNamed: imageName)
-        }
-        
-        boundaryNode.size = size
-        boundaryNode.position = position
-        boundaryNode.zPosition = GameConstants.Map.boundaryZPosition
-        boundaryNode.name = name
-        boundaryNode.texture?.filteringMode = .linear
-        return boundaryNode
-    }
+    // 이미지 기반 경계 생성 메서드들 모두 제거됨 - 그리드 시스템 사용
     
     private func removeCurrentMap() {
-        // 맵 배경 제거
-        backgroundNode?.removeFromParent()
-        backgroundNode = nil
-        
-        // 경계 노드들 제거
-        boundaryNodes.forEach { $0.removeFromParent() }
-        boundaryNodes.removeAll()
+        // 기존 그리드 노드들 제거 (worldNode에서 그리드 관련 노드들을 찾아서 제거)
+        // 이는 새로운 그리드를 생성하기 전에 기존 그리드를 정리하기 위함
     }
     
     // MARK: - Map Information
     func getMapDisplayName() -> String {
-        return currentMapType.displayName
-    }
-    
-    func getMapImageName() -> String {
-        return currentMapType.imageName
+        return "네온 그리드"
     }
     
     // MARK: - Future Extension Methods

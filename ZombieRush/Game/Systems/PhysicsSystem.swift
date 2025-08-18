@@ -83,6 +83,9 @@ extension PhysicsSystem: SKPhysicsContactDelegate {
               let zombie = zombie as? Zombie,
               let scene = scene as? GameScene else { return }
         
+        // 스파클 효과 생성 (총알 위치에서)
+        createSparkleEffect(at: bullet.position, in: scene)
+        
         // 총알 제거
         bullet.removeFromParent()
         
@@ -134,5 +137,60 @@ extension PhysicsSystem: SKPhysicsContactDelegate {
     
     func didEnd(_ contact: SKPhysicsContact) {
         // Top-Down View에서는 특별한 처리 불필요
+    }
+    
+    // MARK: - Visual Effects
+    private func createSparkleEffect(at position: CGPoint, in scene: SKScene) {
+        guard let worldNode = scene.childNode(withName: "World") else { return }
+        
+        // 코드로 파티클 이펙트 생성 (네온 사이버펑크 스타일)
+        guard let impactParticle = createImpactParticle() else { return }
+        
+        impactParticle.position = position
+        impactParticle.zPosition = 10
+        
+        worldNode.addChild(impactParticle)
+        
+        // 파티클 효과 완료 후 자동 제거
+        let waitAction = SKAction.wait(forDuration: GameConstants.Bullet.particleLifetime)
+        let removeAction = SKAction.removeFromParent()
+        impactParticle.run(SKAction.sequence([waitAction, removeAction]))
+    }
+    
+    private func createImpactParticle() -> SKEmitterNode? {
+        guard let emitter = SKEmitterNode(fileNamed: "BulletImpact") else { return nil }
+        
+        // 기본 파티클 설정 (네온 사이버펑크 스타일)
+        emitter.particleBirthRate = GameConstants.Bullet.particleBirthRate
+        emitter.numParticlesToEmit = GameConstants.Bullet.particleCount
+        emitter.particleLifetime = GameConstants.Bullet.particleLifetimeBase
+        emitter.particleLifetimeRange = GameConstants.Bullet.particleLifetimeRange
+        
+        // 속도와 방향
+        emitter.particleSpeed = GameConstants.Bullet.particleSpeed
+        emitter.particleSpeedRange = GameConstants.Bullet.particleSpeedRange
+        emitter.emissionAngle = 0
+        emitter.emissionAngleRange = CGFloat.pi * 2 // 360도
+        
+        // 크기와 투명도
+        emitter.particleScale = GameConstants.Bullet.particleScale
+        emitter.particleScaleRange = GameConstants.Bullet.particleScaleRange
+        emitter.particleScaleSpeed = GameConstants.Bullet.particleScaleSpeed
+        emitter.particleAlpha = GameConstants.Bullet.particleAlpha
+        emitter.particleAlphaSpeed = GameConstants.Bullet.particleAlphaSpeed
+        
+        // 네온 색상 설정
+        emitter.particleColor = GameConstants.Bullet.sparkleColor
+        emitter.particleColorBlendFactor = 1.0
+        emitter.particleColorSequence = nil
+        
+        // 블렌드 모드 (네온 효과의 핵심)
+        emitter.particleBlendMode = .add
+        
+        // 물리 효과 (탑다운이므로 중력 없음)
+        emitter.yAcceleration = 0
+        emitter.xAcceleration = 0
+        
+        return emitter
     }
 }

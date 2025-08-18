@@ -40,8 +40,6 @@ class MeteorSystem {
         isActive = true
         lastMeteorTime = 0
         
-        print("🌠 메테오 스톰 시작!")
-        
         // 즉시 첫 번째 메테오 생성
         spawnMeteor()
     }
@@ -52,8 +50,6 @@ class MeteorSystem {
         // 활성 메테오들 제거
         activeMeteors.forEach { $0.removeFromParent() }
         activeMeteors.removeAll()
-        
-        print("🌠 메테오 스톰 종료!")
     }
     
     func getActiveMeteorCount() -> Int {
