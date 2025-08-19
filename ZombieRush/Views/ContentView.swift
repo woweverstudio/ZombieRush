@@ -63,7 +63,7 @@ struct ContentView: View {
                         .shadow(color: Color(red: 1.0, green: 0.0, blue: 1.0), radius: 15, x: 0, y: 0)
                         .shadow(color: Color(red: 1.0, green: 0.0, blue: 1.0).opacity(0.5), radius: 30, x: 0, y: 0)
                     
-                    Text("SQUARE")
+                    Text("CUBE")
                         .font(.system(size: 48, weight: .heavy, design: .monospaced))
                         .foregroundColor(Color(red: 0.0, green: 0.8, blue: 1.0))
                         .shadow(color: Color(red: 0.0, green: 0.8, blue: 1.0), radius: 20, x: 0, y: 0)
