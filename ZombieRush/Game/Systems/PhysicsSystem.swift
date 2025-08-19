@@ -83,6 +83,12 @@ extension PhysicsSystem: SKPhysicsContactDelegate {
               let zombie = zombie as? Zombie,
               let scene = scene as? GameScene else { return }
         
+        // 타격 사운드 재생 (SpriteKit 방식)
+        if AudioManager.shared.isSoundEffectsEnabled {
+            let hitSound = SKAction.playSoundFileNamed(GameConstants.Audio.SoundEffects.hit, waitForCompletion: false)
+            scene.run(hitSound)
+        }
+        
         // 스파클 효과 생성 (총알 위치에서)
         createSparkleEffect(at: bullet.position, in: scene)
         
@@ -121,6 +127,15 @@ extension PhysicsSystem: SKPhysicsContactDelegate {
     
     private func handlePlayerItemCollision(player: SKNode?, item: SKNode?) {
         guard let item = item as? Item, let scene = scene as? GameScene else { return }
+        
+        // 아이템 수집 사운드 재생 (SpriteKit 방식)
+        if AudioManager.shared.isSoundEffectsEnabled {
+            let itemSound = SKAction.playSoundFileNamed(GameConstants.Audio.SoundEffects.item, waitForCompletion: false)
+            scene.run(itemSound)
+        }
+        
+        // 아이템 수집 햅틱 피드백
+        HapticManager.shared.playItemHaptic()
         
         // 아이템 수집 처리
         scene.collectItem(item)

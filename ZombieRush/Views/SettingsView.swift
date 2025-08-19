@@ -10,7 +10,7 @@ import SwiftUI
 struct SettingsView: View {
     @Environment(\.dismiss) private var dismiss
     @StateObject private var audioManager = AudioManager.shared
-    @State private var vibrationEnabled = true
+    @StateObject private var hapticManager = HapticManager.shared
     
     var body: some View {
         ZStack {
@@ -30,6 +30,7 @@ struct SettingsView: View {
                     // 뒤로가기 버튼 (더 크고 명확하게)
                     Button(action: {
                         AudioManager.shared.playButtonSound()
+                        HapticManager.shared.playButtonHaptic()
                         dismiss()
                     }) {
                         HStack(spacing: 8) {
@@ -88,11 +89,11 @@ struct SettingsView: View {
                             isOn: $audioManager.isBackgroundMusicEnabled
                         )
                         
-                        // 진동 설정
+                        // 진동 설정 (HapticManager와 연결)
                         SettingRow(
                             title: "진동",
                             icon: "iphone.radiowaves.left.and.right",
-                            isOn: $vibrationEnabled
+                            isOn: $hapticManager.isHapticEnabled
                         )
                         
                         // 하단 여백

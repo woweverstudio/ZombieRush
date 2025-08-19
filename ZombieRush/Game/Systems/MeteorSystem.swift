@@ -36,7 +36,14 @@ class MeteorSystem {
         cleanupOldMeteors()
     }
     
-    func startMeteorStorm() {        
+    func startMeteorStorm() {
+        // 메테오 발동 사운드 재생 (SpriteKit 방식)
+        if AudioManager.shared.isSoundEffectsEnabled,
+           let worldNode = worldNode {
+            let meteorSound = SKAction.playSoundFileNamed(GameConstants.Audio.SoundEffects.meteor, waitForCompletion: false)
+            worldNode.run(meteorSound)
+        }
+        
         isActive = true
         lastMeteorTime = 0
         

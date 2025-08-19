@@ -10,7 +10,6 @@ import SpriteKit
 
 struct GameView: View {
     @Environment(\.dismiss) private var dismiss
-    @StateObject private var audioManager = AudioManager.shared
     @State private var gameScene: GameScene?
     
     var body: some View {
@@ -20,10 +19,8 @@ struct GameView: View {
         .navigationBarHidden(true)
         .statusBarHidden(true)
         .onAppear {
-            // 게임 화면 진입 시 배경음악 계속 재생
-            if audioManager.isBackgroundMusicEnabled {
-                audioManager.resumeBackgroundMusic()
-            }
+            // 게임 시작 시 게임용 BGM 재생
+            AudioManager.shared.playGameMusic()
             
             // 게임 종료 알림 등록
             NotificationCenter.default.addObserver(
@@ -35,6 +32,9 @@ struct GameView: View {
             }
         }
         .onDisappear {
+            // 게임 종료 시 메인 메뉴 음악으로 전환
+            AudioManager.shared.playMainMenuMusic()
+            
             // 알림 해제
             NotificationCenter.default.removeObserver(self, name: NSNotification.Name(GameConstants.Notifications.quitGame), object: nil)
         }

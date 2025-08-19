@@ -138,8 +138,11 @@ class Player: SKSpriteNode {
         
         isReloading = true
         
-        // 재장전 사운드 재생
-        AudioManager.shared.playReloadSound()
+        // 재장전 사운드 재생 (SKAction 방식)
+        if AudioManager.shared.isSoundEffectsEnabled {
+            let reloadSound = SKAction.playSoundFileNamed(GameConstants.Audio.SoundEffects.reload, waitForCompletion: false)
+            run(reloadSound)
+        }
         
         let reloadAction = SKAction.sequence([
             SKAction.wait(forDuration: reloadTime),
@@ -163,6 +166,9 @@ class Player: SKSpriteNode {
         }
         
         currentHealth = max(0, currentHealth - damage)
+        
+        // 피격 햅틱 피드백
+        HapticManager.shared.playHitHaptic()
         
         // 피격 효과 (이미지와 호환되는 방식)
         let flashAction = SKAction.sequence([

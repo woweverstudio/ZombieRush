@@ -342,6 +342,9 @@ class GameScene: SKScene {
         // 게임 UI 다시 보이기 (재시작 시 UI 복원)
         showAllGameUI()
         
+        // 게임 재시작 시 게임 BGM 재생
+        AudioManager.shared.playGameMusic()
+        
         // 씬 다시 로드
         let scene = GameScene(size: self.size)
         scene.scaleMode = self.scaleMode

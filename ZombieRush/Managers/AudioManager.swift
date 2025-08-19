@@ -11,17 +11,17 @@ import AVFoundation
 class AudioManager: NSObject, ObservableObject {
     static let shared = AudioManager()
     
-    // MARK: - Audio Engine System
-    private let audioEngine = AVAudioEngine()
-    private let mixerNode = AVAudioMixerNode()
-    
-    // MARK: - Background Music
+    // MARK: - Properties
     private var backgroundMusicPlayer: AVAudioPlayer?
+    private var buttonSoundPlayer: AVAudioPlayer?
+    private var currentMusicName: String?
+    private var currentMusicType: MusicType = .mainMenu
+    
     @Published var isBackgroundMusicEnabled: Bool {
         didSet {
             UserDefaults.standard.set(isBackgroundMusicEnabled, forKey: "isBackgroundMusicEnabled")
             if isBackgroundMusicEnabled {
-                playBackgroundMusic()
+                playBackgroundMusic(type: currentMusicType)
             } else {
                 stopBackgroundMusic()
             }
@@ -34,231 +34,164 @@ class AudioManager: NSObject, ObservableObject {
         }
     }
     
-    // MARK: - Sound Effect Caching
-    private var audioBuffers: [String: AVAudioPCMBuffer] = [:]
-    private var playerNodes: [String: [AVAudioPlayerNode]] = [:]
+    // MARK: - Music Types
+    enum MusicType {
+        case mainMenu, game, fallback
+    }
     
-    // 사운드 파일 정보
-    private let soundFiles = [
-        "shoot": "wav",
-        "shotgun": "wav", 
-        "reload": "wav",
-        "button": "mp3"
-    ]
-    
+    // MARK: - Initialization
     override private init() {
-        // 기본값 설정 (UserDefaults에 값이 없으면 true)
-        let backgroundMusicDefault = UserDefaults.standard.object(forKey: "isBackgroundMusicEnabled") as? Bool ?? true
-        let soundEffectsDefault = UserDefaults.standard.object(forKey: "isSoundEffectsEnabled") as? Bool ?? true
-        
-        // 기본값으로 초기화
-        self.isBackgroundMusicEnabled = backgroundMusicDefault
-        self.isSoundEffectsEnabled = soundEffectsDefault
+        self.isBackgroundMusicEnabled = UserDefaults.standard.bool(forKey: "isBackgroundMusicEnabled", defaultValue: true)
+        self.isSoundEffectsEnabled = UserDefaults.standard.bool(forKey: "isSoundEffectsEnabled", defaultValue: true)
         
         super.init()
         
-        // 기본값이 설정되지 않은 경우에만 UserDefaults에 저장
-        if UserDefaults.standard.object(forKey: "isBackgroundMusicEnabled") == nil {
-            UserDefaults.standard.set(true, forKey: "isBackgroundMusicEnabled")
-        }
-        
-        if UserDefaults.standard.object(forKey: "isSoundEffectsEnabled") == nil {
-            UserDefaults.standard.set(true, forKey: "isSoundEffectsEnabled")
-        }
-        
         setupAudioSession()
-        setupAudioEngine()
-        preloadSoundEffects()
+        setupNotifications()
         
         if isBackgroundMusicEnabled {
             playBackgroundMusic()
         }
     }
     
-    // MARK: - Setup Methods
+    // MARK: - Setup
     private func setupAudioSession() {
         do {
-            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, options: [.mixWithOthers])
-            try AVAudioSession.sharedInstance().setActive(true)
+            let session = AVAudioSession.sharedInstance()
+            try session.setCategory(.playback, mode: .default, options: [.mixWithOthers, .allowBluetooth])
+            try session.setActive(true)
         } catch {
-            print("오디오 세션 설정 실패: \(error)")
+            // 오디오 세션 설정 실패 시 무시
         }
     }
     
-    private func setupAudioEngine() {
-        // 믹서 노드를 엔진에 연결
-        audioEngine.attach(mixerNode)
-        
-        // 적절한 오디오 포맷 설정
-        let format = audioEngine.outputNode.inputFormat(forBus: 0)
-        audioEngine.connect(mixerNode, to: audioEngine.outputNode, format: format)
-        
-        // 엔진 시작
-        do {
-            try audioEngine.start()
-            print("오디오 엔진 시작 성공")
-        } catch {
-            print("오디오 엔진 시작 실패: \(error)")
-        }
+    private func setupNotifications() {
+        NotificationCenter.default.addObserver(
+            self, selector: #selector(handleAudioSessionInterruption),
+            name: AVAudioSession.interruptionNotification, object: nil
+        )
     }
     
-    private func preloadSoundEffects() {
-        // 백그라운드 큐에서 사운드 파일들을 미리 로드
-        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-            guard let self = self else { return }
-            
-            for (soundName, fileExtension) in self.soundFiles {
-                self.loadAudioBuffer(soundName: soundName, fileExtension: fileExtension)
-            }
-            
-            print("모든 사운드 효과 미리 로드 완료")
-        }
-    }
-    
-    private func loadAudioBuffer(soundName: String, fileExtension: String) {
-        guard let url = Bundle.main.url(forResource: soundName, withExtension: fileExtension) else {
-            print("\(soundName).\(fileExtension) 파일을 찾을 수 없습니다")
-            return
-        }
+    @objc private func handleAudioSessionInterruption(notification: Notification) {
+        guard let userInfo = notification.userInfo,
+              let typeValue = userInfo[AVAudioSessionInterruptionTypeKey] as? UInt,
+              let type = AVAudioSession.InterruptionType(rawValue: typeValue) else { return }
         
-        do {
-            let audioFile = try AVAudioFile(forReading: url)
-            let buffer = AVAudioPCMBuffer(pcmFormat: audioFile.processingFormat, frameCapacity: AVAudioFrameCount(audioFile.length))
-            
-            guard let buffer = buffer else {
-                print("\(soundName) 버퍼 생성 실패")
-                return
-            }
-            
-            try audioFile.read(into: buffer)
-            audioBuffers[soundName] = buffer
-            print("\(soundName) 버퍼 로드 성공 - 길이: \(buffer.frameLength), 포맷: \(buffer.format)")
-            
-        } catch {
-            print("\(soundName) 로드 실패: \(error)")
+        if type == .ended && isBackgroundMusicEnabled && backgroundMusicPlayer?.isPlaying != true {
+            backgroundMusicPlayer?.play()
         }
     }
     
     // MARK: - Background Music
-    func playBackgroundMusic() {
+    func playMainMenuMusic() { playBackgroundMusic(type: .mainMenu) }
+    func playGameMusic() { playBackgroundMusic(type: .game) }
+    
+    func playBackgroundMusic(type: MusicType = .fallback) {
         guard isBackgroundMusicEnabled else { return }
         
-        // 이미 재생 중이면 중복 재생 방지
-        if backgroundMusicPlayer?.isPlaying == true { return }
+        let musicName = selectMusicFile(for: type)
         
-        guard let url = Bundle.main.url(forResource: "background", withExtension: "mp3") else {
-            print("background.mp3 파일을 찾을 수 없습니다")
+        // 같은 음악이 재생 중이면 스킵
+        if currentMusicName == musicName && backgroundMusicPlayer?.isPlaying == true {
             return
         }
         
-        do {
-            backgroundMusicPlayer = try AVAudioPlayer(contentsOf: url)
-            backgroundMusicPlayer?.numberOfLoops = -1 // 무한 반복
-            backgroundMusicPlayer?.volume = 0.7
-            backgroundMusicPlayer?.play()
-        } catch {
-            print("백그라운드 뮤직 재생 실패: \(error)")
+        playMusic(named: musicName, type: type)
+    }
+    
+    private func selectMusicFile(for type: MusicType) -> String {
+        let candidates: [String]
+        
+        switch type {
+        case .mainMenu:
+            candidates = GameConstants.Audio.BackgroundMusic.mainMenuTracks
+            return candidates.randomElement() ?? candidates[0]
+        case .game:
+            candidates = GameConstants.Audio.BackgroundMusic.gameTracks
+            return candidates[0]
+        case .fallback:
+            candidates = GameConstants.Audio.BackgroundMusic.fallbackTracks
+            return candidates.first { Bundle.main.url(forResource: $0, withExtension: GameConstants.Audio.BackgroundMusic.fileExtension) != nil } ?? "background"
+        }
+    }
+    
+    private func playMusic(named musicName: String, type: MusicType) {
+        stopBackgroundMusic()
+        
+        guard let url = Bundle.main.url(forResource: musicName, withExtension: GameConstants.Audio.BackgroundMusic.fileExtension) else {
+            if type != .fallback { playBackgroundMusic(type: .fallback) }
+            return
+        }
+        
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            do {
+                let player = try AVAudioPlayer(contentsOf: url)
+                player.numberOfLoops = -1
+                player.volume = GameConstants.Audio.BackgroundMusic.volume
+                player.prepareToPlay()
+                
+                DispatchQueue.main.async {
+                    guard let self = self else { return }
+                    self.backgroundMusicPlayer = player
+                    self.currentMusicName = musicName
+                    self.currentMusicType = type
+                    player.play()
+                }
+            } catch {
+                if type != .fallback {
+                    DispatchQueue.main.async { [weak self] in
+                        self?.playBackgroundMusic(type: .fallback)
+                    }
+                }
+            }
         }
     }
     
     func stopBackgroundMusic() {
         backgroundMusicPlayer?.stop()
+        backgroundMusicPlayer = nil
+        currentMusicName = nil
     }
     
-    func pauseBackgroundMusic() {
-        backgroundMusicPlayer?.pause()
-    }
-    
-    func resumeBackgroundMusic() {
-        if isBackgroundMusicEnabled {
-            backgroundMusicPlayer?.play()
-        }
-    }
-    
-    // MARK: - Sound Effects (High Performance)
-    private func playSoundEffect(_ soundName: String, volume: Float = 1.0) {
-        guard isSoundEffectsEnabled else { 
-            print("사운드 이펙트가 비활성화됨")
-            return 
-        }
-        
-        guard let buffer = audioBuffers[soundName] else {
-            print("\(soundName) 버퍼를 찾을 수 없습니다")
-            return
-        }
-        
-        print("사운드 재생 시도: \(soundName), 볼륨: \(volume)")
-        
-        // 새로운 플레이어 노드 생성 (기존 재생 중단하지 않음)
-        let playerNode = AVAudioPlayerNode()
-        
-        // 엔진이 실행 중인지 확인
-        guard audioEngine.isRunning else {
-            print("오디오 엔진이 실행되지 않음")
-            return
-        }
-        
-        audioEngine.attach(playerNode)
-        
-        // 버퍼의 원본 포맷으로 연결 (중요!)
-        audioEngine.connect(playerNode, to: mixerNode, format: buffer.format)
-        
-        // 플레이어 노드 배열에 추가
-        if playerNodes[soundName] == nil {
-            playerNodes[soundName] = []
-        }
-        playerNodes[soundName]?.append(playerNode)
-        
-        // 볼륨 설정 및 재생
-        playerNode.volume = volume
-        
-        // 버퍼 스케줄링 및 재생
-        playerNode.scheduleBuffer(buffer, completionHandler: { [weak self] in
-            DispatchQueue.main.async {
-                self?.cleanupPlayerNode(soundName: soundName, playerNode: playerNode)
-            }
-        })
-        
-        // AVAudioPlayerNode는 start() 메서드를 사용
-        playerNode.play()
-    }
-    
-    private func stopSoundEffect(_ soundName: String) {
-        playerNodes[soundName]?.forEach { playerNode in
-            playerNode.stop()
-            audioEngine.detach(playerNode)
-        }
-        playerNodes[soundName]?.removeAll()
-    }
-    
-    private func cleanupPlayerNode(soundName: String, playerNode: AVAudioPlayerNode) {
-        audioEngine.detach(playerNode)
-        
-        if let index = playerNodes[soundName]?.firstIndex(of: playerNode) {
-            playerNodes[soundName]?.remove(at: index)
-        }
-    }
-    
-    // MARK: - Public Sound Effect Methods
-    func playShootSound() {
-        playSoundEffect("shoot", volume: 0.4)  // 절반으로 줄임
-    }
-    
-    func playShotgunSound() {
-        playSoundEffect("shotgun", volume: 0.45)  // 절반으로 줄임
-    }
-    
-    func playReloadSound() {
-        playSoundEffect("reload", volume: 0.35)  // 절반으로 줄임
-    }
-    
+    // MARK: - Sound Effects (SwiftUI용)
     func playButtonSound() {
-        playSoundEffect("button", volume: 0.6)  // 그대로 유지
+        guard isSoundEffectsEnabled else { return }
+        guard let url = Bundle.main.url(forResource: "button", withExtension: "mp3") else { return }
+        
+        // 기존 버튼 사운드가 재생 중이면 정지
+        buttonSoundPlayer?.stop()
+        
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            do {
+                let player = try AVAudioPlayer(contentsOf: url)
+                player.volume = 0.8
+                player.prepareToPlay()
+                
+                DispatchQueue.main.async {
+                    self?.buttonSoundPlayer = player
+                    player.play()
+                }
+            } catch {
+                // 재생 실패 시 무시
+            }
+        }
     }
     
     // MARK: - Cleanup
     deinit {
-        audioEngine.stop()
+        NotificationCenter.default.removeObserver(self)
         backgroundMusicPlayer?.stop()
+        buttonSoundPlayer?.stop()
+    }
+}
+
+// MARK: - UserDefaults Extension
+private extension UserDefaults {
+    func bool(forKey key: String, defaultValue: Bool) -> Bool {
+        if object(forKey: key) == nil {
+            set(defaultValue, forKey: key)
+            return defaultValue
+        }
+        return bool(forKey: key)
     }
 }

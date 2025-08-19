@@ -180,11 +180,23 @@ class GameOverManager {
         if let nodeName = touchedNode.parent?.name {
             switch nodeName {
             case "RestartButton":
-                AudioManager.shared.playButtonSound()
+                // 버튼 사운드 재생 (직접 SKAction 사용)
+                if AudioManager.shared.isSoundEffectsEnabled {
+                    let buttonSound = SKAction.playSoundFileNamed(GameConstants.Audio.SoundEffects.button, waitForCompletion: false)
+                    gameOverNode.run(buttonSound)
+                }
+                // 버튼 햅틱 피드백
+                HapticManager.shared.playButtonHaptic()
                 onRestart?()
                 return true
             case "QuitButton":
-                AudioManager.shared.playButtonSound()
+                // 버튼 사운드 재생 (직접 SKAction 사용)
+                if AudioManager.shared.isSoundEffectsEnabled {
+                    let buttonSound = SKAction.playSoundFileNamed(GameConstants.Audio.SoundEffects.button, waitForCompletion: false)
+                    gameOverNode.run(buttonSound)
+                }
+                // 버튼 햅틱 피드백
+                HapticManager.shared.playButtonHaptic()
                 onQuit?()
                 return true
             default:

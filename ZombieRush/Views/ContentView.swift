@@ -10,7 +10,6 @@ import SwiftUI
 struct ContentView: View {
     @State private var showGameView = false
     @State private var showSettingsView = false
-    @StateObject private var audioManager = AudioManager.shared
     
     var body: some View {
         ZStack {
@@ -32,6 +31,7 @@ struct ContentView: View {
                     // 네온 설정 버튼 (우측 상단)
                     Button(action: {
                         AudioManager.shared.playButtonSound()
+                        HapticManager.shared.playButtonHaptic()
                         showSettingsView = true
                     }) {
                         Image(systemName: "gearshape.fill")
@@ -76,6 +76,7 @@ struct ContentView: View {
                     // 네온 게임시작 버튼
                     Button(action: {
                         AudioManager.shared.playButtonSound()
+                        HapticManager.shared.playButtonHaptic()
                         showGameView = true
                     }) {
                         Text("GAME START")
@@ -114,10 +115,8 @@ struct ContentView: View {
             SettingsView()
         }
         .onAppear {
-            // 앱 시작 시 백그라운드 뮤직 재생
-            if audioManager.isBackgroundMusicEnabled {
-                audioManager.playBackgroundMusic()
-            }
+            // 메인 화면 진입 시 랜덤 메인 메뉴 음악 재생
+            AudioManager.shared.playMainMenuMusic()
         }
     }
 }

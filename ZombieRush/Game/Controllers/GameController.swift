@@ -188,20 +188,26 @@ class GameController {
         // 샷건 모드 확인
         if player.getIsShotgunMode() {
             fireShotgunBullets(from: startPosition, worldNode: worldNode)
-            // 샷건 사운드 재생
-            AudioManager.shared.playShotgunSound()
+            // 샷건 사운드 재생 (SKAction 방식)
+            if AudioManager.shared.isSoundEffectsEnabled {
+                let shotgunSound = SKAction.playSoundFileNamed(GameConstants.Audio.SoundEffects.shotgun, waitForCompletion: false)
+                scene.run(shotgunSound)
+            }
+            // 샷건 햅틱 피드백
+            HapticManager.shared.playShotgunHaptic()
             // 샷건 모드에서는 탄약 소모 없음
         } else {
             fireSingleBullet(from: startPosition, worldNode: worldNode)
-            // 일반 총 사운드 재생        
-            AudioManager.shared.playShootSound()
+            // 일반 총 사운드 재생 (SKAction 방식)
+            if AudioManager.shared.isSoundEffectsEnabled {
+                let shootSound = SKAction.playSoundFileNamed(GameConstants.Audio.SoundEffects.shoot, waitForCompletion: false)
+                scene.run(shootSound)
+            }
+            // 일반 총 햅틱 피드백
+            HapticManager.shared.playShootHaptic()
             // 일반 모드에서만 탄약 소모
             player.consumeAmmo()
         }
-        
-        // 햅틱 피드백
-        let impactFeedback = UIImpactFeedbackGenerator(style: .soft)
-        impactFeedback.impactOccurred()
     }
     
     private func fireSingleBullet(from position: CGPoint, worldNode: SKNode) {

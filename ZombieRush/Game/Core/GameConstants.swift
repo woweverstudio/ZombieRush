@@ -287,7 +287,7 @@ struct GameConstants {
         static let announcementDuration: TimeInterval = 2.0  // 웨이브 알림 표시 시간
         static let zombieCountMultiplier: Float = 1.4  // 웨이브마다 좀비 수 40% 증가
         static let speedMultiplier: Float = 1.13  // 웨이브마다 좀비 속도 13% 증가
-        static let healthMultiplier: Float = 1.15  // 웨이브마다 좀비 체력 15% 증가
+        static let healthMultiplier: Float = 1.08  // 웨이브마다 좀비 체력 8% 증가
         static let maxSpeedMultiplier: Float = 3.0  // 최대 속도 배수
         static let maxHealthMultiplier: Float = 5.0  // 최대 체력 배수
     }
@@ -310,5 +310,38 @@ struct GameConstants {
         static let zombieNormalSpawnRate: Int = 60  // 60%
         static let zombieFastSpawnRate: Int = 25    // 25%
         static let zombieStrongSpawnRate: Int = 15  // 15%
+    }
+    
+    // MARK: - Audio
+    struct Audio {
+        // 배경음악 설정
+        struct BackgroundMusic {
+            static let mainMenuTracks = ["main_background1", "main_background2"]
+            static let gameTracks = ["game_background"]
+            static let fallbackTracks = ["main_background1", "main_background2", "game_background", "background"]
+            static let fileExtension = "mp3"
+            static let volume: Float = 0.2
+        }
+        
+        // 효과음 설정 (SKAction 사용)
+        struct SoundEffects {
+            static let shoot = "shoot.wav"
+            static let shotgun = "shotgun.wav"
+            static let reload = "reload.wav"
+            static let button = "button.mp3"
+            static let item = "item.wav"
+            static let meteor = "meteor.wav"
+            static let hit = "hit.wav"
+        }
+    }
+    
+    // MARK: - Haptic
+    struct Haptic {
+        // 햅틱 강도 설정
+        static let shootIntensity: Float = 0.3      // 발사 시 약한 진동
+        static let shotgunIntensity: Float = 0.7    // 샷건 발사 시 강한 진동
+        static let hitIntensity: Float = 0.4        // 피격 시 중간 진동
+        static let itemIntensity: Float = 0.2       // 아이템 수집 시 약한 진동
+        static let buttonIntensity: Float = 0.1     // 버튼 터치 시 매우 약한 진동
     }
 }
