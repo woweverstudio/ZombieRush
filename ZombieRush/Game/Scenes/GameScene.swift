@@ -102,8 +102,6 @@ class GameScene: SKScene {
         if let player = player {
             cameraNode?.position = player.position
         }
-        
-
     }
     
     private func setupSystems() {

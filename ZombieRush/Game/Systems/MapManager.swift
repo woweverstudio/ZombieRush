@@ -135,27 +135,11 @@ class MapManager: MapManagerProtocol {
         worldNode.addChild(outerBorderRect)
     }
     
-    // 이미지 기반 경계 생성 메서드들 제거됨 - 그리드 시스템 사용
-    
-    // 이미지 기반 경계 생성 메서드들 모두 제거됨 - 그리드 시스템 사용
-    
     private func removeCurrentMap() {
-        // 기존 그리드 노드들 제거 (worldNode에서 그리드 관련 노드들을 찾아서 제거)
-        // 이는 새로운 그리드를 생성하기 전에 기존 그리드를 정리하기 위함
+        // 기존 그리드 노드들 제거
     }
     
-    // MARK: - Map Information
     func getMapDisplayName() -> String {
         return "네온 그리드"
-    }
-    
-    // MARK: - Future Extension Methods
-    // 향후 맵 타일링, 맵 애니메이션 등을 위한 확장 포인트
-    private func createTiledMap(in worldNode: SKNode) {
-        // 향후 큰 맵을 위한 타일링 시스템 구현 예정
-    }
-    
-    private func preloadMapAssets() {
-        // 향후 맵 에셋 사전 로딩을 위한 메서드
     }
 }

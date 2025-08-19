@@ -82,21 +82,18 @@ struct SettingsView: View {
                             isOn: $audioManager.isSoundEffectsEnabled
                         )
                         
-                        // 음악 설정 (AudioManager와 연결)
                         SettingRow(
                             title: "배경음악",
                             icon: "music.note",
                             isOn: $audioManager.isBackgroundMusicEnabled
                         )
                         
-                        // 진동 설정 (HapticManager와 연결)
                         SettingRow(
                             title: "진동",
                             icon: "iphone.radiowaves.left.and.right",
                             isOn: $hapticManager.isHapticEnabled
                         )
                         
-                        // 하단 여백
                         Rectangle()
                             .fill(Color.clear)
                             .frame(height: 30)

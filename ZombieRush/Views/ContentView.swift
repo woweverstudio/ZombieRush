@@ -101,7 +101,6 @@ struct ContentView: View {
                 
                 Spacer()
                 
-                // 하단 여백
                 Rectangle()
                     .fill(Color.clear)
                     .frame(height: 50)
@@ -115,7 +114,6 @@ struct ContentView: View {
             SettingsView()
         }
         .onAppear {
-            // 메인 화면 진입 시 랜덤 메인 메뉴 음악 재생
             AudioManager.shared.playMainMenuMusic()
         }
     }

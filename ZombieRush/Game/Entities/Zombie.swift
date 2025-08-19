@@ -133,28 +133,17 @@ class Zombie: SKSpriteNode {
         }
     }
     
-    // 이미지 업데이트 메서드 제거됨 - 단순한 사각형 사용
-    
     // MARK: - Combat Methods
-    /**
-     좀비에게 데미지를 입힙니다.
-     - Parameter damage: 입힐 데미지 (기본값: 1)
-     - Returns: 좀비가 죽었는지 여부 (true: 죽음, false: 생존)
-     - Note: 좀비가 죽어도 씬에서 제거하지 않습니다. 호출자가 제거를 담당해야 합니다.
-     */
     @discardableResult
     func takeDamage(_ damage: Int = 1) -> Bool {
         currentHealth -= damage
         
-        // 체력이 0 이하가 되면 죽음 (제거는 호출자가 담당)
         if currentHealth <= 0 {
-            return true // 죽었음을 반환
+            return true
         }
         
-        return false // 아직 살아있음
+        return false
     }
-    
-
     
     // MARK: - Getters
     func getType() -> ZombieType {

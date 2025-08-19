@@ -19,10 +19,8 @@ class WorldManager {
         self.mapManager = MapManager()
     }
     
-    // MARK: - Setup Methods
     func setupWorld() {
         setupMapBackground()
-        // 그림자 경계 제거됨 - 그리드 시스템 사용
     }
     
     private func setupMapBackground() {
@@ -30,12 +28,10 @@ class WorldManager {
         mapManager.setupMap(in: worldNode)
     }
     
-    // MARK: - Map Management (그리드 기반 간소화)
     func getMapDisplayName() -> String {
         return mapManager.getMapDisplayName()
     }
     
-    // MARK: - World Management
     func getWorldNode() -> SKNode? {
         return worldNode
     }
@@ -47,6 +43,4 @@ class WorldManager {
     func removeChild(_ node: SKNode) {
         node.removeFromParent()
     }
-    
-    // 그림자 경계 생성 메서드들 제거됨 - 그리드 시스템 사용
 }
