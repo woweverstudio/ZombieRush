@@ -15,6 +15,9 @@ class Player: SKSpriteNode {
     // 이미지 관련 프로퍼티 제거됨 - 단순한 원형 사용
     private var lastMoveDirection: CGVector = CGVector.zero
     
+    // MARK: - Face Expression Properties
+    private var faceExpressionNode: SKSpriteNode?
+    
     // MARK: - Movement Properties
     private var baseMoveSpeed: CGFloat = GameConstants.Player.baseMoveSpeed
     private var currentMoveSpeed: CGFloat = GameConstants.Player.baseMoveSpeed
@@ -88,6 +91,24 @@ class Player: SKSpriteNode {
         neonRect.name = "PlayerShape"
         
         addChild(neonRect)
+        
+        // 표정 레이어 추가
+        setupFaceExpression()
+    }
+    
+    // MARK: - Face Expression Setup
+    private func setupFaceExpression() {
+        let faceTexture = SKTexture(imageNamed: "face_normal")
+        
+        faceExpressionNode = SKSpriteNode(texture: faceTexture)
+        faceExpressionNode?.size = CGSize(width: size.width , height: size.height)
+        faceExpressionNode?.position = CGPoint.zero
+        faceExpressionNode?.zPosition = 1 // 네온 사각형 위에 표시
+        faceExpressionNode?.name = "FaceExpression"
+        
+        if let faceNode = faceExpressionNode {
+            addChild(faceNode)
+        }
     }
     
     // MARK: - Movement Methods
@@ -173,6 +194,9 @@ class Player: SKSpriteNode {
             SKAction.fadeAlpha(to: 1.0, duration: 0.05)
         ])
         run(flashAction)
+        
+        // 데미지를 받을 때 face_hit 표정으로 1초간 변경 후 normal로 복원
+        temporaryFaceExpression(imageName: "face_hit", duration: 1.0)
     }
     
     func heal(_ amount: Int) {
@@ -303,6 +327,43 @@ class Player: SKSpriteNode {
     func disableMeteorMode() {
         meteorModeActive = false
         removeAction(forKey: "meteorEffect")
+    }
+    
+    // MARK: - Face Expression Methods
+    func changeFaceExpression(to imageName: String) {
+        guard let faceNode = faceExpressionNode else {
+            print("Warning: Face expression node not found")
+            return
+        }
+        
+        let newTexture = SKTexture(imageNamed: imageName)
+        
+        // 부드러운 전환 효과
+        let fadeOut = SKAction.fadeAlpha(to: 0.0, duration: 0.1)
+        let changeTexture = SKAction.run {
+            faceNode.texture = newTexture
+        }
+        let fadeIn = SKAction.fadeAlpha(to: 1.0, duration: 0.1)
+        
+        let transitionSequence = SKAction.sequence([fadeOut, changeTexture, fadeIn])
+        faceNode.run(transitionSequence)
+    }
+    
+    func setNormalFace() {
+        changeFaceExpression(to: "face_normal")
+    }
+    
+    func temporaryFaceExpression(imageName: String, duration: TimeInterval = 1.0) {
+        changeFaceExpression(to: imageName)
+        
+        // 일정 시간 후 기본 표정으로 복원
+        let waitAction = SKAction.wait(forDuration: duration)
+        let restoreAction = SKAction.run { [weak self] in
+            self?.setNormalFace()
+        }
+        
+        let sequence = SKAction.sequence([waitAction, restoreAction])
+        run(sequence, withKey: "temporaryFaceExpression")
     }
     
     // MARK: - Wave Speed Bonus

@@ -18,8 +18,8 @@ class HapticManager: ObservableObject {
     
     // MARK: - Haptic Generators
     private let impactLight = UIImpactFeedbackGenerator(style: .light)
-    private let impactMedium = UIImpactFeedbackGenerator(style: .medium)
-    private let impactHeavy = UIImpactFeedbackGenerator(style: .heavy)
+    private let impactRigid = UIImpactFeedbackGenerator(style: .rigid)
+    private let impactSoft = UIImpactFeedbackGenerator(style: .soft)
     
     // MARK: - Initialization
     private init() {
@@ -31,8 +31,8 @@ class HapticManager: ObservableObject {
     
     private func prepareHaptics() {
         impactLight.prepare()
-        impactMedium.prepare()
-        impactHeavy.prepare()
+        impactRigid.prepare()
+        impactSoft.prepare()
     }
     
     // MARK: - Haptic Methods
@@ -43,12 +43,12 @@ class HapticManager: ObservableObject {
     
     func playShotgunHaptic() {
         guard isHapticEnabled else { return }
-        impactHeavy.impactOccurred(intensity: CGFloat(GameConstants.Haptic.shotgunIntensity))
+        impactSoft.impactOccurred(intensity: CGFloat(GameConstants.Haptic.shotgunIntensity))
     }
     
     func playHitHaptic() {
         guard isHapticEnabled else { return }
-        impactMedium.impactOccurred(intensity: CGFloat(GameConstants.Haptic.hitIntensity))
+        impactRigid.impactOccurred(intensity: CGFloat(GameConstants.Haptic.hitIntensity))
     }
     
     func playItemHaptic() {
@@ -69,12 +69,12 @@ class HapticManager: ObservableObject {
     
     func playMediumHaptic() {
         guard isHapticEnabled else { return }
-        impactMedium.impactOccurred()
+        impactRigid.impactOccurred()
     }
     
     func playHeavyHaptic() {
         guard isHapticEnabled else { return }
-        impactHeavy.impactOccurred()
+        impactSoft.impactOccurred()
     }
 }
 

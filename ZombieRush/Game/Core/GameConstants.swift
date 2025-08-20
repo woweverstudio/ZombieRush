@@ -338,10 +338,10 @@ struct GameConstants {
     // MARK: - Haptic
     struct Haptic {
         // 햅틱 강도 설정
-        static let shootIntensity: Float = 0.3      // 발사 시 약한 진동
-        static let shotgunIntensity: Float = 0.7    // 샷건 발사 시 강한 진동
-        static let hitIntensity: Float = 0.4        // 피격 시 중간 진동
-        static let itemIntensity: Float = 0.2       // 아이템 수집 시 약한 진동
-        static let buttonIntensity: Float = 0.1     // 버튼 터치 시 매우 약한 진동
+        static let shootIntensity: Float = 0.8      // 발사 시 약한 진동
+        static let shotgunIntensity: Float = 1.0    // 샷건 발사 시 강한 진동
+        static let hitIntensity: Float = 1.0        // 피격 시 중간 진동
+        static let itemIntensity: Float = 1.0       // 아이템 수집 시 약한 진동
+        static let buttonIntensity: Float = 1.0     // 버튼 터치 시 매우 약한 진동
     }
 }

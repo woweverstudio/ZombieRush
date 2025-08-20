@@ -57,13 +57,13 @@ struct ContentView: View {
                 
                 // 게임 타이틀
                 VStack(spacing: 10) {
-                    Text("ATTACK ON")
+                    Text("NEMO NEMO")
                         .font(.system(size: 32, weight: .heavy, design: .monospaced))
                         .foregroundColor(Color(red: 1.0, green: 0.0, blue: 1.0))
                         .shadow(color: Color(red: 1.0, green: 0.0, blue: 1.0), radius: 15, x: 0, y: 0)
                         .shadow(color: Color(red: 1.0, green: 0.0, blue: 1.0).opacity(0.5), radius: 30, x: 0, y: 0)
                     
-                    Text("CUBE")
+                    Text("BEAM")
                         .font(.system(size: 48, weight: .heavy, design: .monospaced))
                         .foregroundColor(Color(red: 0.0, green: 0.8, blue: 1.0))
                         .shadow(color: Color(red: 0.0, green: 0.8, blue: 1.0), radius: 20, x: 0, y: 0)
