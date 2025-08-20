@@ -30,6 +30,7 @@ class SpeedBoostEffect: ItemEffect {
     
     func apply(to player: Player) {
         player.applySpeedBoost(multiplier: GameConstants.Items.speedMultiplier)
+        player.temporaryFaceExpression(imageName: "face_angry", duration: GameConstants.Items.buffDuration)
     }
     
     func remove(from player: Player) {
@@ -44,6 +45,7 @@ class HealthRestoreEffect: ItemEffect {
     
     func apply(to player: Player) {
         player.restoreHealth(amount: GameConstants.Items.healthRestoreAmount)
+        player.temporaryFaceExpression(imageName: "face_happy", duration: 1.3)
     }
     
     func remove(from player: Player) {
@@ -58,6 +60,7 @@ class AmmoRestoreEffect: ItemEffect {
     
     func apply(to player: Player) {
         player.restoreAmmo(amount: GameConstants.Items.ammoRestoreAmount)
+        player.temporaryFaceExpression(imageName: "face_happy", duration: 1.3)
     }
     
     func remove(from player: Player) {
@@ -72,6 +75,7 @@ class InvincibilityEffect: ItemEffect {
     
     func apply(to player: Player) {
         player.enableInvincibility()
+        player.temporaryFaceExpression(imageName: "face_angry", duration: GameConstants.Items.buffDuration)
     }
     
     func remove(from player: Player) {
@@ -89,6 +93,7 @@ class ShotgunEffect: ItemEffect {
             bulletCount: GameConstants.Items.shotgunBulletCount,
             spreadAngle: GameConstants.Items.shotgunSpreadAngle
         )
+        player.temporaryFaceExpression(imageName: "face_angry", duration: GameConstants.Items.buffDuration)
     }
     
     func remove(from player: Player) {
@@ -104,6 +109,7 @@ class MeteorEffect: ItemEffect {
     func apply(to player: Player) {
         // 플레이어 현재 위치에 메테오 폭탄 설치
         player.deployMeteor()
+        player.temporaryFaceExpression(imageName: "face_angry", duration: 1.0)
     }
     
     func remove(from player: Player) {

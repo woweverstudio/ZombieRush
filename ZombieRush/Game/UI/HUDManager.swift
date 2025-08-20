@@ -95,7 +95,7 @@ class HUDManager {
         
         // 나가기 버튼 배경 (검은 반투명 배경)
         exitButton = SKShapeNode(rectOf: CGSize(width: buttonWidth, height: buttonHeight), cornerRadius: 6)
-        exitButton?.fillColor = SKColor.black.withAlphaComponent(0.7)
+        exitButton?.fillColor = SKColor.black.withAlphaComponent(0.3)
         exitButton?.strokeColor = SKColor.white.withAlphaComponent(0.3)
         exitButton?.lineWidth = 1
         exitButton?.position = CGPoint(x: buttonX, y: buttonY)

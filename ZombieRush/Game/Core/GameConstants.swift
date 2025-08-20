@@ -158,9 +158,9 @@ struct GameConstants {
         static let meteorExplosionInnerColor = SKColor.yellow  // 내부 폭발 색상
         
         // 아이템별 최소 웨이브 요구사항
-        static let speedBoostMinWave: Int = 2  // 웨이브 2부터 등장
-        static let invincibilityMinWave: Int = 3  // 웨이브 3부터 등장
-        static let shotgunMinWave: Int = 3  // 웨이브 3부터 등장
+        static let speedBoostMinWave: Int = 1  // 웨이브 2부터 등장
+        static let invincibilityMinWave: Int = 1  // 웨이브 3부터 등장
+        static let shotgunMinWave: Int = 1  // 웨이브 3부터 등장
         
         // 아이템 이미지 설정
         static let ammoRestoreImageName = "item_ammoRestore"
