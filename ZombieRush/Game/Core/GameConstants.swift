@@ -282,6 +282,7 @@ struct GameConstants {
         static let ammo = "Ammo"
         static let reloading = "재장전 중..."
         static let waveAnnouncement = "웨이브 %d"
+        static let exitButton = "나가기"
     }
     
     // MARK: - Wave System

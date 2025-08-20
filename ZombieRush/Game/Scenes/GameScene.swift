@@ -232,6 +232,14 @@ class GameScene: SKScene {
             return
         }
         
+        // HUD 터치 처리 (나가기 버튼 등)
+        for touch in touches {
+            let location = touch.location(in: cameraNode!)
+            if hudManager?.handleTouch(at: location) == true {
+                return
+            }
+        }
+        
         gameController?.handleTouchBegan(touches)
     }
     
