@@ -95,7 +95,7 @@ class ZombieSpawner {
     }
     
     private func getRandomSpawnPosition() -> CGPoint {
-        guard let player = player else { return CGPoint.zero }
+        guard player != nil else { return CGPoint.zero }
         
         let edge = Int.random(in: 0...3) // 0: 상, 1: 우, 2: 하, 3: 좌
         

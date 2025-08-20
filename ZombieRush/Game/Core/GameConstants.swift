@@ -112,7 +112,7 @@ struct GameConstants {
     
     // MARK: - Items
     struct Items {
-        static let size = CGSize(width: 30, height: 30)
+        static let size = CGSize(width: 35, height: 35)
         static let baseSpawnCount: Int = 6  // 초기 아이템 수 증가
         static let spawnCountMultiplier: Float = 1.8  // 웨이브마다 50% 증가
         static let maxSpawnCount: Int = 80  // 최대 아이템 수 증가
@@ -133,26 +133,29 @@ struct GameConstants {
         static let shotgunBulletCount: Int = 5
         static let shotgunSpreadAngle: CGFloat = 70  // 도 단위
         
-        // 메테오 효과 수치
-        static let meteorDuration: TimeInterval = 8.0  // 8초간 지속
-        static let meteorSpawnInterval: TimeInterval = 0.2  // 0.2초마다 운석 생성 (매우 빠름)
-        static let meteorRadius: CGFloat = 300  // 플레이어 주변 300px 반경 (더 확대)
+        // 메테오 효과 수치 (새로운 폭탄 시스템)
         static let meteorDamage: Int = 999  // 즉사 데미지
-        static let meteorSize: CGFloat = 70  // 운석 크기 (더 확대)
-        static let meteorFallSpeed: CGFloat = 1200  // 낙하 속도 (더 빠름)
         static let meteorMinWave: Int = 5  // 웨이브 5부터 등장
+        static let meteorDelayBeforeExplosion: TimeInterval = 1.0  // 아이템 사용 후 폭발까지 대기 시간
         
-        // 메테오 애니메이션 수치
-        static let meteorFireEffectOffset: CGFloat = 15  // 불꽃 효과 추가 반지름
-        static let meteorLineWidth: CGFloat = 4  // 테두리 두께
-        static let meteorFallDuration: TimeInterval = 0.7  // 낙하 시간
-        static let meteorRotationDuration: TimeInterval = 1.0  // 회전 시간
-        static let meteorExplosionRadius: CGFloat = 70  // 폭발 반지름
-        static let meteorInnerExplosionRadius: CGFloat = 40  // 내부 폭발 반지름
-        static let meteorExplosionDuration: TimeInterval = 0.2  // 폭발 지속시간
-        static let meteorExplosionScale: CGFloat = 4.0  // 폭발 최대 스케일
-        static let meteorRemovalScale: CGFloat = 2.0  // 제거 시 스케일
-        static let meteorRemovalDuration: TimeInterval = 0.2  // 제거 애니메이션 시간
+        // 메테오 경고 표시기
+        static let meteorIndicatorSize: CGFloat = 30  // 경고 표시기 크기 (시야 방해 최소화)
+        static let meteorWarningColor = SKColor.orange  // 경고 색상
+        static let meteorWarningLineWidth: CGFloat = 2  // 경고 링 두께
+        static let meteorWarningGlowWidth: CGFloat = 3  // 경고 글로우 효과
+        static let meteorWarningAlpha: CGFloat = 0.8  // 경고 투명도
+        static let meteorCenterDotSize: CGFloat = 3  // 중앙 점 크기
+        
+        // 메테오 폭발 효과 (맵 전체를 커버하는 강력한 폭발)
+        static let meteorExplosionRadius: CGFloat = 800  // 폭발 반지름 (맵 대부분을 커버)
+        static let meteorInnerExplosionRadius: CGFloat = 600  // 내부 폭발 반지름
+        static let meteorCenterFlashRadius: CGFloat = 400  // 중앙 플래시 반지름
+        static let meteorExplosionDuration: TimeInterval = 0.3  // 폭발 지속시간
+        static let meteorExplosionScale: CGFloat = 1.2  // 폭발 최대 스케일 (과하지 않게)
+        static let meteorExplosionLineWidth: CGFloat = 4  // 폭발 링 두께
+        static let meteorExplosionGlowWidth: CGFloat = 6  // 폭발 글로우 효과
+        static let meteorExplosionOuterColor = SKColor.red  // 외부 폭발 색상
+        static let meteorExplosionInnerColor = SKColor.yellow  // 내부 폭발 색상
         
         // 아이템별 최소 웨이브 요구사항
         static let speedBoostMinWave: Int = 2  // 웨이브 2부터 등장

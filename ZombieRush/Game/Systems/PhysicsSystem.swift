@@ -67,15 +67,7 @@ extension PhysicsSystem: SKPhysicsContactDelegate {
             handlePlayerItemCollision(player: player, item: item)
         }
         
-        // 메테오와 좀비 충돌
-        if (bodyA.categoryBitMask == PhysicsCategory.meteor && bodyB.categoryBitMask == PhysicsCategory.enemy) ||
-           (bodyA.categoryBitMask == PhysicsCategory.enemy && bodyB.categoryBitMask == PhysicsCategory.meteor) {
-            
-            let meteor = bodyA.categoryBitMask == PhysicsCategory.meteor ? bodyA.node : bodyB.node
-            let zombie = bodyA.categoryBitMask == PhysicsCategory.enemy ? bodyA.node : bodyB.node
-            
-            handleMeteorZombieCollision(meteor: meteor, zombie: zombie)
-        }
+
     }
     
     private func handleBulletZombieCollision(bullet: SKNode?, zombie: SKNode?) {
@@ -137,14 +129,7 @@ extension PhysicsSystem: SKPhysicsContactDelegate {
         scene.collectItem(item)
     }
     
-    private func handleMeteorZombieCollision(meteor: SKNode?, zombie: SKNode?) {
-        guard let meteor = meteor as? Meteor,
-              let zombie = zombie as? Zombie,
-              let scene = scene as? GameScene else { return }
-        
-        // 메테오 시스템에서 충돌 처리
-        scene.handleMeteorCollision(meteor: meteor, zombie: zombie)
-    }
+
     
     func didEnd(_ contact: SKPhysicsContact) {
         // Top-Down View에서는 특별한 처리 불필요

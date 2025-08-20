@@ -96,16 +96,17 @@ class ShotgunEffect: ItemEffect {
     }
 }
 
-// 메테오 효과
+// 메테오 효과 (폭탄 설치)
 class MeteorEffect: ItemEffect {
-    let duration: TimeInterval = GameConstants.Items.meteorDuration
-    let isInstant: Bool = false
+    let duration: TimeInterval = 0
+    let isInstant: Bool = true
     
     func apply(to player: Player) {
-        player.enableMeteorMode()
+        // 플레이어 현재 위치에 메테오 폭탄 설치
+        player.deployMeteor()
     }
     
     func remove(from player: Player) {
-        player.disableMeteorMode()
+        // 즉시 효과는 제거할 것이 없음
     }
 }

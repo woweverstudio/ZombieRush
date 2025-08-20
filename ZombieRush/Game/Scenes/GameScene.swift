@@ -168,16 +168,14 @@ class GameScene: SKScene {
         itemEffectManager = ItemEffectManager(player: player, toastMessageManager: toastMessageManager)
         
         // 메테오 시스템 설정
-        meteorSystem = MeteorSystem(worldNode: worldNode, player: player)
+        meteorSystem = MeteorSystem(worldNode: worldNode)
+        
+        // 플레이어에 메테오 시스템 연결
+        player.setMeteorSystem(meteorSystem!)
         
         // 아이템 수집 콜백 설정
         itemSpawner?.onItemCollected = { [weak self] itemType in
             self?.itemEffectManager?.applyItemEffect(type: itemType)
-            
-            // 메테오 아이템인 경우 메테오 스톰 시작
-            if itemType == .meteor {
-                self?.meteorSystem?.startMeteorStorm()
-            }
         }
     }
     
@@ -266,17 +264,7 @@ class GameScene: SKScene {
         itemSpawner?.collectItem(item)
     }
     
-    func handleMeteorCollision(meteor: Meteor, zombie: Zombie) {
-        let isDead = meteorSystem?.handleMeteorCollision(meteor: meteor, zombie: zombie) ?? false
-        
-        if isDead {
-            // 점수 추가
-            addScore()
-            
-            // 좀비 스포너에서 제거
-            removeZombie(zombie)
-        }
-    }
+
     
     private func updatePlayerHUD() {
         guard let player = player, let hudManager = hudManager else { return }
@@ -327,7 +315,7 @@ class GameScene: SKScene {
         itemEffectManager?.removeAllEffects()
         
         // 메테오 정리
-        meteorSystem?.stopMeteorStorm()
+        meteorSystem?.clearAllMeteors()
         
         // 월드 노드의 모든 자식 노드 제거 (좀비, 총알, 배경 등 모든 게임 오브젝트)
         worldNode?.removeAllChildren()

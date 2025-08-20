@@ -36,7 +36,9 @@ class Player: SKSpriteNode {
     private var shotgunModeActive: Bool = false
     private var shotgunBulletCount: Int = 1
     private var shotgunSpreadAngle: CGFloat = 0
-    private var meteorModeActive: Bool = false
+    
+    // MARK: - System References
+    private weak var meteorSystem: MeteorSystem?
     
     // MARK: - Initialization
     init() {
@@ -214,7 +216,7 @@ class Player: SKSpriteNode {
     func getIsShotgunMode() -> Bool { return shotgunModeActive }
     func getShotgunBulletCount() -> Int { return shotgunBulletCount }
     func getShotgunSpreadAngle() -> CGFloat { return shotgunSpreadAngle }
-    func getIsMeteorMode() -> Bool { return meteorModeActive }
+
     
     // Fire Direction Tracking 메서드들 제거됨 - 단순한 원형 사용
     
@@ -307,26 +309,13 @@ class Player: SKSpriteNode {
         removeAction(forKey: "shotgunEffect")
     }
     
-    func enableMeteorMode() {
-        meteorModeActive = true
-        
-        // 메테오 모드 시각적 효과 (신비로운 떨림 + 스케일 효과)
-        let meteorEffect = SKAction.repeatForever(SKAction.sequence([
-            SKAction.group([
-                SKAction.scale(to: 1.1, duration: 0.4),
-                SKAction.fadeAlpha(to: 0.7, duration: 0.4)
-            ]),
-            SKAction.group([
-                SKAction.scale(to: 1.0, duration: 0.4),
-                SKAction.fadeAlpha(to: 1.0, duration: 0.4)
-            ])
-        ]))
-        run(meteorEffect, withKey: "meteorEffect")
+    func deployMeteor() {
+        // 메테오 시스템을 통해 현재 위치에 폭탄 설치
+        meteorSystem?.deployMeteor(at: position)
     }
     
-    func disableMeteorMode() {
-        meteorModeActive = false
-        removeAction(forKey: "meteorEffect")
+    func setMeteorSystem(_ meteorSystem: MeteorSystem) {
+        self.meteorSystem = meteorSystem
     }
     
     // MARK: - Face Expression Methods
