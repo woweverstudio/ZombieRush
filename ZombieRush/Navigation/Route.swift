@@ -53,11 +53,13 @@ struct GameData {
     let score: Int
     let wave: Int
     let isRestart: Bool
+    let isNewRecord: Bool
     
-    init(playTime: TimeInterval = 0, score: Int = 0, wave: Int = 0, isRestart: Bool = false) {
+    init(playTime: TimeInterval = 0, score: Int = 0, wave: Int = 0, isRestart: Bool = false, isNewRecord: Bool = false) {
         self.playTime = playTime
         self.score = score
         self.wave = wave
         self.isRestart = isRestart
+        self.isNewRecord = isNewRecord
     }
 }

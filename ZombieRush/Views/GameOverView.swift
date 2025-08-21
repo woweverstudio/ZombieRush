@@ -4,140 +4,182 @@ struct GameOverView: View {
     let playTime: TimeInterval
     let score: Int
     let wave: Int
+    let isNewRecord: Bool
     let onRestart: () -> Void
     let onQuit: () -> Void
     
     var body: some View {
-        ZStack {
-            // 사이버펑크 배경
-            cyberpunkBackground
-            
-            // 격자 패턴
-            gridPattern
-            
-            // 컨텐츠
-            VStack {
-                // 게임 오버 타이틀
-                VStack(spacing: 4) {
-                    SectionTitle("GAME", style: .magenta, size: 28)
-                    SectionTitle("OVER", style: .cyan, size: 36)
-                }
-                .padding(.top, 30)
-                .padding(.bottom, 20)
+        GeometryReader { geometry in
+            ZStack {
+                // 기존 사이버펑크 배경 이미지 사용
+                CyberpunkBackground(opacity: 0.5)
                 
-                HStack {
-                    // 좌측 상단 정보 라벨들 (랜드스케이프용 컴팩트)
-                    VStack(alignment: .leading, spacing: 12) {
-                        infoLabel(title: "TIME", value: formatTime(playTime))
-                        infoLabel(title: "KILLS", value: "\(score)")
-                        infoLabel(title: "WAVE", value: "\(wave)")
+                VStack(spacing: 0) {
+                    // 상단: 타이틀 (화면의 12%) - NEW RECORD 여부에 따라 변경
+                    VStack {
+                        Spacer()
+                        if isNewRecord {
+                            SectionTitle("NEW RECORD", style: .yellow, size: 32)
+                        } else {
+                            SectionTitle("Game Over", style: .cyan, size: 32)
+                        }
+                        Spacer()
                     }
-                    .padding(.leading, 80)
+                    .frame(height: geometry.size.height * 0.15)
                     
-                    Spacer()
-                }
-                
-                Spacer()
-                
-                // 하단 버튼들
-                HStack(spacing: 60) {
-                    // 그만하기 버튼
-                    NeonButton("QUIT", style: .magenta, width: 140, height: 50) {
-                        onQuit()
+                    // 중단: 두 개의 블록 (화면의 55%)                                   
+                    HStack(spacing: 20) {
+                        // 좌측: Game Data 블록
+                        gameDataBlock
+                        
+                        // 우측: Rank 블록
+                        rankBlock
                     }
+                    .padding(8)  // 패딩을 프레임 안으로 이동                    
+                    .frame(height: geometry.size.height * 0.65)
                     
-                    // 다시하기 버튼
-                    NeonButton("RESTART", style: .cyan, width: 140, height: 50) {
-                        onRestart()
+                    // 하단: 버튼들 (화면의 33%)
+                    VStack {                    
+                        
+                        HStack(spacing: 20) {
+                            // Quit 버튼 (화면 절반 너비)
+                            NeonButton("LEADERBOARD", style: .cyan, width: nil, height: 50) {
+                                onQuit()
+                            }                            
+                            
+                            // Retry 버튼 (화면 절반 너비)
+                            NeonButton("RETRY", style: .magenta, width: nil, height: 50) {
+                                onRestart()
+                            }                            
+                        }
+                        
                     }
+                    .frame(height: geometry.size.height * 0.2)
                 }
-                .padding(.bottom, 40)
             }
         }
-        .ignoresSafeArea()
+        // .ignoresSafeArea()
     }
     
     // MARK: - Components
     
-    private var cyberpunkBackground: some View {
-        ZStack {
-            // 메인 그라데이션 배경
-            LinearGradient(
-                colors: [
-                    Color(red: 0.1, green: 0.0, blue: 0.3),
-                    Color(red: 0.05, green: 0.0, blue: 0.2)
-                ],
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            )
-            
-            // 네온 오버레이
-            RadialGradient(
-                colors: [
-                    Color(red: 0.0, green: 0.8, blue: 1.0).opacity(0.2),
-                    Color.clear
-                ],
-                center: .center,
-                startRadius: 100,
-                endRadius: 400
-            )
-        }
-    }
-    
-    private var gridPattern: some View {
-        Canvas { context, size in
-            let path = Path { path in
-                // 수직 라인들
-                let verticalCount = 8
-                let verticalSpacing = size.width / CGFloat(verticalCount)
-                
-                for i in 1..<verticalCount {
-                    let x = CGFloat(i) * verticalSpacing
-                    path.move(to: CGPoint(x: x, y: 0))
-                    path.addLine(to: CGPoint(x: x, y: size.height))
-                }
-                
-                // 수평 라인들
-                let horizontalCount = 6
-                let horizontalSpacing = size.height / CGFloat(horizontalCount)
-                
-                for i in 1..<horizontalCount {
-                    let y = CGFloat(i) * horizontalSpacing
-                    path.move(to: CGPoint(x: 0, y: y))
-                    path.addLine(to: CGPoint(x: size.width, y: y))
-                }
-            }
-            
-            context.stroke(
-                path,
-                with: .color(Color(red: 0.0, green: 0.6, blue: 1.0).opacity(0.3)),
-                lineWidth: 1
-            )
-        }
-    }
-    
-    private func infoLabel(title: String, value: String) -> some View {
+    // 좌측: Game Data 블록 (이미지 스타일)
+    private var gameDataBlock: some View {
         HStack {
-            Text("\(title): \(value)")
-                .font(.system(size: 22, weight: .bold, design: .monospaced))
-                .foregroundColor(Color(red: 0.0, green: 0.8, blue: 1.0))
-                .shadow(color: Color(red: 0.0, green: 0.8, blue: 1.0), radius: 8, x: 0, y: 0)
-                .padding(.horizontal, 12)
-                .padding(.vertical, 6)
-                .background(
-                    RoundedRectangle(cornerRadius: 6)
-                        .fill(Color.black.opacity(0.8))
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 6)
-                                .stroke(Color(red: 0.0, green: 0.8, blue: 1.0), lineWidth: 2)
-                                .shadow(color: Color(red: 0.0, green: 0.8, blue: 1.0), radius: 12, x: 0, y: 0)
-                        )
+            Spacer()
+            VStack {
+                Spacer()
+                
+                // TIME 섹션
+                VStack(spacing: 8) {
+                    SectionTitle("TIME", style: .cyan, size: 28)
+                    
+                    Text(formatTime(playTime))
+                        .font(.largeTitle.bold())
+                        .foregroundColor(.white)
+                        .shadow(color: Color(red: 0.0, green: 0.8, blue: 1.0), radius: 15, x: 0, y: 0)
+                }
+
+                Spacer()
+                
+                // ZOMBIES 섹션
+                VStack(spacing: 8) {
+                    SectionTitle("KILL", style: .cyan, size: 24)
+                    
+                    Text("\(score)")
+                        .font(.title2.bold())
+                        .foregroundColor(.white)
+                        .shadow(color: Color(red: 0.0, green: 0.8, blue: 1.0), radius: 15, x: 0, y: 0)
+                }
+
+                Spacer()            
+            }
+            Spacer()
+        }
+        .background(
+            RoundedRectangle(cornerRadius: 15)
+                .fill(Color.black.opacity(0.7))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 15)
+                        .stroke(Color(red: 0.0, green: 0.8, blue: 1.0), lineWidth: 3)
+                        .shadow(color: Color(red: 0.0, green: 0.8, blue: 1.0), radius: 10, x: 0, y: 0)
                 )
-                .shadow(color: Color(red: 0.0, green: 0.8, blue: 1.0).opacity(0.5), radius: 15, x: 0, y: 0)
+        )
+        .shadow(color: Color(red: 0.0, green: 0.8, blue: 1.0).opacity(0.3), radius: 20, x: 0, y: 0)
+    }
+    
+    // 우측: Rank 블록 (실제 개인 랭크 데이터)
+    private var rankBlock: some View {
+        VStack {
+            Spacer()
+            
+            // 랭크 리스트 타이틀
+            SectionTitle("My Records", style: .magenta, size: 20)
+                .padding(.vertical, 10)
+            
+            // 개인 랭크 리스트 (ScrollView로 10개 표시)
+            ScrollView {
+                LazyVStack(spacing: 8) {
+                    let records = GameStateManager.shared.getPersonalRecords()
+                    
+                    if records.isEmpty {
+                        // 기록이 없을 때
+                        Text("No records yet")
+                            .font(.title3.bold())
+                            .foregroundColor(.gray)
+                            .padding(.top, 20)
+                    } else {
+                        // 기록이 있을 때
+                        ForEach(Array(records.enumerated()), id: \.offset) { index, record in
+                            rankRow(
+                                rank: "\(index + 1)",
+                                time: record.formattedTime,
+                                zombies: "\(record.zombieKills)"
+                            )
+                        }
+                    }
+                }
+                .padding(.horizontal, 10)
+            }
+            .frame(maxHeight: .infinity)
             
             Spacer()
         }
+        .background(
+            RoundedRectangle(cornerRadius: 15)
+                .fill(Color.black.opacity(0.7))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 15)
+                        .stroke(Color(red: 1.0, green: 0.0, blue: 1.0), lineWidth: 3)
+                        .shadow(color: Color(red: 1.0, green: 0.0, blue: 1.0), radius: 10, x: 0, y: 0)
+                )
+        )
+        .shadow(color: Color(red: 1.0, green: 0.0, blue: 1.0).opacity(0.3), radius: 20, x: 0, y: 0)
     }
+    
+
+    
+    // 랭크 행
+    private func rankRow(rank: String, time: String, zombies: String) -> some View {
+        HStack {
+            Text("#\(rank)")
+                .font(.title3.bold())
+                .foregroundColor(Color(red: 1.0, green: 0.0, blue: 1.0))
+                .frame(width: 40, alignment: .leading)
+            
+            Text(time)
+                .font(.title3.bold().monospacedDigit())
+                .foregroundColor(.white)
+            
+            Spacer()
+            
+            Text("\(zombies)")
+                .font(.title3.bold().monospacedDigit().smallCaps())
+                .foregroundColor(.white)
+        }
+        .padding(.horizontal, 15)
+    }
+
     
     private func formatTime(_ time: TimeInterval) -> String {
         let minutes = Int(time) / 60
@@ -148,9 +190,10 @@ struct GameOverView: View {
 
 #Preview {
     GameOverView(
-        playTime: 125.5,
+        playTime: 125,
         score: 42,
         wave: 5,
+        isNewRecord: true,
         onRestart: {},
         onQuit: {}
     )

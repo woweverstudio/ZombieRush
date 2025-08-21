@@ -5,6 +5,7 @@ enum NeonButtonStyle {
     case cyan
     case magenta
     case white
+    case yellow
     
     var color: Color {
         switch self {
@@ -14,6 +15,8 @@ enum NeonButtonStyle {
             return Color(red: 1.0, green: 0.0, blue: 1.0)
         case .white:
             return Color.white
+        case .yellow:
+            return Color(red: 1.0, green: 0.8, blue: 0.0)
         }
     }
 }
@@ -22,14 +25,14 @@ enum NeonButtonStyle {
 struct NeonButton: View {
     let title: String
     let style: NeonButtonStyle
-    let width: CGFloat
+    let width: CGFloat?
     let height: CGFloat
     let action: () -> Void
     
     init(
         _ title: String,
         style: NeonButtonStyle = .cyan,
-        width: CGFloat = 240,
+        width: CGFloat? = 240,
         height: CGFloat = 60,
         action: @escaping () -> Void
     ) {
@@ -51,6 +54,7 @@ struct NeonButton: View {
                 .foregroundColor(style.color)
                 .shadow(color: style.color, radius: 10, x: 0, y: 0)
                 .frame(width: width, height: height)
+                .frame(maxWidth: width == nil ? .infinity : nil)  // nil이면 infinity 적용
                 .background(
                     RoundedRectangle(cornerRadius: 8)
                         .fill(Color.black.opacity(0.8))
@@ -67,6 +71,10 @@ struct NeonButton: View {
     
     private var fontSize: CGFloat {
         // 버튼 크기에 따라 폰트 크기 조정
+        guard let width = width else {
+            return 24  // width가 nil이면 기본 크기
+        }
+        
         if width < 150 {
             return 18
         } else if width < 200 {

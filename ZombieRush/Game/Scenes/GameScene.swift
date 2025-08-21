@@ -291,12 +291,16 @@ class GameScene: SKScene {
         // 맵의 모든 게임 노드 제거
         clearGameNodes()
         
+        // 개인 랭크에 현재 게임 기록 저장 및 NEW RECORD 여부 확인
+        let isNewRecord = gameStateManager.saveCurrentGameRecordAndCheckNew()
+        
         // 라우터를 통해 게임오버 화면으로 전환
         DispatchQueue.main.async {
             AppRouter.shared.showGameOver(
                 playTime: playTime,
                 score: score,
-                wave: wave
+                wave: wave,
+                isNewRecord: isNewRecord
             )
         }
     }

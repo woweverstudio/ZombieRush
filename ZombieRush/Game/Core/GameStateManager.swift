@@ -7,6 +7,41 @@ enum GameState {
     case loading
 }
 
+// MARK: - Personal Record
+struct PersonalRecord {
+    let timeInSeconds: Int
+    let zombieKills: Int
+    
+    // 64비트 정수로 인코딩 (상위 32비트: 시간, 하위 32비트: 킬수)
+    var encoded: Int64 {
+        return (Int64(timeInSeconds) << 32) | Int64(zombieKills)
+    }
+    
+    // 64비트 정수에서 디코딩
+    init(encoded: Int64) {
+        self.timeInSeconds = Int(encoded >> 32)
+        self.zombieKills = Int(encoded & 0xFFFFFFFF)
+    }
+    
+    // 일반 생성자
+    init(timeInSeconds: Int, zombieKills: Int) {
+        self.timeInSeconds = timeInSeconds
+        self.zombieKills = zombieKills
+    }
+    
+    // 시간을 MM:SS 형식으로 반환
+    var formattedTime: String {
+        let minutes = timeInSeconds / 60
+        let seconds = timeInSeconds % 60
+        return String(format: "%02d:%02d", minutes, seconds)
+    }
+    
+    // 정렬을 위한 점수 계산 (시간 + 킬수 기반)
+    var totalScore: Int {
+        return timeInSeconds * 10 + zombieKills  // 시간에 더 높은 가중치
+    }
+}
+
 // MARK: - Game Statistics
 struct GameStatistics {
     var score: Int = 0
@@ -44,6 +79,10 @@ class GameStateManager {
     // MARK: - Wave System
     private var waveStartTime: TimeInterval = 0
     private var currentWaveNumber: Int = 1
+    
+    // MARK: - Personal Records
+    private let personalRecordsKey = "PersonalRecords"
+    private let maxRecordsCount = 10
     
     // MARK: - State Management
     private init() {}
@@ -151,6 +190,81 @@ class GameStateManager {
     
     func getZombieCountMultiplier() -> Float {
         return pow(GameConstants.Wave.zombieCountMultiplier, Float(currentWaveNumber - 1))
+    }
+    
+    // MARK: - Personal Records Management
+    
+    /// 현재 게임 결과를 개인 랭크에 저장
+    func saveCurrentGameRecord() {
+        let timeInSeconds = Int(statistics.playTime)
+        let zombieKills = statistics.zombieKills
+        
+        let newRecord = PersonalRecord(timeInSeconds: timeInSeconds, zombieKills: zombieKills)
+        addPersonalRecord(newRecord)
+    }
+    
+    /// 개인 랭크에 새 기록 추가
+    private func addPersonalRecord(_ newRecord: PersonalRecord) {
+        var records = getPersonalRecords()
+        
+        // 새 기록 추가
+        records.append(newRecord)
+        
+        // 점수 기준으로 내림차순 정렬 (높은 점수가 먼저)
+        records.sort { $0.totalScore > $1.totalScore }
+        
+        // 상위 10개만 유지
+        if records.count > maxRecordsCount {
+            records = Array(records.prefix(maxRecordsCount))
+        }
+        
+        // UserDefaults에 저장 (64비트 정수 배열로)
+        let encodedRecords = records.map { $0.encoded }
+        UserDefaults.standard.set(encodedRecords, forKey: personalRecordsKey)
+    }
+    
+    /// 개인 랭크 기록들을 가져옴
+    func getPersonalRecords() -> [PersonalRecord] {
+        guard let encodedRecords = UserDefaults.standard.array(forKey: personalRecordsKey) as? [Int64] else {
+            return []
+        }
+        
+        return encodedRecords.map { PersonalRecord(encoded: $0) }
+    }
+    
+    /// 현재 기록이 새로운 기록인지 확인 (저장 전에 체크)
+    func isNewRecord() -> Bool {
+        let records = getPersonalRecords()
+        
+        // 기록이 없으면 새로운 기록
+        guard !records.isEmpty else { return true }
+        
+        let currentScore = Int(statistics.playTime) * 10 + statistics.zombieKills
+        
+        // 현재 점수가 기존 최고 기록보다 높으면 새로운 기록
+        return currentScore > records.first?.totalScore ?? 0
+    }
+    
+    /// 게임 종료 시 NEW RECORD 여부를 미리 확인하고 저장
+    func saveCurrentGameRecordAndCheckNew() -> Bool {
+        let isNew = isNewRecord()  // 저장 전에 미리 체크
+        saveCurrentGameRecord()    // 그 다음에 저장
+        return isNew
+    }
+    
+    /// 현재 기록의 순위를 반환 (1-based)
+    func getCurrentRecordRank() -> Int? {
+        let records = getPersonalRecords()
+        let currentScore = Int(statistics.playTime) * 10 + statistics.zombieKills
+        
+        // 현재 점수보다 높은 기록의 개수 + 1이 순위
+        let higherRecords = records.filter { $0.totalScore > currentScore }
+        return higherRecords.count + 1
+    }
+    
+    /// 개인 랭크 초기화 (디버그용)
+    func clearPersonalRecords() {
+        UserDefaults.standard.removeObject(forKey: personalRecordsKey)
     }
     
     // MARK: - Debug

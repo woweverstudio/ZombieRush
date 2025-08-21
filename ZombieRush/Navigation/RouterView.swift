@@ -20,6 +20,7 @@ struct RouterView: View {
                         playTime: router.currentGameData?.playTime ?? 0,
                         score: router.currentGameData?.score ?? 0,
                         wave: router.currentGameData?.wave ?? 0,
+                        isNewRecord: router.currentGameData?.isNewRecord ?? false,
                         onRestart: {
                             router.restart()
                         },

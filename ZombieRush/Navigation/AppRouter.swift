@@ -61,8 +61,8 @@ class AppRouter: ObservableObject {
         navigate(to: .game, with: restartData, animated: animated)
     }
     
-    func showGameOver(playTime: TimeInterval, score: Int, wave: Int, animated: Bool = true) {
-        let gameOverData = GameData(playTime: playTime, score: score, wave: wave)
+    func showGameOver(playTime: TimeInterval, score: Int, wave: Int, isNewRecord: Bool = false, animated: Bool = true) {
+        let gameOverData = GameData(playTime: playTime, score: score, wave: wave, isNewRecord: isNewRecord)
         navigate(to: .gameOver, with: gameOverData, animated: animated)
     }
     
