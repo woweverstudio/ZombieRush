@@ -49,7 +49,7 @@ class GameKitManager: NSObject, ObservableObject {
         localPlayer.authenticateHandler = { [weak self] viewController, error in
             DispatchQueue.main.async {
                 // 에러가 있는 경우
-                if let error = error {
+                if error != nil {
                     // 인증 실패 시 게스트 모드로 전환
                     self?.handleAuthenticationFailure()
                     return
@@ -240,7 +240,7 @@ class GameKitManager: NSObject, ObservableObject {
         let loadCount = min(batchSize, 100 - currentCount)
         
         // 상위 데이터 로드
-        let (localPlayerEntry, entries, totalPlayerCount) = try await leaderboard.loadEntries(
+        let (_, entries, _) = try await leaderboard.loadEntries(
             for: .global,
             timeScope: .allTime,
             range: NSRange(location: 1, length: loadCount)

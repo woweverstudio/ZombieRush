@@ -20,7 +20,7 @@ struct GameCenterAccessPointView: UIViewRepresentable {
     }
     
     private func activateAccessPoint(for windowScene: UIWindowScene?) {
-        guard let scene = windowScene else { return }
+        guard let _ = windowScene else { return }
         
         let accessPoint = GKAccessPoint.shared
         accessPoint.location = .topTrailing
