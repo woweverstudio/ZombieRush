@@ -8,12 +8,23 @@ struct MainMenuView: View {
         ZStack {
             // 사이버펑크 배경
             CyberpunkBackground()
-            
+                .ignoresSafeArea()
+                
             VStack {
-                // 상단 영역 - 설정 버튼
-                HStack {
+                Spacer()
+                // 상단 영역 - 설정 및 리더보드 버튼
+                HStack(spacing: 20) {
                     Spacer()
                     
+                    // 리더보드 버튼
+                    NeonIconButton(
+                        icon: "crown.fill",
+                        style: .cyan
+                    ) {
+                        router.navigate(to: .leaderboard)
+                    }
+                    
+                    // 설정 버튼
                     NeonIconButton(
                         icon: "gearshape.fill",
                         style: .magenta
@@ -21,8 +32,6 @@ struct MainMenuView: View {
                         router.navigate(to: .settings)
                     }
                 }
-                .padding(.top, 50)
-                .padding(.trailing, 30)
                 
                 Spacer()
                 
@@ -39,17 +48,8 @@ struct MainMenuView: View {
                 .padding(.horizontal, 40)
                 
                 Spacer()
-                
-                // 하단 여백
-                Rectangle()
-                    .fill(Color.clear)
-                    .frame(height: 50)
+                Spacer()
             }
-        }
-        .ignoresSafeArea()
-        .onAppear {
-            // 메인 메뉴 진입 시 메인 메뉴 음악 재생
-            AudioManager.shared.playMainMenuMusic()
         }
     }
 }

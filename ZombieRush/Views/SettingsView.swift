@@ -15,97 +15,59 @@ struct SettingsView: View {
     var body: some View {
         ZStack {
             // 사이버펑크 배경
-            CyberpunkBackground(opacity: 0.6)
+            CyberpunkBackground(opacity: 0.6)        .ignoresSafeArea()
             
-            VStack(spacing: 0) {
+            VStack {
                 // 상단 영역 - 제목과 뒤로가기 버튼
                 HStack {
                     // 뒤로가기 버튼
-                    Button(action: {
-                        AudioManager.shared.playButtonSound()
-                        HapticManager.shared.playButtonHaptic()
+                    BackButton(style: .cyan) {
                         router.goBack()
-                    }) {
-                        HStack(spacing: 8) {
-                            Image(systemName: "chevron.left")
-                                .font(.system(size: 20, weight: .bold))
-                            Text("뒤로")
-                                .font(.system(size: 18, weight: .semibold))
-                        }
-                        .foregroundColor(.white)
-                        .padding(.horizontal, 16)
-                        .padding(.vertical, 12)
-                        .background(
-                            RoundedRectangle(cornerRadius: 25)
-                                .fill(Color.black.opacity(0.6))
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 25)
-                                        .stroke(Color.white.opacity(0.3), lineWidth: 1)
-                                )
-                        )
                     }
-                    .buttonStyle(PlainButtonStyle())
                     
                     Spacer()
                     
                     // 설정 타이틀
-                    SectionTitle("SETTINGS")
+                    SectionTitle("SETTINGS", size: 28)
                     
                     Spacer()
                     
-                    // 빈 공간으로 균형 맞추기
-                    RoundedRectangle(cornerRadius: 25)
-                        .fill(Color.clear)
-                        .frame(width: 100, height: 44)
+                    BackButton(style: .cyan) {
+                        
+                    }
+                    .opacity(0)
                 }
-                .padding(.top, 50)
-                .padding(.horizontal, 30)
+                .padding(.top, 30)
                 .padding(.bottom, 20)
                 
                 // 설정 옵션들 (스크롤 가능)
                 ScrollView {
-                    VStack(spacing: 20) {
-                        // 사운드 설정
-                        SettingRow(
-                            title: "효과음",
-                            icon: "speaker.wave.2.fill",
-                            isOn: $audioManager.isSoundEffectsEnabled
-                        )
-                        
-                        SettingRow(
-                            title: "배경음악",
-                            icon: "music.note",
-                            isOn: $audioManager.isBackgroundMusicEnabled
-                        )
-                        
-                        SettingRow(
-                            title: "진동",
-                            icon: "iphone.radiowaves.left.and.right",
-                            isOn: $hapticManager.isHapticEnabled
-                        )
-                        
-                        Rectangle()
-                            .fill(Color.clear)
-                            .frame(height: 30)
-                    }
-                    .padding(.horizontal, 40) // 좌우에서 충분한 간격
-                }
-                
-                // 하단 영역 (고정)
-                HStack(spacing: 15) {
-                    Text("version 1.0.0")
-                        .font(.system(size: 12))
-                        .foregroundColor(.white)
                     
-                    Text("© 2025 woweverstudio")
-                        .font(.system(size: 12))
-                        .foregroundColor(.white)
+                    // 사운드 설정
+                    SettingRow(
+                        title: "효과음",
+                        icon: "speaker.wave.2.fill",
+                        isOn: $audioManager.isSoundEffectsEnabled
+                    )
+                    .padding(.bottom, 10)
+                    
+                    SettingRow(
+                        title: "배경음악",
+                        icon: "music.note",
+                        isOn: $audioManager.isBackgroundMusicEnabled
+                    )
+                    .padding(.bottom, 10)
+                    
+                    SettingRow(
+                        title: "진동",
+                        icon: "iphone.radiowaves.left.and.right",
+                        isOn: $hapticManager.isHapticEnabled
+                    )
+                    
                 }
-                .padding(.bottom, 50) // 하단에서 충분한 간격
-                .padding(.horizontal, 30) // 좌우에서 충분한 간격
             }
+            .padding()
         }
-        .ignoresSafeArea()
     }
 }
 

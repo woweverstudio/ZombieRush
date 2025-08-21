@@ -25,6 +25,10 @@ class AppRouter: ObservableObject {
     // MARK: - Initialization
     private init() {
         setupNavigationObserver()
+        // 앱 시작 시 메인 화면 음악 재생
+        DispatchQueue.main.async {
+            self.handleAudioTransition(to: .mainMenu)
+        }
     }
     
     // MARK: - Navigation Methods
@@ -97,7 +101,7 @@ class AppRouter: ObservableObject {
     
     private func handleAudioTransition(to route: Route) {
         switch route {
-        case .mainMenu, .settings:
+        case .mainMenu, .settings, .leaderboard:
             AudioManager.shared.playMainMenuMusic()
         case .game:
             AudioManager.shared.playGameMusic()

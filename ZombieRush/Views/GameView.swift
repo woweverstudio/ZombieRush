@@ -15,10 +15,6 @@ struct GameView: View {
         // SpriteKit 게임 씬 (풀스크린)
         SpriteView(scene: makeGameScene())
             .ignoresSafeArea()
-        .onAppear {
-            // 게임 시작 시 게임용 BGM 재생
-            AudioManager.shared.playGameMusic()
-        }
     }
     
     // MARK: - Game Scene Creation

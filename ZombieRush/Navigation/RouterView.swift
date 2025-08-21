@@ -15,6 +15,8 @@ struct RouterView: View {
                     GameView()
                 case .settings:
                     SettingsView()
+                case .leaderboard:
+                    LeaderBoardView()
                 case .gameOver:
                     GameOverView(
                         playTime: router.currentGameData?.playTime ?? 0,

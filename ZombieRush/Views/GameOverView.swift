@@ -58,7 +58,6 @@ struct GameOverView: View {
                 }
             }
         }
-        // .ignoresSafeArea()
     }
     
     // MARK: - Components
@@ -193,7 +192,7 @@ struct GameOverView: View {
         playTime: 125,
         score: 42,
         wave: 5,
-        isNewRecord: true,
+        isNewRecord: false,
         onRestart: {},
         onQuit: {}
     )

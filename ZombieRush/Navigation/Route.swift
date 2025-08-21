@@ -6,6 +6,7 @@ enum Route: String, CaseIterable, Hashable {
     case mainMenu = "main_menu"
     case game = "game"
     case settings = "settings"
+    case leaderboard = "leaderboard"
     case gameOver = "game_over"
     
     var title: String {
@@ -16,6 +17,8 @@ enum Route: String, CaseIterable, Hashable {
             return "GAME"
         case .settings:
             return "SETTINGS"
+        case .leaderboard:
+            return "LEADERBOARD"
         case .gameOver:
             return "GAME OVER"
         }
