@@ -131,7 +131,7 @@ class HUDManager {
         
         // 체력 바 채우기 (네온 그린)
         healthBarFill = SKShapeNode(rectOf: CGSize(width: barWidth - 4, height: barHeight - 4), cornerRadius: 3)
-        healthBarFill?.fillColor = SKColor(red: 0.0, green: 1.0, blue: 0.5, alpha: 0.8)
+        healthBarFill?.fillColor = GameConstants.UI.healthBarColor
         healthBarFill?.strokeColor = SKColor.clear
         healthBarFill?.position = CGPoint(x: 0, y: 0)
         healthBar?.addChild(healthBarFill!)
@@ -164,7 +164,7 @@ class HUDManager {
         
         // 탄약 바 채우기 (네온 시안)
         ammoBarFill = SKShapeNode(rectOf: CGSize(width: barWidth - 4, height: barHeight - 4), cornerRadius: 3)
-        ammoBarFill?.fillColor = SKColor(red: 0.0, green: 0.8, blue: 1.0, alpha: 0.8)
+        ammoBarFill?.fillColor = GameConstants.UI.ammoBarColor
         ammoBarFill?.strokeColor = SKColor.clear
         ammoBarFill?.position = CGPoint(x: 0, y: 0)
         ammoBar?.addChild(ammoBarFill!)
@@ -182,7 +182,7 @@ class HUDManager {
         reloadLabel = SKLabelNode(text: "RELOADING...")
         reloadLabel?.fontName = "Arial-Bold"
         reloadLabel?.fontSize = 16
-        reloadLabel?.fontColor = SKColor(red: 1.0, green: 0.5, blue: 0.0, alpha: 1.0)
+        reloadLabel?.fontColor = GameConstants.UI.reloadLabelColor
         reloadLabel?.position = CGPoint(x: barWidth/2 + 70, y: barY - 6)
         reloadLabel?.horizontalAlignmentMode = .center
         reloadLabel?.isHidden = true
@@ -239,8 +239,8 @@ class HUDManager {
         
         let newAmmoFill = SKShapeNode(rectOf: CGSize(width: newWidth, height: 10), cornerRadius: 3)
         newAmmoFill.fillColor = isReloading ? 
-            SKColor(red: 1.0, green: 0.5, blue: 0.0, alpha: 0.8) : 
-            SKColor(red: 0.0, green: 0.8, blue: 1.0, alpha: 0.8)
+            GameConstants.UI.ammoReloadingColor : 
+            GameConstants.UI.ammoBarColor
         newAmmoFill.strokeColor = SKColor.clear
         newAmmoFill.position = CGPoint(x: -(barWidth - newWidth)/2, y: 0)
         
@@ -253,11 +253,11 @@ class HUDManager {
     
     private func getHealthNeonColor(ratio: CGFloat) -> SKColor {
         if ratio > 0.6 {
-            return SKColor(red: 0.0, green: 1.0, blue: 0.5, alpha: 0.8)  // 네온 그린
+            return GameConstants.UI.healthHighColor
         } else if ratio > 0.3 {
-            return SKColor(red: 1.0, green: 0.8, blue: 0.0, alpha: 0.8)  // 네온 옐로우
+            return GameConstants.UI.healthMediumColor
         } else {
-            return SKColor(red: 1.0, green: 0.2, blue: 0.2, alpha: 0.8)  // 네온 레드
+            return GameConstants.UI.healthLowColor
         }
     }
     
@@ -284,7 +284,9 @@ class HUDManager {
             ]))
             
             // 메인화면으로 이동
-            NotificationCenter.default.post(name: NSNotification.Name(GameConstants.Notifications.quitGame), object: nil)
+            DispatchQueue.main.async {
+                AppRouter.shared.quitToMainMenu()
+            }
             return true
         }
         

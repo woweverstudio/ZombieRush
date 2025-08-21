@@ -18,14 +18,13 @@ class GameScene: SKScene {
     // MARK: - Game Systems
     private var physicsSystem: PhysicsSystem?
     private var cameraSystem: CameraSystem?
-    private var worldManager: WorldManager?
+    private var worldSystem: WorldSystem?
     private var gameController: GameController?
     private var hudManager: HUDManager?
-    private var zombieSpawner: ZombieSpawner?
-    private var gameOverManager: GameOverManager?
+    private var zombieSpawnSystem: ZombieSpawnSystem?
     private var toastMessageManager: ToastMessageManager?
-    private var itemSpawner: ItemSpawner?
-    private var itemEffectManager: ItemEffectManager?
+    private var itemSpawnSystem: ItemSpawnSystem?
+    private var itemEffectSystem: ItemEffectSystem?
     private var meteorSystem: MeteorSystem?
     
     // MARK: - Game State
@@ -37,22 +36,30 @@ class GameScene: SKScene {
         // 멀티터치 활성화
         view.isMultipleTouchEnabled = true
         
-        // 게임 시작
+        // 게임 시작 (GameStateManager가 이미 완벽한 초기화 제공)
         gameStateManager.startNewGame()
         
-        // 텍스처 캐시 제거됨
-        
+        // 게임 시스템 초기화
+        initializeGameSystems()
+    }
+    
+    // MARK: - Game System Initialization
+    private func initializeGameSystems() {
+        // 핵심 시스템들 먼저 초기화 (즉시 필요한 것들)
         setupPhysicsWorld()
         setupWorld()
         setupPlayer()
         setupCamera()
-        setupSystems()
-        setupController()
-        setupHUD()
-        setupZombieSpawner()
-        setupGameOverManager()
-        setupToastMessageManager()
-        setupItemSystem()
+        
+        // UI와 상호작용 시스템들을 다음 프레임에서 초기화 (부드러운 시작)
+        DispatchQueue.main.async { [weak self] in
+            self?.setupSystems()
+            self?.setupController()
+            self?.setupHUD()
+            self?.setupZombieSpawnSystem()
+            self?.setupToastMessageManager()
+            self?.setupItemSystem()
+        }
     }
     
     // MARK: - Setup Methods
@@ -77,17 +84,17 @@ class GameScene: SKScene {
         worldNode?.name = GameConstants.NodeNames.world
         addChild(worldNode!)
         
-        // WorldManager를 사용하여 월드 설정
-        worldManager = WorldManager(worldNode: worldNode!)
-        worldManager?.setupWorld()
+        // WorldSystem을 사용하여 월드 설정
+        worldSystem = WorldSystem(worldNode: worldNode!)
+        worldSystem?.setupWorld()
     }
     
     private func setupPlayer() {
-        guard let worldManager = worldManager else { return }
+        guard let worldSystem = worldSystem else { return }
         
         player = Player()
         player?.position = CGPoint(x: 0, y: 0)
-        worldManager.addChild(player!)
+        worldSystem.getWorldNode()?.addChild(player!)
     }
     
     private func setupCamera() {
@@ -119,12 +126,12 @@ class GameScene: SKScene {
         hudManager = HUDManager(camera: cameraNode)
     }
     
-    private func setupZombieSpawner() {
+    private func setupZombieSpawnSystem() {
         guard let worldNode = worldNode, let player = player else { return }
-        zombieSpawner = ZombieSpawner(worldNode: worldNode, player: player)
+        zombieSpawnSystem = ZombieSpawnSystem(worldNode: worldNode, player: player)
         
         // 웨이브 시작 콜백 설정
-        zombieSpawner?.onNewWaveStarted = { [weak self] waveNumber in
+        zombieSpawnSystem?.onNewWaveStarted = { [weak self] waveNumber in
             let message = String(format: GameConstants.Text.waveAnnouncement, waveNumber)
             self?.toastMessageManager?.showToastMessage(message, duration: GameConstants.Wave.announcementDuration)
             
@@ -133,21 +140,7 @@ class GameScene: SKScene {
         }
     }
     
-    private func setupGameOverManager() {
-        guard let cameraNode = cameraNode else { return }
-        
-        gameOverManager = GameOverManager(camera: cameraNode)
-        
-        // 다시하기 콜백
-        gameOverManager?.onRestart = { [weak self] in
-            self?.restartGame()
-        }
-        
-        // 그만하기 콜백
-        gameOverManager?.onQuit = { [weak self] in
-            self?.quitGame()
-        }
-    }
+
     
     private func setupToastMessageManager() {
         guard let cameraNode = cameraNode, let player = player else { return }
@@ -162,10 +155,10 @@ class GameScene: SKScene {
         }
         
         // 아이템 스포너 설정
-        itemSpawner = ItemSpawner(worldNode: worldNode)
+        itemSpawnSystem = ItemSpawnSystem(worldNode: worldNode)
         
-        // 아이템 효과 매니저 설정
-        itemEffectManager = ItemEffectManager(player: player, toastMessageManager: toastMessageManager)
+        // 아이템 효과 시스템 설정
+        itemEffectSystem = ItemEffectSystem(player: player, toastMessageManager: toastMessageManager)
         
         // 메테오 시스템 설정
         meteorSystem = MeteorSystem(worldNode: worldNode)
@@ -174,8 +167,8 @@ class GameScene: SKScene {
         player.setMeteorSystem(meteorSystem!)
         
         // 아이템 수집 콜백 설정
-        itemSpawner?.onItemCollected = { [weak self] itemType in
-            self?.itemEffectManager?.applyItemEffect(type: itemType)
+        itemSpawnSystem?.onItemCollected = { [weak self] itemType in
+            self?.itemEffectSystem?.applyItemEffect(type: itemType)
         }
     }
     
@@ -210,8 +203,8 @@ class GameScene: SKScene {
         // 시스템 업데이트
         physicsSystem?.update(currentTime)
         cameraSystem?.update(currentTime)
-        zombieSpawner?.update(currentTime)
-        itemSpawner?.update(currentTime)
+        zombieSpawnSystem?.update(currentTime)
+        itemSpawnSystem?.update(currentTime)
         meteorSystem?.update(currentTime)
         hudManager?.updateTime()
         
@@ -221,14 +214,8 @@ class GameScene: SKScene {
     
     // MARK: - Touch Handling
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        // 게임오버 상태에서는 게임오버 UI만 처리
+        // 게임오버 상태에서는 터치 처리 안함
         if gameStateManager.isGameOver() {
-            for touch in touches {
-                let location = touch.location(in: cameraNode!)
-                if gameOverManager?.handleTouch(at: location) == true {
-                    return
-                }
-            }
             return
         }
         
@@ -265,11 +252,11 @@ class GameScene: SKScene {
     }
     
     func removeZombie(_ zombie: Zombie) {
-        zombieSpawner?.removeZombie(zombie)
+        zombieSpawnSystem?.removeZombie(zombie)
     }
     
     func collectItem(_ item: Item) {
-        itemSpawner?.collectItem(item)
+        itemSpawnSystem?.collectItem(item)
     }
     
 
@@ -304,8 +291,14 @@ class GameScene: SKScene {
         // 맵의 모든 게임 노드 제거
         clearGameNodes()
         
-        // 게임오버 화면 표시
-        gameOverManager?.showGameOver(playTime: playTime, score: score, wave: wave)
+        // 라우터를 통해 게임오버 화면으로 전환
+        DispatchQueue.main.async {
+            AppRouter.shared.showGameOver(
+                playTime: playTime,
+                score: score,
+                wave: wave
+            )
+        }
     }
     
     private func clearGameNodes() {
@@ -313,14 +306,14 @@ class GameScene: SKScene {
         player?.removeFromParent()
         player = nil
         
-        // 좀비 스포너 정리 (배열에서 제거)
-        zombieSpawner?.removeAllZombies()
+        // 좀비 스폰 시스템 정리 (배열에서 제거)
+        zombieSpawnSystem?.removeAllZombies()
         
         // 모든 아이템 제거
-        itemSpawner?.removeAllItems()
+        itemSpawnSystem?.removeAllItems()
         
         // 모든 아이템 효과 제거
-        itemEffectManager?.removeAllEffects()
+        itemEffectSystem?.removeAllEffects()
         
         // 메테오 정리
         meteorSystem?.clearAllMeteors()
@@ -329,26 +322,7 @@ class GameScene: SKScene {
         worldNode?.removeAllChildren()
     }
     
-    private func restartGame() {
-        // 게임오버 UI 숨기기
-        gameOverManager?.hideGameOver()
-        
-        // 게임 UI 다시 보이기 (재시작 시 UI 복원)
-        showAllGameUI()
-        
-        // 게임 재시작 시 게임 BGM 재생
-        AudioManager.shared.playGameMusic()
-        
-        // 씬 다시 로드
-        let scene = GameScene(size: self.size)
-        scene.scaleMode = self.scaleMode
-        self.view?.presentScene(scene)
-    }
-    
-    private func quitGame() {
-        // 게임 뷰 닫기 (GameView에서 처리하도록 알림)
-        NotificationCenter.default.post(name: NSNotification.Name(GameConstants.Notifications.quitGame), object: nil)
-    }
+
     
     // MARK: - UI Control (SOLID 원칙 - 단일 책임)
     private func hideAllGameUI() {
@@ -360,4 +334,6 @@ class GameScene: SKScene {
         gameController?.showUI()
         hudManager?.showHUD()
     }
+    
+
 }

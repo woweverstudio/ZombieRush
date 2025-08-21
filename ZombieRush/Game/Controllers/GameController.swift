@@ -38,18 +38,18 @@ class GameController {
         let screenHeight = UIScreen.main.bounds.height
         
         // 조이스틱 (좌측 하단)
-        let joystickX = -screenWidth/2 + 100
-        let joystickY = -screenHeight/2 + 100
+        let joystickX = -screenWidth/2 + GameConstants.UI.controlMargin
+        let joystickY = -screenHeight/2 + GameConstants.UI.controlMargin
         
-        joystickBase = SKShapeNode(circleOfRadius: 50)
+        joystickBase = SKShapeNode(circleOfRadius: GameConstants.UI.joystickRadius)
         joystickBase?.fillColor = SKColor.clear
         joystickBase?.strokeColor = SKColor.white.withAlphaComponent(0.3)
         joystickBase?.lineWidth = 2
         joystickBase?.position = CGPoint(x: joystickX, y: joystickY)
-        joystickBase?.zPosition = 100
+        joystickBase?.zPosition = GameConstants.UI.controlZPosition
         camera.addChild(joystickBase!)
         
-        joystickThumb = SKShapeNode(circleOfRadius: 20)
+        joystickThumb = SKShapeNode(circleOfRadius: GameConstants.UI.joystickThumbRadius)
         joystickThumb?.fillColor = SKColor.white.withAlphaComponent(0.2)
         joystickThumb?.strokeColor = SKColor.white.withAlphaComponent(0.5)
         joystickThumb?.lineWidth = 1.5
@@ -58,16 +58,16 @@ class GameController {
         camera.addChild(joystickThumb!)
         
         // 발사 버튼 (우측 하단)
-        let fireX = screenWidth/2 - 100
-        let fireY = -screenHeight/2 + 100
+        let fireX = screenWidth/2 - GameConstants.UI.controlMargin
+        let fireY = -screenHeight/2 + GameConstants.UI.controlMargin
         
         // 네모난 불투명 발사버튼
-        fireButton = SKShapeNode(rectOf: CGSize(width: 80, height: 80), cornerRadius: 8)
+        fireButton = SKShapeNode(rectOf: CGSize(width: GameConstants.UI.fireButtonSize, height: GameConstants.UI.fireButtonSize), cornerRadius: 8)
         fireButton?.fillColor = SKColor.white.withAlphaComponent(0.1)
         fireButton?.strokeColor = SKColor.white.withAlphaComponent(0.4)
         fireButton?.lineWidth = 2
         fireButton?.position = CGPoint(x: fireX, y: fireY)
-        fireButton?.zPosition = 100
+        fireButton?.zPosition = GameConstants.UI.controlZPosition
         
         // FIRE 텍스트 추가
         let fireLabel = SKLabelNode(text: "FIRE")

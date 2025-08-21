@@ -8,30 +8,23 @@
 import SwiftUI
 
 struct SettingsView: View {
-    @Environment(\.dismiss) private var dismiss
+    @StateObject private var router = AppRouter.shared
     @StateObject private var audioManager = AudioManager.shared
     @StateObject private var hapticManager = HapticManager.shared
     
     var body: some View {
         ZStack {
-            // 배경 이미지 (반투명 오버레이)
-            Image("background")
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .ignoresSafeArea()
-            
-            // 반투명 어두운 오버레이
-            Color.black.opacity(0.6)
-                .ignoresSafeArea()
+            // 사이버펑크 배경
+            CyberpunkBackground(opacity: 0.6)
             
             VStack(spacing: 0) {
-                // 상단 영역 - 제목과 뒤로가기 버튼 (고정)
+                // 상단 영역 - 제목과 뒤로가기 버튼
                 HStack {
-                    // 뒤로가기 버튼 (더 크고 명확하게)
+                    // 뒤로가기 버튼
                     Button(action: {
                         AudioManager.shared.playButtonSound()
                         HapticManager.shared.playButtonHaptic()
-                        dismiss()
+                        router.goBack()
                     }) {
                         HStack(spacing: 8) {
                             Image(systemName: "chevron.left")
@@ -56,10 +49,7 @@ struct SettingsView: View {
                     Spacer()
                     
                     // 설정 타이틀
-                    Text("SETTINGS")
-                        .font(.system(size: 24, weight: .bold, design: .monospaced))
-                        .foregroundColor(Color(red: 0.0, green: 0.8, blue: 1.0))
-                        .shadow(color: Color(red: 0.0, green: 0.8, blue: 1.0), radius: 10, x: 0, y: 0)
+                    SectionTitle("SETTINGS")
                     
                     Spacer()
                     
@@ -68,8 +58,8 @@ struct SettingsView: View {
                         .fill(Color.clear)
                         .frame(width: 100, height: 44)
                 }
-                .padding(.top, 50) // 상단에서 충분한 간격
-                .padding(.horizontal, 30) // 좌우에서 충분한 간격
+                .padding(.top, 50)
+                .padding(.horizontal, 30)
                 .padding(.bottom, 20)
                 
                 // 설정 옵션들 (스크롤 가능)
@@ -115,8 +105,7 @@ struct SettingsView: View {
                 .padding(.horizontal, 30) // 좌우에서 충분한 간격
             }
         }
-        .navigationBarHidden(true)
-        .statusBarHidden(true)
+        .ignoresSafeArea()
     }
 }
 

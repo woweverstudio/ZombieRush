@@ -100,18 +100,14 @@ class AudioManager: NSObject, ObservableObject {
     }
     
     private func selectMusicFile(for type: MusicType) -> String {
-        let candidates: [String]
-        
         switch type {
         case .mainMenu:
-            candidates = GameConstants.Audio.BackgroundMusic.mainMenuTracks
-            return candidates.randomElement() ?? candidates[0]
+            return GameConstants.Audio.BackgroundMusic.mainMenuTrack
         case .game:
-            candidates = GameConstants.Audio.BackgroundMusic.gameTracks
-            return candidates[0]
+            return GameConstants.Audio.BackgroundMusic.gameTrack
         case .fallback:
-            candidates = GameConstants.Audio.BackgroundMusic.fallbackTracks
-            return candidates.first { Bundle.main.url(forResource: $0, withExtension: GameConstants.Audio.BackgroundMusic.fileExtension) != nil } ?? "background"
+            // 메인 메뉴 음악을 fallback으로 사용
+            return GameConstants.Audio.BackgroundMusic.mainMenuTrack
         }
     }
     

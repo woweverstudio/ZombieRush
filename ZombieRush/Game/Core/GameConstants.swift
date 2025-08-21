@@ -134,8 +134,7 @@ struct GameConstants {
         static let shotgunSpreadAngle: CGFloat = 70  // 도 단위
         
         // 메테오 효과 수치 (새로운 폭탄 시스템)
-        static let meteorDamage: Int = 999  // 즉사 데미지
-        static let meteorMinWave: Int = 5  // 웨이브 5부터 등장
+        static let meteorDamage: Int = 999  // 즉사 데미지        
         static let meteorDelayBeforeExplosion: TimeInterval = 1.0  // 아이템 사용 후 폭발까지 대기 시간
         
         // 메테오 경고 표시기
@@ -158,9 +157,10 @@ struct GameConstants {
         static let meteorExplosionInnerColor = SKColor.yellow  // 내부 폭발 색상
         
         // 아이템별 최소 웨이브 요구사항
-        static let speedBoostMinWave: Int = 1  // 웨이브 2부터 등장
-        static let invincibilityMinWave: Int = 1  // 웨이브 3부터 등장
-        static let shotgunMinWave: Int = 1  // 웨이브 3부터 등장
+        static let speedBoostMinWave: Int = 2  // 웨이브 2부터 등장
+        static let invincibilityMinWave: Int = 3  // 웨이브 3부터 등장
+        static let shotgunMinWave: Int = 3  // 웨이브 3부터 등장
+        static let meteorMinWave: Int = 5  // 웨이브 5부터 등장
         
         // 아이템 이미지 설정
         static let ammoRestoreImageName = "item_ammoRestore"
@@ -177,7 +177,10 @@ struct GameConstants {
         static let joystickRadius: CGFloat = 50
         static let joystickThumbRadius: CGFloat = 20
         static let fireButtonRadius: CGFloat = 40
+        static let fireButtonSize: CGFloat = 80
         static let joystickDeadzone: CGFloat = 10
+        static let controlMargin: CGFloat = 100  // 조이스틱과 버튼의 화면 가장자리 마진
+        static let controlZPosition: CGFloat = 100  // 컨트롤 UI의 z-position
         
         // HUD
         static let hudMargin: CGFloat = 20
@@ -185,12 +188,26 @@ struct GameConstants {
         static let barHeight: CGFloat = 20
         static let labelFontSize: CGFloat = 18
         
+        // HUD Colors
+        static let healthBarColor = SKColor(red: 0.0, green: 1.0, blue: 0.5, alpha: 0.8)  // 네온 그린
+        static let ammoBarColor = SKColor(red: 0.0, green: 0.8, blue: 1.0, alpha: 0.8)   // 네온 시안
+        static let reloadLabelColor = SKColor(red: 1.0, green: 0.5, blue: 0.0, alpha: 1.0)  // 네온 오렌지
+        static let ammoReloadingColor = SKColor(red: 1.0, green: 0.5, blue: 0.0, alpha: 0.8)  // 재장전 중 색상
+        
+        // Health Bar Color Gradients
+        static let healthHighColor = SKColor(red: 0.0, green: 1.0, blue: 0.5, alpha: 0.8)   // 네온 그린
+        static let healthMediumColor = SKColor(red: 1.0, green: 0.8, blue: 0.0, alpha: 0.8) // 네온 옐로우
+        static let healthLowColor = SKColor(red: 1.0, green: 0.2, blue: 0.2, alpha: 0.8)    // 네온 레드
+        
         // GameOver
         static let gameOverBackgroundSize = CGSize(width: 800, height: 600)
         static let gameOverTitleFontSize: CGFloat = 48
         static let gameOverLabelFontSize: CGFloat = 24
         static let gameOverButtonSize = CGSize(width: 120, height: 40)
         static let gameOverButtonFontSize: CGFloat = 18
+        
+        // Navigation
+        static let transitionDuration: Double = 0.3
     }
     
     // MARK: - Colors
@@ -263,10 +280,7 @@ struct GameConstants {
         static let fireButton = "FireButton"
     }
     
-    // MARK: - Notification Names
-    struct Notifications {
-        static let quitGame = "QuitGame"
-    }
+
     
     // MARK: - Text
     struct Text {
@@ -320,9 +334,8 @@ struct GameConstants {
     struct Audio {
         // 배경음악 설정
         struct BackgroundMusic {
-            static let mainMenuTracks = ["main_background1", "main_background2"]
-            static let gameTracks = ["game_background"]
-            static let fallbackTracks = ["main_background1", "main_background2", "game_background", "background"]
+            static let mainMenuTrack = "main_background"
+            static let gameTrack = "game_background"
             static let fileExtension = "mp3"
             static let volume: Float = 0.2
         }
