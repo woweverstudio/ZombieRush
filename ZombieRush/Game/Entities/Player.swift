@@ -321,8 +321,7 @@ class Player: SKSpriteNode {
     // MARK: - Face Expression Methods
     func changeFaceExpression(to imageName: String) {
         guard let faceNode = faceExpressionNode else {
-            print("Warning: Face expression node not found")
-            return
+            return // 얼굴 표정 노드를 찾을 수 없음
         }
         
         let newTexture = SKTexture(imageNamed: imageName)

@@ -14,13 +14,16 @@ struct PersonalRecord {
     
     // 64비트 정수로 인코딩 (상위 32비트: 시간, 하위 32비트: 킬수)
     var encoded: Int64 {
-        return (Int64(timeInSeconds) << 32) | Int64(zombieKills)
+        // 16비트씩 사용하여 안전한 범위 보장
+        let safeTime = min(timeInSeconds, 65535)  // 16비트 최대값
+        let safeKills = min(zombieKills, 65535)   // 16비트 최대값
+        return (Int64(safeTime) << 16) | Int64(safeKills)
     }
     
     // 64비트 정수에서 디코딩
     init(encoded: Int64) {
-        self.timeInSeconds = Int(encoded >> 32)
-        self.zombieKills = Int(encoded & 0xFFFFFFFF)
+        self.timeInSeconds = Int((encoded >> 16) & 0xFFFF)  // 상위 16비트
+        self.zombieKills = Int(encoded & 0xFFFF)            // 하위 16비트
     }
     
     // 일반 생성자
@@ -249,33 +252,32 @@ class GameStateManager {
     func saveCurrentGameRecordAndCheckNew() -> Bool {
         let isNew = isNewRecord()  // 저장 전에 미리 체크
         saveCurrentGameRecord()    // 그 다음에 저장
+        
+        // Game Center에 점수 제출 (비동기)
+        submitScoreToGameCenter()
+        
         return isNew
     }
     
-    /// 현재 기록의 순위를 반환 (1-based)
-    func getCurrentRecordRank() -> Int? {
-        let records = getPersonalRecords()
-        let currentScore = Int(statistics.playTime) * 10 + statistics.zombieKills
+    /// Game Center에 현재 게임 점수 제출
+    private func submitScoreToGameCenter() {
+        // PersonalRecord와 동일한 16비트 인코딩 방식 사용
+        let timeInSeconds = Int(statistics.playTime)
+        let zombieKills = statistics.zombieKills
         
-        // 현재 점수보다 높은 기록의 개수 + 1이 순위
-        let higherRecords = records.filter { $0.totalScore > currentScore }
-        return higherRecords.count + 1
-    }
-    
-    /// 개인 랭크 초기화 (디버그용)
-    func clearPersonalRecords() {
-        UserDefaults.standard.removeObject(forKey: personalRecordsKey)
-    }
-    
-    // MARK: - Debug
-    func getCurrentStateDescription() -> String {
-        switch currentState {
-        case .playing:
-            return "Playing - Score: \(statistics.score), Time: \(getFormattedPlayTime())"
-        case .gameOver:
-            return "Game Over - Final Score: \(statistics.score)"
-        case .loading:
-            return "Loading"
+        let safeTime = min(timeInSeconds, 65535)  // 16비트 최대값
+        let safeKills = min(zombieKills, 65535)   // 16비트 최대값
+        let encodedScore = (Int64(safeTime) << 16) | Int64(safeKills)
+        
+        Task {
+            do {
+                try await GameKitManager.shared.submitScore(encodedScore)
+                // Game Center에 점수 제출 완료
+            } catch {
+                // Game Center 점수 제출 실패 (게임 진행에는 영향 없음)
+            }
         }
     }
+    
+
 }

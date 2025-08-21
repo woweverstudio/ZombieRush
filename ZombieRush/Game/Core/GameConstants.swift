@@ -330,6 +330,21 @@ struct GameConstants {
         static let zombieStrongSpawnRate: Int = 15  // 15%
     }
     
+    // MARK: - Game Center
+    struct GameCenter {
+        // 맵별 리더보드 ID
+        struct LeaderboardIDs {
+            static let basic = "nnb_basic_ranking"
+            // 향후 추가될 맵들
+            // static let desert = "nnb_desert_ranking"
+            // static let city = "nnb_city_ranking"
+            // static let space = "nnb_space_ranking"
+        }
+        
+        // 현재 사용 중인 리더보드 ID
+        static let currentLeaderboardID = LeaderboardIDs.basic
+    }
+    
     // MARK: - Audio
     struct Audio {
         // 배경음악 설정

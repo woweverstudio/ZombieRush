@@ -14,16 +14,13 @@ struct GameOverView: View {
                 // 기존 사이버펑크 배경 이미지 사용
                 CyberpunkBackground(opacity: 0.5)
                 
-                VStack(spacing: 0) {
-                    // 상단: 타이틀 (화면의 12%) - NEW RECORD 여부에 따라 변경
-                    VStack {
-                        Spacer()
+                VStack(spacing: 0) {                    
+                    VStack {                        
                         if isNewRecord {
                             SectionTitle("NEW RECORD", style: .yellow, size: 32)
                         } else {
                             SectionTitle("Game Over", style: .cyan, size: 32)
-                        }
-                        Spacer()
+                        }                             
                     }
                     .frame(height: geometry.size.height * 0.15)
                     
@@ -35,15 +32,14 @@ struct GameOverView: View {
                         // 우측: Rank 블록
                         rankBlock
                     }
-                    .padding(8)  // 패딩을 프레임 안으로 이동                    
-                    .frame(height: geometry.size.height * 0.65)
+                    .padding(8)  // 패딩을 프레임 안으로 이동
+                    .frame(height: geometry.size.height * 0.55)
                     
                     // 하단: 버튼들 (화면의 33%)
-                    VStack {                    
-                        
+                    VStack {                                            
                         HStack(spacing: 20) {
                             // Quit 버튼 (화면 절반 너비)
-                            NeonButton("LEADERBOARD", style: .cyan, width: nil, height: 50) {
+                            NeonButton("QUIT", style: .cyan, width: nil, height: 50) {
                                 onQuit()
                             }                            
                             
@@ -51,8 +47,7 @@ struct GameOverView: View {
                             NeonButton("RETRY", style: .magenta, width: nil, height: 50) {
                                 onRestart()
                             }                            
-                        }
-                        
+                        }                        
                     }
                     .frame(height: geometry.size.height * 0.2)
                 }
@@ -70,8 +65,8 @@ struct GameOverView: View {
                 Spacer()
                 
                 // TIME 섹션
-                VStack(spacing: 8) {
-                    SectionTitle("TIME", style: .cyan, size: 28)
+                VStack {
+                    SectionTitle("TIME", style: .cyan, size: 24)
                     
                     Text(formatTime(playTime))
                         .font(.largeTitle.bold())
@@ -82,7 +77,7 @@ struct GameOverView: View {
                 Spacer()
                 
                 // ZOMBIES 섹션
-                VStack(spacing: 8) {
+                VStack {
                     SectionTitle("KILL", style: .cyan, size: 24)
                     
                     Text("\(score)")
@@ -113,7 +108,7 @@ struct GameOverView: View {
             Spacer()
             
             // 랭크 리스트 타이틀
-            SectionTitle("My Records", style: .magenta, size: 20)
+            SectionTitle("My Records Top 10", style: .magenta, size: 20)
                 .padding(.vertical, 10)
             
             // 개인 랭크 리스트 (ScrollView로 10개 표시)
@@ -162,18 +157,18 @@ struct GameOverView: View {
     private func rankRow(rank: String, time: String, zombies: String) -> some View {
         HStack {
             Text("#\(rank)")
-                .font(.title3.bold())
+                .font(.title3.bold().monospaced())
                 .foregroundColor(Color(red: 1.0, green: 0.0, blue: 1.0))
                 .frame(width: 40, alignment: .leading)
             
             Text(time)
-                .font(.title3.bold().monospacedDigit())
+                .font(.title3.bold().monospaced())
                 .foregroundColor(.white)
             
             Spacer()
             
             Text("\(zombies)")
-                .font(.title3.bold().monospacedDigit().smallCaps())
+                .font(.title3.bold().monospaced())
                 .foregroundColor(.white)
         }
         .padding(.horizontal, 15)

@@ -1,0 +1,19 @@
+{
+  "meta" : {
+    "version" : "2024-11-15"
+  },
+  "resources" : {
+    "leaderboards" : [
+      {
+        "archived" : false,
+        "defaultFormatter" : "INTEGER",
+        "referenceName" : "네모네모빔 기본 맵 랭킹",
+        "scoreRangeEnd" : "4294836225",
+        "scoreRangeStart" : "0",
+        "scoreSortType" : "DESC",
+        "submissionType" : "BEST_SCORE",
+        "vendorIdentifier" : "nnb_basic_ranking"
+      }
+    ]
+  }
+}
