@@ -10,7 +10,7 @@ struct GlobalRankingCard: View {
             Spacer()
             
             // 타이틀
-            SectionTitle("Global Ranking Top 100", style: .magenta, size: 18)
+            SectionTitle("Global Top 100", style: .magenta, size: 18)
                 .padding(.vertical, 10)
             
             // 랭킹 리스트
