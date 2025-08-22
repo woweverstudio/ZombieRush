@@ -14,11 +14,8 @@ struct LeaderBoardView: View {
                     await loadLeaderboardData()
                 }
 
-            VStack {
-                // 상단: 헤더
+            VStack(spacing: 10) {
                 headerSection
-                
-                // 중단: 프로필과 랭킹 카드
                 contentSection
             }
             .padding()
@@ -46,8 +43,6 @@ struct LeaderBoardView: View {
             GameCenterAccessPointView()
                 .frame(width: 44, height: 44)
         }
-        .padding(.top, 30)
-        .padding(.bottom, 20)
     }
     
     // MARK: - Content Section

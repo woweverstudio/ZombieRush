@@ -14,7 +14,7 @@ struct ZombieRushApp: App {
     
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView()                
                 .preferredColorScheme(.dark)
                 .environmentObject(gameKitManager)  // GameKit 매니저 주입
         }

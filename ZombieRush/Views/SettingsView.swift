@@ -15,30 +15,12 @@ struct SettingsView: View {
     var body: some View {
         ZStack {
             // 사이버펑크 배경
-            CyberpunkBackground(opacity: 0.6)        .ignoresSafeArea()
+            CyberpunkBackground(opacity: 0.6)
+                .ignoresSafeArea()
             
             VStack {
                 // 상단 영역 - 제목과 뒤로가기 버튼
-                HStack {
-                    // 뒤로가기 버튼
-                    BackButton(style: .cyan) {
-                        router.goBack()
-                    }
-                    
-                    Spacer()
-                    
-                    // 설정 타이틀
-                    SectionTitle("SETTINGS", size: 28)
-                    
-                    Spacer()
-                    
-                    BackButton(style: .cyan) {
-                        
-                    }
-                    .opacity(0)
-                }
-                .padding(.top, 30)
-                .padding(.bottom, 20)
+                headerSection
                 
                 // 설정 옵션들 (스크롤 가능)
                 ScrollView {
@@ -67,6 +49,23 @@ struct SettingsView: View {
                 }
             }
             .padding()
+        }
+    }
+    
+    var headerSection: some View {
+        HStack {
+            // 뒤로가기 버튼
+            BackButton(style: .cyan) { router.goBack() }
+            
+            Spacer()
+            
+            // 설정 타이틀
+            SectionTitle("SETTINGS", size: 28)
+            
+            Spacer()
+            
+            BackButton(style: .cyan) { }
+            .opacity(0)
         }
     }
 }

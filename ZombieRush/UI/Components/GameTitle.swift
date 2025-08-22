@@ -5,13 +5,15 @@ struct GameTitle: View {
     let titleSize: CGFloat
     let subtitleSize: CGFloat
     
-    init(titleSize: CGFloat = 32, subtitleSize: CGFloat = 48) {
-        self.titleSize = titleSize
-        self.subtitleSize = subtitleSize
+    init(titleSize: CGFloat? = nil, subtitleSize: CGFloat? = nil) {
+        // 화면 크기에 따른 기본값 설정
+        let screenWidth = UIScreen.main.bounds.width
+        self.titleSize = titleSize ?? min(screenWidth * 0.06, 48)
+        self.subtitleSize = subtitleSize ?? min(screenWidth * 0.08, 64)
     }
     
     var body: some View {
-        VStack(spacing: 10) {
+        VStack(spacing: max(titleSize * 0.2, 8)) {
             Text("NEMO NEMO")
                 .font(.system(size: titleSize, weight: .heavy, design: .monospaced))
                 .foregroundColor(Color(red: 1.0, green: 0.0, blue: 1.0))

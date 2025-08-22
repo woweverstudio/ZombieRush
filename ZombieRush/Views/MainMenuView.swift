@@ -9,47 +9,40 @@ struct MainMenuView: View {
             // 사이버펑크 배경
             CyberpunkBackground()
                 .ignoresSafeArea()
-                
+            
             VStack {
                 Spacer()
                 // 상단 영역 - 설정 및 리더보드 버튼
-                HStack(spacing: 20) {
+                HStack {
+                    HStack(spacing: 20) {
+                        // 리더보드 버튼
+                        NeonIconButton(icon: "crown.fill", style: .cyan) {
+                            router.navigate(to: .leaderboard)
+                        }
+                        
+                        // 설정 버튼
+                        NeonIconButton(icon: "gearshape.fill", style: .magenta) {
+                            router.navigate(to: .settings)
+                        }
+                    }
                     Spacer()
-                    
-                    // 리더보드 버튼
-                    NeonIconButton(
-                        icon: "crown.fill",
-                        style: .cyan
-                    ) {
-                        router.navigate(to: .leaderboard)
-                    }
-                    
-                    // 설정 버튼
-                    NeonIconButton(
-                        icon: "gearshape.fill",
-                        style: .magenta
-                    ) {
-                        router.navigate(to: .settings)
-                    }
                 }
+                Spacer()
+                
+                // 중앙 영역 - 게임 타이틀
+                GameTitle()
                 
                 Spacer()
                 
-                // 게임 타이틀
-                GameTitle()
-                    .padding(.bottom, 40)
-                
-                // 게임 시작 버튼
-                VStack(spacing: 20) {
-                    NeonButton("GAME START") {
-                        router.navigate(to: .game)
-                    }
+                // 하단 영역 - 게임 시작 버튼
+                NeonButton("GAME START") {
+                    router.navigate(to: .game)
                 }
                 .padding(.horizontal, 40)
                 
                 Spacer()
-                Spacer()
             }
+            .padding()
         }
     }
 }

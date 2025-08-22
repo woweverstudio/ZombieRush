@@ -25,21 +25,18 @@ enum NeonButtonStyle {
 struct NeonButton: View {
     let title: String
     let style: NeonButtonStyle
-    let width: CGFloat?
-    let height: CGFloat
+    let fullWidth: Bool
     let action: () -> Void
     
     init(
         _ title: String,
         style: NeonButtonStyle = .cyan,
-        width: CGFloat? = 240,
-        height: CGFloat = 60,
+        fullWidth: Bool = false,
         action: @escaping () -> Void
     ) {
         self.title = title
         self.style = style
-        self.width = width
-        self.height = height
+        self.fullWidth = fullWidth
         self.action = action
     }
     
@@ -50,11 +47,12 @@ struct NeonButton: View {
             action()
         }) {
             Text(title)
-                .font(.system(size: fontSize, weight: .bold, design: .monospaced))
+                .frame(maxWidth: fullWidth ? .infinity : nil)
+                .font(.system(size: 24, weight: .bold, design: .monospaced))
                 .foregroundColor(style.color)
                 .shadow(color: style.color, radius: 10, x: 0, y: 0)
-                .frame(width: width, height: height)
-                .frame(maxWidth: width == nil ? .infinity : nil)  // nil이면 infinity 적용
+                .padding(.horizontal, 40)
+                .padding(.vertical, 16)
                 .background(
                     RoundedRectangle(cornerRadius: 8)
                         .fill(Color.black.opacity(0.8))
@@ -67,21 +65,6 @@ struct NeonButton: View {
                 .shadow(color: style.color.opacity(0.5), radius: 20, x: 0, y: 0)
         }
         .buttonStyle(PlainButtonStyle())
-    }
-    
-    private var fontSize: CGFloat {
-        // 버튼 크기에 따라 폰트 크기 조정
-        guard let width = width else {
-            return 24  // width가 nil이면 기본 크기
-        }
-        
-        if width < 150 {
-            return 18
-        } else if width < 200 {
-            return 22
-        } else {
-            return 28
-        }
     }
 }
 
@@ -133,7 +116,7 @@ struct NeonIconButton: View {
 #Preview {
     VStack(spacing: 20) {
         NeonButton("GAME START") {}
-        NeonButton("QUIT", style: .magenta, width: 140, height: 50) {}
+        NeonButton("QUIT", style: .magenta) {}
         NeonIconButton(icon: "gearshape.fill") {}
     }
     .padding()

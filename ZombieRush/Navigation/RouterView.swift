@@ -37,7 +37,7 @@ struct RouterView: View {
             // 전환 중 로딩 오버레이 (필요시)
             if router.isTransitioning {
                 Color.black.opacity(0.3)
-                    .ignoresSafeArea()
+                    // .ignoresSafeArea()
                     .allowsHitTesting(false)
             }
         }

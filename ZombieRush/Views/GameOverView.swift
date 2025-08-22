@@ -9,48 +9,45 @@ struct GameOverView: View {
     let onQuit: () -> Void
     
     var body: some View {
-        GeometryReader { geometry in
-            ZStack {
-                // 기존 사이버펑크 배경 이미지 사용
-                CyberpunkBackground(opacity: 0.5)
-                
-                VStack(spacing: 0) {                    
-                    VStack {                        
-                        if isNewRecord {
-                            SectionTitle("NEW RECORD", style: .yellow, size: 32)
-                        } else {
-                            SectionTitle("Game Over", style: .cyan, size: 32)
-                        }                             
+        ZStack {
+            CyberpunkBackground(opacity: 0.5)
+                .ignoresSafeArea()
+            
+            VStack {
+                VStack {
+                    if isNewRecord {
+                        SectionTitle("NEW RECORD", style: .yellow, size: 32)
+                    } else {
+                        SectionTitle("GAME OVER", style: .cyan, size: 32)
                     }
-                    .frame(height: geometry.size.height * 0.15)
+                }
+                .padding()
                     
-                    // 중단: 두 개의 블록 (화면의 55%)                                   
+                // 중단: 두 개의 블록 (화면의 55%)
+                HStack(spacing: 20) {
+                    // 좌측: Game Data 블록
+                    gameDataBlock
+                    
+                    // 우측: Rank 블록
+                    rankBlock
+                }
+                .padding(.bottom)
+                    
+                // 하단: 버튼들 (화면의 33%)
+                VStack {
                     HStack(spacing: 20) {
-                        // 좌측: Game Data 블록
-                        gameDataBlock
+                        // Quit 버튼 (화면 절반 너비)
+                        NeonButton("QUIT", style: .cyan, fullWidth: true) {
+                            onQuit()
+                        }
                         
-                        // 우측: Rank 블록
-                        rankBlock
-                    }
-                    .padding(8)  // 패딩을 프레임 안으로 이동
-                    .frame(height: geometry.size.height * 0.55)
-                    
-                    // 하단: 버튼들 (화면의 33%)
-                    VStack {                                            
-                        HStack(spacing: 20) {
-                            // Quit 버튼 (화면 절반 너비)
-                            NeonButton("QUIT", style: .cyan, width: nil, height: 50) {
-                                onQuit()
-                            }                            
-                            
-                            // Retry 버튼 (화면 절반 너비)
-                            NeonButton("RETRY", style: .magenta, width: nil, height: 50) {
-                                onRestart()
-                            }                            
+                        // Retry 버튼 (화면 절반 너비)
+                        NeonButton("RETRY", style: .magenta, fullWidth: true) {
+                            onRestart()
                         }                        
                     }
-                    .frame(height: geometry.size.height * 0.2)
                 }
+                .padding(.bottom)
             }
         }
     }
@@ -105,8 +102,6 @@ struct GameOverView: View {
     // 우측: Rank 블록 (실제 개인 랭크 데이터)
     private var rankBlock: some View {
         VStack {
-            Spacer()
-            
             // 랭크 리스트 타이틀
             SectionTitle("My Records Top 10", style: .magenta, size: 20)
                 .padding(.vertical, 10)
@@ -135,9 +130,8 @@ struct GameOverView: View {
                 }
                 .padding(.horizontal, 10)
             }
+            .scrollIndicators(.hidden)
             .frame(maxHeight: .infinity)
-            
-            Spacer()
         }
         .background(
             RoundedRectangle(cornerRadius: 15)

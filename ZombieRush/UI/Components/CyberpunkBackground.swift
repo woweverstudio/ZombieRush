@@ -12,13 +12,10 @@ struct CyberpunkBackground: View {
         ZStack {
             // 사이버펑크 배경 이미지
             Image("background")
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .ignoresSafeArea()
+                .resizable()                
             
             // 어두운 오버레이
             Color.black.opacity(opacity)
-                .ignoresSafeArea()
         }
     }
 }

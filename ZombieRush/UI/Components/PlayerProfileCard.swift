@@ -6,21 +6,18 @@ struct PlayerProfileCard: View {
     @ObservedObject var gameKitManager: GameKitManager
     
     var body: some View {
-        VStack {
+        VStack(spacing: 20) {
             Spacer()
             // 프로필 섹션
             profileSection
             
             // 전체 랭킹 섹션 (인증된 사용자만)
             if gameKitManager.isAuthenticated {
-                Spacer()
                 rankSection
             }
             
-            Spacer()
             // 기록 또는 로그인 안내 섹션
             contentSection
-            
             Spacer()
         }
         .background(
@@ -38,7 +35,7 @@ struct PlayerProfileCard: View {
     // MARK: - Profile Section
     private var profileSection: some View {
         HStack(spacing: 20) {
-            Spacer()
+            
             // 프로필 이미지 (작게 만듦)
             Group {
                 if let playerPhoto = gameKitManager.playerPhoto {
@@ -51,7 +48,7 @@ struct PlayerProfileCard: View {
                         .foregroundColor(.white)
                 }
             }
-            .frame(width: 60, height: 60)
+            .frame(width: 50, height: 50)
             .clipShape(Circle())
             .background(
                 Circle()
@@ -75,31 +72,29 @@ struct PlayerProfileCard: View {
                     .font(.system(size: 14, weight: .light, design: .monospaced))
                     .foregroundColor(.white.opacity(0.6))
             }
-            
-            Spacer()
+                        
         }
-        .padding(.horizontal, 15)
-        .padding(.bottom, 10)
     }
     
     // MARK: - Content Section
     private var contentSection: some View {
-        Group {
+        HStack {
+            Spacer()
             if gameKitManager.isAuthenticated {
                 authenticatedContent
             } else {
                 guestContent
             }
+            Spacer()
         }
-        .padding(.horizontal, 15)
         .padding(.bottom, 15)
     }
     
     // MARK: - Rank Section
     private var rankSection: some View {
-        VStack(spacing: 5) {
+        HStack(spacing: 20) {
             Text("Global Rank")
-                .font(.system(size: 18, weight: .medium, design: .monospaced))
+                .font(.system(size: 14, weight: .medium, design: .monospaced))
                 .foregroundColor(.white.opacity(0.7))
             
             Group {
