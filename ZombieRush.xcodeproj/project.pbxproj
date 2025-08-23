@@ -10,9 +10,22 @@
 		1F70BB842E506D1C0089462F /* ZombieRush.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ZombieRush.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		1FC42C232E578C7E00054B2C /* Exceptions for "ZombieRush" folder in "ZombieRush" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 1F70BB832E506D1C0089462F /* ZombieRush */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		1F70BB862E506D1C0089462F /* ZombieRush */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				1FC42C232E578C7E00054B2C /* Exceptions for "ZombieRush" folder in "ZombieRush" target */,
+			);
 			path = ZombieRush;
 			sourceTree = "<group>";
 		};
@@ -257,7 +270,9 @@
 				DEVELOPMENT_ASSET_PATHS = "\"ZombieRush/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ZombieRush/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "네모네모빔";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.arcade-games";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -288,7 +303,9 @@
 				DEVELOPMENT_ASSET_PATHS = "\"ZombieRush/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ZombieRush/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "네모네모빔";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.arcade-games";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;

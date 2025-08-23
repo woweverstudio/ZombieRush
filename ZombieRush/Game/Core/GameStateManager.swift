@@ -192,7 +192,7 @@ class GameStateManager {
     }
     
     func getZombieCountMultiplier() -> Float {
-        return pow(GameConstants.Wave.zombieCountMultiplier, Float(currentWaveNumber - 1))
+        return pow(GameConstants.Wave.zombieCountMultiplier, Float(currentWaveNumber))
     }
     
     // MARK: - Personal Records Management

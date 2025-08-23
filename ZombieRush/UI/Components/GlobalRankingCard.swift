@@ -186,9 +186,9 @@ struct GlobalRankRow: View {
         HStack(spacing: 10) {
             // 순위
             Text("\(rank)")
-                .font(.system(size: 14, weight: .heavy, design: .monospaced))
+                .font(.system(size: 16, weight: .heavy, design: .monospaced))
                 .foregroundColor(rankColor)
-                .frame(width: 25)
+                .frame(width: 30)
             
             // 프로필 이미지
             Group {
@@ -203,19 +203,19 @@ struct GlobalRankRow: View {
                         .background(Color.gray.opacity(0.3))
                 }
             }
-            .frame(width: 20, height: 20)
+            .frame(width: 22, height: 22)
             .clipShape(Circle())
             
             // 닉네임
             Text(nickname)
-                .font(.system(size: 12, weight: .medium, design: .monospaced))
+                .font(.system(size: 14, weight: .medium, design: .monospaced))
                 .foregroundColor(.white)
                 .lineLimit(1)
             
             Spacer()
             
             // 시간과 킬수
-            HStack(spacing: 8) {
+            VStack(alignment: .trailing, spacing: 4) {
                 Text(time)
                     .font(.system(size: 14, weight: .bold, design: .monospaced))
                     .foregroundColor(.white.opacity(0.9))

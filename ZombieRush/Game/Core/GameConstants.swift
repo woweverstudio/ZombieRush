@@ -286,7 +286,7 @@ struct GameConstants {
     struct Text {
         static let gameOver = "게임 오버"
         static let playTime = "플레이 시간: %02d:%02d"
-        static let zombieKills = "좀비 처치: %d마리"
+        static let zombieKills = "네모 처치: %d마리"
         static let wave = "웨이브: %d"
         static let restart = "다시하기"
         static let quit = "그만하기"

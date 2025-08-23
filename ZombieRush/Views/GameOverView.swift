@@ -8,99 +8,176 @@ struct GameOverView: View {
     let onRestart: () -> Void
     let onQuit: () -> Void
     
+    @StateObject private var gameKitManager = GameKitManager.shared
+    
     var body: some View {
         ZStack {
+            // 사이버펑크 배경
             CyberpunkBackground(opacity: 0.5)
                 .ignoresSafeArea()
+
+            VStack(spacing: 20) {
+                // 헤더 섹션
+                headerSection
+                
+                // 콘텐츠 섹션 (LeaderBoard 스타일)
+                contentSection
+                
+                // 버튼 섹션
+                buttonSection
+            }
+            .padding()
+        }
+    }
+    
+    // MARK: - Header Section
+    private var headerSection: some View {
+        HStack {
+            BackButton(style: .cyan) {
+                onQuit()
+            }
             
-            VStack {
-                VStack {
-                    if isNewRecord {
-                        SectionTitle("NEW RECORD", style: .yellow, size: 32)
-                    } else {
-                        SectionTitle("GAME OVER", style: .cyan, size: 32)
-                    }
-                }
-                .padding()
-                    
-                // 중단: 두 개의 블록 (화면의 55%)
-                HStack(spacing: 20) {
-                    // 좌측: Game Data 블록
-                    gameDataBlock
-                    
-                    // 우측: Rank 블록
-                    rankBlock
-                }
-                .padding(.bottom)
-                    
-                // 하단: 버튼들 (화면의 33%)
-                VStack {
-                    HStack(spacing: 20) {
-                        // Quit 버튼 (화면 절반 너비)
-                        NeonButton("QUIT", style: .cyan, fullWidth: true) {
-                            onQuit()
-                        }
-                        
-                        // Retry 버튼 (화면 절반 너비)
-                        NeonButton("RETRY", style: .magenta, fullWidth: true) {
-                            onRestart()
-                        }                        
-                    }
-                }
-                .padding(.bottom)
+            Spacer()
+            
+            if isNewRecord {
+                SectionTitle("NEW RECORD", style: .yellow, size: 28)
+            } else {
+                SectionTitle("GAME OVER", style: .cyan, size: 28)
+            }
+            
+            Spacer()
+            
+            // 투명 버튼으로 중앙 정렬 유지
+            BackButton(style: .cyan) {}
+                .opacity(0)
+        }
+    }
+    
+    // MARK: - Content Section
+    private var contentSection: some View {
+        HStack(spacing: 20) {
+            // 좌측: 플레이어 프로필과 게임 데이터 카드
+            gameDataCard
+            
+            // 우측: 개인 랭킹 카드
+            personalRankingCard
+        }
+    }
+    
+    // MARK: - Button Section
+    private var buttonSection: some View {
+        HStack(spacing: 20) {
+            NeonButton("QUIT", style: .cyan, fullWidth: true) {
+                onQuit()
+            }
+            
+            NeonButton("RETRY", style: .magenta, fullWidth: true) {
+                onRestart()
             }
         }
     }
     
-    // MARK: - Components
-    
-    // 좌측: Game Data 블록 (이미지 스타일)
-    private var gameDataBlock: some View {
-        HStack {
+    // MARK: - Game Data Card (PlayerProfile 스타일)
+    private var gameDataCard: some View {
+        VStack(spacing: 20) {
             Spacer()
-            VStack {
-                Spacer()
-                
-                // TIME 섹션
-                VStack {
-                    SectionTitle("TIME", style: .cyan, size: 24)
-                    
-                    Text(formatTime(playTime))
-                        .font(.largeTitle.bold())
-                        .foregroundColor(.white)
-                        .shadow(color: Color(red: 0.0, green: 0.8, blue: 1.0), radius: 15, x: 0, y: 0)
-                }
-
-                Spacer()
-                
-                // ZOMBIES 섹션
-                VStack {
-                    SectionTitle("KILL", style: .cyan, size: 24)
-                    
-                    Text("\(score)")
-                        .font(.title2.bold())
-                        .foregroundColor(.white)
-                        .shadow(color: Color(red: 0.0, green: 0.8, blue: 1.0), radius: 15, x: 0, y: 0)
-                }
-
-                Spacer()            
-            }
+            
+            // 프로필 섹션
+            profileSection
+            
+            // 게임 데이터 섹션
+            gameStatsSection
+            
             Spacer()
         }
         .background(
-            RoundedRectangle(cornerRadius: 15)
+            RoundedRectangle(cornerRadius: 8)
                 .fill(Color.black.opacity(0.7))
                 .overlay(
-                    RoundedRectangle(cornerRadius: 15)
-                        .stroke(Color(red: 0.0, green: 0.8, blue: 1.0), lineWidth: 3)
-                        .shadow(color: Color(red: 0.0, green: 0.8, blue: 1.0), radius: 10, x: 0, y: 0)
+                    RoundedRectangle(cornerRadius: 8)
+                        .stroke(Color.cyan, lineWidth: 2)
+                        .shadow(color: Color.cyan, radius: 8, x: 0, y: 0)
                 )
         )
-        .shadow(color: Color(red: 0.0, green: 0.8, blue: 1.0).opacity(0.3), radius: 20, x: 0, y: 0)
+        .shadow(color: Color.cyan.opacity(0.3), radius: 15, x: 0, y: 0)
     }
     
-    // 우측: Rank 블록 (실제 개인 랭크 데이터)
-    private var rankBlock: some View {
+    // MARK: - Profile Section
+    private var profileSection: some View {
+        HStack(spacing: 15) {
+            // 프로필 이미지
+            Group {
+                if let playerPhoto = gameKitManager.playerPhoto {
+                    Image(uiImage: playerPhoto)
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                } else {
+                    Image(systemName: gameKitManager.isAuthenticated ? "person.crop.circle.fill" : "person.fill")
+                        .font(.system(size: 18))
+                        .foregroundColor(.white)
+                }
+            }
+            .frame(width: 40, height: 40)
+            .clipShape(Circle())
+            .background(
+                Circle()
+                    .fill(
+                        LinearGradient(
+                            colors: [Color.cyan, Color.blue],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
+            )
+            .shadow(color: Color.cyan, radius: 3, x: 0, y: 0)
+            
+            // 닉네임
+            VStack(alignment: .leading, spacing: 2) {
+                Text(gameKitManager.playerDisplayName)
+                    .font(.system(size: 18, weight: .bold, design: .monospaced))
+                    .foregroundColor(Color.cyan)
+                    .lineLimit(1)
+                
+                Text(gameKitManager.isAuthenticated ? "Game Center" : "Guest")
+                    .font(.system(size: 12, weight: .light, design: .monospaced))
+                    .foregroundColor(.white.opacity(0.6))
+            }
+        }
+    }
+    
+    // MARK: - Game Stats Section
+    private var gameStatsSection: some View {
+        HStack {
+            Spacer()
+            
+            // TIME 섹션
+            VStack(spacing: 8) {
+                SectionTitle("TIME", style: .cyan, size: 16)
+                
+                Text(formatTime(playTime))
+                    .font(.system(size: 24, weight: .heavy, design: .monospaced))
+                    .foregroundColor(.white)
+                    .shadow(color: Color.cyan, radius: 5, x: 0, y: 0)
+            }
+            
+            Spacer()
+            
+            // KILLS 섹션
+            VStack(spacing: 8) {
+                SectionTitle("KILLS", style: .cyan, size: 16)
+                
+                Text("\(score)")
+                    .font(.system(size: 24, weight: .heavy, design: .monospaced))
+                    .foregroundColor(.white)
+                    .shadow(color: Color.cyan, radius: 5, x: 0, y: 0)
+            }
+            
+            Spacer()
+        }
+    }
+    
+    // MARK: - Personal Ranking Card
+    private var personalRankingCard: some View {
         VStack {
             // 랭크 리스트 타이틀
             SectionTitle("My Records Top 10", style: .magenta, size: 20)
@@ -134,41 +211,39 @@ struct GameOverView: View {
             .frame(maxHeight: .infinity)
         }
         .background(
-            RoundedRectangle(cornerRadius: 15)
+            RoundedRectangle(cornerRadius: 8)
                 .fill(Color.black.opacity(0.7))
                 .overlay(
-                    RoundedRectangle(cornerRadius: 15)
-                        .stroke(Color(red: 1.0, green: 0.0, blue: 1.0), lineWidth: 3)
-                        .shadow(color: Color(red: 1.0, green: 0.0, blue: 1.0), radius: 10, x: 0, y: 0)
+                    RoundedRectangle(cornerRadius: 8)
+                        .stroke(Color.magenta, lineWidth: 2)
+                        .shadow(color: Color.magenta, radius: 8, x: 0, y: 0)
                 )
         )
-        .shadow(color: Color(red: 1.0, green: 0.0, blue: 1.0).opacity(0.3), radius: 20, x: 0, y: 0)
+        .shadow(color: Color.magenta.opacity(0.3), radius: 15, x: 0, y: 0)
     }
     
-
-    
-    // 랭크 행
+    // MARK: - Rank Row
     private func rankRow(rank: String, time: String, zombies: String) -> some View {
         HStack {
             Text("#\(rank)")
-                .font(.title3.bold().monospaced())
-                .foregroundColor(Color(red: 1.0, green: 0.0, blue: 1.0))
+                .font(.system(size: 16, weight: .bold, design: .monospaced))
+                .foregroundColor(Color.magenta)
                 .frame(width: 40, alignment: .leading)
             
             Text(time)
-                .font(.title3.bold().monospaced())
+                .font(.system(size: 16, weight: .bold, design: .monospaced))
                 .foregroundColor(.white)
             
             Spacer()
             
             Text("\(zombies)")
-                .font(.title3.bold().monospaced())
+                .font(.system(size: 16, weight: .bold, design: .monospaced))
                 .foregroundColor(.white)
         }
         .padding(.horizontal, 15)
     }
-
     
+    // MARK: - Helper Functions
     private func formatTime(_ time: TimeInterval) -> String {
         let minutes = Int(time) / 60
         let seconds = Int(time) % 60
@@ -176,6 +251,7 @@ struct GameOverView: View {
     }
 }
 
+// MARK: - Preview
 #Preview {
     GameOverView(
         playTime: 125,
@@ -185,4 +261,5 @@ struct GameOverView: View {
         onRestart: {},
         onQuit: {}
     )
+    .preferredColorScheme(.dark)
 }

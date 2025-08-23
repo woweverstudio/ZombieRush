@@ -11,9 +11,10 @@ struct MainMenuView: View {
                 .ignoresSafeArea()
             
             VStack {
-                Spacer()
                 // 상단 영역 - 설정 및 리더보드 버튼
                 HStack {
+                    Spacer()
+                    
                     HStack(spacing: 20) {
                         // 리더보드 버튼
                         NeonIconButton(icon: "crown.fill", style: .cyan) {
@@ -25,8 +26,10 @@ struct MainMenuView: View {
                             router.navigate(to: .settings)
                         }
                     }
-                    Spacer()
                 }
+                .padding(.horizontal)
+                .padding(.top)
+                
                 Spacer()
                 
                 // 중앙 영역 - 게임 타이틀
@@ -42,7 +45,6 @@ struct MainMenuView: View {
                 
                 Spacer()
             }
-            .padding()
         }
     }
 }

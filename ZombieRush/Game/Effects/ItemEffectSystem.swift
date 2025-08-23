@@ -98,7 +98,7 @@ class ItemEffectSystem {
         case .shotgun:
             message = "샷건 모드!"
         case .meteor:
-            message = "메테오 스톰!"
+            message = "폭탄 발사!"
         }
         
         toastMessageManager?.showToastMessage(message, duration: 1.5)
@@ -118,7 +118,7 @@ class ItemEffectSystem {
         case .shotgun:
             message = "샷건 모드 해제"
         case .meteor:
-            message = "메테오 스톰 종료"
+            return
         default:
             return  // 즉시 효과는 메시지 없음
         }
