@@ -27,9 +27,22 @@ class GameScene: SKScene {
     private var itemEffectSystem: ItemEffectSystem?
     private var meteorSystem: MeteorSystem?
     
+    // MARK: - Dependencies
+    private let appRouter: AppRouter
+    
     // MARK: - Game State
     private let gameStateManager = GameStateManager.shared
     private var lastUpdateTime: TimeInterval = 0
+    
+    // MARK: - Initialization
+    init(appRouter: AppRouter) {
+        self.appRouter = appRouter
+        super.init(size: .zero)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     // MARK: - Scene Lifecycle
     override func didMove(to view: SKView) {
@@ -123,7 +136,7 @@ class GameScene: SKScene {
     
     private func setupHUD() {
         guard let cameraNode = cameraNode else { return }
-        hudManager = HUDManager(camera: cameraNode)
+        hudManager = HUDManager(camera: cameraNode, appRouter: appRouter)
     }
     
     private func setupZombieSpawnSystem() {
@@ -295,8 +308,8 @@ class GameScene: SKScene {
         let isNewRecord = gameStateManager.saveCurrentGameRecordAndCheckNew()
         
         // 라우터를 통해 게임오버 화면으로 전환
-        DispatchQueue.main.async {
-            AppRouter.shared.showGameOver(
+        DispatchQueue.main.async { [weak self] in
+            self?.appRouter.showGameOver(
                 playTime: playTime,
                 score: score,
                 wave: wave,

@@ -7,10 +7,12 @@
 
 import UIKit
 
-class HapticManager: ObservableObject {
+@Observable
+class HapticManager {
+    // 게임 로직에서 사용하므로 싱글턴 유지
     static let shared = HapticManager()
     
-    @Published var isHapticEnabled: Bool {
+    var isHapticEnabled: Bool {
         didSet {
             UserDefaults.standard.set(isHapticEnabled, forKey: "isHapticEnabled")
         }
@@ -22,7 +24,7 @@ class HapticManager: ObservableObject {
     private let impactSoft = UIImpactFeedbackGenerator(style: .soft)
     
     // MARK: - Initialization
-    private init() {
+    init() {
         self.isHapticEnabled = UserDefaults.standard.bool(forKey: "isHapticEnabled", defaultValue: true)
         
         // 햅틱 제너레이터 준비

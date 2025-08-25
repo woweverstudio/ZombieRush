@@ -2,7 +2,8 @@ import SwiftUI
 
 // MARK: - Main Menu View
 struct MainMenuView: View {
-    @StateObject private var router = AppRouter.shared
+    @Environment(AppRouter.self) var router
+    @Environment(GameKitManager.self) var gameKitManager
     
     var body: some View {
         ZStack {

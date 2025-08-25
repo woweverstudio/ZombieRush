@@ -3,7 +3,7 @@ import GameKit
 
 // MARK: - Global Ranking Card Component
 struct GlobalRankingCard: View {
-    @ObservedObject var gameKitManager: GameKitManager
+    @Environment(GameKitManager.self) var gameKitManager
     
     var body: some View {
         VStack {
@@ -38,7 +38,7 @@ struct GlobalRankingCard: View {
                     loadingView
                 } else if !gameKitManager.isAuthenticated {
                     sampleDataView
-                } else if gameKitManager.globalLeaderboard.isEmpty {
+                } else if gameKitManager.leaderboardEntries.isEmpty {
                     emptyDataView
                 } else {
                     realDataView
@@ -113,7 +113,7 @@ struct GlobalRankingCard: View {
     // MARK: - Real Data View (Authenticated with data)
     private var realDataView: some View {
         LazyVStack(spacing: 0) {
-            ForEach(Array(gameKitManager.globalLeaderboard.enumerated()), id: \.offset) { index, entry in
+            ForEach(Array(gameKitManager.leaderboardEntries.enumerated()), id: \.offset) { index, entry in
                 let rank = entry.rank
                 let playerName = entry.player.displayName
                 let totalScore = entry.score
@@ -133,31 +133,11 @@ struct GlobalRankingCard: View {
                     profileImage: gameKitManager.profileImages[playerID]
                 )
                 .onAppear {
-                    // 마지막에서 5번째 항목이 나타나면 더 많은 데이터 로드
-                    if index == gameKitManager.globalLeaderboard.count - 5 {
-                        Task {
-                            await gameKitManager.loadMoreLeaderboard()
-                        }
-                    }
+                    // 추가 로딩 기능은 향후 구현 예정
                 }
             }
             
-            // 로딩 인디케이터 (더 많은 데이터를 로드할 수 있는 경우)
-            if gameKitManager.globalLeaderboard.count < 100 && gameKitManager.globalLeaderboard.count >= 20 {
-                HStack {
-                    ProgressView()
-                        .scaleEffect(0.7)
-                    Text("Loading more...")
-                        .font(.system(size: 10, weight: .light, design: .monospaced))
-                        .foregroundColor(.white.opacity(0.6))
-                }
-                .padding(.vertical, 10)
-                .onAppear {
-                    Task {
-                        await gameKitManager.loadMoreLeaderboard()
-                    }
-                }
-            }
+            // 더 많은 데이터 로드 기능은 향후 구현 예정
         }
     }
     
@@ -262,6 +242,7 @@ struct GlobalRankRow: View {
 
 // MARK: - Preview
 #Preview {
-    GlobalRankingCard(gameKitManager: GameKitManager.shared)
+    GlobalRankingCard()
+        .environment(GameKitManager())
         .preferredColorScheme(.dark)
 }

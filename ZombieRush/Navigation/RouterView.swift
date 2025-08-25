@@ -2,21 +2,25 @@ import SwiftUI
 
 // MARK: - Main Router View
 struct RouterView: View {
-    @StateObject private var router = AppRouter.shared
+    @Environment(AppRouter.self) var router
     
     var body: some View {
+        // ZStack으로 전환 애니메이션 지원
         ZStack {
-            // 메인 컨텐츠
             Group {
                 switch router.currentRoute {
                 case .mainMenu:
                     MainMenuView()
+                        .id("mainMenu")
                 case .game:
                     GameView()
+                        .id("game")
                 case .settings:
                     SettingsView()
+                        .id("settings")
                 case .leaderboard:
                     LeaderBoardView()
+                        .id("leaderboard")
                 case .gameOver:
                     GameOverView(
                         playTime: router.currentGameData?.playTime ?? 0,
@@ -30,17 +34,14 @@ struct RouterView: View {
                             router.quitToMainMenu()
                         }
                     )
+                    .id("gameOver")
                 }
             }
             .transition(getTransition())
-            
-            // 전환 중 로딩 오버레이 (필요시)
-            if router.isTransitioning {
-                Color.black.opacity(0.3)
-                    // .ignoresSafeArea()
-                    .allowsHitTesting(false)
-            }
+            .animation(.easeInOut(duration: UIConstants.Animation.transitionDuration), value: router.currentRoute)
         }
+        
+        
         .navigationBarHidden(true)
         .statusBarHidden(true)
     }
@@ -67,4 +68,8 @@ struct RouterView: View {
 // MARK: - Preview
 #Preview {
     RouterView()
+        .environment(AppRouter())
+        .environment(GameKitManager())
+        .environment(AudioManager.shared)
+        .environment(HapticManager.shared)
 }

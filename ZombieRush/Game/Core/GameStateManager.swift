@@ -79,6 +79,9 @@ class GameStateManager {
     private(set) var currentState: GameState = .loading
     private(set) var statistics = GameStatistics()
     
+    // MARK: - Dependencies
+    private var gameKitManager: GameKitManager?
+    
     // MARK: - Wave System
     private var waveStartTime: TimeInterval = 0
     private var currentWaveNumber: Int = 1
@@ -89,6 +92,11 @@ class GameStateManager {
     
     // MARK: - State Management
     private init() {}
+    
+    // MARK: - Dependency Injection
+    func setGameKitManager(_ gameKitManager: GameKitManager) {
+        self.gameKitManager = gameKitManager
+    }
     
     // MARK: - Public Methods
     func startNewGame() {
@@ -261,6 +269,8 @@ class GameStateManager {
     
     /// Game Center에 현재 게임 점수 제출
     private func submitScoreToGameCenter() {
+        guard let gameKitManager = gameKitManager else { return }
+        
         // PersonalRecord와 동일한 16비트 인코딩 방식 사용
         let timeInSeconds = Int(statistics.playTime)
         let zombieKills = statistics.zombieKills
@@ -271,7 +281,7 @@ class GameStateManager {
         
         Task {
             do {
-                try await GameKitManager.shared.submitScore(encodedScore)
+                try await gameKitManager.submitScore(encodedScore)
                 // Game Center에 점수 제출 완료
             } catch {
                 // Game Center 점수 제출 실패 (게임 진행에는 영향 없음)

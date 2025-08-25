@@ -8,11 +8,15 @@
 import SwiftUI
 
 struct SettingsView: View {
-    @StateObject private var router = AppRouter.shared
-    @StateObject private var audioManager = AudioManager.shared
-    @StateObject private var hapticManager = HapticManager.shared
+    @Environment(AppRouter.self) var router
+    @Environment(AudioManager.self) var audioManager
+    @Environment(HapticManager.self) var hapticManager
     
     var body: some View {
+        // @Bindable을 body 내부에서 생성
+        @Bindable var bindableAudioManager = audioManager
+        @Bindable var bindableHapticManager = hapticManager
+        
         ZStack {
             // 사이버펑크 배경
             CyberpunkBackground(opacity: 0.6)
@@ -29,21 +33,21 @@ struct SettingsView: View {
                     SettingRow(
                         title: "효과음",
                         icon: "speaker.wave.2.fill",
-                        isOn: $audioManager.isSoundEffectsEnabled
+                        isOn: $bindableAudioManager.isSoundEffectsEnabled
                     )
                     .padding(.bottom, 10)
                     
                     SettingRow(
                         title: "배경음악",
                         icon: "music.note",
-                        isOn: $audioManager.isBackgroundMusicEnabled
+                        isOn: $bindableAudioManager.isBackgroundMusicEnabled
                     )
                     .padding(.bottom, 10)
                     
                     SettingRow(
                         title: "진동",
                         icon: "iphone.radiowaves.left.and.right",
-                        isOn: $hapticManager.isHapticEnabled
+                        isOn: $bindableHapticManager.isHapticEnabled
                     )
                     
                 }
@@ -106,4 +110,8 @@ struct SettingRow: View {
 
 #Preview {
     SettingsView()
+        .environment(AppRouter())
+        .environment(AudioManager.shared)
+        .environment(HapticManager.shared)
+        .preferredColorScheme(.dark)
 }

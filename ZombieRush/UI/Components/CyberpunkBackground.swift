@@ -11,7 +11,7 @@ struct CyberpunkBackground: View {
     var body: some View {
         ZStack {
             // 사이버펑크 배경 이미지
-            Image("background")
+            Image(ResourceConstants.Images.UI.background)
                 .resizable()
             
             // 어두운 오버레이

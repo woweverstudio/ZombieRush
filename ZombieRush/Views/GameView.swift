@@ -9,7 +9,7 @@ import SwiftUI
 import SpriteKit
 
 struct GameView: View {
-    @StateObject private var router = AppRouter.shared
+    @Environment(AppRouter.self) var router
     
     var body: some View {
         // SpriteKit 게임 씬 (풀스크린)
@@ -19,8 +19,10 @@ struct GameView: View {
     
     // MARK: - Game Scene Creation
     private func makeGameScene() -> SKScene {
-        let scene = GameScene()
-        scene.size = CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
+        let scene = GameScene(appRouter: router)
+        // 화면 크기를 한 번만 계산하여 캐시
+        let screenSize = UIScreen.main.bounds.size
+        scene.size = CGSize(width: screenSize.width, height: screenSize.height)
         scene.scaleMode = .aspectFill
         return scene
     }
@@ -28,4 +30,5 @@ struct GameView: View {
 
 #Preview {
     GameView()
+        .environment(AppRouter())
 }

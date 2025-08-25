@@ -27,19 +27,17 @@ class GameController {
     private var fixedJoystickPosition: CGPoint = .zero
     private var isUsingTemporaryJoystick: Bool = false
     
-    // MARK: - Computed Properties
-    private var screenBounds: CGSize {
-        UIScreen.main.bounds.size
-    }
+    // MARK: - Cached Properties (성능 최적화)
+    private let screenBounds: CGSize = UIScreen.main.bounds.size
     
-    private var leftBottomTouchArea: CGRect {
+    private lazy var leftBottomTouchArea: CGRect = {
         CGRect(
             x: -screenBounds.width / 2,
             y: -screenBounds.height / 2,
             width: screenBounds.width / 2,
             height: screenBounds.height / 2
         )
-    }
+    }()
     
     private var camera: SKCameraNode? {
         scene?.camera

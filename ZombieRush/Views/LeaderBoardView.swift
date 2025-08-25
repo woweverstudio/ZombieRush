@@ -2,8 +2,8 @@ import SwiftUI
 
 // MARK: - LeaderBoard View
 struct LeaderBoardView: View {
-    @StateObject private var router = AppRouter.shared
-    @StateObject private var gameKitManager = GameKitManager.shared
+    @Environment(AppRouter.self) var router
+    @Environment(GameKitManager.self) var gameKitManager
     
     var body: some View {
         ZStack {
@@ -29,8 +29,7 @@ struct LeaderBoardView: View {
             }
         }
         .onDisappear {
-            // 리더보드 화면을 벗어날 때 GKAccessPoint 비활성화
-            GameCenterAccessPointView.deactivateAccessPoint()
+            // 리더보드 화면을 벗어날 때 처리할 내용이 있으면 여기에 추가
         }
     }
     
@@ -46,10 +45,6 @@ struct LeaderBoardView: View {
             SectionTitle("LEADER BOARD", style: .cyan, size: 28)
             
             Spacer()
-            
-            // Game Center Access Point
-            GameCenterAccessPointView()
-                .frame(width: 44, height: 44)
         }
     }
     
@@ -57,19 +52,20 @@ struct LeaderBoardView: View {
     private var contentSection: some View {
         HStack(spacing: 20) {
             // 좌측: 플레이어 프로필 카드
-            PlayerProfileCard(gameKitManager: gameKitManager)
+            PlayerProfileCard()
             
             // 우측: 글로벌 랭킹 카드
-            GlobalRankingCard(gameKitManager: gameKitManager)
+            GlobalRankingCard()
         }
     }
     
     // MARK: - Data Loading
     private func loadLeaderboardData() async {
         do {
-            try await gameKitManager.loadGlobalLeaderboard()
+            try await gameKitManager.loadTop100Leaderboard()
         } catch {
-            // 리더보드 로드 실패는 샘플 데이터로 대체됨
+            print("🎮 LeaderBoard: Failed to load top 100 - \(error.localizedDescription)")
+            // 인증되지 않은 경우 등 실패 시 샘플 데이터로 대체됨
         }
     }
 }

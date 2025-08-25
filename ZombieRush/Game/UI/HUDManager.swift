@@ -25,14 +25,18 @@ class HUDManager {
     private var exitButton: SKShapeNode?
     private var exitButtonLabel: SKLabelNode?
     
+    // MARK: - Dependencies
+    private let appRouter: AppRouter
+    
     // MARK: - Game Data
     private(set) var score: Int = 0
     private let gameStateManager = GameStateManager.shared
     
     // MARK: - Initialization
-    init(camera: SKCameraNode) {
+    init(camera: SKCameraNode, appRouter: AppRouter) {
         self.camera = camera
         self.scene = camera.scene
+        self.appRouter = appRouter
         setupHUD()
     }
     
@@ -285,7 +289,7 @@ class HUDManager {
             
             // 메인화면으로 이동
             DispatchQueue.main.async {
-                AppRouter.shared.quitToMainMenu()
+                self.appRouter.quitToMainMenu()
             }
             return true
         }

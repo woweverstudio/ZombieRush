@@ -8,7 +8,7 @@ struct GameOverView: View {
     let onRestart: () -> Void
     let onQuit: () -> Void
     
-    @StateObject private var gameKitManager = GameKitManager.shared
+    @Environment(GameKitManager.self) var gameKitManager
     
     var body: some View {
         ZStack {

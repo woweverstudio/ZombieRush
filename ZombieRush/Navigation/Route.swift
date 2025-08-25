@@ -30,7 +30,7 @@ enum Route: String, CaseIterable, Hashable {
 
 // MARK: - Navigation State
 struct NavigationState {
-    var currentRoute: Route = .mainMenu
+    var currentRoute: Route = .mainMenu  // 로딩 화면 제거, 바로 메인메뉴로
     var previousRoute: Route?
     var gameData: GameData?
     

@@ -1,6 +1,5 @@
 import Foundation
 import SwiftUI
-import Combine
 
 // MARK: - Navigation Direction
 enum NavigationDirection {
@@ -9,55 +8,46 @@ enum NavigationDirection {
 }
 
 // MARK: - App Router (Single Source of Truth)
-class AppRouter: ObservableObject {
+@Observable
+final class AppRouter {
     
-    // MARK: - Singleton
-    static let shared = AppRouter()
-    
-    // MARK: - Published Properties
-    @Published private(set) var navigationState = NavigationState()
-    @Published var isTransitioning = false
-    @Published private(set) var navigationDirection: NavigationDirection = .forward
-    
-    // MARK: - Private Properties
-    private var cancellables = Set<AnyCancellable>()
+    // MARK: - Observable Properties (직접 노출로 변경 감지 보장)
+    private(set) var currentRoute: Route = .mainMenu
+    private(set) var previousRoute: Route?
+    private(set) var gameData: GameData?
+    private(set) var navigationDirection: NavigationDirection = .forward
     
     // MARK: - Initialization
-    private init() {
-        setupNavigationObserver()
-        // 앱 시작 시 메인 화면 음악 재생
-        DispatchQueue.main.async {
-            self.handleAudioTransition(to: .mainMenu)
-        }
+    init() {
+        // 앱 시작 시 바로 메인메뉴로 시작
     }
     
     // MARK: - Navigation Methods
     func navigate(to route: Route, with data: GameData? = nil, animated: Bool = true) {
-        guard navigationState.currentRoute != route else { return }
+        guard currentRoute != route else { return }
         
         navigationDirection = .forward
+        print("🔄 Navigation: \(currentRoute) → \(route) (FORWARD)")
         
-        if animated {
-            withAnimation(.easeInOut(duration: UIConstants.Animation.transitionDuration)) {
-                performNavigation(to: route, with: data)
-            }
-        } else {
-            performNavigation(to: route, with: data)
-        }
+        // 오디오 처리
+        handleAudioTransition(to: route)
+        
+        // 직접 프로퍼티 업데이트 (@Observable이 감지)
+        previousRoute = currentRoute
+        currentRoute = route
+        gameData = data
     }
     
     func goBack(animated: Bool = true) {
-        guard navigationState.previousRoute != nil else { return }
+        guard let previous = previousRoute else { return }
         
         navigationDirection = .backward
+        print("🔄 Navigation: \(currentRoute) ← \(previous) (BACKWARD)")
         
-        if animated {
-            withAnimation(.easeInOut(duration: UIConstants.Animation.transitionDuration)) {
-                navigationState.goBack()
-            }
-        } else {
-            navigationState.goBack()
-        }
+        // 직접 프로퍼티 업데이트 (@Observable이 감지)
+        currentRoute = previous
+        previousRoute = nil
+        gameData = nil
     }
     
     func restart(animated: Bool = true) {
@@ -73,30 +63,20 @@ class AppRouter: ObservableObject {
     func quitToMainMenu(animated: Bool = true) {
         // 게임에서 메인메뉴로 나가는 것은 "뒤로 가기" 개념
         navigationDirection = .backward
-        
-        if animated {
-            withAnimation(.easeInOut(duration: UIConstants.Animation.transitionDuration)) {
-                performNavigation(to: .mainMenu, with: nil)
-            }
-        } else {
-            performNavigation(to: .mainMenu, with: nil)
-        }
-    }
-    
-    // MARK: - Private Methods
-    private func performNavigation(to route: Route, with data: GameData?) {
-        isTransitioning = true
+        print("🔄 Navigation: \(currentRoute) → mainMenu (BACKWARD)")
         
         // 오디오 처리
-        handleAudioTransition(to: route)
+        handleAudioTransition(to: .mainMenu)
         
-        // 네비게이션 상태 업데이트
-        navigationState.navigate(to: route, with: data)
-        
-        // 전환 완료 후 플래그 리셋
-        DispatchQueue.main.asyncAfter(deadline: .now() + UIConstants.Animation.transitionDuration) {
-            self.isTransitioning = false
-        }
+        // 직접 프로퍼티 업데이트 (@Observable이 감지)
+        previousRoute = currentRoute
+        currentRoute = .mainMenu
+        gameData = nil
+    }
+    
+    func completeLoading(animated: Bool = true) {
+        // 더 이상 사용되지 않음 - 바로 메인메뉴로 시작
+        // 호환성을 위해 메서드는 유지하되 아무것도 하지 않음
     }
     
     private func handleAudioTransition(to route: Route) {
@@ -111,28 +91,15 @@ class AppRouter: ObservableObject {
         }
     }
     
-    private func setupNavigationObserver() {
-        // 라우트 변경 모니터링
-        $navigationState
-            .map(\.currentRoute)
-            .removeDuplicates()
-            .sink { _ in
-                // 네비게이션 상태 변경 감지
-            }
-            .store(in: &cancellables)
-    }
+
     
     // MARK: - Computed Properties
-    var currentRoute: Route {
-        navigationState.currentRoute
-    }
-    
     var currentGameData: GameData? {
-        navigationState.gameData
+        gameData
     }
     
     var canGoBack: Bool {
-        navigationState.previousRoute != nil
+        previousRoute != nil
     }
 }
 

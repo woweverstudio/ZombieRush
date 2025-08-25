@@ -3,7 +3,8 @@ import GameKit
 
 // MARK: - Player Profile Card Component
 struct PlayerProfileCard: View {
-    @ObservedObject var gameKitManager: GameKitManager
+    @Environment(GameKitManager.self) var gameKitManager
+    @Environment(AppRouter.self) var router
     
     var body: some View {
         VStack(spacing: 20) {
@@ -132,6 +133,14 @@ struct PlayerProfileCard: View {
         await gameKitManager.loadPlayerRank()
     }
     
+    // MARK: - Open iPhone Settings
+    private func openGameCenterSettings() {
+        // iPhone 설정 앱 열기
+        if let settingsURL = URL(string: UIApplication.openSettingsURLString) {
+            UIApplication.shared.open(settingsURL)
+        }
+    }
+    
     // MARK: - Authenticated User Content
     private var authenticatedContent: some View {
         let personalRecords = GameStateManager.shared.getPersonalRecords()
@@ -174,74 +183,52 @@ struct PlayerProfileCard: View {
                 .foregroundColor(Color.cyan.opacity(0.6))
             
             VStack(spacing: 8) {
-                Text("Sign in to Game Center")
+                Text("게임센터에 로그인 하세요!")
                     .font(.system(size: 12, weight: .medium, design: .monospaced))
                     .foregroundColor(.white.opacity(0.8))
                     .multilineTextAlignment(.center)
                 
-                Text("to view your records")
+                Text("로그인 하시면 글로벌 순위에 도전하실 수 있습니다.")
                     .font(.system(size: 10, weight: .light, design: .monospaced))
                     .foregroundColor(.white.opacity(0.6))
+                    .multilineTextAlignment(.center)
             }
             
-            // 로그인 버튼
+            // iPhone 설정 앱으로 이동하는 버튼
             Button(action: {
-                //
+                openGameCenterSettings()
             }) {
-                HStack(spacing: 6) {
-                    // 로딩 중일 때 스피너 표시
-                    if gameKitManager.authenticationStatus == "Authenticating..." {
-                        ProgressView()
-                            .scaleEffect(0.7)
-                            .progressViewStyle(CircularProgressViewStyle(tint: .white))
-                    } else {
-                        Image(systemName: "gamecontroller.fill")
-                            .font(.system(size: 10))
-                    }
+                HStack(spacing: 8) {
+                    Image(systemName: "gear")
+                        .font(.system(size: 12, weight: .medium))
                     
-                    Text(gameKitManager.authenticationStatus == "Authenticating..." ? "Signing in..." : "Sign in to Game Center")
-                        .font(.system(size: 10, weight: .bold, design: .monospaced))
+                    Text("설정 열기")
+                        .font(.system(size: 12, weight: .medium, design: .monospaced))
                 }
                 .foregroundColor(.white)
                 .padding(.horizontal, 16)
                 .padding(.vertical, 8)
                 .background(
-                    RoundedRectangle(cornerRadius: 12)
-                        .fill(Color.cyan.opacity(gameKitManager.authenticationStatus == "Authenticating..." ? 0.2 : 0.3))
+                    RoundedRectangle(cornerRadius: 8)
+                        .fill(Color.cyan.opacity(0.2))
                         .overlay(
-                            RoundedRectangle(cornerRadius: 12)
+                            RoundedRectangle(cornerRadius: 8)
                                 .stroke(Color.cyan, lineWidth: 1)
                         )
                 )
             }
-            .disabled(gameKitManager.authenticationStatus == "Authenticating...")
-            
-            // 취소 버튼 (로딩 중일 때만 표시)
-            if gameKitManager.authenticationStatus == "Authenticating..." {
-                Button(action: {
-                    //
-                }) {
-                    Text("Cancel")
-                        .font(.system(size: 8, weight: .medium, design: .monospaced))
-                        .foregroundColor(.red.opacity(0.8))
-                        .padding(.horizontal, 12)
-                        .padding(.vertical, 4)
-                        .background(
-                            RoundedRectangle(cornerRadius: 8)
-                                .fill(Color.red.opacity(0.2))
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 8)
-                                        .stroke(Color.red.opacity(0.5), lineWidth: 1)
-                                )
-                        )
-                }
-            }
+            // iPhone 설정에서 Game Center 로그인 안내            
+            Text("세팅 > 게임센터 > 로그인")
+                .font(.system(size: 12, weight: .light, design: .monospaced))
+                .foregroundColor(.white.opacity(0.5))
         }
     }
 }
 
 // MARK: - Preview
 #Preview {
-    PlayerProfileCard(gameKitManager: GameKitManager.shared)
+    PlayerProfileCard()
+        .environment(GameKitManager())
+        .environment(AppRouter())
         .preferredColorScheme(.dark)
 }

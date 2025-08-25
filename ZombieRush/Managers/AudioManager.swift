@@ -8,7 +8,9 @@
 import Foundation
 import AVFoundation
 
-class AudioManager: NSObject, ObservableObject {
+@Observable
+class AudioManager: NSObject {
+    // 게임 로직에서 사용하므로 싱글턴 유지
     static let shared = AudioManager()
     
     // MARK: - Properties
@@ -17,7 +19,7 @@ class AudioManager: NSObject, ObservableObject {
     private var currentMusicName: String?
     private var currentMusicType: MusicType = .mainMenu
     
-    @Published var isBackgroundMusicEnabled: Bool {
+    var isBackgroundMusicEnabled: Bool {
         didSet {
             UserDefaults.standard.set(isBackgroundMusicEnabled, forKey: "isBackgroundMusicEnabled")
             if isBackgroundMusicEnabled {
@@ -28,7 +30,7 @@ class AudioManager: NSObject, ObservableObject {
         }
     }
     
-    @Published var isSoundEffectsEnabled: Bool {
+    var isSoundEffectsEnabled: Bool {
         didSet {
             UserDefaults.standard.set(isSoundEffectsEnabled, forKey: "isSoundEffectsEnabled")
         }
@@ -40,7 +42,7 @@ class AudioManager: NSObject, ObservableObject {
     }
     
     // MARK: - Initialization
-    override private init() {
+    override init() {
         self.isBackgroundMusicEnabled = UserDefaults.standard.bool(forKey: "isBackgroundMusicEnabled", defaultValue: true)
         self.isSoundEffectsEnabled = UserDefaults.standard.bool(forKey: "isSoundEffectsEnabled", defaultValue: true)
         
