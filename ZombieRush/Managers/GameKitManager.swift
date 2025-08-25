@@ -113,6 +113,10 @@ class GameKitManager: NSObject, ObservableObject {
         
         // GKAccessPoint 활성화
         setupAccessPoint()
+        
+        Task {
+            await loadPlayerRank()
+        }
     }
     
     private func handleAuthenticationFailure() {
@@ -172,7 +176,7 @@ class GameKitManager: NSObject, ObservableObject {
     
     /// 점수를 Game Center 리더보드에 제출 (현재 맵)
     func submitScore(_ score: Int64) async throws {
-        try await submitScore(score, to: GameConstants.GameCenter.currentLeaderboardID)
+        try await submitScore(score, to: TextConstants.GameCenter.LeaderboardIDs.basic)
     }
     
     /// 특정 맵의 리더보드에 점수 제출 (향후 확장용)
@@ -224,7 +228,7 @@ class GameKitManager: NSObject, ObservableObject {
         }
         
         // 리더보드 로드
-        let leaderboards = try await GKLeaderboard.loadLeaderboards(IDs: [GameConstants.GameCenter.currentLeaderboardID])
+        let leaderboards = try await GKLeaderboard.loadLeaderboards(IDs: [TextConstants.GameCenter.currentLeaderboardID])
         
         guard let leaderboard = leaderboards.first else {
             throw NSError(domain: "GameKit", code: -1, userInfo: [NSLocalizedDescriptionKey: "No leaderboard found"])
@@ -272,7 +276,7 @@ class GameKitManager: NSObject, ObservableObject {
         
         do {
             // 리더보드 로드
-            let leaderboards = try await GKLeaderboard.loadLeaderboards(IDs: [GameConstants.GameCenter.currentLeaderboardID])
+            let leaderboards = try await GKLeaderboard.loadLeaderboards(IDs: [TextConstants.GameCenter.currentLeaderboardID])
             
             guard let leaderboard = leaderboards.first else {
                 return // 리더보드를 찾을 수 없음
@@ -340,7 +344,7 @@ class GameKitManager: NSObject, ObservableObject {
         }
         
         do {
-            let leaderboards = try await GKLeaderboard.loadLeaderboards(IDs: [GameConstants.GameCenter.currentLeaderboardID])
+            let leaderboards = try await GKLeaderboard.loadLeaderboards(IDs: [TextConstants.GameCenter.currentLeaderboardID])
             
             guard let leaderboard = leaderboards.first else {
                 await MainActor.run { [weak self] in

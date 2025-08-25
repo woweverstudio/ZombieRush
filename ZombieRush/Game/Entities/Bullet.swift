@@ -10,12 +10,12 @@ import SpriteKit
 class Bullet: SKSpriteNode {
     
     // MARK: - Properties
-    private let bulletSpeed: CGFloat = GameConstants.Bullet.speed
-    private let lifetime: TimeInterval = GameConstants.Bullet.lifetime
+    private let bulletSpeed: CGFloat = GameBalance.Bullet.speed
+    private let lifetime: TimeInterval = GameBalance.Bullet.lifetime
     
     // MARK: - Initialization
     init() {
-        let size = GameConstants.Bullet.size
+        let size = GameBalance.Bullet.size
         super.init(texture: nil, color: .clear, size: size)
         
         setupBullet()
@@ -27,7 +27,7 @@ class Bullet: SKSpriteNode {
     
     // MARK: - Setup
     private func setupBullet() {
-        name = GameConstants.NodeNames.bullet
+        name = TextConstants.NodeNames.bullet
         zPosition = 5
         
         // 네온 사이버펑크 스타일 총알 생성
@@ -54,10 +54,10 @@ class Bullet: SKSpriteNode {
         let neonBullet = SKShapeNode(rect: bulletRect, cornerRadius: size.width / 4)
         
         // 네온 청록색 설정
-        neonBullet.fillColor = GameConstants.Bullet.neonColor
-        neonBullet.strokeColor = GameConstants.Bullet.neonStrokeColor
+        neonBullet.fillColor = UIConstants.Colors.Neon.bulletColor
+        neonBullet.strokeColor = UIConstants.Colors.Neon.bulletStrokeColor
         neonBullet.lineWidth = 1.5
-        neonBullet.glowWidth = GameConstants.Bullet.glowWidth
+        neonBullet.glowWidth = UIConstants.Colors.Neon.bulletGlowWidth
         
         // 내부 코어 (더 밝은 중심)
         let coreSize = CGSize(width: size.width * 0.6, height: size.height * 0.6)
@@ -69,9 +69,9 @@ class Bullet: SKSpriteNode {
         )
         
         let core = SKShapeNode(rect: coreRect, cornerRadius: coreSize.width / 4)
-        core.fillColor = GameConstants.Bullet.coreColor
+        core.fillColor = UIConstants.Colors.Neon.bulletCoreColor
         core.strokeColor = .clear
-        core.glowWidth = GameConstants.Bullet.coreGlowWidth
+        core.glowWidth = UIConstants.Colors.Neon.bulletCoreGlowWidth
         
         neonBullet.addChild(core)
         addChild(neonBullet)

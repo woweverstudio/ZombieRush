@@ -76,7 +76,7 @@ extension PhysicsSystem: SKPhysicsContactDelegate {
               let scene = scene as? GameScene else { return }
         
         if AudioManager.shared.isSoundEffectsEnabled {
-            let hitSound = SKAction.playSoundFileNamed(GameConstants.Audio.SoundEffects.hit, waitForCompletion: false)
+            let hitSound = SKAction.playSoundFileNamed(ResourceConstants.Audio.SoundEffects.hit, waitForCompletion: false)
             scene.run(hitSound)
         }
         
@@ -86,7 +86,7 @@ extension PhysicsSystem: SKPhysicsContactDelegate {
         bullet.removeFromParent()
         
         // 좀비에게 데미지
-        let isDead = zombie.takeDamage(GameConstants.Bullet.damage)
+        let isDead = zombie.takeDamage(GameBalance.Bullet.damage)
         
         if isDead {
             // 점수 추가
@@ -103,7 +103,7 @@ extension PhysicsSystem: SKPhysicsContactDelegate {
               let scene = scene as? GameScene else { return }
         
         // 플레이어에게 데미지
-        player.takeDamage(GameConstants.Player.damagePerHit)
+        player.takeDamage(GameBalance.Player.damagePerHit)
         
         // 좀비 제거 (한 번 공격하면 사라짐)
         scene.removeZombie(zombie)
@@ -119,7 +119,7 @@ extension PhysicsSystem: SKPhysicsContactDelegate {
         guard let item = item as? Item, let scene = scene as? GameScene else { return }
         
         if AudioManager.shared.isSoundEffectsEnabled {
-            let itemSound = SKAction.playSoundFileNamed(GameConstants.Audio.SoundEffects.item, waitForCompletion: false)
+            let itemSound = SKAction.playSoundFileNamed(ResourceConstants.Audio.SoundEffects.item, waitForCompletion: false)
             scene.run(itemSound)
         }
         
@@ -148,35 +148,35 @@ extension PhysicsSystem: SKPhysicsContactDelegate {
         worldNode.addChild(impactParticle)
         
         // 파티클 효과 완료 후 자동 제거
-        let waitAction = SKAction.wait(forDuration: GameConstants.Bullet.particleLifetime)
+        let waitAction = SKAction.wait(forDuration: UIConstants.ParticleEffects.bulletParticleLifetime)
         let removeAction = SKAction.removeFromParent()
         impactParticle.run(SKAction.sequence([waitAction, removeAction]))
     }
     
     private func createImpactParticle() -> SKEmitterNode? {
-        guard let emitter = SKEmitterNode(fileNamed: "BulletImpact") else { return nil }
+        guard let emitter = SKEmitterNode(fileNamed: ResourceConstants.ParticleEffects.bulletImpact) else { return nil }
         
         // 기본 파티클 설정 (네온 사이버펑크 스타일)
-        emitter.particleBirthRate = GameConstants.Bullet.particleBirthRate
-        emitter.numParticlesToEmit = GameConstants.Bullet.particleCount
-        emitter.particleLifetime = GameConstants.Bullet.particleLifetimeBase
-        emitter.particleLifetimeRange = GameConstants.Bullet.particleLifetimeRange
+        emitter.particleBirthRate = UIConstants.ParticleEffects.bulletParticleBirthRate
+        emitter.numParticlesToEmit = UIConstants.ParticleEffects.bulletParticleCount
+        emitter.particleLifetime = UIConstants.ParticleEffects.bulletParticleLifetimeBase
+        emitter.particleLifetimeRange = UIConstants.ParticleEffects.bulletParticleLifetimeRange
         
         // 속도와 방향
-        emitter.particleSpeed = GameConstants.Bullet.particleSpeed
-        emitter.particleSpeedRange = GameConstants.Bullet.particleSpeedRange
+        emitter.particleSpeed = UIConstants.ParticleEffects.bulletParticleSpeed
+        emitter.particleSpeedRange = UIConstants.ParticleEffects.bulletParticleSpeedRange
         emitter.emissionAngle = 0
         emitter.emissionAngleRange = CGFloat.pi * 2 // 360도
         
         // 크기와 투명도
-        emitter.particleScale = GameConstants.Bullet.particleScale
-        emitter.particleScaleRange = GameConstants.Bullet.particleScaleRange
-        emitter.particleScaleSpeed = GameConstants.Bullet.particleScaleSpeed
-        emitter.particleAlpha = GameConstants.Bullet.particleAlpha
-        emitter.particleAlphaSpeed = GameConstants.Bullet.particleAlphaSpeed
+        emitter.particleScale = UIConstants.ParticleEffects.bulletParticleScale
+        emitter.particleScaleRange = UIConstants.ParticleEffects.bulletParticleScaleRange
+        emitter.particleScaleSpeed = UIConstants.ParticleEffects.bulletParticleScaleSpeed
+        emitter.particleAlpha = UIConstants.ParticleEffects.bulletParticleAlpha
+        emitter.particleAlphaSpeed = UIConstants.ParticleEffects.bulletParticleAlphaSpeed
         
         // 네온 색상 설정
-        emitter.particleColor = GameConstants.Bullet.sparkleColor
+        emitter.particleColor = UIConstants.Colors.Neon.bulletSparkleColor
         emitter.particleColorBlendFactor = 1.0
         emitter.particleColorSequence = nil
         

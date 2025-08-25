@@ -38,7 +38,7 @@ class AppRouter: ObservableObject {
         navigationDirection = .forward
         
         if animated {
-            withAnimation(.easeInOut(duration: GameConstants.UI.transitionDuration)) {
+            withAnimation(.easeInOut(duration: UIConstants.Animation.transitionDuration)) {
                 performNavigation(to: route, with: data)
             }
         } else {
@@ -52,7 +52,7 @@ class AppRouter: ObservableObject {
         navigationDirection = .backward
         
         if animated {
-            withAnimation(.easeInOut(duration: GameConstants.UI.transitionDuration)) {
+            withAnimation(.easeInOut(duration: UIConstants.Animation.transitionDuration)) {
                 navigationState.goBack()
             }
         } else {
@@ -75,7 +75,7 @@ class AppRouter: ObservableObject {
         navigationDirection = .backward
         
         if animated {
-            withAnimation(.easeInOut(duration: GameConstants.UI.transitionDuration)) {
+            withAnimation(.easeInOut(duration: UIConstants.Animation.transitionDuration)) {
                 performNavigation(to: .mainMenu, with: nil)
             }
         } else {
@@ -94,7 +94,7 @@ class AppRouter: ObservableObject {
         navigationState.navigate(to: route, with: data)
         
         // 전환 완료 후 플래그 리셋
-        DispatchQueue.main.asyncAfter(deadline: .now() + GameConstants.UI.transitionDuration) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + UIConstants.Animation.transitionDuration) {
             self.isTransitioning = false
         }
     }

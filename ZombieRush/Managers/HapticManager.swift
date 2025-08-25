@@ -38,27 +38,27 @@ class HapticManager: ObservableObject {
     // MARK: - Haptic Methods
     func playShootHaptic() {
         guard isHapticEnabled else { return }
-        impactLight.impactOccurred(intensity: CGFloat(GameConstants.Haptic.shootIntensity))
+        impactLight.impactOccurred(intensity: CGFloat(UIConstants.Haptic.shootIntensity))
     }
     
     func playShotgunHaptic() {
         guard isHapticEnabled else { return }
-        impactSoft.impactOccurred(intensity: CGFloat(GameConstants.Haptic.shotgunIntensity))
+        impactSoft.impactOccurred(intensity: CGFloat(UIConstants.Haptic.shotgunIntensity))
     }
     
     func playHitHaptic() {
         guard isHapticEnabled else { return }
-        impactRigid.impactOccurred(intensity: CGFloat(GameConstants.Haptic.hitIntensity))
+        impactRigid.impactOccurred(intensity: CGFloat(UIConstants.Haptic.hitIntensity))
     }
     
     func playItemHaptic() {
         guard isHapticEnabled else { return }
-        impactLight.impactOccurred(intensity: CGFloat(GameConstants.Haptic.itemIntensity))
+        impactLight.impactOccurred(intensity: CGFloat(UIConstants.Haptic.itemIntensity))
     }
     
     func playButtonHaptic() {
         guard isHapticEnabled else { return }
-        impactLight.impactOccurred(intensity: CGFloat(GameConstants.Haptic.buttonIntensity))
+        impactLight.impactOccurred(intensity: CGFloat(UIConstants.Haptic.buttonIntensity))
     }
     
     // MARK: - Generic Haptic Methods

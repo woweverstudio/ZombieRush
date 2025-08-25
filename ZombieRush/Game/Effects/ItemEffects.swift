@@ -25,12 +25,12 @@ class ItemEffectFactory {
 
 // 이동속도 증가 효과
 class SpeedBoostEffect: ItemEffect {
-    let duration: TimeInterval = GameConstants.Items.buffDuration
+    let duration: TimeInterval = GameBalance.Items.buffDuration
     let isInstant: Bool = false
     
     func apply(to player: Player) {
-        player.applySpeedBoost(multiplier: GameConstants.Items.speedMultiplier)
-        player.temporaryFaceExpression(imageName: "face_angry", duration: GameConstants.Items.buffDuration)
+        player.applySpeedBoost(multiplier: GameBalance.Items.speedMultiplier)
+        player.temporaryFaceExpression(imageName: "face_angry", duration: GameBalance.Items.buffDuration)
     }
     
     func remove(from player: Player) {
@@ -44,7 +44,7 @@ class HealthRestoreEffect: ItemEffect {
     let isInstant: Bool = true
     
     func apply(to player: Player) {
-        player.restoreHealth(amount: GameConstants.Items.healthRestoreAmount)
+        player.restoreHealth(amount: GameBalance.Items.healthRestoreAmount)
         player.temporaryFaceExpression(imageName: "face_happy", duration: 1.3)
     }
     
@@ -59,7 +59,7 @@ class AmmoRestoreEffect: ItemEffect {
     let isInstant: Bool = true
     
     func apply(to player: Player) {
-        player.restoreAmmo(amount: GameConstants.Items.ammoRestoreAmount)
+        player.restoreAmmo(amount: GameBalance.Items.ammoRestoreAmount)
         player.temporaryFaceExpression(imageName: "face_happy", duration: 1.3)
     }
     
@@ -70,12 +70,12 @@ class AmmoRestoreEffect: ItemEffect {
 
 // 무적상태 효과
 class InvincibilityEffect: ItemEffect {
-    let duration: TimeInterval = GameConstants.Items.buffDuration
+    let duration: TimeInterval = GameBalance.Items.buffDuration
     let isInstant: Bool = false
     
     func apply(to player: Player) {
         player.enableInvincibility()
-        player.temporaryFaceExpression(imageName: "face_angry", duration: GameConstants.Items.buffDuration)
+        player.temporaryFaceExpression(imageName: "face_angry", duration: GameBalance.Items.buffDuration)
     }
     
     func remove(from player: Player) {
@@ -85,15 +85,15 @@ class InvincibilityEffect: ItemEffect {
 
 // 샷건발사 효과
 class ShotgunEffect: ItemEffect {
-    let duration: TimeInterval = GameConstants.Items.buffDuration
+    let duration: TimeInterval = GameBalance.Items.buffDuration
     let isInstant: Bool = false
     
     func apply(to player: Player) {
         player.enableShotgunMode(
-            bulletCount: GameConstants.Items.shotgunBulletCount,
-            spreadAngle: GameConstants.Items.shotgunSpreadAngle
+            bulletCount: GameBalance.Items.shotgunBulletCount,
+            spreadAngle: GameBalance.Items.shotgunSpreadAngle
         )
-        player.temporaryFaceExpression(imageName: "face_angry", duration: GameConstants.Items.buffDuration)
+        player.temporaryFaceExpression(imageName: "face_angry", duration: GameBalance.Items.buffDuration)
     }
     
     func remove(from player: Player) {

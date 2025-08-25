@@ -103,7 +103,7 @@ class HUDManager {
         hudNode?.addChild(exitButton!)
         
         // 나가기 버튼 라벨
-        exitButtonLabel = SKLabelNode(text: GameConstants.Text.exitButton)
+        exitButtonLabel = SKLabelNode(text: TextConstants.UI.exitButton)
         exitButtonLabel?.fontName = "Arial-Bold"
         exitButtonLabel?.fontSize = 14
         exitButtonLabel?.fontColor = SKColor.white.withAlphaComponent(0.9)
@@ -131,7 +131,7 @@ class HUDManager {
         
         // 체력 바 채우기 (네온 그린)
         healthBarFill = SKShapeNode(rectOf: CGSize(width: barWidth - 4, height: barHeight - 4), cornerRadius: 3)
-        healthBarFill?.fillColor = GameConstants.UI.healthBarColor
+        healthBarFill?.fillColor = UIConstants.Colors.HUD.healthBarColor
         healthBarFill?.strokeColor = SKColor.clear
         healthBarFill?.position = CGPoint(x: 0, y: 0)
         healthBar?.addChild(healthBarFill!)
@@ -164,7 +164,7 @@ class HUDManager {
         
         // 탄약 바 채우기 (네온 시안)
         ammoBarFill = SKShapeNode(rectOf: CGSize(width: barWidth - 4, height: barHeight - 4), cornerRadius: 3)
-        ammoBarFill?.fillColor = GameConstants.UI.ammoBarColor
+        ammoBarFill?.fillColor = UIConstants.Colors.HUD.ammoBarColor
         ammoBarFill?.strokeColor = SKColor.clear
         ammoBarFill?.position = CGPoint(x: 0, y: 0)
         ammoBar?.addChild(ammoBarFill!)
@@ -182,7 +182,7 @@ class HUDManager {
         reloadLabel = SKLabelNode(text: "RELOADING...")
         reloadLabel?.fontName = "Arial-Bold"
         reloadLabel?.fontSize = 16
-        reloadLabel?.fontColor = GameConstants.UI.reloadLabelColor
+        reloadLabel?.fontColor = UIConstants.Colors.HUD.reloadLabelColor
         reloadLabel?.position = CGPoint(x: barWidth/2 + 70, y: barY - 6)
         reloadLabel?.horizontalAlignmentMode = .center
         reloadLabel?.isHidden = true
@@ -192,7 +192,7 @@ class HUDManager {
     // MARK: - Public Methods
     func addScore(_ points: Int = 1) {
         score += points
-        scoreLabel?.text = String(format: GameConstants.Text.score, score)
+        scoreLabel?.text = String(format: TextConstants.HUD.scoreFormat, score)
     }
     
     func updateTime() {
@@ -200,7 +200,7 @@ class HUDManager {
         let minutes = Int(playTime) / 60
         let seconds = Int(playTime) % 60
         
-        timeLabel?.text = String(format: GameConstants.Text.time, minutes, seconds)
+        timeLabel?.text = String(format: TextConstants.HUD.timeFormat, minutes, seconds)
     }
     
     func updatePlayerStats(health: Int, maxHealth: Int, ammo: Int, maxAmmo: Int, isReloading: Bool) {
@@ -239,8 +239,8 @@ class HUDManager {
         
         let newAmmoFill = SKShapeNode(rectOf: CGSize(width: newWidth, height: 10), cornerRadius: 3)
         newAmmoFill.fillColor = isReloading ? 
-            GameConstants.UI.ammoReloadingColor : 
-            GameConstants.UI.ammoBarColor
+            UIConstants.Colors.HUD.ammoReloadingColor : 
+            UIConstants.Colors.HUD.ammoBarColor
         newAmmoFill.strokeColor = SKColor.clear
         newAmmoFill.position = CGPoint(x: -(barWidth - newWidth)/2, y: 0)
         
@@ -253,11 +253,11 @@ class HUDManager {
     
     private func getHealthNeonColor(ratio: CGFloat) -> SKColor {
         if ratio > 0.6 {
-            return GameConstants.UI.healthHighColor
+            return UIConstants.Colors.HUD.healthHighColor
         } else if ratio > 0.3 {
-            return GameConstants.UI.healthMediumColor
+            return UIConstants.Colors.HUD.healthMediumColor
         } else {
-            return GameConstants.UI.healthLowColor
+            return UIConstants.Colors.HUD.healthLowColor
         }
     }
     
@@ -272,7 +272,7 @@ class HUDManager {
         if touchedNode.name == "exitButton" || touchedNode.name == "exitButtonLabel" {
             // 버튼 사운드 및 햅틱 효과
             if AudioManager.shared.isSoundEffectsEnabled {
-                let buttonSound = SKAction.playSoundFileNamed(GameConstants.Audio.SoundEffects.button, waitForCompletion: false)
+                let buttonSound = SKAction.playSoundFileNamed(ResourceConstants.Audio.SoundEffects.button, waitForCompletion: false)
                 hudNode.run(buttonSound)
             }
             HapticManager.shared.playButtonHaptic()

@@ -39,22 +39,22 @@ class Zombie: SKSpriteNode {
         
         switch type {
         case .normal:
-            self.moveSpeed = GameConstants.Zombie.normalSpeed * CGFloat(speedMultiplier)
-            self.health = Int(Float(GameConstants.Zombie.normalHealth) * healthMultiplier)
-            size = GameConstants.Zombie.normalSize
-            color = GameConstants.NeonEffects.normalZombieNeonColor
+            self.moveSpeed = GameBalance.Zombie.normalSpeed * CGFloat(speedMultiplier)
+            self.health = Int(Float(GameBalance.Zombie.normalHealth) * healthMultiplier)
+            size = GameBalance.Zombie.normalSize
+            color = UIConstants.Colors.Neon.normalZombieColor
             
         case .fast:
-            self.moveSpeed = GameConstants.Zombie.fastSpeed * CGFloat(speedMultiplier)
-            self.health = Int(Float(GameConstants.Zombie.fastHealth) * healthMultiplier)
-            size = GameConstants.Zombie.fastSize
-            color = GameConstants.NeonEffects.fastZombieNeonColor
+            self.moveSpeed = GameBalance.Zombie.fastSpeed * CGFloat(speedMultiplier)
+            self.health = Int(Float(GameBalance.Zombie.fastHealth) * healthMultiplier)
+            size = GameBalance.Zombie.fastSize
+            color = UIConstants.Colors.Neon.fastZombieColor
             
         case .strong:
-            self.moveSpeed = GameConstants.Zombie.strongSpeed * CGFloat(speedMultiplier)
-            self.health = Int(Float(GameConstants.Zombie.strongHealth) * healthMultiplier)
-            size = GameConstants.Zombie.strongSize
-            color = GameConstants.NeonEffects.strongZombieNeonColor
+            self.moveSpeed = GameBalance.Zombie.strongSpeed * CGFloat(speedMultiplier)
+            self.health = Int(Float(GameBalance.Zombie.strongHealth) * healthMultiplier)
+            size = GameBalance.Zombie.strongSize
+            color = UIConstants.Colors.Neon.fastZombieColor
         }
         
         self.currentHealth = health
@@ -71,7 +71,7 @@ class Zombie: SKSpriteNode {
     
     // MARK: - Setup
     private func setupZombie(color: SKColor) {
-        name = GameConstants.NodeNames.zombie
+        name = TextConstants.NodeNames.zombie
         zPosition = 8
         
         // 물리 설정 - 사각형에 맞게 변경
@@ -81,7 +81,7 @@ class Zombie: SKSpriteNode {
         physicsBody?.categoryBitMask = PhysicsCategory.enemy
         physicsBody?.contactTestBitMask = PhysicsCategory.bullet | PhysicsCategory.player
         physicsBody?.collisionBitMask = PhysicsCategory.worldBorder
-        physicsBody?.linearDamping = GameConstants.Physics.zombieLinearDamping
+        physicsBody?.linearDamping = GameBalance.Physics.zombieLinearDamping
         
         // 네온 사각형 직접 생성
         createNeonRectangle(color: color)
@@ -100,7 +100,7 @@ class Zombie: SKSpriteNode {
         neonRect.fillColor = color
         neonRect.strokeColor = color
         neonRect.lineWidth = 2
-        neonRect.glowWidth = GameConstants.NeonEffects.zombieGlowWidth
+        neonRect.glowWidth = UIConstants.Colors.Neon.zombieGlowWidth
         neonRect.position = CGPoint.zero
         neonRect.name = "ZombieShape"
         

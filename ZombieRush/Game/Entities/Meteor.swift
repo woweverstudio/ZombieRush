@@ -9,10 +9,10 @@ class Meteor: SKSpriteNode {
     
     // MARK: - Initialization
     init(at position: CGPoint) {
-        self.damage = GameConstants.Items.meteorDamage
+        self.damage = GameBalance.Items.meteorDamage
         self.explosionPosition = position
         
-        super.init(texture: nil, color: .clear, size: CGSize(width: GameConstants.Items.meteorIndicatorSize, height: GameConstants.Items.meteorIndicatorSize))
+        super.init(texture: nil, color: .clear, size: CGSize(width: UIConstants.ItemVisual.meteorIndicatorSize, height: UIConstants.ItemVisual.meteorIndicatorSize))
         setupMeteor()
     }
     
@@ -22,7 +22,7 @@ class Meteor: SKSpriteNode {
     
     // MARK: - Setup
     private func setupMeteor() {
-        name = GameConstants.NodeNames.meteor
+        name = TextConstants.NodeNames.meteor
         zPosition = 10
         position = explosionPosition
         
@@ -35,17 +35,17 @@ class Meteor: SKSpriteNode {
     
     private func createWarningIndicator() {
         // 간단한 원형 경고 표시기 (시야 방해 최소화)
-        let warningCircle = SKShapeNode(circleOfRadius: GameConstants.Items.meteorIndicatorSize / 2)
+        let warningCircle = SKShapeNode(circleOfRadius: UIConstants.ItemVisual.meteorIndicatorSize / 2)
         warningCircle.fillColor = .clear
-        warningCircle.strokeColor = GameConstants.Items.meteorWarningColor
-        warningCircle.lineWidth = GameConstants.Items.meteorWarningLineWidth
-        warningCircle.glowWidth = GameConstants.Items.meteorWarningGlowWidth
-        warningCircle.alpha = GameConstants.Items.meteorWarningAlpha
+        warningCircle.strokeColor = UIConstants.Colors.Items.meteorWarningColor
+        warningCircle.lineWidth = UIConstants.ItemVisual.meteorWarningLineWidth
+        warningCircle.glowWidth = UIConstants.ItemVisual.meteorWarningGlowWidth
+        warningCircle.alpha = UIConstants.ItemVisual.meteorWarningAlpha
         addChild(warningCircle)
         
         // 중앙 점
-        let centerDot = SKShapeNode(circleOfRadius: GameConstants.Items.meteorCenterDotSize)
-        centerDot.fillColor = GameConstants.Items.meteorWarningColor
+        let centerDot = SKShapeNode(circleOfRadius: UIConstants.ItemVisual.meteorCenterDotSize)
+        centerDot.fillColor = UIConstants.Colors.Items.meteorWarningColor
         centerDot.strokeColor = .clear
         centerDot.glowWidth = 1
         addChild(centerDot)
@@ -60,7 +60,7 @@ class Meteor: SKSpriteNode {
     }
     
     private func scheduleExplosion() {
-        let waitAction = SKAction.wait(forDuration: GameConstants.Items.meteorDelayBeforeExplosion)
+        let waitAction = SKAction.wait(forDuration: GameBalance.Items.meteorDelayBeforeExplosion)
         let explodeAction = SKAction.run { [weak self] in
             self?.explode()
         }
@@ -78,7 +78,7 @@ class Meteor: SKSpriteNode {
         // 폭발 소리 재생
         if AudioManager.shared.isSoundEffectsEnabled,
            let worldNode = parent {
-            let meteorSound = SKAction.playSoundFileNamed(GameConstants.Audio.SoundEffects.meteor, waitForCompletion: false)
+            let meteorSound = SKAction.playSoundFileNamed(ResourceConstants.Audio.SoundEffects.meteor, waitForCompletion: false)
             worldNode.run(meteorSound)
         }
         
@@ -98,9 +98,9 @@ class Meteor: SKSpriteNode {
         guard let worldNode = parent else { return }
         
         // 폭발 반지름 내의 모든 좀비 찾기
-        let explosionRadius = GameConstants.Items.meteorExplosionRadius
+        let explosionRadius = GameBalance.Items.meteorExplosionRadius
         
-        worldNode.enumerateChildNodes(withName: GameConstants.NodeNames.zombie) { [weak self] node, _ in
+        worldNode.enumerateChildNodes(withName: TextConstants.NodeNames.zombie) { [weak self] node, _ in
             guard let zombie = node as? Zombie,
                   let meteorPosition = self?.position else { return }
             
@@ -109,7 +109,7 @@ class Meteor: SKSpriteNode {
             
             // 폭발 범위 내에 있으면 즉사 데미지
             if distance <= explosionRadius {
-                let isDead = zombie.takeDamage(self?.getDamage() ?? GameConstants.Items.meteorDamage)
+                let isDead = zombie.takeDamage(self?.getDamage() ?? GameBalance.Items.meteorDamage)
                 
                 // GameScene에 좀비 제거 알림
                 if isDead, let scene = worldNode.scene as? GameScene {
@@ -126,31 +126,31 @@ class Meteor: SKSpriteNode {
         let explosionNode = SKNode()
         
         // 외부 폭발 링
-        let outerRing = SKShapeNode(circleOfRadius: GameConstants.Items.meteorExplosionRadius)
+        let outerRing = SKShapeNode(circleOfRadius: GameBalance.Items.meteorExplosionRadius)
         outerRing.fillColor = .clear
-        outerRing.strokeColor = GameConstants.Items.meteorExplosionOuterColor
-        outerRing.lineWidth = GameConstants.Items.meteorExplosionLineWidth
-        outerRing.glowWidth = GameConstants.Items.meteorExplosionGlowWidth
+        outerRing.strokeColor = UIConstants.Colors.Items.meteorExplosionOuterColor
+        outerRing.lineWidth = UIConstants.ItemVisual.meteorExplosionLineWidth
+        outerRing.glowWidth = UIConstants.ItemVisual.meteorExplosionGlowWidth
         outerRing.alpha = 0.9
         explosionNode.addChild(outerRing)
         
         // 내부 폭발 원
-        let innerCircle = SKShapeNode(circleOfRadius: GameConstants.Items.meteorInnerExplosionRadius)
-        innerCircle.fillColor = GameConstants.Items.meteorExplosionInnerColor
+        let innerCircle = SKShapeNode(circleOfRadius: GameBalance.Items.meteorInnerExplosionRadius)
+        innerCircle.fillColor = UIConstants.Colors.Items.meteorExplosionInnerColor
         innerCircle.strokeColor = .clear
         innerCircle.alpha = 0.8
         explosionNode.addChild(innerCircle)
         
         // 중앙 밝은 점
-        let centerFlash = SKShapeNode(circleOfRadius: GameConstants.Items.meteorCenterFlashRadius)
+        let centerFlash = SKShapeNode(circleOfRadius: GameBalance.Items.meteorCenterFlashRadius)
         centerFlash.fillColor = .white
         centerFlash.strokeColor = .clear
         centerFlash.glowWidth = 3
         explosionNode.addChild(centerFlash)
         
         // 폭발 애니메이션
-        let scaleUp = SKAction.scale(to: GameConstants.Items.meteorExplosionScale, duration: GameConstants.Items.meteorExplosionDuration)
-        let fadeOut = SKAction.fadeOut(withDuration: GameConstants.Items.meteorExplosionDuration)
+        let scaleUp = SKAction.scale(to: GameBalance.Items.meteorExplosionScale, duration: GameBalance.Items.meteorExplosionDuration)
+        let fadeOut = SKAction.fadeOut(withDuration: GameBalance.Items.meteorExplosionDuration)
         let remove = SKAction.removeFromParent()
         
         explosionNode.run(SKAction.sequence([

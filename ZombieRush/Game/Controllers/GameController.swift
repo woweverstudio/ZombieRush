@@ -84,8 +84,8 @@ class GameController {
     
     private func setupJoystick(in camera: SKCameraNode) {
         fixedJoystickPosition = CGPoint(
-            x: -screenBounds.width / 2 + GameConstants.UI.controlMargin,
-            y: -screenBounds.height / 2 + GameConstants.UI.controlMargin
+            x: -screenBounds.width / 2 + UIConstants.Layout.controlMargin,
+            y: -screenBounds.height / 2 + UIConstants.Layout.controlMargin
         )
         
         joystickBase = createJoystickBase()
@@ -96,8 +96,8 @@ class GameController {
     
     private func setupFireButton(in camera: SKCameraNode) {
         let firePosition = CGPoint(
-            x: screenBounds.width / 2 - GameConstants.UI.controlMargin,
-            y: -screenBounds.height / 2 + GameConstants.UI.controlMargin
+            x: screenBounds.width / 2 - UIConstants.Layout.controlMargin,
+            y: -screenBounds.height / 2 + UIConstants.Layout.controlMargin
         )
         
         fireButton = createFireButton(at: firePosition)
@@ -105,17 +105,17 @@ class GameController {
     }
     
     private func createJoystickBase() -> SKShapeNode {
-        let base = SKShapeNode(circleOfRadius: GameConstants.UI.joystickRadius)
+        let base = SKShapeNode(circleOfRadius: UIConstants.Controls.joystickRadius)
         base.fillColor = .clear
         base.strokeColor = Constants.Colors.joystickBase
         base.lineWidth = 2
         base.position = fixedJoystickPosition
-        base.zPosition = GameConstants.UI.controlZPosition
+        base.zPosition = UIConstants.Controls.controlZPosition
         return base
     }
     
     private func createJoystickThumb() -> SKShapeNode {
-        let thumb = SKShapeNode(circleOfRadius: GameConstants.UI.joystickThumbRadius)
+        let thumb = SKShapeNode(circleOfRadius: UIConstants.Controls.joystickThumbRadius)
         thumb.fillColor = Constants.Colors.joystickThumbFill
         thumb.strokeColor = Constants.Colors.joystickThumbStroke
         thumb.lineWidth = 1.5
@@ -126,17 +126,17 @@ class GameController {
     
     private func createFireButton(at position: CGPoint) -> SKShapeNode {
         let button = SKShapeNode(
-            rectOf: CGSize(width: GameConstants.UI.fireButtonSize, height: GameConstants.UI.fireButtonSize),
+            rectOf: CGSize(width: UIConstants.Controls.fireButtonSize, height: UIConstants.Controls.fireButtonSize),
             cornerRadius: 8
         )
         button.fillColor = Constants.Colors.fireButtonFill
         button.strokeColor = Constants.Colors.fireButtonStroke
         button.lineWidth = 2
         button.position = position
-        button.zPosition = GameConstants.UI.controlZPosition
+        button.zPosition = UIConstants.Controls.controlZPosition
         
-        let label = SKLabelNode(text: "FIRE")
-        label.fontName = "Arial-Bold"
+        let label = SKLabelNode(text: TextConstants.UI.fireButton)
+        label.fontName = ResourceConstants.Fonts.arialBold
         label.fontSize = 16
         label.fontColor = Constants.Colors.fireButtonText
         label.horizontalAlignmentMode = .center
@@ -176,7 +176,7 @@ class GameController {
         leftTouch = touch
         
         let distanceFromFixed = location.distance(to: fixedJoystickPosition)
-        if distanceFromFixed <= GameConstants.UI.joystickRadius + Constants.joystickTouchRadius {
+        if distanceFromFixed <= UIConstants.Controls.joystickRadius + Constants.joystickTouchRadius {
             isUsingTemporaryJoystick = false
         } else {
             moveJoystickToPosition(location)
@@ -277,11 +277,11 @@ class GameController {
         
         if player.getIsShotgunMode() {
             fireShotgunBullets(from: startPosition, worldNode: worldNode)
-            playSound(GameConstants.Audio.SoundEffects.shotgun)
+            playSound(ResourceConstants.Audio.SoundEffects.shotgun)
             HapticManager.shared.playShotgunHaptic()
         } else {
             fireSingleBullet(from: startPosition, worldNode: worldNode)
-            playSound(GameConstants.Audio.SoundEffects.shoot)
+            playSound(ResourceConstants.Audio.SoundEffects.shoot)
             HapticManager.shared.playShootHaptic()
             player.consumeAmmo()
         }

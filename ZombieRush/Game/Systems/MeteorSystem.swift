@@ -46,6 +46,4 @@ class MeteorSystem {
             return false
         }
     }
-    
-
 }

@@ -19,16 +19,16 @@ class Player: SKSpriteNode {
     private var faceExpressionNode: SKSpriteNode?
     
     // MARK: - Movement Properties
-    private var baseMoveSpeed: CGFloat = GameConstants.Player.baseMoveSpeed
-    private var currentMoveSpeed: CGFloat = GameConstants.Player.baseMoveSpeed
+    private var baseMoveSpeed: CGFloat = GameBalance.Player.baseMoveSpeed
+    private var currentMoveSpeed: CGFloat = GameBalance.Player.baseMoveSpeed
     private var speedBoostActive: Bool = false
     
     // MARK: - Player Stats
-    private var maxHealth: Int = GameConstants.Player.maxHealth
-    private var currentHealth: Int = GameConstants.Player.maxHealth
-    private var maxAmmo: Int = GameConstants.Player.maxAmmo
-    private var currentAmmo: Int = GameConstants.Player.maxAmmo
-    private var reloadTime: TimeInterval = GameConstants.Player.reloadTime
+    private var maxHealth: Int = GameBalance.Player.maxHealth
+    private var currentHealth: Int = GameBalance.Player.maxHealth
+    private var maxAmmo: Int = GameBalance.Player.maxAmmo
+    private var currentAmmo: Int = GameBalance.Player.maxAmmo
+    private var reloadTime: TimeInterval = GameBalance.Player.reloadTime
     private var isReloading: Bool = false
     
     // MARK: - Item Effects
@@ -43,7 +43,7 @@ class Player: SKSpriteNode {
     // MARK: - Initialization
     init() {
         // 원형 플레이어로 초기화 (SKShapeNode 사용)
-        super.init(texture: nil, color: .clear, size: GameConstants.Player.size)
+        super.init(texture: nil, color: .clear, size: GameBalance.Player.size)
         
         setupPhysics()
         setupProperties()
@@ -62,7 +62,7 @@ class Player: SKSpriteNode {
         physicsBody?.mass = 1.0
         physicsBody?.friction = 0.0
         physicsBody?.restitution = 0.0
-        physicsBody?.linearDamping = GameConstants.Physics.playerLinearDamping // 부드러운 정지 (속도 저하 최소화)
+        physicsBody?.linearDamping = GameBalance.Physics.playerLinearDamping // 부드러운 정지 (속도 저하 최소화)
         
         // 물리 카테고리 설정
         physicsBody?.categoryBitMask = PhysicsCategory.player
@@ -85,10 +85,10 @@ class Player: SKSpriteNode {
             height: size.height
         )
         let neonRect = SKShapeNode(rect: rect, cornerRadius: 4)
-        neonRect.fillColor = GameConstants.NeonEffects.playerNeonColor
-        neonRect.strokeColor = GameConstants.NeonEffects.playerNeonColor
+        neonRect.fillColor = UIConstants.Colors.Neon.playerColor
+        neonRect.strokeColor = UIConstants.Colors.Neon.playerColor
         neonRect.lineWidth = 2
-        neonRect.glowWidth = GameConstants.NeonEffects.playerGlowWidth
+        neonRect.glowWidth = UIConstants.Colors.Neon.playerGlowWidth
         neonRect.position = CGPoint.zero
         neonRect.name = "PlayerShape"
         
@@ -162,7 +162,7 @@ class Player: SKSpriteNode {
         isReloading = true
         
         if AudioManager.shared.isSoundEffectsEnabled {
-            let reloadSound = SKAction.playSoundFileNamed(GameConstants.Audio.SoundEffects.reload, waitForCompletion: false)
+            let reloadSound = SKAction.playSoundFileNamed(ResourceConstants.Audio.SoundEffects.reload, waitForCompletion: false)
             run(reloadSound)
         }
         
@@ -181,7 +181,7 @@ class Player: SKSpriteNode {
         isReloading = false
     }
     
-    func takeDamage(_ damage: Int = GameConstants.Player.damagePerHit) {
+    func takeDamage(_ damage: Int = GameBalance.Player.damagePerHit) {
         // 무적 상태에서는 데미지를 받지 않음
         if isInvincible {
             return
@@ -357,15 +357,15 @@ class Player: SKSpriteNode {
     // MARK: - Wave Speed Bonus
     func updateWaveSpeed(currentWave: Int) {
         let waveBonus = min(
-            CGFloat(currentWave - 1) * GameConstants.Player.waveSpeedBonus,
-            GameConstants.Player.maxWaveSpeedBonus
+            CGFloat(currentWave - 1) * GameBalance.Player.waveSpeedBonus,
+            GameBalance.Player.maxWaveSpeedBonus
         )
         
-        baseMoveSpeed = GameConstants.Player.baseMoveSpeed + waveBonus
+        baseMoveSpeed = GameBalance.Player.baseMoveSpeed + waveBonus
         
         // 현재 속도도 업데이트 (아이템 효과 고려)
         if speedBoostActive {
-            currentMoveSpeed = baseMoveSpeed * GameConstants.Items.speedMultiplier
+            currentMoveSpeed = baseMoveSpeed * GameBalance.Items.speedMultiplier
         } else {
             currentMoveSpeed = baseMoveSpeed
         }

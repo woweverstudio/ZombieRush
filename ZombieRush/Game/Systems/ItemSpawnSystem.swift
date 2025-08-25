@@ -10,8 +10,8 @@ class ItemSpawnSystem {
     private var lastSpawnTime: TimeInterval = 0
     
     // MARK: - Spawn Configuration
-    private let mapSize = CGSize(width: GameConstants.Physics.worldWidth, height: GameConstants.Physics.worldHeight)
-    private let spawnMargin: CGFloat = GameConstants.Items.spawnMargin
+    private let mapSize = CGSize(width: GameBalance.Physics.worldWidth, height: GameBalance.Physics.worldHeight)
+    private let spawnMargin: CGFloat = GameBalance.Items.spawnMargin
     
     // MARK: - Callbacks
     var onItemCollected: ((ItemType) -> Void)?
@@ -30,7 +30,7 @@ class ItemSpawnSystem {
         }
         
         // 주기적으로 새 아이템 스폰
-        if currentTime - lastSpawnTime >= GameConstants.Items.spawnInterval {
+        if currentTime - lastSpawnTime >= GameBalance.Items.spawnInterval {
             spawnNewItem()
             lastSpawnTime = currentTime
         }
@@ -107,16 +107,16 @@ class ItemSpawnSystem {
     
     private func getCurrentMaxItemCount() -> Int {
         let waveNumber = gameStateManager.getCurrentWaveNumber()
-        let multiplier = pow(GameConstants.Items.spawnCountMultiplier, Float(waveNumber - 1))
-        let count = Int(Float(GameConstants.Items.baseSpawnCount) * multiplier)
+        let multiplier = pow(GameBalance.Items.spawnCountMultiplier, Float(waveNumber - 1))
+        let count = Int(Float(GameBalance.Items.baseSpawnCount) * multiplier)
         
-        return min(count, GameConstants.Items.maxSpawnCount)
+        return min(count, GameBalance.Items.maxSpawnCount)
     }
     
     private func cleanupOldItems(currentTime: TimeInterval) {
         activeItems.removeAll { item in
             let age = item.getAge(currentTime: currentTime)
-            if age >= GameConstants.Items.lifetime {
+            if age >= GameBalance.Items.lifetime {
                 item.removeFromParent()
                 return true
             }
@@ -144,13 +144,13 @@ class ItemSpawnSystem {
             case .healthRestore, .ammoRestore:
                 return true  // 웨이브 1부터 항상 사용 가능
             case .speedBoost:
-                return currentWave >= GameConstants.Items.speedBoostMinWave
+                return currentWave >= GameBalance.Items.speedBoostMinWave
             case .invincibility:
-                return currentWave >= GameConstants.Items.invincibilityMinWave
+                return currentWave >= GameBalance.Items.invincibilityMinWave
             case .shotgun:
-                return currentWave >= GameConstants.Items.shotgunMinWave
+                return currentWave >= GameBalance.Items.shotgunMinWave
             case .meteor:
-                return currentWave >= GameConstants.Items.meteorMinWave
+                return currentWave >= GameBalance.Items.meteorMinWave
             }
         }
         

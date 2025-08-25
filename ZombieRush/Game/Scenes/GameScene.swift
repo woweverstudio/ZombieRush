@@ -68,7 +68,7 @@ class GameScene: SKScene {
         physicsWorld.gravity = CGVector(dx: 0, dy: 0)
         
         // 물리 월드 경계 설정 (넓은 맵을 위해)
-        let worldSize = CGSize(width: GameConstants.Physics.worldWidth, height: GameConstants.Physics.worldHeight)
+        let worldSize = CGSize(width: GameBalance.Physics.worldWidth, height: GameBalance.Physics.worldHeight)
         let borderBody = SKPhysicsBody(edgeLoopFrom: CGRect(origin: CGPoint(x: -worldSize.width/2, y: -worldSize.height/2), size: worldSize))
         borderBody.categoryBitMask = PhysicsCategory.worldBorder
         borderBody.collisionBitMask = PhysicsCategory.player | PhysicsCategory.enemy
@@ -81,7 +81,7 @@ class GameScene: SKScene {
     
     private func setupWorld() {
         worldNode = SKNode()
-        worldNode?.name = GameConstants.NodeNames.world
+        worldNode?.name = TextConstants.NodeNames.world
         addChild(worldNode!)
         
         // WorldSystem을 사용하여 월드 설정
@@ -99,7 +99,7 @@ class GameScene: SKScene {
     
     private func setupCamera() {
         cameraNode = SKCameraNode()
-        cameraNode?.name = GameConstants.NodeNames.camera
+        cameraNode?.name = TextConstants.NodeNames.camera
         addChild(cameraNode!)
         
         // scene의 camera 속성 설정
@@ -132,8 +132,8 @@ class GameScene: SKScene {
         
         // 웨이브 시작 콜백 설정
         zombieSpawnSystem?.onNewWaveStarted = { [weak self] waveNumber in
-            let message = String(format: GameConstants.Text.waveAnnouncement, waveNumber)
-            self?.toastMessageManager?.showToastMessage(message, duration: GameConstants.Wave.announcementDuration)
+            let message = String(format: TextConstants.Wave.waveAnnouncementFormat, waveNumber)
+            self?.toastMessageManager?.showToastMessage(message, duration: GameBalance.Wave.announcementDuration)
             
             // 플레이어 웨이브 속도 보너스 적용
             self?.player?.updateWaveSpeed(currentWave: waveNumber)
@@ -246,7 +246,7 @@ class GameScene: SKScene {
     }
     
     // MARK: - Game Logic
-    func addScore(_ points: Int = GameConstants.Balance.scorePerKill) {
+    func addScore(_ points: Int = GameBalance.Score.perKill) {
         gameStateManager.addScore(points)
         hudManager?.addScore(points)
     }

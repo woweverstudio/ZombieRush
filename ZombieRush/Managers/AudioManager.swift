@@ -102,19 +102,19 @@ class AudioManager: NSObject, ObservableObject {
     private func selectMusicFile(for type: MusicType) -> String {
         switch type {
         case .mainMenu:
-            return GameConstants.Audio.BackgroundMusic.mainMenuTrack
+            return ResourceConstants.Audio.BackgroundMusic.mainMenuTrack
         case .game:
-            return GameConstants.Audio.BackgroundMusic.gameTrack
+            return ResourceConstants.Audio.BackgroundMusic.gameTrack
         case .fallback:
             // 메인 메뉴 음악을 fallback으로 사용
-            return GameConstants.Audio.BackgroundMusic.mainMenuTrack
+            return ResourceConstants.Audio.BackgroundMusic.mainMenuTrack
         }
     }
     
     private func playMusic(named musicName: String, type: MusicType) {
         stopBackgroundMusic()
         
-        guard let url = Bundle.main.url(forResource: musicName, withExtension: GameConstants.Audio.BackgroundMusic.fileExtension) else {
+        guard let url = Bundle.main.url(forResource: musicName, withExtension: ResourceConstants.Audio.BackgroundMusic.fileExtension) else {
             if type != .fallback { playBackgroundMusic(type: .fallback) }
             return
         }
@@ -123,7 +123,7 @@ class AudioManager: NSObject, ObservableObject {
             do {
                 let player = try AVAudioPlayer(contentsOf: url)
                 player.numberOfLoops = -1
-                player.volume = GameConstants.Audio.BackgroundMusic.volume
+                player.volume = ResourceConstants.Audio.BackgroundMusic.volume
                 player.prepareToPlay()
                 
                 DispatchQueue.main.async {

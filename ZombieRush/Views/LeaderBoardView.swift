@@ -20,6 +20,14 @@ struct LeaderBoardView: View {
             }
             .padding()
         }
+        .onChange(of: gameKitManager.isAuthenticated) { oldValue, newValue in
+            // 인증 상태가 false에서 true로 변경되면 리더보드 다시 로드
+            if !oldValue && newValue {
+                Task {
+                    await loadLeaderboardData()
+                }
+            }
+        }
         .onDisappear {
             // 리더보드 화면을 벗어날 때 GKAccessPoint 비활성화
             GameCenterAccessPointView.deactivateAccessPoint()

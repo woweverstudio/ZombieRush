@@ -186,7 +186,7 @@ struct PlayerProfileCard: View {
             
             // 로그인 버튼
             Button(action: {
-                gameKitManager.retryAuthentication()
+                //
             }) {
                 HStack(spacing: 6) {
                     // 로딩 중일 때 스피너 표시
@@ -219,7 +219,7 @@ struct PlayerProfileCard: View {
             // 취소 버튼 (로딩 중일 때만 표시)
             if gameKitManager.authenticationStatus == "Authenticating..." {
                 Button(action: {
-                    gameKitManager.authenticationStatus = "Guest Mode"
+                    //
                 }) {
                     Text("Cancel")
                         .font(.system(size: 8, weight: .medium, design: .monospaced))

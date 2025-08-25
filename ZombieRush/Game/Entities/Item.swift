@@ -22,12 +22,12 @@ enum ItemType: CaseIterable {
     
     var imageName: String {
         switch self {
-        case .speedBoost: return GameConstants.Items.speedBoostImageName
-        case .healthRestore: return GameConstants.Items.healthRestoreImageName
-        case .ammoRestore: return GameConstants.Items.ammoRestoreImageName
-        case .invincibility: return GameConstants.Items.invincibilityImageName
-        case .shotgun: return GameConstants.Items.shotgunImageName
-        case .meteor: return GameConstants.Items.meteorImageName
+        case .speedBoost: return ResourceConstants.Images.Items.speedBoost
+        case .healthRestore: return ResourceConstants.Images.Items.healthRestore
+        case .ammoRestore: return ResourceConstants.Images.Items.ammoRestore
+        case .invincibility: return ResourceConstants.Images.Items.invincibility
+        case .shotgun: return ResourceConstants.Images.Items.shotgun
+        case .meteor: return ResourceConstants.Images.Items.meteor
         }
     }
     
@@ -67,7 +67,7 @@ class Item: SKSpriteNode {
         
         if textureSize.width > 1 && textureSize.height > 1 {
             // 이미지가 있으면 이미지 사용
-            super.init(texture: texture, color: .clear, size: GameConstants.Items.size)
+            super.init(texture: texture, color: .clear, size: GameBalance.Items.size)
         } else {
             // 이미지가 없으면 색상 사각형으로 대체
             let fallbackColor: SKColor
@@ -79,7 +79,7 @@ class Item: SKSpriteNode {
             case .shotgun: fallbackColor = .purple
             case .meteor: fallbackColor = .brown
             }
-            super.init(texture: nil, color: fallbackColor, size: GameConstants.Items.size)
+            super.init(texture: nil, color: fallbackColor, size: GameBalance.Items.size)
         }
         
         setupItem()
@@ -91,8 +91,8 @@ class Item: SKSpriteNode {
     
     // MARK: - Setup
     private func setupItem() {
-        name = GameConstants.NodeNames.item
-        zPosition = GameConstants.Items.zPosition
+        name = TextConstants.NodeNames.item
+        zPosition = UIConstants.ItemVisual.zPosition
         
         // 이미지 비율 유지
         maintainAspectRatio()
@@ -110,11 +110,11 @@ class Item: SKSpriteNode {
     private func maintainAspectRatio() {
         guard let texture = texture else { 
             // 텍스처가 없으면 기본 사이즈 사용 (색상 사각형인 경우)
-            size = GameConstants.Items.size
+            size = GameBalance.Items.size
             return 
         }
         let originalSize = texture.size()
-        let targetSize = GameConstants.Items.size
+        let targetSize = GameBalance.Items.size
         
         // 원본 비율을 유지하면서 targetSize에 맞춤 (aspect fit)
         let scaleX = targetSize.width / originalSize.width
@@ -128,7 +128,7 @@ class Item: SKSpriteNode {
     }
     
     private func setupPhysics() {
-        physicsBody = SKPhysicsBody(circleOfRadius: GameConstants.Items.size.width / 2)
+        physicsBody = SKPhysicsBody(circleOfRadius: GameBalance.Items.size.width / 2)
         physicsBody?.isDynamic = false
         physicsBody?.categoryBitMask = PhysicsCategory.item
         physicsBody?.contactTestBitMask = PhysicsCategory.player
@@ -154,7 +154,7 @@ class Item: SKSpriteNode {
     }
     
     private func setupLifetime() {
-        let lifetime = SKAction.wait(forDuration: GameConstants.Items.lifetime)
+        let lifetime = SKAction.wait(forDuration: GameBalance.Items.lifetime)
         let fadeOut = SKAction.fadeOut(withDuration: 1.0)
         let remove = SKAction.removeFromParent()
         

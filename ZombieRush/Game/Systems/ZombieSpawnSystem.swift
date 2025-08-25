@@ -18,12 +18,12 @@ class ZombieSpawnSystem {
     var onNewWaveStarted: ((Int) -> Void)?
     
     private var lastSpawnTime: TimeInterval = 0
-    private var baseSpawnInterval: TimeInterval = 0.8  // 초기 스폰 간격을 1초로 단축
+    private var baseSpawnInterval: TimeInterval = GameBalance.Zombie.baseSpawnInterval  // 초기 스폰 간격
     private var zombies: [Zombie] = []
     
     // MARK: - Spawn Configuration
-    private let mapSize: CGSize = CGSize(width: GameConstants.Physics.worldWidth, height: GameConstants.Physics.worldHeight)
-    private let spawnDistance: CGFloat = 50 // 맵 가장자리에서 얼마나 안쪽에서 스폰할지
+    private let mapSize: CGSize = CGSize(width: GameBalance.Physics.worldWidth, height: GameBalance.Physics.worldHeight)
+    private let spawnDistance: CGFloat = GameBalance.Zombie.spawnDistance // 맵 가장자리에서 얼마나 안쪽에서 스폰할지
     
     // MARK: - Performance Optimization
     private let maxZombieCount: Int = 60 // 최대 좀비 수 제한 (성능 최적화)

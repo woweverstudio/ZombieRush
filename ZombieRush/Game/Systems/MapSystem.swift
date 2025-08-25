@@ -40,9 +40,9 @@ class MapSystem: MapSystemProtocol {
     
     // MARK: - Cyberpunk Grid Background Creation
     private func createGridBackground(in worldNode: SKNode) {
-        let worldWidth = GameConstants.Physics.worldWidth
-        let worldHeight = GameConstants.Physics.worldHeight
-        let gridSize = GameConstants.Map.gridSpacing
+        let worldWidth = GameBalance.Physics.worldWidth
+        let worldHeight = GameBalance.Physics.worldHeight
+        let gridSize = UIConstants.Map.gridSpacing
         
         // 사이버펑크 어두운 배경색 생성
         let backgroundRect = SKShapeNode(rect: CGRect(
@@ -51,9 +51,9 @@ class MapSystem: MapSystemProtocol {
             width: worldWidth, 
             height: worldHeight
         ))
-        backgroundRect.fillColor = GameConstants.NeonEffects.cyberpunkBackgroundColor
+        backgroundRect.fillColor = UIConstants.Colors.Neon.cyberpunkBackgroundColor
         backgroundRect.strokeColor = .clear
-        backgroundRect.zPosition = GameConstants.Map.backgroundZPosition
+        backgroundRect.zPosition = UIConstants.Map.backgroundZPosition
         backgroundRect.name = "CyberpunkBackground"
         worldNode.addChild(backgroundRect)
         
@@ -68,9 +68,9 @@ class MapSystem: MapSystemProtocol {
             path.move(to: CGPoint(x: x, y: -worldHeight/2))
             path.addLine(to: CGPoint(x: x, y: worldHeight/2))
             line.path = path
-            line.strokeColor = GameConstants.NeonEffects.gridNeonColor
-            line.lineWidth = GameConstants.Map.gridLineWidth
-            line.zPosition = GameConstants.Map.gridZPosition
+            line.strokeColor = UIConstants.Colors.Neon.gridColor
+            line.lineWidth = UIConstants.Map.gridLineWidth
+            line.zPosition = UIConstants.Map.gridZPosition
             line.name = "NeonGridLineVertical_\(i)"
             
 
@@ -89,9 +89,9 @@ class MapSystem: MapSystemProtocol {
             path.move(to: CGPoint(x: -worldWidth/2, y: y))
             path.addLine(to: CGPoint(x: worldWidth/2, y: y))
             line.path = path
-            line.strokeColor = GameConstants.NeonEffects.gridNeonColor
-            line.lineWidth = GameConstants.Map.gridLineWidth
-            line.zPosition = GameConstants.Map.gridZPosition
+            line.strokeColor = UIConstants.Colors.Neon.gridColor
+            line.lineWidth = UIConstants.Map.gridLineWidth
+            line.zPosition = UIConstants.Map.gridZPosition
             line.name = "NeonGridLineHorizontal_\(i)"
             
 
@@ -107,10 +107,10 @@ class MapSystem: MapSystemProtocol {
             height: worldHeight
         ))
         borderRect.fillColor = .clear
-        borderRect.strokeColor = GameConstants.NeonEffects.borderNeonColor
-        borderRect.lineWidth = GameConstants.Map.borderLineWidth
-        borderRect.glowWidth = GameConstants.NeonEffects.borderGlowWidth  // 진짜 네온 글로우!
-        borderRect.zPosition = GameConstants.Map.borderZPosition
+        borderRect.strokeColor = UIConstants.Colors.Neon.borderColor
+        borderRect.lineWidth = UIConstants.Map.borderLineWidth
+        borderRect.glowWidth = UIConstants.Colors.Neon.borderGlowWidth  // 진짜 네온 글로우!
+        borderRect.zPosition = UIConstants.Map.borderZPosition
         borderRect.name = "NeonBorder"
         
 
@@ -125,9 +125,9 @@ class MapSystem: MapSystemProtocol {
             height: worldHeight + 6
         ))
         outerBorderRect.fillColor = .clear
-        outerBorderRect.strokeColor = GameConstants.NeonEffects.borderGlowColor
+        outerBorderRect.strokeColor = UIConstants.Colors.Neon.borderGlowColor
         outerBorderRect.lineWidth = 2
-        outerBorderRect.zPosition = GameConstants.Map.backgroundZPosition + 1
+        outerBorderRect.zPosition = UIConstants.Map.backgroundZPosition + 1
         outerBorderRect.name = "NeonBorderGlow"
         
 

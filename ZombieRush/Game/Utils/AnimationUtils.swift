@@ -90,7 +90,7 @@ struct AnimationUtils {
     static func createAppearEffect(scale: CGFloat = 0.5, targetScale: CGFloat = 1.0, duration: TimeInterval = 0.2) -> SKAction {
         let scaleUp = SKAction.scale(to: targetScale, duration: duration)
         let fadeIn = createFadeInEffect(duration: duration)
-        let moveUp = SKAction.moveBy(x: 0, y: GameConstants.ToastMessage.appearMoveDistance, duration: duration)
+        let moveUp = SKAction.moveBy(x: 0, y: UIConstants.Toast.appearMoveDistance, duration: duration)
         
         return SKAction.group([scaleUp, fadeIn, moveUp])
     }
@@ -98,7 +98,7 @@ struct AnimationUtils {
     static func createDisappearEffect(scale: CGFloat = 0.8, duration: TimeInterval = 0.3) -> SKAction {
         let scaleDown = SKAction.scale(to: scale, duration: duration)
         let fadeOut = SKAction.fadeOut(withDuration: duration)
-        let moveUp = SKAction.moveBy(x: 0, y: GameConstants.ToastMessage.disappearMoveDistance, duration: duration)
+        let moveUp = SKAction.moveBy(x: 0, y: UIConstants.Toast.disappearMoveDistance, duration: duration)
         
         return SKAction.group([scaleDown, fadeOut, moveUp])
     }

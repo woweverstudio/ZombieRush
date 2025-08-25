@@ -17,7 +17,7 @@ class ToastMessageManager {
     }
     
     // MARK: - Public Methods
-    func showToastMessage(_ text: String, duration: TimeInterval = GameConstants.ToastMessage.defaultDuration) {
+    func showToastMessage(_ text: String, duration: TimeInterval = UIConstants.Toast.defaultDuration) {
         guard let player = player else { return }
         
         // 기존 토스트들을 위로 밀어올리기
@@ -32,7 +32,7 @@ class ToastMessageManager {
         let toastNode = createToastNode(text: text)
         
         // 플레이어 머리 위 위치 설정 (가장 아래 위치)
-        toastNode.position = CGPoint(x: 0, y: GameConstants.ToastMessage.offsetY)
+        toastNode.position = CGPoint(x: 0, y: UIConstants.Toast.offsetY)
         
         // 플레이어에 직접 추가
         player.addChild(toastNode)
@@ -59,15 +59,15 @@ class ToastMessageManager {
     // MARK: - Private Methods
     private func createToastNode(text: String) -> SKNode {
         let containerNode = SKNode()
-        containerNode.name = GameConstants.NodeNames.toastMessage
-        containerNode.zPosition = GameConstants.ToastMessage.zPosition
+        containerNode.name = TextConstants.NodeNames.toastMessage
+        containerNode.zPosition = UIConstants.Toast.zPosition
         
         // 텍스트 라벨 생성
         let label = createLabel(text: text, color: SKColor.white)
         
         // 텍스트에 검은 테두리 효과 (가독성 향상)
         let shadowLabel = createLabel(text: text, color: SKColor.black)
-        shadowLabel.position = GameConstants.ToastMessage.shadowOffset
+        shadowLabel.position = UIConstants.Toast.shadowOffset
         shadowLabel.zPosition = -1
         
         containerNode.addChild(shadowLabel)
@@ -75,7 +75,7 @@ class ToastMessageManager {
         
         // 초기 상태 설정 (애니메이션을 위해)
         containerNode.alpha = 0
-        containerNode.setScale(GameConstants.ToastMessage.initialScale)
+        containerNode.setScale(UIConstants.Toast.initialScale)
         
         return containerNode
     }
@@ -83,7 +83,7 @@ class ToastMessageManager {
     private func createLabel(text: String, color: SKColor) -> SKLabelNode {
         let label = SKLabelNode(text: text)
         label.fontName = "HelveticaNeue-Bold"
-        label.fontSize = GameConstants.ToastMessage.fontSize
+        label.fontSize = UIConstants.Toast.fontSize
         label.fontColor = color
         label.verticalAlignmentMode = .center
         label.horizontalAlignmentMode = .center
@@ -92,34 +92,34 @@ class ToastMessageManager {
     
     private func createAppearAnimation() -> SKAction {
         return AnimationUtils.createAppearEffect(
-            scale: GameConstants.ToastMessage.initialScale,
+            scale: UIConstants.Toast.initialScale,
             targetScale: 1.0,
-            duration: GameConstants.ToastMessage.appearDuration
+            duration: UIConstants.Toast.appearDuration
         )
     }
     
     private func createDisappearAnimation() -> SKAction {
         return AnimationUtils.createDisappearEffect(
-            scale: GameConstants.ToastMessage.finalScale,
-            duration: GameConstants.ToastMessage.disappearDuration
+            scale: UIConstants.Toast.finalScale,
+            duration: UIConstants.Toast.disappearDuration
         )
     }
     
     // MARK: - Stack Management
     private func pushExistingToastsUp() {
         for (index, toast) in activeToasts.enumerated() {
-            let targetY = GameConstants.ToastMessage.offsetY + CGFloat(index + 1) * GameConstants.ToastMessage.stackSpacing
+            let targetY = UIConstants.Toast.offsetY + CGFloat(index + 1) * UIConstants.Toast.stackSpacing
             
             // 위로 이동 애니메이션
-            let moveUp = SKAction.moveTo(y: targetY, duration: GameConstants.ToastMessage.stackAnimationDuration)
+            let moveUp = SKAction.moveTo(y: targetY, duration: UIConstants.Toast.stackAnimationDuration)
             
             // 크기 축소 애니메이션 (위로 갈수록 작아짐)
-            let newScale = 1.0 - CGFloat(index + 1) * GameConstants.ToastMessage.stackScaleReduction
-            let scaleDown = SKAction.scale(to: max(newScale, GameConstants.ToastMessage.minStackScale), duration: GameConstants.ToastMessage.stackAnimationDuration)
+            let newScale = 1.0 - CGFloat(index + 1) * UIConstants.Toast.stackScaleReduction
+            let scaleDown = SKAction.scale(to: max(newScale, UIConstants.Toast.minStackScale), duration: UIConstants.Toast.stackAnimationDuration)
             
             // 투명도 감소 (위로 갈수록 투명해짐)
-            let newAlpha = 1.0 - CGFloat(index + 1) * GameConstants.ToastMessage.stackAlphaReduction
-            let fadeOut = SKAction.fadeAlpha(to: max(newAlpha, GameConstants.ToastMessage.minStackAlpha), duration: GameConstants.ToastMessage.stackAnimationDuration)
+            let newAlpha = 1.0 - CGFloat(index + 1) * UIConstants.Toast.stackAlphaReduction
+            let fadeOut = SKAction.fadeAlpha(to: max(newAlpha, UIConstants.Toast.minStackAlpha), duration: UIConstants.Toast.stackAnimationDuration)
             
             let pushAnimation = SKAction.group([moveUp, scaleDown, fadeOut])
             toast.run(pushAnimation, withKey: "pushUp")
@@ -130,8 +130,8 @@ class ToastMessageManager {
         guard let oldestToast = activeToasts.first else { return }
         
         // 즉시 제거 애니메이션
-        let quickFade = SKAction.fadeOut(withDuration: GameConstants.ToastMessage.quickRemovalDuration)
-        let quickScale = SKAction.scale(to: GameConstants.ToastMessage.quickRemovalScale, duration: GameConstants.ToastMessage.quickRemovalDuration)
+        let quickFade = SKAction.fadeOut(withDuration: UIConstants.Toast.quickRemovalDuration)
+        let quickScale = SKAction.scale(to: UIConstants.Toast.quickRemovalScale, duration: UIConstants.Toast.quickRemovalDuration)
         let quickRemove = SKAction.group([quickFade, quickScale])
         
         oldestToast.run(quickRemove) { [weak self] in
@@ -154,13 +154,13 @@ class ToastMessageManager {
     
     private func repositionRemainingToasts() {
         for (index, toast) in activeToasts.enumerated() {
-            let targetY = GameConstants.ToastMessage.offsetY + CGFloat(index) * GameConstants.ToastMessage.stackSpacing
-            let targetScale = 1.0 - CGFloat(index) * GameConstants.ToastMessage.stackScaleReduction
-            let targetAlpha = 1.0 - CGFloat(index) * GameConstants.ToastMessage.stackAlphaReduction
+            let targetY = UIConstants.Toast.offsetY + CGFloat(index) * UIConstants.Toast.stackSpacing
+            let targetScale = 1.0 - CGFloat(index) * UIConstants.Toast.stackScaleReduction
+            let targetAlpha = 1.0 - CGFloat(index) * UIConstants.Toast.stackAlphaReduction
             
-            let moveAnimation = SKAction.moveTo(y: targetY, duration: GameConstants.ToastMessage.repositionDuration)
-            let scaleAnimation = SKAction.scale(to: max(targetScale, GameConstants.ToastMessage.minStackScale), duration: GameConstants.ToastMessage.repositionDuration)
-            let alphaAnimation = SKAction.fadeAlpha(to: max(targetAlpha, GameConstants.ToastMessage.minStackAlpha), duration: GameConstants.ToastMessage.repositionDuration)
+            let moveAnimation = SKAction.moveTo(y: targetY, duration: UIConstants.Toast.repositionDuration)
+            let scaleAnimation = SKAction.scale(to: max(targetScale, UIConstants.Toast.minStackScale), duration: UIConstants.Toast.repositionDuration)
+            let alphaAnimation = SKAction.fadeAlpha(to: max(targetAlpha, UIConstants.Toast.minStackAlpha), duration: UIConstants.Toast.repositionDuration)
             
             let repositionAnimation = SKAction.group([moveAnimation, scaleAnimation, alphaAnimation])
             toast.run(repositionAnimation, withKey: "reposition")

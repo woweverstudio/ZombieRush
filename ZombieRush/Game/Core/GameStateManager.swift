@@ -63,7 +63,7 @@ struct GameStatistics {
         playTime += deltaTime
     }
     
-    mutating func addScore(_ points: Int = GameConstants.Balance.scorePerKill) {
+    mutating func addScore(_ points: Int = GameBalance.Score.perKill) {
         score += points
         zombieKills += 1
     }
@@ -114,7 +114,7 @@ class GameStateManager {
     }
     
     // MARK: - Statistics Management
-    func addScore(_ points: Int = GameConstants.Balance.scorePerKill) {
+    func addScore(_ points: Int = GameBalance.Score.perKill) {
         guard isGameActive() else { return }
         statistics.addScore(points)
     }
@@ -143,7 +143,7 @@ class GameStateManager {
     func getFormattedPlayTime() -> String {
         let minutes = Int(statistics.playTime) / 60
         let seconds = Int(statistics.playTime) % 60
-        return String(format: GameConstants.Text.playTime, minutes, seconds)
+        return String(format: TextConstants.GameOver.playTimeFormat, minutes, seconds)
     }
     
     // MARK: - Wave Management
@@ -158,7 +158,7 @@ class GameStateManager {
         
         // 30초가 지났는지 확인
         let elapsedTime = currentTime - waveStartTime
-        if elapsedTime >= GameConstants.Wave.duration {
+        if elapsedTime >= GameBalance.Wave.duration {
             // 다음 웨이브로 진행
             currentWaveNumber += 1
             statistics.currentWave = currentWaveNumber
@@ -178,21 +178,21 @@ class GameStateManager {
         guard waveStartTime > 0 else { return 0 }
         
         let elapsedTime = currentTime - waveStartTime
-        return Float(elapsedTime / GameConstants.Wave.duration)
+        return Float(elapsedTime / GameBalance.Wave.duration)
     }
     
     func getZombieSpeedMultiplier() -> Float {
-        let multiplier = pow(GameConstants.Wave.speedMultiplier, Float(currentWaveNumber - 1))
-        return min(multiplier, GameConstants.Wave.maxSpeedMultiplier)
+        let multiplier = pow(GameBalance.Wave.speedMultiplier, Float(currentWaveNumber - 1))
+        return min(multiplier, GameBalance.Wave.maxSpeedMultiplier)
     }
     
     func getZombieHealthMultiplier() -> Float {
-        let multiplier = pow(GameConstants.Wave.healthMultiplier, Float(currentWaveNumber - 1))
-        return min(multiplier, GameConstants.Wave.maxHealthMultiplier)
+        let multiplier = pow(GameBalance.Wave.healthMultiplier, Float(currentWaveNumber - 1))
+        return min(multiplier, GameBalance.Wave.maxHealthMultiplier)
     }
     
     func getZombieCountMultiplier() -> Float {
-        return pow(GameConstants.Wave.zombieCountMultiplier, Float(currentWaveNumber))
+        return pow(GameBalance.Wave.zombieCountMultiplier, Float(currentWaveNumber))
     }
     
     // MARK: - Personal Records Management
