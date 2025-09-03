@@ -144,8 +144,8 @@ struct UIConstants {
             
             // Zombies
             static let normalZombieColor = SKColor(red: 0.0, green: 1.0, blue: 0.5, alpha: 1.0)
-            static let fastZombieColor = SKColor(red: 1.0, green: 0.0, blue: 1.0, alpha: 1.0)
-            static let strongZombieColor = SKColor(red: 1.0, green: 0.2, blue: 0.0, alpha: 1.0)
+            static let fastZombieColor = SKColor(red: 1.0, green: 0.75, blue: 0.0, alpha: 1.0)
+            static let strongZombieColor = SKColor(red: 1.0, green: 0.2, blue: 0.35, alpha: 1.0)
             static let zombieGlowWidth: CGFloat = 2
             
             // Grid

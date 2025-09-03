@@ -54,7 +54,7 @@ class Zombie: SKSpriteNode {
             self.moveSpeed = GameBalance.Zombie.strongSpeed * CGFloat(speedMultiplier)
             self.health = Int(Float(GameBalance.Zombie.strongHealth) * healthMultiplier)
             size = GameBalance.Zombie.strongSize
-            color = UIConstants.Colors.Neon.fastZombieColor
+            color = UIConstants.Colors.Neon.strongZombieColor
         }
         
         self.currentHealth = health
@@ -100,7 +100,6 @@ class Zombie: SKSpriteNode {
         neonRect.fillColor = color
         neonRect.strokeColor = color
         neonRect.lineWidth = 2
-        neonRect.glowWidth = UIConstants.Colors.Neon.zombieGlowWidth
         neonRect.position = CGPoint.zero
         neonRect.name = "ZombieShape"
         

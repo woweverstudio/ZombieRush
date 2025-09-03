@@ -154,9 +154,9 @@ class HUDManager {
         // 체력 라벨 (바 중앙 정렬)
         let healthLabel = SKLabelNode(text: NSLocalizedString("HUD_HEALTH_LABEL", comment: "Health label"))
         healthLabel.fontName = "Arial-Bold"
-        healthLabel.fontSize = 12
+        healthLabel.fontSize = 8
         healthLabel.fontColor = SKColor.white
-        healthLabel.position = CGPoint(x: 0, y: -6)
+        healthLabel.position = CGPoint(x: 0, y: -4)
         healthLabel.horizontalAlignmentMode = .center
         healthBar?.addChild(healthLabel)
     }
@@ -187,9 +187,9 @@ class HUDManager {
         // 탄약 라벨 (바 중앙 정렬)
         let ammoLabel = SKLabelNode(text: NSLocalizedString("HUD_AMMO_LABEL", comment: "Ammo label"))
         ammoLabel.fontName = "Arial-Bold"
-        ammoLabel.fontSize = 12
+        ammoLabel.fontSize = 8
         ammoLabel.fontColor = SKColor.white
-        ammoLabel.position = CGPoint(x: 0, y: -6)
+        ammoLabel.position = CGPoint(x: 0, y: -4)
         ammoLabel.horizontalAlignmentMode = .center
         ammoBar?.addChild(ammoLabel)
         

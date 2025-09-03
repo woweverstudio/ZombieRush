@@ -99,7 +99,6 @@ class Player: SKSpriteNode {
         neonRect.fillColor = UIConstants.Colors.Neon.playerColor
         neonRect.strokeColor = UIConstants.Colors.Neon.playerColor
         neonRect.lineWidth = 2
-        neonRect.glowWidth = UIConstants.Colors.Neon.playerGlowWidth
         neonRect.position = CGPoint.zero
         neonRect.name = "PlayerShape"
         
