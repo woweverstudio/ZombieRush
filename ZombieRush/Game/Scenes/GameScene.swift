@@ -33,6 +33,10 @@ class GameScene: SKScene {
     // MARK: - Game State
     private let gameStateManager = GameStateManager.shared
     private var lastUpdateTime: TimeInterval = 0
+
+    // HUD 업데이트는 HUDManager에서 최적화하여 처리
+
+
     
     // MARK: - Initialization
     init(appRouter: AppRouter) {
@@ -51,9 +55,12 @@ class GameScene: SKScene {
         
         // 게임 시작 (GameStateManager가 이미 완벽한 초기화 제공)
         gameStateManager.startNewGame()
-        
+
         // 게임 시스템 초기화
         initializeGameSystems()
+
+        // HUD 값들 리셋 (게임 재시작 시)
+        resetHUDValues()
     }
     
     // MARK: - Game System Initialization
@@ -104,10 +111,23 @@ class GameScene: SKScene {
     
     private func setupPlayer() {
         guard let worldSystem = worldSystem else { return }
-        
+
         player = Player()
         player?.position = CGPoint(x: 0, y: 0)
         worldSystem.getWorldNode()?.addChild(player!)
+
+        // HUD 초기 값 설정 (성능 최적화)
+        initializeHUDValues()
+    }
+
+        private func initializeHUDValues() {
+        // HUDManager에서 초기 상태를 관리하므로 별도 초기화 불필요
+        // 게임 시작 시 첫 번째 updateHUD 호출에서 자동으로 값들이 설정됨
+    }
+
+    private func resetHUDValues() {
+        // HUDManager의 상태 리셋
+        hudManager?.resetHUDState()
     }
     
     private func setupCamera() {
@@ -220,9 +240,24 @@ class GameScene: SKScene {
         itemSpawnSystem?.update(currentTime)
         meteorSystem?.update(currentTime)
         hudManager?.updateTime()
-        
-        // 플레이어 상태 업데이트
-        updatePlayerHUD()
+
+        // 총알은 Bullet 클래스에서 스스로 관리 (단순 lifetime)
+
+        // 플레이어 상태 업데이트 (HUDManager에서 최적화 처리)
+        if let player = player, let hudManager = hudManager {
+            let health = player.getHealth()
+            let maxHealth = player.getMaxHealth()
+            let ammo = player.getAmmo()
+            let maxAmmo = player.getMaxAmmo()
+            let isReloading = player.getIsReloading()
+
+            // HUDManager에서 프레임 카운팅과 값 비교를 수행
+            hudManager.updateHUD(health: health, maxHealth: maxHealth,
+                               ammo: ammo, maxAmmo: maxAmmo,
+                               isReloading: isReloading)
+        }
+
+        // 총알은 3초 후 자동으로 사라지므로 별도 정리 불필요
     }
     
     // MARK: - Touch Handling
@@ -274,18 +309,10 @@ class GameScene: SKScene {
     
 
     
-    private func updatePlayerHUD() {
-        guard let player = player, let hudManager = hudManager else { return }
-        
-        hudManager.updatePlayerStats(
-            health: player.getHealth(),
-            maxHealth: player.getMaxHealth(),
-            ammo: player.getAmmo(),
-            maxAmmo: player.getMaxAmmo(),
-            isReloading: player.getIsReloading()
-        )
-    }
-    
+        // HUD 업데이트는 HUDManager에서 최적화하여 처리하므로 별도 메서드 불필요
+
+
+
     // MARK: - Game Over Logic
     private func triggerGameOver() {
         guard !gameStateManager.isGameOver() else { return }
@@ -303,7 +330,9 @@ class GameScene: SKScene {
         
         // 맵의 모든 게임 노드 제거
         clearGameNodes()
-        
+
+        // 총알들은 스스로 라이프사이클 관리 (자동 정리)
+
         // 개인 랭크에 현재 게임 기록 저장 및 NEW RECORD 여부 확인
         let isNewRecord = gameStateManager.saveCurrentGameRecordAndCheckNew()
         
@@ -339,8 +368,6 @@ class GameScene: SKScene {
         worldNode?.removeAllChildren()
     }
     
-
-    
     // MARK: - UI Control (SOLID 원칙 - 단일 책임)
     private func hideAllGameUI() {
         gameController?.hideUI()
@@ -351,6 +378,4 @@ class GameScene: SKScene {
         gameController?.showUI()
         hudManager?.showHUD()
     }
-    
-
 }

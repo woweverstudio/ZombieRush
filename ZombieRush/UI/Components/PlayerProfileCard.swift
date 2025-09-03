@@ -68,8 +68,8 @@ struct PlayerProfileCard: View {
                 Text(gameKitManager.playerDisplayName)
                     .font(.system(size: 24, weight: .bold, design: .monospaced))
                     .foregroundColor(Color.cyan)
-                
-                Text(gameKitManager.isAuthenticated ? "Game Center" : "Guest Mode")
+
+                Text(gameKitManager.isAuthenticated ? NSLocalizedString("PROFILE_GAME_CENTER", comment: "Game Center label") : NSLocalizedString("PROFILE_GUEST_MODE", comment: "Guest mode label"))
                     .font(.system(size: 14, weight: .light, design: .monospaced))
                     .foregroundColor(.white.opacity(0.6))
             }
@@ -94,10 +94,10 @@ struct PlayerProfileCard: View {
     // MARK: - Rank Section
     private var rankSection: some View {
         HStack(spacing: 20) {
-            Text("Global Rank")
+            Text(NSLocalizedString("PROFILE_GLOBAL_RANK", comment: "Global rank label"))
                 .font(.system(size: 14, weight: .medium, design: .monospaced))
                 .foregroundColor(.white.opacity(0.7))
-            
+
             Group {
                 if let rank = gameKitManager.playerRank {
                     Text("#\(rank)")
@@ -150,10 +150,10 @@ struct PlayerProfileCard: View {
             Spacer()
             // TIME 섹션 (GameOverView 스타일)
             VStack(spacing: 8) {
-                Text("TIME")
+                Text(NSLocalizedString("PROFILE_TIME_LABEL", comment: "Time label"))
                     .font(.system(size: 16, weight: .bold, design: .monospaced))
                     .foregroundColor(Color.cyan)
-                
+
                 Text(bestRecord?.formattedTime ?? "00:00")
                     .font(.system(size: 28, weight: .heavy, design: .monospaced))
                     .foregroundColor(.white)
@@ -162,10 +162,10 @@ struct PlayerProfileCard: View {
             Spacer()
             // KILLS 섹션 (GameOverView 스타일)
             VStack(spacing: 8) {
-                Text("KILLS")
+                Text(NSLocalizedString("PROFILE_KILLS_LABEL", comment: "Kills label"))
                     .font(.system(size: 16, weight: .bold, design: .monospaced))
                     .foregroundColor(Color.cyan)
-                
+
                 Text("\(bestRecord?.zombieKills ?? 0)")
                     .font(.system(size: 28, weight: .heavy, design: .monospaced))
                     .foregroundColor(.white)
@@ -183,12 +183,12 @@ struct PlayerProfileCard: View {
                 .foregroundColor(Color.cyan.opacity(0.6))
             
             VStack(spacing: 8) {
-                Text("게임센터에 로그인 하세요!")
+                Text(NSLocalizedString("PROFILE_SIGN_IN_PROMPT", comment: "Sign in prompt"))
                     .font(.system(size: 12, weight: .medium, design: .monospaced))
                     .foregroundColor(.white.opacity(0.8))
                     .multilineTextAlignment(.center)
-                
-                Text("로그인 하시면 글로벌 순위에 도전하실 수 있습니다.")
+
+                Text(NSLocalizedString("PROFILE_SIGN_IN_BENEFIT", comment: "Sign in benefit"))
                     .font(.system(size: 10, weight: .light, design: .monospaced))
                     .foregroundColor(.white.opacity(0.6))
                     .multilineTextAlignment(.center)
@@ -202,7 +202,7 @@ struct PlayerProfileCard: View {
                     Image(systemName: "gear")
                         .font(.system(size: 12, weight: .medium))
                     
-                    Text("설정 열기")
+                    Text(NSLocalizedString("PROFILE_OPEN_SETTINGS", comment: "Open settings button"))
                         .font(.system(size: 12, weight: .medium, design: .monospaced))
                 }
                 .foregroundColor(.white)
@@ -217,8 +217,8 @@ struct PlayerProfileCard: View {
                         )
                 )
             }
-            // iPhone 설정에서 Game Center 로그인 안내            
-            Text("세팅 > 게임센터 > 로그인")
+            // iPhone 설정에서 Game Center 로그인 안내
+            Text(NSLocalizedString("PROFILE_SETTINGS_PATH", comment: "Settings path guide"))
                 .font(.system(size: 12, weight: .light, design: .monospaced))
                 .foregroundColor(.white.opacity(0.5))
         }

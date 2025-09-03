@@ -80,19 +80,70 @@ class Bullet: SKSpriteNode {
     // MARK: - Fire Bullet
     func fire(from startPosition: CGPoint, direction: CGVector) {
         position = startPosition
-        
+
         // 총알 속도 설정
         let velocity = CGVector(
             dx: direction.dx * bulletSpeed,
             dy: direction.dy * bulletSpeed
         )
         physicsBody?.velocity = velocity
-        
+
         // 일정 시간 후 총알 제거
         let removeAction = SKAction.sequence([
             SKAction.wait(forDuration: lifetime),
             SKAction.removeFromParent()
         ])
-        run(removeAction)
+        run(removeAction, withKey: "lifetime")
+    }
+
+    // MARK: - Smart Lifecycle Management
+    // Bullet은 이제 스스로 라이프사이클을 관리하므로 수동 reset/deactivate 불필요
+
+
+
+    // MARK: - Static Factory Methods (GameScene 간소화)
+    static func createAndFire(from position: CGPoint,
+                             direction: CGVector,
+                             in worldNode: SKNode) -> Bullet {
+        let bullet = Bullet()
+        bullet.position = position
+
+        // 자동으로 발사
+        bullet.fire(from: position, direction: direction)
+
+        // 월드에 추가
+        worldNode.addChild(bullet)
+
+        return bullet
+    }
+
+    // MARK: - Convenience Methods
+    static func fireSingle(from position: CGPoint,
+                          direction: CGVector,
+                          in worldNode: SKNode) -> Bullet {
+        return createAndFire(from: position, direction: direction, in: worldNode)
+    }
+
+    static func fireShotgun(count: Int,
+                           from position: CGPoint,
+                           baseDirection: CGVector,
+                           spreadAngle: CGFloat,
+                           in worldNode: SKNode) -> [Bullet] {
+        var bullets: [Bullet] = []
+        let baseAngle = atan2(baseDirection.dy, baseDirection.dx)
+        let spreadRadians = spreadAngle * .pi / 180.0
+
+        for i in 0..<count {
+            // 샷건 탄퍼짐 계산
+            let normalizedIndex = Float(i) - Float(count - 1) / 2.0
+            let angleOffset = normalizedIndex * Float(spreadRadians) / Float(count - 1)
+            let finalAngle = baseAngle + CGFloat(angleOffset)
+            let direction = CGVector(dx: cos(finalAngle), dy: sin(finalAngle))
+
+            let bullet = createAndFire(from: position, direction: direction, in: worldNode)
+            bullets.append(bullet)
+        }
+
+        return bullets
     }
 }

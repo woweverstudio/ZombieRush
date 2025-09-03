@@ -42,7 +42,7 @@ struct LeaderBoardView: View {
             
             Spacer()
             
-            SectionTitle("LEADER BOARD", style: .cyan, size: 28)
+            SectionTitle(NSLocalizedString("LEADERBOARD_TITLE", comment: "Leaderboard screen title"), style: .cyan, size: 28)
             
             Spacer()
         }

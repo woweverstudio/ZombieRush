@@ -11,32 +11,32 @@ struct TextConstants {
     
     // MARK: - Game Over Screen
     struct GameOver {
-        static let title = "게임 오버"
-        static let playTimeFormat = "플레이 시간: %02d:%02d"
-        static let zombieKillsFormat = "네모 처치: %d마리"
-        static let restartButton = "다시하기"
-        static let quitButton = "그만하기"
+        static let title = NSLocalizedString("GAME_OVER_TITLE", comment: "Game over screen title")
+        static let playTimeFormat = NSLocalizedString("GAME_OVER_PLAY_TIME_FORMAT", comment: "Play time format")
+        static let zombieKillsFormat = NSLocalizedString("GAME_OVER_ZOMBIE_KILLS_FORMAT", comment: "Zombie kills format")
+        static let restartButton = NSLocalizedString("GAME_OVER_RESTART_BUTTON", comment: "Restart game button")
+        static let quitButton = NSLocalizedString("GAME_OVER_QUIT_BUTTON", comment: "Quit game button")
     }
-    
+
     // MARK: - HUD Display
     struct HUD {
-        static let scoreFormat = "Score: %d"
-        static let timeFormat = "%02d:%02d"
-        static let health = "Health"
-        static let ammo = "Ammo"
-        static let reloading = "재장전 중..."
+        static let scoreFormat = NSLocalizedString("HUD_SCORE_FORMAT", comment: "Score display format")
+        static let timeFormat = NSLocalizedString("HUD_TIME_FORMAT", comment: "Time display format")
+        static let health = NSLocalizedString("HUD_HEALTH", comment: "Health label")
+        static let ammo = NSLocalizedString("HUD_AMMO", comment: "Ammo label")
+        static let reloading = NSLocalizedString("HUD_RELOADING", comment: "Reloading status text")
     }
-    
+
     // MARK: - Wave System
     struct Wave {
-        static let waveFormat = "웨이브: %d"
-        static let waveAnnouncementFormat = "웨이브 %d"
+        static let waveFormat = NSLocalizedString("WAVE_FORMAT", comment: "Wave display format")
+        static let waveAnnouncementFormat = NSLocalizedString("WAVE_ANNOUNCEMENT_FORMAT", comment: "Wave announcement format")
     }
-    
+
     // MARK: - UI Elements
     struct UI {
-        static let exitButton = "나가기"
-        static let fireButton = "FIRE"
+        static let exitButton = NSLocalizedString("UI_EXIT_BUTTON", comment: "Exit button text")
+        static let fireButton = NSLocalizedString("UI_FIRE_BUTTON", comment: "Fire button text")
     }
     
     // MARK: - Node Names (for SpriteKit identification)

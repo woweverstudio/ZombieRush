@@ -1,0 +1,79 @@
+/* Game Over Screen */
+"GAME_OVER_TITLE" = "게임 오버";
+"GAME_OVER_PLAY_TIME_FORMAT" = "플레이 시간: %02d:%02d";
+"GAME_OVER_ZOMBIE_KILLS_FORMAT" = "네모 처치: %d마리";
+"GAME_OVER_RESTART_BUTTON" = "다시하기";
+"GAME_OVER_QUIT_BUTTON" = "그만하기";
+
+/* HUD Display */
+"HUD_SCORE_FORMAT" = "Score: %d";
+"HUD_TIME_FORMAT" = "%02d:%02d";
+"HUD_HEALTH" = "HP";
+"HUD_AMMO" = "탄약";
+"HUD_RELOADING" = "재장전 중...";
+
+/* Wave System */
+"WAVE_FORMAT" = "웨이브: %d";
+"WAVE_ANNOUNCEMENT_FORMAT" = "웨이브 %d";
+
+/* UI Elements */
+"UI_EXIT_BUTTON" = "나가기";
+"UI_FIRE_BUTTON" = "발사";
+
+/* Game Over View */
+"GAME_OVER_NEW_RECORD" = "새 기록";
+"GAME_OVER_TIME_LABEL" = "시간";
+"GAME_OVER_KILLS_LABEL" = "킬수";
+"GAME_OVER_GAME_CENTER" = "게임센터";
+"GAME_OVER_GUEST" = "게스트";
+"GAME_OVER_NO_RECORDS" = "아직 기록이 없어요";
+"GAME_OVER_MY_RECORDS_TITLE" = "내 기록 탑 10";
+
+/* HUD Manager */
+"HUD_SCORE_INITIAL" = "점수: 0";
+"HUD_TIME_INITIAL" = "00:00";
+"HUD_HEALTH_LABEL" = "체력";
+"HUD_AMMO_LABEL" = "탄약";
+"HUD_RELOADING_LABEL" = "재장전 중...";
+
+/* Item Effects - Collection Messages */
+"ITEM_SPEED_BOOST_COLLECT" = "이동속도 증가!";
+"ITEM_HEALTH_RESTORE_COLLECT" = "체력 회복!";
+"ITEM_AMMO_RESTORE_COLLECT" = "탄약 충전!";
+"ITEM_INVINCIBILITY_COLLECT" = "무적 상태!";
+"ITEM_SHOTGUN_COLLECT" = "샷건 모드!";
+"ITEM_METEOR_COLLECT" = "폭탄 발사!";
+
+/* Item Effects - End Messages */
+"ITEM_SPEED_BOOST_END" = "이동속도 정상화";
+"ITEM_INVINCIBILITY_END" = "무적 상태 해제";
+"ITEM_SHOTGUN_END" = "샷건 모드 해제";
+
+/* Settings View */
+"SETTINGS_TITLE" = "설정";
+"SETTINGS_SOUND_EFFECTS" = "효과음";
+"SETTINGS_BACKGROUND_MUSIC" = "배경음악";
+"SETTINGS_VIBRATION" = "진동";
+
+/* Leaderboard View */
+"LEADERBOARD_TITLE" = "리더보드";
+
+/* Player Profile Card */
+"PROFILE_GLOBAL_RANK" = "글로벌 랭킹";
+"PROFILE_GAME_CENTER" = "게임센터";
+"PROFILE_GUEST_MODE" = "게스트 모드";
+"PROFILE_TIME_LABEL" = "시간";
+"PROFILE_KILLS_LABEL" = "킬수";
+"PROFILE_SIGN_IN_PROMPT" = "게임센터에 로그인 하세요!";
+"PROFILE_SIGN_IN_BENEFIT" = "로그인 하시면 글로벌 순위에 도전하실 수 있습니다.";
+"PROFILE_OPEN_SETTINGS" = "설정 열기";
+"PROFILE_SETTINGS_PATH" = "설정 > 게임센터 > 로그인";
+
+/* Global Ranking Card */
+"RANKING_GLOBAL_TOP_100" = "글로벌 탑 100";
+"RANKING_LOADING" = "로딩 중...";
+"RANKING_SAMPLE_TITLE" = "샘플 랭킹";
+"RANKING_SIGN_IN_REAL" = "실제 랭킹을 보려면 로그인하세요";
+"RANKING_NO_DATA" = "아직 랭킹이 없어요";
+"RANKING_PLAY_TO_SEE" = "게임을 플레이해서 랭킹을 확인하세요!";
+"RANKING_KILLS_SUFFIX" = "킬";

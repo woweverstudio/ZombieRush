@@ -17,6 +17,17 @@ class Player: SKSpriteNode {
     
     // MARK: - Face Expression Properties
     private var faceExpressionNode: SKSpriteNode?
+
+    // 표정 텍스처들을 미리 캐싱 (성능 최적화)
+    private var faceTextureCache: [String: SKTexture] = [:]
+
+    // 사용할 표정 목록 정의
+    private let availableExpressions = [
+        "face_normal",
+        "face_happy",
+        "face_hit",
+        "face_angry"
+    ]
     
     // MARK: - Movement Properties
     private var baseMoveSpeed: CGFloat = GameBalance.Player.baseMoveSpeed
@@ -94,22 +105,29 @@ class Player: SKSpriteNode {
         
         addChild(neonRect)
         
-        // 표정 레이어 추가
-        setupFaceExpression()
+        // 표정 레이어 추가 (캐싱 포함)
+        setupFaceExpressions()
     }
     
-    // MARK: - Face Expression Setup
-    private func setupFaceExpression() {
-        let faceTexture = SKTexture(imageNamed: "face_normal")
-        
-        faceExpressionNode = SKSpriteNode(texture: faceTexture)
-        faceExpressionNode?.size = CGSize(width: size.width , height: size.height)
-        faceExpressionNode?.position = CGPoint.zero
-        faceExpressionNode?.zPosition = 1 // 네온 사각형 위에 표시
-        faceExpressionNode?.name = "FaceExpression"
-        
-        if let faceNode = faceExpressionNode {
-            addChild(faceNode)
+    // MARK: - Face Expression Setup (성능 최적화)
+    private func setupFaceExpressions() {
+        // 미리 모든 표정 텍스처들을 로드해서 캐싱 (성능 최적화)
+        for expressionName in availableExpressions {
+            let texture = SKTexture(imageNamed: expressionName)
+            faceTextureCache[expressionName] = texture
+        }
+
+        // 기본 표정 노드 생성
+        if let normalTexture = faceTextureCache["face_normal"] {
+            faceExpressionNode = SKSpriteNode(texture: normalTexture)
+            faceExpressionNode?.size = CGSize(width: size.width, height: size.height)
+            faceExpressionNode?.position = CGPoint.zero
+            faceExpressionNode?.zPosition = 1 // 네온 사각형 위에 표시
+            faceExpressionNode?.name = "FaceExpression"
+
+            if let faceNode = faceExpressionNode {
+                addChild(faceNode)
+            }
         }
     }
     
@@ -318,27 +336,44 @@ class Player: SKSpriteNode {
         self.meteorSystem = meteorSystem
     }
     
-    // MARK: - Face Expression Methods
+    // MARK: - Face Expression Methods (성능 최적화)
     func changeFaceExpression(to imageName: String) {
         guard let faceNode = faceExpressionNode else {
             return // 얼굴 표정 노드를 찾을 수 없음
         }
-        
-        let newTexture = SKTexture(imageNamed: imageName)
-        
+
+        // 캐싱된 텍스처 사용 (성능 최적화)
+        guard let cachedTexture = faceTextureCache[imageName] else {
+            print("Warning: Face expression '\(imageName)' not found in cache")
+            return
+        }
+
         // 부드러운 전환 효과
         let fadeOut = SKAction.fadeAlpha(to: 0.0, duration: 0.1)
         let changeTexture = SKAction.run {
-            faceNode.texture = newTexture
+            faceNode.texture = cachedTexture  // 캐싱된 텍스처 사용
         }
         let fadeIn = SKAction.fadeAlpha(to: 1.0, duration: 0.1)
-        
+
         let transitionSequence = SKAction.sequence([fadeOut, changeTexture, fadeIn])
         faceNode.run(transitionSequence)
     }
     
     func setNormalFace() {
         changeFaceExpression(to: "face_normal")
+    }
+
+    // MARK: - Face Expression Utilities
+    func getAvailableExpressions() -> [String] {
+        return availableExpressions
+    }
+
+    func getCachedTextureCount() -> Int {
+        return faceTextureCache.count
+    }
+
+    func isTextureCached(_ expressionName: String) -> Bool {
+        return faceTextureCache[expressionName] != nil
     }
     
     func temporaryFaceExpression(imageName: String, duration: TimeInterval = 1.0) {

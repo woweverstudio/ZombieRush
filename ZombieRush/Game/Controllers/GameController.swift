@@ -133,7 +133,7 @@ class GameController {
         button.position = position
         button.zPosition = UIConstants.Controls.controlZPosition
         
-        let label = SKLabelNode(text: TextConstants.UI.fireButton)
+        let label = SKLabelNode(text: NSLocalizedString("UI_FIRE_BUTTON", comment: "Fire button text"))
         label.fontName = ResourceConstants.Fonts.arialBold
         label.fontSize = 16
         label.fontColor = Constants.Colors.fireButtonText
@@ -285,12 +285,11 @@ class GameController {
         }
     }
     
-    private func fireSingleBullet(from position: CGPoint, worldNode: SKNode) {
-        let bullet = Bullet()
+        private func fireSingleBullet(from position: CGPoint, worldNode: SKNode) {
         let direction = getAutoAimDirection() ?? CGVector(dx: 0, dy: 1)
-        
-        worldNode.addChild(bullet)
-        bullet.fire(from: position, direction: direction)
+
+        // Bullet의 스마트 생성 메서드 사용 (GameScene 종속성 제거)
+        Bullet.fireSingle(from: position, direction: direction, in: worldNode)
     }
     
     private func fireShotgunBullets(from position: CGPoint, worldNode: SKNode) {
@@ -301,22 +300,15 @@ class GameController {
         let baseDirection = getAutoAimDirection() ?? CGVector(dx: 0, dy: 1)
         let baseAngle = atan2(baseDirection.dy, baseDirection.dx)
         
-        for i in 0..<bulletCount {
-            let bullet = Bullet()
-            let angleOffset = calculateAngleOffset(for: i, count: bulletCount, spread: spreadAngle)
-            let finalAngle = baseAngle + angleOffset
-            let direction = CGVector(dx: cos(finalAngle), dy: sin(finalAngle))
-            
-            worldNode.addChild(bullet)
-            bullet.fire(from: position, direction: direction)
-        }
+                // 샷건 총알들 발사 (Bullet의 스마트 메서드 사용)
+        Bullet.fireShotgun(count: bulletCount,
+                          from: position,
+                          baseDirection: baseDirection,
+                          spreadAngle: spreadAngle,
+                          in: worldNode)
     }
     
-    private func calculateAngleOffset(for index: Int, count: Int, spread: CGFloat) -> CGFloat {
-        let normalizedIndex = Float(index) - Float(count - 1) / 2.0
-        let angleOffset = normalizedIndex * Float(spread) / Float(count - 1)
-        return CGFloat(angleOffset * .pi / 180.0)
-    }
+
     
     private func getAutoAimDirection() -> CGVector? {
         guard let scene = scene,

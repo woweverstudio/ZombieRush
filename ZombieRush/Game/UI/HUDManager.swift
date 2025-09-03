@@ -31,6 +31,17 @@ class HUDManager {
     // MARK: - Game Data
     private(set) var score: Int = 0
     private let gameStateManager = GameStateManager.shared
+
+    // HUD 업데이트 최적화 (성능 향상)
+    private var frameCount: Int = 0
+    private let updateInterval: Int = 10  // 10프레임마다 1회 업데이트 (60fps → 6fps)
+
+    // 플레이어 상태 값 캐싱 (변경 감지용)
+    private var lastHealth: Int = 0
+    private var lastMaxHealth: Int = 0
+    private var lastAmmo: Int = 0
+    private var lastMaxAmmo: Int = 0
+    private var lastIsReloading: Bool = false
     
     // MARK: - Initialization
     init(camera: SKCameraNode, appRouter: AppRouter) {
@@ -61,7 +72,7 @@ class HUDManager {
         let sceneWidth = scene.size.width
         let sceneHeight = scene.size.height
         
-        scoreLabel = SKLabelNode(text: "SCORE: 0")
+        scoreLabel = SKLabelNode(text: NSLocalizedString("HUD_SCORE_INITIAL", comment: "Initial score display"))
         scoreLabel?.fontName = "Arial-Bold"
         scoreLabel?.fontSize = 18
         scoreLabel?.fontColor = SKColor.white.withAlphaComponent(0.9)
@@ -77,7 +88,7 @@ class HUDManager {
         let sceneWidth = scene.size.width
         let sceneHeight = scene.size.height
         
-        timeLabel = SKLabelNode(text: "00:00")
+        timeLabel = SKLabelNode(text: NSLocalizedString("HUD_TIME_INITIAL", comment: "Initial time display"))
         timeLabel?.fontName = "Arial-Bold"
         timeLabel?.fontSize = 20
         timeLabel?.fontColor = SKColor.white.withAlphaComponent(0.9)
@@ -141,7 +152,7 @@ class HUDManager {
         healthBar?.addChild(healthBarFill!)
         
         // 체력 라벨 (바 중앙 정렬)
-        let healthLabel = SKLabelNode(text: "HP")
+        let healthLabel = SKLabelNode(text: NSLocalizedString("HUD_HEALTH_LABEL", comment: "Health label"))
         healthLabel.fontName = "Arial-Bold"
         healthLabel.fontSize = 12
         healthLabel.fontColor = SKColor.white
@@ -174,7 +185,7 @@ class HUDManager {
         ammoBar?.addChild(ammoBarFill!)
         
         // 탄약 라벨 (바 중앙 정렬)
-        let ammoLabel = SKLabelNode(text: "AMMO")
+        let ammoLabel = SKLabelNode(text: NSLocalizedString("HUD_AMMO_LABEL", comment: "Ammo label"))
         ammoLabel.fontName = "Arial-Bold"
         ammoLabel.fontSize = 12
         ammoLabel.fontColor = SKColor.white
@@ -183,7 +194,7 @@ class HUDManager {
         ammoBar?.addChild(ammoLabel)
         
         // 재장전 라벨 (네온 스타일)
-        reloadLabel = SKLabelNode(text: "RELOADING...")
+        reloadLabel = SKLabelNode(text: NSLocalizedString("HUD_RELOADING_LABEL", comment: "Reloading label"))
         reloadLabel?.fontName = "Arial-Bold"
         reloadLabel?.fontSize = 16
         reloadLabel?.fontColor = UIConstants.Colors.HUD.reloadLabelColor
@@ -207,9 +218,46 @@ class HUDManager {
         timeLabel?.text = String(format: TextConstants.HUD.timeFormat, minutes, seconds)
     }
     
+    // MARK: - Public Interface (최적화 적용)
+    func updateHUD(health: Int, maxHealth: Int, ammo: Int, maxAmmo: Int, isReloading: Bool) {
+        frameCount += 1
+
+        // 10프레임마다 1회 값 비교 및 업데이트
+        if frameCount % updateInterval == 0 {
+            updatePlayerStatsIfNeeded(health: health, maxHealth: maxHealth,
+                                    ammo: ammo, maxAmmo: maxAmmo,
+                                    isReloading: isReloading)
+        }
+    }
+
     func updatePlayerStats(health: Int, maxHealth: Int, ammo: Int, maxAmmo: Int, isReloading: Bool) {
-        updateHealthBar(current: health, max: maxHealth)
-        updateAmmoBar(current: ammo, max: maxAmmo, isReloading: isReloading)
+        // 기존 API 유지 (호환성)
+        updatePlayerStatsIfNeeded(health: health, maxHealth: maxHealth,
+                                ammo: ammo, maxAmmo: maxAmmo,
+                                isReloading: isReloading)
+    }
+
+    // MARK: - Optimized Update Logic
+    private func updatePlayerStatsIfNeeded(health: Int, maxHealth: Int, ammo: Int, maxAmmo: Int, isReloading: Bool) {
+        // 값이 변경되었는지 확인
+        let hasChanged = (health != lastHealth) ||
+                        (maxHealth != lastMaxHealth) ||
+                        (ammo != lastAmmo) ||
+                        (maxAmmo != lastMaxAmmo) ||
+                        (isReloading != lastIsReloading)
+
+        // 값이 변경되었을 때만 실제 UI 업데이트 수행
+        if hasChanged {
+            updateHealthBar(current: health, max: maxHealth)
+            updateAmmoBar(current: ammo, max: maxAmmo, isReloading: isReloading)
+
+            // 이전 값들 업데이트
+            lastHealth = health
+            lastMaxHealth = maxHealth
+            lastAmmo = ammo
+            lastMaxAmmo = maxAmmo
+            lastIsReloading = isReloading
+        }
     }
     
     private func updateHealthBar(current: Int, max: Int) {
@@ -296,7 +344,20 @@ class HUDManager {
         
         return false
     }
-    
+
+    // MARK: - Reset (게임 재시작용)
+    func resetHUDState() {
+        // 프레임 카운터 리셋
+        frameCount = 0
+
+        // 이전 값들 리셋
+        lastHealth = 0
+        lastMaxHealth = 0
+        lastAmmo = 0
+        lastMaxAmmo = 0
+        lastIsReloading = false
+    }
+
     // MARK: - UI Visibility Control
     func hideHUD() {
         hudNode?.isHidden = true

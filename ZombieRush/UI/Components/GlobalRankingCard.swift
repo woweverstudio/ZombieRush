@@ -10,7 +10,7 @@ struct GlobalRankingCard: View {
             Spacer()
             
             // 타이틀
-            SectionTitle("Global Top 100", style: .magenta, size: 18)
+            SectionTitle(NSLocalizedString("RANKING_GLOBAL_TOP_100", comment: "Global top 100 title"), style: .magenta, size: 18)
                 .padding(.vertical, 10)
             
             // 랭킹 리스트
@@ -53,7 +53,7 @@ struct GlobalRankingCard: View {
         HStack {
             ProgressView()
                 .scaleEffect(0.8)
-            Text("Loading...")
+            Text(NSLocalizedString("RANKING_LOADING", comment: "Loading text"))
                 .font(.system(size: 14, weight: .medium, design: .monospaced))
                 .foregroundColor(.white.opacity(0.7))
         }
@@ -67,7 +67,7 @@ struct GlobalRankingCard: View {
             HStack {
                 Image(systemName: "info.circle")
                     .foregroundColor(.yellow.opacity(0.8))
-                Text("Sample Rankings")
+                Text(NSLocalizedString("RANKING_SAMPLE_TITLE", comment: "Sample rankings title"))
                     .font(.system(size: 12, weight: .medium, design: .monospaced))
                     .foregroundColor(.yellow.opacity(0.8))
             }
@@ -87,7 +87,7 @@ struct GlobalRankingCard: View {
             }
             
             // 하단 안내
-            Text("Sign in to see real rankings")
+            Text(NSLocalizedString("RANKING_SIGN_IN_REAL", comment: "Sign in to see real rankings"))
                 .font(.system(size: 10, weight: .light, design: .monospaced))
                 .foregroundColor(.white.opacity(0.5))
                 .padding(.top, 5)
@@ -100,10 +100,10 @@ struct GlobalRankingCard: View {
             Image(systemName: "list.bullet")
                 .font(.system(size: 24))
                 .foregroundColor(.white.opacity(0.5))
-            Text("No rankings yet")
+            Text(NSLocalizedString("RANKING_NO_DATA", comment: "No rankings yet"))
                 .font(.system(size: 14, weight: .medium, design: .monospaced))
                 .foregroundColor(.white.opacity(0.7))
-            Text("Play games to see rankings!")
+            Text(NSLocalizedString("RANKING_PLAY_TO_SEE", comment: "Play games to see rankings"))
                 .font(.system(size: 12, weight: .light, design: .monospaced))
                 .foregroundColor(.white.opacity(0.5))
         }
@@ -200,7 +200,7 @@ struct GlobalRankRow: View {
                     .font(.system(size: 14, weight: .bold, design: .monospaced))
                     .foregroundColor(.white.opacity(0.9))
                 
-                Text("\(kills) kills")
+                Text("\(kills) \(NSLocalizedString("RANKING_KILLS_SUFFIX", comment: "Kills suffix"))")
                     .font(.system(size: 12, weight: .light, design: .monospaced))
                     .foregroundColor(.white.opacity(0.6))
             }

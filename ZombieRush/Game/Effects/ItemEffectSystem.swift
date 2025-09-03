@@ -88,17 +88,17 @@ class ItemEffectSystem {
         
         switch type {
         case .speedBoost:
-            message = "이동속도 증가!"
+            message = NSLocalizedString("ITEM_SPEED_BOOST_COLLECT", comment: "Speed boost item collected")
         case .healthRestore:
-            message = "체력 회복!"
+            message = NSLocalizedString("ITEM_HEALTH_RESTORE_COLLECT", comment: "Health restore item collected")
         case .ammoRestore:
-            message = "탄약 충전!"
+            message = NSLocalizedString("ITEM_AMMO_RESTORE_COLLECT", comment: "Ammo restore item collected")
         case .invincibility:
-            message = "무적 상태!"
+            message = NSLocalizedString("ITEM_INVINCIBILITY_COLLECT", comment: "Invincibility item collected")
         case .shotgun:
-            message = "샷건 모드!"
+            message = NSLocalizedString("ITEM_SHOTGUN_COLLECT", comment: "Shotgun item collected")
         case .meteor:
-            message = "폭탄 발사!"
+            message = NSLocalizedString("ITEM_METEOR_COLLECT", comment: "Meteor item collected")
         }
         
         toastMessageManager?.showToastMessage(message, duration: 1.5)
@@ -112,11 +112,11 @@ class ItemEffectSystem {
         
         switch type {
         case .speedBoost:
-            message = "이동속도 정상화"
+            message = NSLocalizedString("ITEM_SPEED_BOOST_END", comment: "Speed boost effect ended")
         case .invincibility:
-            message = "무적 상태 해제"
+            message = NSLocalizedString("ITEM_INVINCIBILITY_END", comment: "Invincibility effect ended")
         case .shotgun:
-            message = "샷건 모드 해제"
+            message = NSLocalizedString("ITEM_SHOTGUN_END", comment: "Shotgun effect ended")
         case .meteor:
             return
         default:

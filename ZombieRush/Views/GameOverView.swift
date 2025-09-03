@@ -40,9 +40,9 @@ struct GameOverView: View {
             Spacer()
             
             if isNewRecord {
-                SectionTitle("NEW RECORD", style: .yellow, size: 28)
+                SectionTitle(NSLocalizedString("GAME_OVER_NEW_RECORD", comment: "New record title"), style: .yellow, size: 28)
             } else {
-                SectionTitle("GAME OVER", style: .cyan, size: 28)
+                SectionTitle(TextConstants.GameOver.title, style: .cyan, size: 28)
             }
             
             Spacer()
@@ -67,11 +67,11 @@ struct GameOverView: View {
     // MARK: - Button Section
     private var buttonSection: some View {
         HStack(spacing: 20) {
-            NeonButton("QUIT", style: .cyan, fullWidth: true) {
+            NeonButton(TextConstants.GameOver.quitButton, style: .cyan, fullWidth: true) {
                 onQuit()
             }
-            
-            NeonButton("RETRY", style: .magenta, fullWidth: true) {
+
+            NeonButton(TextConstants.GameOver.restartButton, style: .magenta, fullWidth: true) {
                 onRestart()
             }
         }
@@ -138,7 +138,7 @@ struct GameOverView: View {
                     .foregroundColor(Color.cyan)
                     .lineLimit(1)
                 
-                Text(gameKitManager.isAuthenticated ? "Game Center" : "Guest")
+                Text(gameKitManager.isAuthenticated ? NSLocalizedString("GAME_OVER_GAME_CENTER", comment: "Game Center label") : NSLocalizedString("GAME_OVER_GUEST", comment: "Guest label"))
                     .font(.system(size: 12, weight: .light, design: .monospaced))
                     .foregroundColor(.white.opacity(0.6))
             }
@@ -152,7 +152,7 @@ struct GameOverView: View {
             
             // TIME 섹션
             VStack(spacing: 8) {
-                SectionTitle("TIME", style: .cyan, size: 16)
+                SectionTitle(NSLocalizedString("GAME_OVER_TIME_LABEL", comment: "Time label"), style: .cyan, size: 16)
                 
                 Text(formatTime(playTime))
                     .font(.system(size: 24, weight: .heavy, design: .monospaced))
@@ -164,7 +164,7 @@ struct GameOverView: View {
             
             // KILLS 섹션
             VStack(spacing: 8) {
-                SectionTitle("KILLS", style: .cyan, size: 16)
+                SectionTitle(NSLocalizedString("GAME_OVER_KILLS_LABEL", comment: "Kills label"), style: .cyan, size: 16)
                 
                 Text("\(score)")
                     .font(.system(size: 24, weight: .heavy, design: .monospaced))
@@ -180,7 +180,7 @@ struct GameOverView: View {
     private var personalRankingCard: some View {
         VStack {
             // 랭크 리스트 타이틀
-            SectionTitle("My Records Top 10", style: .magenta, size: 20)
+            SectionTitle(NSLocalizedString("GAME_OVER_MY_RECORDS_TITLE", comment: "My records title"), style: .magenta, size: 20)
                 .padding(.vertical, 10)
             
             // 개인 랭크 리스트 (ScrollView로 10개 표시)
@@ -190,7 +190,7 @@ struct GameOverView: View {
                     
                     if records.isEmpty {
                         // 기록이 없을 때
-                        Text("No records yet")
+                        Text(NSLocalizedString("GAME_OVER_NO_RECORDS", comment: "No records message"))
                             .font(.title3.bold())
                             .foregroundColor(.gray)
                             .padding(.top, 20)
