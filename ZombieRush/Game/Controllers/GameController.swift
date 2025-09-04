@@ -17,6 +17,7 @@ class GameController {
     // MARK: - Touch Tracking
     private var leftTouch: UITouch?
     private var rightTouch: UITouch?
+    private var leftTouchStartLocation: CGPoint?  // 터치 시작 위치 저장
     
     // MARK: - UI Elements
     private var joystickBase: SKShapeNode?
@@ -54,11 +55,8 @@ class GameController {
         
         struct Colors {
             static let joystickBase = SKColor.white.withAlphaComponent(0.3)
-            static let joystickBaseBright = SKColor.white.withAlphaComponent(0.4)
             static let joystickThumbFill = SKColor.white.withAlphaComponent(0.2)
-            static let joystickThumbFillBright = SKColor.white.withAlphaComponent(0.3)
             static let joystickThumbStroke = SKColor.white.withAlphaComponent(0.5)
-            static let joystickThumbStrokeBright = SKColor.white.withAlphaComponent(0.6)
             static let fireButtonFill = SKColor.white.withAlphaComponent(0.1)
             static let fireButtonStroke = SKColor.white.withAlphaComponent(0.4)
             static let fireButtonText = SKColor.white.withAlphaComponent(0.8)
@@ -170,21 +168,21 @@ class GameController {
     
     private func handleJoystickTouch(_ touch: UITouch, at location: CGPoint) {
         guard leftTouch == nil, leftBottomTouchArea.contains(location) else { return }
-        
+
         leftTouch = touch
-        
+        leftTouchStartLocation = location  // 터치 시작 위치 저장
+
         let distanceFromFixed = location.distance(to: fixedJoystickPosition)
         if distanceFromFixed <= UIConstants.Controls.joystickRadius + Constants.joystickTouchRadius {
             isUsingTemporaryJoystick = false
         } else {
-            moveJoystickToPosition(location)
             isUsingTemporaryJoystick = true
         }
     }
     
     func handleTouchMoved(_ touches: Set<UITouch>) {
         guard let camera = camera else { return }
-        
+
         for touch in touches where touch == leftTouch {
             updateJoystick(location: touch.location(in: camera))
         }
@@ -194,6 +192,7 @@ class GameController {
         for touch in touches {
             if touch == leftTouch {
                 leftTouch = nil
+                leftTouchStartLocation = nil  // 터치 시작 위치 초기화
                 returnJoystickToFixed()
                 player?.stopMoving()
             } else if touch == rightTouch {
@@ -209,58 +208,38 @@ class GameController {
     // MARK: - Joystick Logic
     private func updateJoystick(location: CGPoint) {
         guard let joystickBase = joystickBase,
-              let joystickThumb = joystickThumb else { return }
-        
+              let joystickThumb = joystickThumb,
+              let touchStartLocation = leftTouchStartLocation else { return }
+
+        // 플레이어 이동 방향 계산 (터치 시작 위치 기준)
+        let movementDelta = location - touchStartLocation
+        let movementDistance = movementDelta.magnitude
+
+        guard movementDistance > 0 else { return }
+
+        let movementDirection = movementDelta.normalized
+
+        // 썸의 시각적 위치 계산 (베이스 위치 기준)
         let delta = location - joystickBase.position
         let distance = delta.magnitude
-        
-        guard distance > 0 else { return }
-        
         let clampedDistance = min(distance, Constants.joystickMaxDistance)
         let direction = delta.normalized
-        
+
         joystickThumb.position = joystickBase.position + direction * clampedDistance
-        
-        if distance > Constants.joystickDeadzone {
-            player?.move(direction: CGVector(dx: direction.x, dy: direction.y))
+
+        // 플레이어 이동
+        if movementDistance > Constants.joystickDeadzone {
+            player?.move(direction: CGVector(dx: movementDirection.x, dy: movementDirection.y))
         }
     }
-    
-    private func moveJoystickToPosition(_ position: CGPoint) {
-        joystickBase?.position = position
-        joystickThumb?.position = position
-        
-        // 임시 위치 표시를 위한 색상 변경
-        joystickBase?.strokeColor = Constants.Colors.joystickBaseBright
-        joystickThumb?.fillColor = Constants.Colors.joystickThumbFillBright
-        joystickThumb?.strokeColor = Constants.Colors.joystickThumbStrokeBright
-    }
-    
+
     private func returnJoystickToFixed() {
-        guard let joystickBase = joystickBase,
-              let joystickThumb = joystickThumb else { return }
-        
-        if isUsingTemporaryJoystick {
-            // 부드러운 이동과 색상 복원
-            let moveBaseAction = SKAction.move(to: fixedJoystickPosition, duration: Constants.animationDuration)
-            let moveThumbAction = SKAction.move(to: fixedJoystickPosition, duration: Constants.animationDuration)
-            
-            let restoreBaseColor = SKAction.run {
-                joystickBase.strokeColor = Constants.Colors.joystickBase
-            }
-            let restoreThumbColor = SKAction.run {
-                joystickThumb.fillColor = Constants.Colors.joystickThumbFill
-                joystickThumb.strokeColor = Constants.Colors.joystickThumbStroke
-            }
-            
-            joystickBase.run(SKAction.group([moveBaseAction, restoreBaseColor]))
-            joystickThumb.run(SKAction.group([moveThumbAction, restoreThumbColor]))
-        } else {
-            // 고정 위치에서 사용 중이었다면 썸만 중앙으로 복귀
-            let moveThumbAction = SKAction.move(to: fixedJoystickPosition, duration: Constants.quickAnimationDuration)
-            joystickThumb.run(moveThumbAction)
-        }
-        
+        guard let joystickThumb = joystickThumb else { return }
+
+        // 썸을 중앙으로 복귀
+        let moveThumbAction = SKAction.move(to: fixedJoystickPosition, duration: Constants.quickAnimationDuration)
+        joystickThumb.run(moveThumbAction)
+
         isUsingTemporaryJoystick = false
     }
     
@@ -284,32 +263,29 @@ class GameController {
             player.consumeAmmo()
         }
     }
-    
-        private func fireSingleBullet(from position: CGPoint, worldNode: SKNode) {
+
+    private func fireSingleBullet(from position: CGPoint, worldNode: SKNode) {
         let direction = getAutoAimDirection() ?? CGVector(dx: 0, dy: 1)
 
         // Bullet의 스마트 생성 메서드 사용 (GameScene 종속성 제거)
-        Bullet.fireSingle(from: position, direction: direction, in: worldNode)
+        _ = Bullet.fireSingle(from: position, direction: direction, in: worldNode)
     }
     
     private func fireShotgunBullets(from position: CGPoint, worldNode: SKNode) {
         guard let player = player else { return }
-        
+
         let bulletCount = player.getShotgunBulletCount()
         let spreadAngle = player.getShotgunSpreadAngle()
         let baseDirection = getAutoAimDirection() ?? CGVector(dx: 0, dy: 1)
-        let baseAngle = atan2(baseDirection.dy, baseDirection.dx)
-        
-                // 샷건 총알들 발사 (Bullet의 스마트 메서드 사용)
-        Bullet.fireShotgun(count: bulletCount,
+
+        // 샷건 총알들 발사
+        _ = Bullet.fireShotgun(count: bulletCount,
                           from: position,
                           baseDirection: baseDirection,
                           spreadAngle: spreadAngle,
                           in: worldNode)
     }
-    
 
-    
     private func getAutoAimDirection() -> CGVector? {
         guard let scene = scene,
               let player = player,
@@ -386,5 +362,3 @@ private extension CGPoint {
         CGVector(dx: x, dy: y)
     }
 }
-
-
