@@ -95,19 +95,9 @@ struct UIConstants {
     }
     
     // MARK: - Particle Effects
+    // Bullet particle 상수들은 PhysicsSystem으로 이동됨
     struct ParticleEffects {
-        static let bulletParticleLifetime: TimeInterval = 0.5
-        static let bulletParticleBirthRate: CGFloat = 500.0
-        static let bulletParticleCount: Int = 50
-        static let bulletParticleLifetimeBase: CGFloat = 0.25
-        static let bulletParticleLifetimeRange: CGFloat = 0.1
-        static let bulletParticleSpeed: CGFloat = 250
-        static let bulletParticleSpeedRange: CGFloat = 100
-        static let bulletParticleScale: CGFloat = 0.3
-        static let bulletParticleScaleRange: CGFloat = 0.2
-        static let bulletParticleScaleSpeed: CGFloat = -1.5
-        static let bulletParticleAlpha: CGFloat = 0.9
-        static let bulletParticleAlphaSpeed: CGFloat = -3.5
+        // 다른 particle 효과 상수들 추가 가능
     }
     
     // MARK: - Animations

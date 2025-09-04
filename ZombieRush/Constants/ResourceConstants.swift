@@ -49,7 +49,6 @@ struct ResourceConstants {
         struct UI {
             static let background = "background"
             static let gameOver = "gameover"
-            static let bokeh = "bokeh"
         }
         
         // MARK: - Character Faces
@@ -63,6 +62,7 @@ struct ResourceConstants {
         // MARK: - Effects
         struct Effects {
             static let spark = "spark"
+            static let bokeh = "bokeh"
         }
         
         // MARK: - App Icon

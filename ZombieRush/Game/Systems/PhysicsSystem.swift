@@ -75,15 +75,15 @@ extension PhysicsSystem: SKPhysicsContactDelegate {
               let zombie = zombie as? Zombie,
               let scene = scene as? GameScene else { return }
         
+        // 총알 제거 (먼저 제거해서 중복 충돌 방지)
+        bullet.removeFromParent()
+
         if AudioManager.shared.isSoundEffectsEnabled {
             let hitSound = SKAction.playSoundFileNamed(ResourceConstants.Audio.SoundEffects.hit, waitForCompletion: false)
             scene.run(hitSound)
         }
-        
+
         createSparkleEffect(at: bullet.position, in: scene)
-        
-        // 총알 제거
-        bullet.removeFromParent()
         
         // 좀비에게 데미지
         let isDead = zombie.takeDamage(GameBalance.Bullet.damage)
@@ -138,55 +138,56 @@ extension PhysicsSystem: SKPhysicsContactDelegate {
     // MARK: - Visual Effects
     private func createSparkleEffect(at position: CGPoint, in scene: SKScene) {
         guard let worldNode = scene.childNode(withName: "World") else { return }
-        
-        // 코드로 파티클 이펙트 생성 (네온 사이버펑크 스타일)
+
         guard let impactParticle = createImpactParticle() else { return }
-        
         impactParticle.position = position
         impactParticle.zPosition = 10
-        
         worldNode.addChild(impactParticle)
-        
-        // 파티클 효과 완료 후 자동 제거
-        let waitAction = SKAction.wait(forDuration: UIConstants.ParticleEffects.bulletParticleLifetime)
+
+        // Particle 효과 완료 후 자동 제거
+        let waitAction = SKAction.wait(forDuration: 0.4)
         let removeAction = SKAction.removeFromParent()
         impactParticle.run(SKAction.sequence([waitAction, removeAction]))
     }
-    
+
     private func createImpactParticle() -> SKEmitterNode? {
-        guard let emitter = SKEmitterNode(fileNamed: ResourceConstants.ParticleEffects.bulletImpact) else { return nil }
-        
-        // 기본 파티클 설정 (네온 사이버펑크 스타일)
-        emitter.particleBirthRate = UIConstants.ParticleEffects.bulletParticleBirthRate
-        emitter.numParticlesToEmit = UIConstants.ParticleEffects.bulletParticleCount
-        emitter.particleLifetime = UIConstants.ParticleEffects.bulletParticleLifetimeBase
-        emitter.particleLifetimeRange = UIConstants.ParticleEffects.bulletParticleLifetimeRange
-        
+        let emitter = SKEmitterNode()
+
+        // Spark 텍스처 설정
+        let sparkTexture = SKTexture(imageNamed: ResourceConstants.Images.Effects.spark)
+        emitter.particleTexture = sparkTexture
+
+        // 기본 파티클 설정
+        emitter.particleBirthRate = 300.0
+        emitter.numParticlesToEmit = 25
+        emitter.particleLifetime = 0.2
+        emitter.particleLifetimeRange = 0.08
+
         // 속도와 방향
-        emitter.particleSpeed = UIConstants.ParticleEffects.bulletParticleSpeed
-        emitter.particleSpeedRange = UIConstants.ParticleEffects.bulletParticleSpeedRange
+        emitter.particleSpeed = 180
+        emitter.particleSpeedRange = 60
         emitter.emissionAngle = 0
-        emitter.emissionAngleRange = CGFloat.pi * 2 // 360도
-        
+        emitter.emissionAngleRange = CGFloat.pi * 0.8
+
         // 크기와 투명도
-        emitter.particleScale = UIConstants.ParticleEffects.bulletParticleScale
-        emitter.particleScaleRange = UIConstants.ParticleEffects.bulletParticleScaleRange
-        emitter.particleScaleSpeed = UIConstants.ParticleEffects.bulletParticleScaleSpeed
-        emitter.particleAlpha = UIConstants.ParticleEffects.bulletParticleAlpha
-        emitter.particleAlphaSpeed = UIConstants.ParticleEffects.bulletParticleAlphaSpeed
-        
+        emitter.particleScale = 0.25
+        emitter.particleScaleRange = 0.15
+        emitter.particleScaleSpeed = -1.8
+        emitter.particleAlpha = 0.85
+        emitter.particleAlphaSpeed = -3.2
+
         // 네온 색상 설정
         emitter.particleColor = UIConstants.Colors.Neon.bulletSparkleColor
         emitter.particleColorBlendFactor = 1.0
         emitter.particleColorSequence = nil
-        
-        // 블렌드 모드 (네온 효과의 핵심)
+
+        // 블렌드 모드
         emitter.particleBlendMode = .add
-        
-        // 물리 효과 (탑다운이므로 중력 없음)
-        emitter.yAcceleration = 0
+
+        // 물리 효과
+        emitter.yAcceleration = -50
         emitter.xAcceleration = 0
-        
+
         return emitter
     }
 }
