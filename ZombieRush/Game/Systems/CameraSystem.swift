@@ -13,9 +13,10 @@ class CameraSystem {
     private weak var scene: SKScene?
     private weak var player: Player?
     private weak var camera: SKCameraNode?
-    
+
     // MARK: - Camera Settings
     private let cameraSmoothness: CGFloat = 0.1
+    private var originalCameraScale: CGFloat = 1.0  // 메테오 효과용 원래 줌 상태 저장
     
     // MARK: - Initialization
     init(scene: SKScene, player: Player?, camera: SKCameraNode?) {
@@ -58,11 +59,32 @@ class CameraSystem {
         camera.run(repeatAction)
     }
     
-    // MARK: - Camera Zoom (나중에 사용)
+    // MARK: - Camera Zoom
     func zoomCamera(to scale: CGFloat, duration: TimeInterval) {
         guard let camera = camera else { return }
-        
+
         let zoomAction = SKAction.scale(to: scale, duration: duration)
         camera.run(zoomAction)
+    }
+
+    // MARK: - Meteor Camera Effects
+    func startMeteorZoomOut() {
+        guard let camera = camera else { return }
+
+        // 메테오 배치 시 줌아웃 시작 - 원래 상태 저장
+        originalCameraScale = camera.xScale
+        let zoomOut = SKAction.scale(to: originalCameraScale * 1.3, duration: 0.2)
+        camera.run(zoomOut)
+    }
+
+    func performMeteorExplosionZoomIn() {
+        guard let camera = camera else { return }
+
+        // 메테오 폭발 후 1초 뒤 줌인 - 저장된 원래 상태로 복귀
+        let wait = SKAction.wait(forDuration: 1.0)
+        let zoomIn = SKAction.scale(to: originalCameraScale, duration: 0.4)
+
+        let sequence = SKAction.sequence([wait, zoomIn])
+        camera.run(sequence)
     }
 }

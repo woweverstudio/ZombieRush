@@ -146,7 +146,6 @@ struct UIConstants {
             // Border
             static let borderColor = SKColor(red: 1.0, green: 0.0, blue: 1.0, alpha: 0.8)
             static let borderGlowColor = SKColor(red: 1.0, green: 0.0, blue: 1.0, alpha: 0.3)
-            static let borderGlowWidth: CGFloat = 2
             
             // Background
             static let cyberpunkBackgroundColor = SKColor(red: 0.05, green: 0.05, blue: 0.15, alpha: 1.0)

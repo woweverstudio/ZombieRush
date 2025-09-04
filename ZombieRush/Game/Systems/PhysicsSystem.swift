@@ -128,13 +128,7 @@ extension PhysicsSystem: SKPhysicsContactDelegate {
         // 아이템 수집 처리
         scene.collectItem(item)
     }
-    
-
-    
-    func didEnd(_ contact: SKPhysicsContact) {
-        // Top-Down View에서는 특별한 처리 불필요
-    }
-    
+ 
     // MARK: - Visual Effects
     private func createSparkleEffect(at position: CGPoint, in scene: SKScene) {
         guard let worldNode = scene.childNode(withName: "World") else { return }

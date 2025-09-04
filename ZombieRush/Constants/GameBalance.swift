@@ -98,7 +98,7 @@ struct GameBalance {
         static let speedBoostMinWave: Int = 2
         static let invincibilityMinWave: Int = 3
         static let shotgunMinWave: Int = 3
-        static let meteorMinWave: Int = 5
+        static let meteorMinWave: Int = 4
     }
     
     // MARK: - Wave System

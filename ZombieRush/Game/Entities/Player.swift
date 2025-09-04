@@ -9,25 +9,8 @@ import SpriteKit
 import GameplayKit
 
 class Player: SKSpriteNode {
-    
-    // MARK: - Properties
-    
-    // 이미지 관련 프로퍼티 제거됨 - 단순한 원형 사용
-    private var lastMoveDirection: CGVector = CGVector.zero
-    
     // MARK: - Face Expression Properties
     private var faceExpressionNode: SKSpriteNode?
-
-    // 표정 텍스처들을 미리 캐싱 (성능 최적화)
-    private var faceTextureCache: [String: SKTexture] = [:]
-
-    // 사용할 표정 목록 정의
-    private let availableExpressions = [
-        "face_normal",
-        "face_happy",
-        "face_hit",
-        "face_angry"
-    ]
     
     // MARK: - Movement Properties
     private var baseMoveSpeed: CGFloat = GameBalance.Player.baseMoveSpeed
@@ -88,53 +71,38 @@ class Player: SKSpriteNode {
     
     // MARK: - Neon Rectangle Setup
     private func setupNeonCircle() {
-        // 둥근 사각형으로 변경 (좀비와 통일)
         let rect = CGRect(
-            x: -size.width/2, 
-            y: -size.height/2, 
-            width: size.width, 
+            x: -size.width/2,
+            y: -size.height/2,
+            width: size.width,
             height: size.height
         )
         let neonRect = SKShapeNode(rect: rect, cornerRadius: 4)
         neonRect.fillColor = UIConstants.Colors.Neon.playerColor
         neonRect.strokeColor = UIConstants.Colors.Neon.playerColor
         neonRect.lineWidth = 2
-        neonRect.position = CGPoint.zero
+        neonRect.position = .zero
         neonRect.name = "PlayerShape"
         
         addChild(neonRect)
-        
-        // 표정 레이어 추가 (캐싱 포함)
         setupFaceExpressions()
     }
     
-    // MARK: - Face Expression Setup (성능 최적화)
     private func setupFaceExpressions() {
-        // 미리 모든 표정 텍스처들을 로드해서 캐싱 (성능 최적화)
-        for expressionName in availableExpressions {
-            let texture = SKTexture(imageNamed: expressionName)
-            faceTextureCache[expressionName] = texture
-        }
-
-        // 기본 표정 노드 생성
-        if let normalTexture = faceTextureCache["face_normal"] {
-            faceExpressionNode = SKSpriteNode(texture: normalTexture)
-            faceExpressionNode?.size = CGSize(width: size.width, height: size.height)
-            faceExpressionNode?.position = CGPoint.zero
-            faceExpressionNode?.zPosition = 1 // 네온 사각형 위에 표시
-            faceExpressionNode?.name = "FaceExpression"
-
-            if let faceNode = faceExpressionNode {
-                addChild(faceNode)
-            }
+        let normalTexture = SKTexture(imageNamed: "face_normal")
+        faceExpressionNode = SKSpriteNode(texture: normalTexture)
+        faceExpressionNode?.size = size
+        faceExpressionNode?.position = .zero
+        faceExpressionNode?.zPosition = 1
+        faceExpressionNode?.name = "FaceExpression"
+        
+        if let faceNode = faceExpressionNode {
+            addChild(faceNode)
         }
     }
     
     // MARK: - Movement Methods
     func move(direction: CGVector) {
-        // 이동 방향 저장
-        lastMoveDirection = direction
-        
         // 방향 벡터 정규화 (360도 지원)
         let length = sqrt(direction.dx * direction.dx + direction.dy * direction.dy)
         if length > 0 {
@@ -154,7 +122,6 @@ class Player: SKSpriteNode {
     
     func stopMoving() {
         physicsBody?.velocity = CGVector.zero
-        lastMoveDirection = CGVector.zero
     }
     
     // MARK: - Combat Methods
@@ -223,26 +190,22 @@ class Player: SKSpriteNode {
     }
     
     // MARK: - Getters
-    func getHealth() -> Int { return currentHealth }
-    func getMaxHealth() -> Int { return maxHealth }
-    func getAmmo() -> Int { return currentAmmo }
-    func getMaxAmmo() -> Int { return maxAmmo }
-    func getIsReloading() -> Bool { return isReloading }
-    func isDead() -> Bool { return currentHealth <= 0 }
-    func getIsInvincible() -> Bool { return isInvincible }
-    func getIsShotgunMode() -> Bool { return shotgunModeActive }
-    func getShotgunBulletCount() -> Int { return shotgunBulletCount }
-    func getShotgunSpreadAngle() -> CGFloat { return shotgunSpreadAngle }
-
-    
-    // Fire Direction Tracking 메서드들 제거됨 - 단순한 원형 사용
+    func getHealth() -> Int { currentHealth }
+    func getMaxHealth() -> Int { maxHealth }
+    func getAmmo() -> Int { currentAmmo }
+    func getMaxAmmo() -> Int { maxAmmo }
+    func getIsReloading() -> Bool { isReloading }
+    func isDead() -> Bool { currentHealth <= 0 }
+    func getIsInvincible() -> Bool { isInvincible }
+    func getIsShotgunMode() -> Bool { shotgunModeActive }
+    func getShotgunBulletCount() -> Int { shotgunBulletCount }
+    func getShotgunSpreadAngle() -> CGFloat { shotgunSpreadAngle }
     
     // MARK: - Item Effects
     func applySpeedBoost(multiplier: CGFloat) {
         speedBoostActive = true
         currentMoveSpeed = baseMoveSpeed * multiplier
         
-        // 시각적 효과 (속도 부스트 - 빠른 펄스 효과)
         let speedEffect = SKAction.repeatForever(SKAction.sequence([
             SKAction.scale(to: 1.05, duration: 0.2),
             SKAction.scale(to: 1.0, duration: 0.2)
@@ -260,9 +223,7 @@ class Player: SKSpriteNode {
         let oldHealth = currentHealth
         currentHealth = min(maxHealth, currentHealth + amount)
         
-        // 회복 효과가 있었을 때만 시각적 효과 (이미지와 호환되는 방식)
         if currentHealth > oldHealth {
-            // 스케일 효과로 대체
             let healEffect = SKAction.sequence([
                 SKAction.scale(to: 1.2, duration: 0.1),
                 SKAction.scale(to: 1.0, duration: 0.1)
@@ -280,7 +241,6 @@ class Player: SKSpriteNode {
             removeAction(forKey: "reload")
         }
         
-        // 탄약 충전 효과 (이미지와 호환되는 방식)
         let ammoEffect = SKAction.sequence([
             SKAction.fadeAlpha(to: 0.7, duration: 0.1),
             SKAction.fadeAlpha(to: 1.0, duration: 0.1)
@@ -292,7 +252,10 @@ class Player: SKSpriteNode {
         isInvincible = true
         
         // 무적 상태 시각적 효과 (깜빡임)
-        let blinkAction = AnimationUtils.createBlinkEffect(minAlpha: 0.5, maxAlpha: 1.0, duration: 0.2)
+        let blinkAction = SKAction.repeatForever(SKAction.sequence([
+            SKAction.fadeAlpha(to: 0.5, duration: 0.1),
+            SKAction.fadeAlpha(to: 1.0, duration: 0.1)
+        ]))
         run(blinkAction, withKey: "invincibilityEffect")
     }
     
@@ -307,14 +270,9 @@ class Player: SKSpriteNode {
         shotgunBulletCount = bulletCount
         shotgunSpreadAngle = spreadAngle
         
-        // 샷건 모드 시각적 효과 (강한 펄스 + 회전 효과)
         let shotgunEffect = SKAction.repeatForever(SKAction.sequence([
-            SKAction.group([
-                SKAction.scale(to: 1.15, duration: 0.3)
-            ]),
-            SKAction.group([
-                SKAction.scale(to: 1.0, duration: 0.3)
-            ])
+            SKAction.scale(to: 1.15, duration: 0.3),
+            SKAction.scale(to: 1.0, duration: 0.3)
         ]))
         run(shotgunEffect, withKey: "shotgunEffect")
     }
@@ -335,50 +293,25 @@ class Player: SKSpriteNode {
         self.meteorSystem = meteorSystem
     }
     
-    // MARK: - Face Expression Methods (성능 최적화)
     func changeFaceExpression(to imageName: String) {
-        guard let faceNode = faceExpressionNode else {
-            return // 얼굴 표정 노드를 찾을 수 없음
-        }
-
-        // 캐싱된 텍스처 사용 (성능 최적화)
-        guard let cachedTexture = faceTextureCache[imageName] else {
-            print("Warning: Face expression '\(imageName)' not found in cache")
-            return
-        }
-
-        // 부드러운 전환 효과
+        guard let faceNode = faceExpressionNode else { return }
+        
+        let texture = SKTexture(imageNamed: imageName)
         let fadeOut = SKAction.fadeAlpha(to: 0.0, duration: 0.1)
-        let changeTexture = SKAction.run {
-            faceNode.texture = cachedTexture  // 캐싱된 텍스처 사용
-        }
+        let changeTexture = SKAction.run { faceNode.texture = texture }
         let fadeIn = SKAction.fadeAlpha(to: 1.0, duration: 0.1)
-
-        let transitionSequence = SKAction.sequence([fadeOut, changeTexture, fadeIn])
-        faceNode.run(transitionSequence)
+        
+        let sequence = SKAction.sequence([fadeOut, changeTexture, fadeIn])
+        faceNode.run(sequence)
     }
     
     func setNormalFace() {
         changeFaceExpression(to: "face_normal")
     }
-
-    // MARK: - Face Expression Utilities
-    func getAvailableExpressions() -> [String] {
-        return availableExpressions
-    }
-
-    func getCachedTextureCount() -> Int {
-        return faceTextureCache.count
-    }
-
-    func isTextureCached(_ expressionName: String) -> Bool {
-        return faceTextureCache[expressionName] != nil
-    }
     
     func temporaryFaceExpression(imageName: String, duration: TimeInterval = 1.0) {
         changeFaceExpression(to: imageName)
         
-        // 일정 시간 후 기본 표정으로 복원
         let waitAction = SKAction.wait(forDuration: duration)
         let restoreAction = SKAction.run { [weak self] in
             self?.setNormalFace()
@@ -388,7 +321,6 @@ class Player: SKSpriteNode {
         run(sequence, withKey: "temporaryFaceExpression")
     }
     
-    // MARK: - Wave Speed Bonus
     func updateWaveSpeed(currentWave: Int) {
         let waveBonus = min(
             CGFloat(currentWave - 1) * GameBalance.Player.waveSpeedBonus,
@@ -397,7 +329,6 @@ class Player: SKSpriteNode {
         
         baseMoveSpeed = GameBalance.Player.baseMoveSpeed + waveBonus
         
-        // 현재 속도도 업데이트 (아이템 효과 고려)
         if speedBoostActive {
             currentMoveSpeed = baseMoveSpeed * GameBalance.Items.speedMultiplier
         } else {

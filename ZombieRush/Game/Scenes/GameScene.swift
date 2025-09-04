@@ -34,10 +34,6 @@ class GameScene: SKScene {
     private let gameStateManager = GameStateManager.shared
     private var lastUpdateTime: TimeInterval = 0
 
-    // HUD 업데이트는 HUDManager에서 최적화하여 처리
-
-
-    
     // MARK: - Initialization
     init(appRouter: AppRouter) {
         self.appRouter = appRouter
@@ -58,9 +54,6 @@ class GameScene: SKScene {
 
         // 게임 시스템 초기화
         initializeGameSystems()
-
-        // HUD 값들 리셋 (게임 재시작 시)
-        resetHUDValues()
     }
     
     // MARK: - Game System Initialization
@@ -116,28 +109,15 @@ class GameScene: SKScene {
         player?.position = CGPoint(x: 0, y: 0)
         worldSystem.getWorldNode()?.addChild(player!)
 
-        // HUD 초기 값 설정 (성능 최적화)
-        initializeHUDValues()
     }
 
-        private func initializeHUDValues() {
-        // HUDManager에서 초기 상태를 관리하므로 별도 초기화 불필요
-        // 게임 시작 시 첫 번째 updateHUD 호출에서 자동으로 값들이 설정됨
-    }
-
-    private func resetHUDValues() {
-        // HUDManager의 상태 리셋
-        hudManager?.resetHUDState()
-    }
-    
     private func setupCamera() {
         cameraNode = SKCameraNode()
         cameraNode?.name = TextConstants.NodeNames.camera
         addChild(cameraNode!)
         
-        // scene의 camera 속성 설정
         self.camera = cameraNode
-        
+
         // 카메라를 플레이어에 연결
         if let player = player {
             cameraNode?.position = player.position
@@ -162,30 +142,24 @@ class GameScene: SKScene {
     private func setupZombieSpawnSystem() {
         guard let worldNode = worldNode, let player = player else { return }
         zombieSpawnSystem = ZombieSpawnSystem(worldNode: worldNode, player: player)
-        
+
         // 웨이브 시작 콜백 설정
         zombieSpawnSystem?.onNewWaveStarted = { [weak self] waveNumber in
             let message = String(format: TextConstants.Wave.waveAnnouncementFormat, waveNumber)
             self?.toastMessageManager?.showToastMessage(message, duration: GameBalance.Wave.announcementDuration)
-            
-            // 플레이어 웨이브 속도 보너스 적용
             self?.player?.updateWaveSpeed(currentWave: waveNumber)
         }
     }
-    
 
-    
     private func setupToastMessageManager() {
         guard let cameraNode = cameraNode, let player = player else { return }
         toastMessageManager = ToastMessageManager(camera: cameraNode, player: player)
     }
     
     private func setupItemSystem() {
-        guard let worldNode = worldNode, 
+        guard let worldNode = worldNode,
               let player = player,
-              let toastMessageManager = toastMessageManager else { 
-                        return
-        }
+              let toastMessageManager = toastMessageManager else { return }
         
         // 아이템 스포너 설정
         itemSpawnSystem = ItemSpawnSystem(worldNode: worldNode)
@@ -195,7 +169,17 @@ class GameScene: SKScene {
         
         // 메테오 시스템 설정
         meteorSystem = MeteorSystem(worldNode: worldNode)
-        
+
+        // 메테오 배치 시 줌아웃 시작
+        meteorSystem?.onMeteorDeployed = { [weak self] in
+            self?.cameraSystem?.startMeteorZoomOut()
+        }
+
+        // 메테오 폭발 후 줌인
+        meteorSystem?.onMeteorExploded = { [weak self] in
+            self?.cameraSystem?.performMeteorExplosionZoomIn()
+        }
+
         // 플레이어에 메테오 시스템 연결
         player.setMeteorSystem(meteorSystem!)
         
@@ -209,52 +193,42 @@ class GameScene: SKScene {
     override func update(_ currentTime: TimeInterval) {
         super.update(currentTime)
         
-        // 첫 프레임에서 lastUpdateTime 초기화
         if lastUpdateTime == 0 {
             lastUpdateTime = currentTime
             return
         }
-        
-        // 델타타임 계산 및 제한 (안전한 최대값 설정)
-        var deltaTime = currentTime - lastUpdateTime
 
-        // deltaTime이 너무 크면 제한 (예: 1초 이상은 비정상으로 간주)
-        // 이는 앱이 background에서 복귀할 때 큰 deltaTime을 방지
-        let maxDeltaTime: TimeInterval = 1.0  // 최대 1초
+        var deltaTime = currentTime - lastUpdateTime
+        let maxDeltaTime: TimeInterval = 1.0
         deltaTime = min(deltaTime, maxDeltaTime)
 
-        // 앱이 활성 상태일 때만 lastUpdateTime 업데이트
         if gameStateManager.isAppCurrentlyActive() {
             lastUpdateTime = currentTime
         }
-        
-        // 게임오버 상태에서는 업데이트 중지
+
         if gameStateManager.isGameOver() {
             return
         }
-        
+
         // 플레이어 사망 체크
         if let player = player, player.isDead() {
             triggerGameOver()
             return
         }
-        
-        // 플레이 시간 업데이트 (앱 활성 상태에서만)
+
+        // 플레이 시간 업데이트
         gameStateManager.updatePlayTime(deltaTime: deltaTime)
 
-        // 시스템 업데이트 (앱 활성 상태에서만)
         if gameStateManager.isAppCurrentlyActive() {
             physicsSystem?.update(currentTime)
             cameraSystem?.update(currentTime)
             zombieSpawnSystem?.update(currentTime)
             itemSpawnSystem?.update(currentTime)
             meteorSystem?.update(currentTime)
-            hudManager?.updateTime()  // HUD 시간 업데이트도 앱 활성 상태에서만
+            hudManager?.updateTime()
         }
 
-        // 총알은 Bullet 클래스에서 스스로 관리 (단순 lifetime)
-
-        // 플레이어 상태 업데이트 (HUDManager에서 최적화 처리)
+        // 플레이어 상태 업데이트
         if let player = player, let hudManager = hudManager {
             let health = player.getHealth()
             let maxHealth = player.getMaxHealth()
@@ -262,23 +236,19 @@ class GameScene: SKScene {
             let maxAmmo = player.getMaxAmmo()
             let isReloading = player.getIsReloading()
 
-            // HUDManager에서 프레임 카운팅과 값 비교를 수행
             hudManager.updateHUD(health: health, maxHealth: maxHealth,
                                ammo: ammo, maxAmmo: maxAmmo,
                                isReloading: isReloading)
         }
-
-        // 총알은 3초 후 자동으로 사라지므로 별도 정리 불필요
     }
-    
+
     // MARK: - Touch Handling
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        // 게임오버 상태에서는 터치 처리 안함
         if gameStateManager.isGameOver() {
             return
         }
-        
-        // HUD 터치 처리 (나가기 버튼 등)
+
+        // HUD 터치 처리
         for touch in touches {
             let location = touch.location(in: cameraNode!)
             if hudManager?.handleTouch(at: location) == true {
@@ -288,17 +258,17 @@ class GameScene: SKScene {
         
         gameController?.handleTouchBegan(touches)
     }
-    
+
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         if gameStateManager.isGameOver() { return }
         gameController?.handleTouchMoved(touches)
     }
-    
+
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         if gameStateManager.isGameOver() { return }
         gameController?.handleTouchEnded(touches)
     }
-    
+
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
         if gameStateManager.isGameOver() { return }
         gameController?.handleTouchCancelled(touches)
@@ -318,36 +288,19 @@ class GameScene: SKScene {
         itemSpawnSystem?.collectItem(item)
     }
     
-
-    
-        // HUD 업데이트는 HUDManager에서 최적화하여 처리하므로 별도 메서드 불필요
-
-
-
     // MARK: - Game Over Logic
     private func triggerGameOver() {
         guard !gameStateManager.isGameOver() else { return }
         
-        // 게임 상태를 게임오버로 변경
         gameStateManager.endGame()
-        
-        // 모든 UI 숨기기 (SOLID 원칙 - 단일 책임)
         hideAllGameUI()
-        
-        // 게임 통계 가져오기
+        clearGameNodes()
+
         let playTime = gameStateManager.getPlayTime()
         let score = gameStateManager.getScore()
         let wave = gameStateManager.getCurrentWave()
-        
-        // 맵의 모든 게임 노드 제거
-        clearGameNodes()
-
-        // 총알들은 스스로 라이프사이클 관리 (자동 정리)
-
-        // 개인 랭크에 현재 게임 기록 저장 및 NEW RECORD 여부 확인
         let isNewRecord = gameStateManager.saveCurrentGameRecordAndCheckNew()
-        
-        // 라우터를 통해 게임오버 화면으로 전환
+
         DispatchQueue.main.async { [weak self] in
             self?.appRouter.showGameOver(
                 playTime: playTime,
@@ -357,36 +310,24 @@ class GameScene: SKScene {
             )
         }
     }
-    
+
     private func clearGameNodes() {
-        // 플레이어 제거
         player?.removeFromParent()
         player = nil
-        
-        // 좀비 스폰 시스템 정리 (배열에서 제거)
+
+        // 각 시스템이 스스로 정리하도록 위임
         zombieSpawnSystem?.removeAllZombies()
-        
-        // 모든 아이템 제거
         itemSpawnSystem?.removeAllItems()
-        
-        // 모든 아이템 효과 제거
         itemEffectSystem?.removeAllEffects()
-        
-        // 메테오 정리
         meteorSystem?.clearAllMeteors()
-        
-        // 월드 노드의 모든 자식 노드 제거 (좀비, 총알, 배경 등 모든 게임 오브젝트)
+
+        // World 노드 정리
         worldNode?.removeAllChildren()
     }
     
-    // MARK: - UI Control (SOLID 원칙 - 단일 책임)
+    // MARK: - UI Control
     private func hideAllGameUI() {
         gameController?.hideUI()
         hudManager?.hideHUD()
-    }
-    
-    private func showAllGameUI() {
-        gameController?.showUI()
-        hudManager?.showHUD()
     }
 }

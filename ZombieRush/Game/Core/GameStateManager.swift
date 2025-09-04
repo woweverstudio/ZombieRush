@@ -11,22 +11,22 @@ enum GameState {
 struct PersonalRecord {
     let timeInSeconds: Int
     let zombieKills: Int
-    
-    // 64비트 정수로 인코딩 (상위 32비트: 시간, 하위 32비트: 킬수)
+
+    private static let maxValue: Int = 65535  // 16비트 최대값
+    private static let timeShift: Int = 16    // 시간 비트 시프트
+    private static let mask: Int64 = 0xFFFF   // 16비트 마스크
+
     var encoded: Int64 {
-        // 16비트씩 사용하여 안전한 범위 보장
-        let safeTime = min(timeInSeconds, 65535)  // 16비트 최대값
-        let safeKills = min(zombieKills, 65535)   // 16비트 최대값
-        return (Int64(safeTime) << 16) | Int64(safeKills)
+        let safeTime = min(timeInSeconds, Self.maxValue)
+        let safeKills = min(zombieKills, Self.maxValue)
+        return (Int64(safeTime) << Self.timeShift) | Int64(safeKills)
     }
-    
-    // 64비트 정수에서 디코딩
+
     init(encoded: Int64) {
-        self.timeInSeconds = Int((encoded >> 16) & 0xFFFF)  // 상위 16비트
-        self.zombieKills = Int(encoded & 0xFFFF)            // 하위 16비트
+        self.timeInSeconds = Int((encoded >> Self.timeShift) & Self.mask)
+        self.zombieKills = Int(encoded & Self.mask)
     }
-    
-    // 일반 생성자
+
     init(timeInSeconds: Int, zombieKills: Int) {
         self.timeInSeconds = timeInSeconds
         self.zombieKills = zombieKills
@@ -39,9 +39,10 @@ struct PersonalRecord {
         return String(format: "%02d:%02d", minutes, seconds)
     }
     
-    // 정렬을 위한 점수 계산 (시간 + 킬수 기반)
+    private static let timeWeight: Int = 10  // 시간 가중치
+
     var totalScore: Int {
-        return timeInSeconds * 10 + zombieKills  // 시간에 더 높은 가중치
+        return timeInSeconds * Self.timeWeight + zombieKills
     }
 }
 
@@ -88,8 +89,8 @@ class GameStateManager {
     private var previousWaveNumber: Int = 1  // 이전 프레임의 웨이브 번호
     
     // MARK: - Personal Records
-    private let personalRecordsKey = "PersonalRecords"
-    private let maxRecordsCount = 10
+    private static let personalRecordsKey = "PersonalRecords"
+    private static let maxRecordsCount = 10
     
     // MARK: - State Management
     private init() {}
@@ -103,7 +104,7 @@ class GameStateManager {
     func startNewGame() {
         currentState = .playing
         statistics.reset()
-
+        
         // 웨이브 시스템 초기화
         currentWaveNumber = 1
         previousWaveNumber = 1
@@ -117,11 +118,11 @@ class GameStateManager {
     func isGameActive() -> Bool {
         return currentState == .playing
     }
-
+    
     func isGameOver() -> Bool {
         return currentState == .gameOver
     }
-
+    
     // 앱 활성 상태 확인 메소드
     func isAppCurrentlyActive() -> Bool {
         return isAppActive
@@ -164,20 +165,20 @@ class GameStateManager {
     // MARK: - Wave Management
     func updateWaveSystem(currentTime: TimeInterval) -> Bool {
         guard isGameActive() else { return false }
-
+        
         // playTime을 기준으로 현재 웨이브 계산
         let waveDuration = GameBalance.Wave.duration
         let calculatedWave = Int(statistics.playTime / waveDuration) + 1
-
+        
         // 계산된 웨이브가 현재 웨이브보다 크면 웨이브 상승
         if calculatedWave > currentWaveNumber {
             previousWaveNumber = currentWaveNumber
             currentWaveNumber = calculatedWave
             statistics.currentWave = currentWaveNumber
-
+            
             return true  // 새로운 웨이브 시작됨
         }
-
+        
         return false
     }
     
@@ -221,25 +222,21 @@ class GameStateManager {
     private func addPersonalRecord(_ newRecord: PersonalRecord) {
         var records = getPersonalRecords()
         
-        // 새 기록 추가
         records.append(newRecord)
         
-        // 점수 기준으로 내림차순 정렬 (높은 점수가 먼저)
         records.sort { $0.totalScore > $1.totalScore }
         
-        // 상위 10개만 유지
-        if records.count > maxRecordsCount {
-            records = Array(records.prefix(maxRecordsCount))
+        if records.count > Self.maxRecordsCount {
+            records = Array(records.prefix(Self.maxRecordsCount))
         }
         
-        // UserDefaults에 저장 (64비트 정수 배열로)
         let encodedRecords = records.map { $0.encoded }
-        UserDefaults.standard.set(encodedRecords, forKey: personalRecordsKey)
+        UserDefaults.standard.set(encodedRecords, forKey: Self.personalRecordsKey)
     }
     
     /// 개인 랭크 기록들을 가져옴
     func getPersonalRecords() -> [PersonalRecord] {
-        guard let encodedRecords = UserDefaults.standard.array(forKey: personalRecordsKey) as? [Int64] else {
+        guard let encodedRecords = UserDefaults.standard.array(forKey: Self.personalRecordsKey) as? [Int64] else {
             return []
         }
         
@@ -270,32 +267,26 @@ class GameStateManager {
         return isNew
     }
     
-    /// Game Center에 현재 게임 점수 제출
     private func submitScoreToGameCenter() {
         guard let gameKitManager = gameKitManager else { return }
         
-        // PersonalRecord와 동일한 16비트 인코딩 방식 사용
-        let timeInSeconds = Int(statistics.playTime)
-        let zombieKills = statistics.zombieKills
-        
-        let safeTime = min(timeInSeconds, 65535)  // 16비트 최대값
-        let safeKills = min(zombieKills, 65535)   // 16비트 최대값
-        let encodedScore = (Int64(safeTime) << 16) | Int64(safeKills)
+        let record = PersonalRecord(
+            timeInSeconds: Int(statistics.playTime),
+            zombieKills: statistics.zombieKills
+        )
+        let encodedScore = record.encoded
         
         Task {
             do {
                 try await gameKitManager.submitScore(encodedScore)
-                // Game Center에 점수 제출 완료
             } catch {
                 // Game Center 점수 제출 실패 (게임 진행에는 영향 없음)
             }
         }
     }
-
+    
     // MARK: - App State Management
     func setAppActive(_ active: Bool) {
         isAppActive = active
     }
-
-
 }
