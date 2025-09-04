@@ -1,0 +1,1078 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "" : {
+
+    },
+    "--" : {
+
+    },
+    "#%@" : {
+
+    },
+    "#%lld" : {
+
+    },
+    "%@" : {
+
+    },
+    "%@ %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ %2$@"
+          }
+        }
+      }
+    },
+    "%lld" : {
+
+    },
+    "GAME_OVER_GAME_CENTER" : {
+      "comment" : "Game Over View",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Game Center"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "게임센터"
+          }
+        }
+      }
+    },
+    "GAME_OVER_GUEST" : {
+      "comment" : "Game Over View",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Guest"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "게스트"
+          }
+        }
+      }
+    },
+    "GAME_OVER_KILLS_LABEL" : {
+      "comment" : "Game Over View",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "KILLS"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "킬수"
+          }
+        }
+      }
+    },
+    "GAME_OVER_MY_RECORDS_TITLE" : {
+      "comment" : "Game Over View",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "My Records Top 10"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "내 기록 탑 10"
+          }
+        }
+      }
+    },
+    "GAME_OVER_NEW_RECORD" : {
+      "comment" : "Game Over View",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "NEW RECORD"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "새 기록"
+          }
+        }
+      }
+    },
+    "GAME_OVER_NO_RECORDS" : {
+      "comment" : "Game Over View",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No records yet"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "아직 기록이 없어요"
+          }
+        }
+      }
+    },
+    "GAME_OVER_PLAY_TIME_FORMAT" : {
+      "comment" : "Game Over Screen - Format for play time display",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Play Time: %02d:%02d"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "플레이 시간: %02d:%02d"
+          }
+        }
+      }
+    },
+    "GAME_OVER_QUIT_BUTTON" : {
+      "comment" : "Game Over Screen",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quit"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "그만하기"
+          }
+        }
+      }
+    },
+    "GAME_OVER_RESTART_BUTTON" : {
+      "comment" : "Game Over Screen",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Play Again"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "다시하기"
+          }
+        }
+      }
+    },
+    "GAME_OVER_TIME_LABEL" : {
+      "comment" : "Game Over View",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "TIME"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "시간"
+          }
+        }
+      }
+    },
+    "GAME_OVER_TITLE" : {
+      "comment" : "Game Over Screen",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Game Over"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "게임 오버"
+          }
+        }
+      }
+    },
+    "GAME_OVER_ZOMBIE_KILLS_FORMAT" : {
+      "comment" : "Game Over Screen - Format for zombie kills display",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zombies Killed: %d"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "네모 처치: %d마리"
+          }
+        }
+      }
+    },
+    "GAME_TITLE_LINE1" : {
+      "comment" : "Game title first line - NEMO NEMO for Korean, BLOCK for English",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "BLOCK"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "NEMO NEMO"
+          }
+        }
+      }
+    },
+    "GAME_TITLE_LINE2" : {
+      "comment" : "Game title second line - BEAM for Korean, BUSTER for English",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "BUSTER"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "BEAM"
+          }
+        }
+      }
+    },
+    "HUD_AMMO" : {
+      "comment" : "HUD Display",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ammo"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "탄약"
+          }
+        }
+      }
+    },
+    "HUD_AMMO_LABEL" : {
+      "comment" : "HUD Manager",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AMMO"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "탄약"
+          }
+        }
+      }
+    },
+    "HUD_HEALTH" : {
+      "comment" : "HUD Display",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Health"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "HP"
+          }
+        }
+      }
+    },
+    "HUD_HEALTH_LABEL" : {
+      "comment" : "HUD Manager",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "HP"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "체력"
+          }
+        }
+      }
+    },
+    "HUD_RELOADING" : {
+      "comment" : "HUD Display",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "RELOADING..."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "재장전 중..."
+          }
+        }
+      }
+    },
+    "HUD_RELOADING_LABEL" : {
+      "comment" : "HUD Manager",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "RELOADING..."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "재장전 중..."
+          }
+        }
+      }
+    },
+    "HUD_SCORE_FORMAT" : {
+      "comment" : "HUD Display",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Score: %d"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Score: %d"
+          }
+        }
+      }
+    },
+    "HUD_SCORE_INITIAL" : {
+      "comment" : "HUD Manager",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "SCORE: 0"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "점수: 0"
+          }
+        }
+      }
+    },
+    "HUD_TIME_FORMAT" : {
+      "comment" : "HUD Display",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%02d:%02d"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%02d:%02d"
+          }
+        }
+      }
+    },
+    "HUD_TIME_INITIAL" : {
+      "comment" : "HUD Manager",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "00:00"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "00:00"
+          }
+        }
+      }
+    },
+    "ITEM_AMMO_RESTORE_COLLECT" : {
+      "comment" : "Item Effects - Collection Messages",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ammo Restored!"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "탄약 충전!"
+          }
+        }
+      }
+    },
+    "ITEM_HEALTH_RESTORE_COLLECT" : {
+      "comment" : "Item Effects - Collection Messages",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Health Restored!"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "체력 회복!"
+          }
+        }
+      }
+    },
+    "ITEM_INVINCIBILITY_COLLECT" : {
+      "comment" : "Item Effects - Collection Messages",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Invincibility!"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "무적 상태!"
+          }
+        }
+      }
+    },
+    "ITEM_INVINCIBILITY_END" : {
+      "comment" : "Item Effects - End Messages",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Invincibility Ended"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "무적 상태 해제"
+          }
+        }
+      }
+    },
+    "ITEM_METEOR_COLLECT" : {
+      "comment" : "Item Effects - Collection Messages",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nuke Detected!"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "핵공격 감지!"
+          }
+        }
+      }
+    },
+    "ITEM_SHOTGUN_COLLECT" : {
+      "comment" : "Item Effects - Collection Messages",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shotgun Mode!"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "샷건 모드!"
+          }
+        }
+      }
+    },
+    "ITEM_SHOTGUN_END" : {
+      "comment" : "Item Effects - End Messages",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shotgun Mode Ended"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "샷건 모드 해제"
+          }
+        }
+      }
+    },
+    "ITEM_SPEED_BOOST_COLLECT" : {
+      "comment" : "Item Effects - Collection Messages",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Speed Boost!"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이동속도 증가!"
+          }
+        }
+      }
+    },
+    "ITEM_SPEED_BOOST_END" : {
+      "comment" : "Item Effects - End Messages",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Speed Normalized"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이동속도 정상화"
+          }
+        }
+      }
+    },
+    "LEADERBOARD_TITLE" : {
+      "comment" : "Leaderboard View",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LEADER BOARD"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "글로벌 랭킹"
+          }
+        }
+      }
+    },
+    "PROFILE_GAME_CENTER" : {
+      "comment" : "Player Profile Card",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Game Center"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "게임센터"
+          }
+        }
+      }
+    },
+    "PROFILE_GLOBAL_RANK" : {
+      "comment" : "Player Profile Card",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Global Rank"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "글로벌 랭킹"
+          }
+        }
+      }
+    },
+    "PROFILE_GUEST_MODE" : {
+      "comment" : "Player Profile Card",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Guest Mode"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "게스트 모드"
+          }
+        }
+      }
+    },
+    "PROFILE_KILLS_LABEL" : {
+      "comment" : "Player Profile Card",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "KILLS"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "킬수"
+          }
+        }
+      }
+    },
+    "PROFILE_OPEN_SETTINGS" : {
+      "comment" : "Player Profile Card",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open Settings"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "설정 열기"
+          }
+        }
+      }
+    },
+    "PROFILE_SETTINGS_PATH" : {
+      "comment" : "Player Profile Card",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Settings > Game Center > Sign In"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "설정 > 게임센터 > 로그인"
+          }
+        }
+      }
+    },
+    "PROFILE_SIGN_IN_BENEFIT" : {
+      "comment" : "Player Profile Card",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sign in to challenge global rankings."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "로그인 하시면 글로벌 랭킹에 도전하실 수 있습니다."
+          }
+        }
+      }
+    },
+    "PROFILE_SIGN_IN_PROMPT" : {
+      "comment" : "Player Profile Card",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Please sign in to Game Center!"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "게임센터에 로그인 하세요!"
+          }
+        }
+      }
+    },
+    "PROFILE_TIME_LABEL" : {
+      "comment" : "Player Profile Card",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "TIME"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "시간"
+          }
+        }
+      }
+    },
+    "RANKING_GLOBAL_TOP_100" : {
+      "comment" : "Global Ranking Card",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Global Top 100"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "글로벌 탑 100"
+          }
+        }
+      }
+    },
+    "RANKING_KILLS_SUFFIX" : {
+      "comment" : "Global Ranking Card",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "kills"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "킬"
+          }
+        }
+      }
+    },
+    "RANKING_LOADING" : {
+      "comment" : "Global Ranking Card",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loading..."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "로딩 중..."
+          }
+        }
+      }
+    },
+    "RANKING_NO_DATA" : {
+      "comment" : "Global Ranking Card",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No rankings yet"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "아직 랭킹이 없어요"
+          }
+        }
+      }
+    },
+    "RANKING_PLAY_TO_SEE" : {
+      "comment" : "Global Ranking Card",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Play games to see rankings!"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "게임을 플레이해서 랭킹을 확인하세요!"
+          }
+        }
+      }
+    },
+    "RANKING_SAMPLE_TITLE" : {
+      "comment" : "Global Ranking Card",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sample Rankings"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "샘플 랭킹"
+          }
+        }
+      }
+    },
+    "RANKING_SIGN_IN_REAL" : {
+      "comment" : "Global Ranking Card",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sign in to see real rankings"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "실제 랭킹을 보려면 로그인하세요"
+          }
+        }
+      }
+    },
+    "SETTINGS_BACKGROUND_MUSIC" : {
+      "comment" : "Settings View",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Background Music"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "배경음악"
+          }
+        }
+      }
+    },
+    "SETTINGS_SOUND_EFFECTS" : {
+      "comment" : "Settings View",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sound Effects"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "효과음"
+          }
+        }
+      }
+    },
+    "SETTINGS_TITLE" : {
+      "comment" : "Settings View",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "SETTINGS"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "설정"
+          }
+        }
+      }
+    },
+    "SETTINGS_VIBRATION" : {
+      "comment" : "Settings View",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vibration"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "진동"
+          }
+        }
+      }
+    },
+    "UI_EXIT_BUTTON" : {
+      "comment" : "UI Elements",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exit"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "나가기"
+          }
+        }
+      }
+    },
+    "UI_FIRE_BUTTON" : {
+      "comment" : "UI Elements",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "FIRE"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "발사"
+          }
+        }
+      }
+    },
+    "WAVE_ANNOUNCEMENT_FORMAT" : {
+      "comment" : "Wave System",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wave %d"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "웨이브 %d"
+          }
+        }
+      }
+    },
+    "WAVE_FORMAT" : {
+      "comment" : "Wave System",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wave: %d"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "웨이브: %d"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}
