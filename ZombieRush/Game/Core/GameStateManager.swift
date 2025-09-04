@@ -78,6 +78,7 @@ class GameStateManager {
     // MARK: - Properties
     private(set) var currentState: GameState = .loading
     private(set) var statistics = GameStatistics()
+    private(set) var isAppActive: Bool = true  // 앱 활성 상태 추적
     
     // MARK: - Dependencies
     private var gameKitManager: GameKitManager?
@@ -116,9 +117,14 @@ class GameStateManager {
     func isGameActive() -> Bool {
         return currentState == .playing
     }
-    
+
     func isGameOver() -> Bool {
         return currentState == .gameOver
+    }
+
+    // 앱 활성 상태 확인 메소드
+    func isAppCurrentlyActive() -> Bool {
+        return isAppActive
     }
     
     // MARK: - Statistics Management
@@ -128,7 +134,8 @@ class GameStateManager {
     }
     
     func updatePlayTime(deltaTime: TimeInterval) {
-        guard isGameActive() else { return }
+        // 앱이 비활성 상태이거나 게임이 일시정지된 경우 시간 업데이트 중지
+        guard isGameActive() && isAppActive else { return }
         statistics.updatePlayTime(deltaTime: deltaTime)
     }
     
@@ -288,6 +295,11 @@ class GameStateManager {
             }
         }
     }
-    
+
+    // MARK: - App State Management
+    func setAppActive(_ active: Bool) {
+        isAppActive = active
+    }
+
 
 }

@@ -42,7 +42,7 @@
 "ITEM_AMMO_RESTORE_COLLECT" = "탄약 충전!";
 "ITEM_INVINCIBILITY_COLLECT" = "무적 상태!";
 "ITEM_SHOTGUN_COLLECT" = "샷건 모드!";
-"ITEM_METEOR_COLLECT" = "폭탄 발사!";
+"ITEM_METEOR_COLLECT" = "핵공격 감지!";
 
 /* Item Effects - End Messages */
 "ITEM_SPEED_BOOST_END" = "이동속도 정상화";
@@ -56,7 +56,7 @@
 "SETTINGS_VIBRATION" = "진동";
 
 /* Leaderboard View */
-"LEADERBOARD_TITLE" = "리더보드";
+"LEADERBOARD_TITLE" = "글로벌 랭킹";
 
 /* Player Profile Card */
 "PROFILE_GLOBAL_RANK" = "글로벌 랭킹";
@@ -65,7 +65,7 @@
 "PROFILE_TIME_LABEL" = "시간";
 "PROFILE_KILLS_LABEL" = "킬수";
 "PROFILE_SIGN_IN_PROMPT" = "게임센터에 로그인 하세요!";
-"PROFILE_SIGN_IN_BENEFIT" = "로그인 하시면 글로벌 순위에 도전하실 수 있습니다.";
+"PROFILE_SIGN_IN_BENEFIT" = "로그인 하시면 글로벌 랭킹에 도전하실 수 있습니다.";
 "PROFILE_OPEN_SETTINGS" = "설정 열기";
 "PROFILE_SETTINGS_PATH" = "설정 > 게임센터 > 로그인";
 

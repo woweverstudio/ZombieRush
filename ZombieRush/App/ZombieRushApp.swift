@@ -14,10 +14,11 @@ struct ZombieRushApp: App {
     @State private var appRouter = AppRouter()
     @State private var audioManager = AudioManager.shared  // 게임에서 사용하므로 싱글턴 유지
     @State private var hapticManager = HapticManager.shared  // 게임에서 사용하므로 싱글턴 유지
+    @Environment(\.scenePhase) private var scenePhase  // 앱 상태 모니터링
     
     var body: some Scene {
         WindowGroup {
-            ContentView()                
+            ContentView()
                 .preferredColorScheme(.dark)
                 .environment(gameKitManager)   // GameKit 매니저 주입
                 .environment(appRouter)        // App Router 주입
@@ -26,13 +27,26 @@ struct ZombieRushApp: App {
                 .onAppear {
                     // GameStateManager에 GameKitManager 의존성 주입
                     GameStateManager.shared.setGameKitManager(gameKitManager)
-                    
+
                     // 앱 시작 시 즉시 메인메뉴 음악 재생
                     audioManager.playMainMenuMusic()
-                    
+
                     // 앱 시작 시 GameKit 인증 시도
                     gameKitManager.startAuthentication()
                 }
+        }
+        .onChange(of: scenePhase) { oldPhase, newPhase in
+            // 앱 상태 변화 감지 및 GameStateManager에 전달
+            switch newPhase {
+            case .active:
+                GameStateManager.shared.setAppActive(true)
+                print("📱 앱이 활성화됨 - 플레이 시간 측정 재개")
+            case .inactive, .background:
+                GameStateManager.shared.setAppActive(false)
+                print("📱 앱이 비활성화됨 - 플레이 시간 측정 일시정지")
+            @unknown default:
+                break
+            }
         }
     }
 }

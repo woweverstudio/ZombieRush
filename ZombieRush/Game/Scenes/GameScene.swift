@@ -215,9 +215,18 @@ class GameScene: SKScene {
             return
         }
         
-        // 델타타임 계산
-        let deltaTime = currentTime - lastUpdateTime
-        lastUpdateTime = currentTime
+        // 델타타임 계산 및 제한 (안전한 최대값 설정)
+        var deltaTime = currentTime - lastUpdateTime
+
+        // deltaTime이 너무 크면 제한 (예: 1초 이상은 비정상으로 간주)
+        // 이는 앱이 background에서 복귀할 때 큰 deltaTime을 방지
+        let maxDeltaTime: TimeInterval = 1.0  // 최대 1초
+        deltaTime = min(deltaTime, maxDeltaTime)
+
+        // 앱이 활성 상태일 때만 lastUpdateTime 업데이트
+        if gameStateManager.isAppCurrentlyActive() {
+            lastUpdateTime = currentTime
+        }
         
         // 게임오버 상태에서는 업데이트 중지
         if gameStateManager.isGameOver() {
@@ -230,16 +239,18 @@ class GameScene: SKScene {
             return
         }
         
-        // 게임 시간 업데이트 (델타타임 사용)
+        // 플레이 시간 업데이트 (앱 활성 상태에서만)
         gameStateManager.updatePlayTime(deltaTime: deltaTime)
-        
-        // 시스템 업데이트
-        physicsSystem?.update(currentTime)
-        cameraSystem?.update(currentTime)
-        zombieSpawnSystem?.update(currentTime)
-        itemSpawnSystem?.update(currentTime)
-        meteorSystem?.update(currentTime)
-        hudManager?.updateTime()
+
+        // 시스템 업데이트 (앱 활성 상태에서만)
+        if gameStateManager.isAppCurrentlyActive() {
+            physicsSystem?.update(currentTime)
+            cameraSystem?.update(currentTime)
+            zombieSpawnSystem?.update(currentTime)
+            itemSpawnSystem?.update(currentTime)
+            meteorSystem?.update(currentTime)
+            hudManager?.updateTime()  // HUD 시간 업데이트도 앱 활성 상태에서만
+        }
 
         // 총알은 Bullet 클래스에서 스스로 관리 (단순 lifetime)
 

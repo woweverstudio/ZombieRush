@@ -42,7 +42,7 @@
 "ITEM_AMMO_RESTORE_COLLECT" = "Ammo Restored!";
 "ITEM_INVINCIBILITY_COLLECT" = "Invincibility!";
 "ITEM_SHOTGUN_COLLECT" = "Shotgun Mode!";
-"ITEM_METEOR_COLLECT" = "Meteor Strike!";
+"ITEM_METEOR_COLLECT" = "Nuke Detected!";
 
 /* Item Effects - End Messages */
 "ITEM_SPEED_BOOST_END" = "Speed Normalized";
