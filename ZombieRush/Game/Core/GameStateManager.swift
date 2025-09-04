@@ -50,13 +50,13 @@ struct GameStatistics {
     var score: Int = 0
     var zombieKills: Int = 0
     var playTime: TimeInterval = 0
-    var currentWave: Int = 0
+    var currentWave: Int = 1  // 웨이브는 1부터 시작
     
     mutating func reset() {
         score = 0
         zombieKills = 0
         playTime = 0
-        currentWave = 0
+        currentWave = 1  // 웨이브는 1부터 시작
     }
     
     mutating func updatePlayTime(deltaTime: TimeInterval) {
@@ -84,8 +84,8 @@ class GameStateManager {
     private var gameKitManager: GameKitManager?
     
     // MARK: - Wave System
-    private var waveStartTime: TimeInterval = 0
     private var currentWaveNumber: Int = 1
+    private var previousWaveNumber: Int = 1  // 이전 프레임의 웨이브 번호
     
     // MARK: - Personal Records
     private let personalRecordsKey = "PersonalRecords"
@@ -103,10 +103,10 @@ class GameStateManager {
     func startNewGame() {
         currentState = .playing
         statistics.reset()
-        
+
         // 웨이브 시스템 초기화
         currentWaveNumber = 1
-        waveStartTime = 0  // update에서 첫 번째 호출 시 설정됨
+        previousWaveNumber = 1
         statistics.currentWave = currentWaveNumber
     }
     
@@ -164,24 +164,20 @@ class GameStateManager {
     // MARK: - Wave Management
     func updateWaveSystem(currentTime: TimeInterval) -> Bool {
         guard isGameActive() else { return false }
-        
-        // 첫 번째 업데이트에서 웨이브 시작 시간 설정
-        if waveStartTime == 0 {
-            waveStartTime = currentTime
-            return false
-        }
-        
-        // 30초가 지났는지 확인
-        let elapsedTime = currentTime - waveStartTime
-        if elapsedTime >= GameBalance.Wave.duration {
-            // 다음 웨이브로 진행
-            currentWaveNumber += 1
+
+        // playTime을 기준으로 현재 웨이브 계산
+        let waveDuration = GameBalance.Wave.duration
+        let calculatedWave = Int(statistics.playTime / waveDuration) + 1
+
+        // 계산된 웨이브가 현재 웨이브보다 크면 웨이브 상승
+        if calculatedWave > currentWaveNumber {
+            previousWaveNumber = currentWaveNumber
+            currentWaveNumber = calculatedWave
             statistics.currentWave = currentWaveNumber
-            waveStartTime = currentTime
-            
+
             return true  // 새로운 웨이브 시작됨
         }
-        
+
         return false
     }
     
@@ -190,10 +186,10 @@ class GameStateManager {
     }
     
     func getWaveProgress(currentTime: TimeInterval) -> Float {
-        guard waveStartTime > 0 else { return 0 }
-        
-        let elapsedTime = currentTime - waveStartTime
-        return Float(elapsedTime / GameBalance.Wave.duration)
+        // 현재 웨이브 내에서의 진행도 계산
+        let waveDuration = GameBalance.Wave.duration
+        let playTimeInCurrentWave = statistics.playTime.truncatingRemainder(dividingBy: waveDuration)
+        return Float(playTimeInCurrentWave / waveDuration)
     }
     
     func getZombieSpeedMultiplier() -> Float {
