@@ -134,7 +134,7 @@ class HUDManager {
         
         let barWidth: CGFloat = 200
         let barHeight: CGFloat = 10
-        let barY = -sceneHeight/2 + 40  // 화면 하단에서 50pt 위쪽에 위치
+        let barY = -sceneHeight/2 + 50  // 화면 하단에서 50pt 위쪽에 위치
         
         // 체력 바 배경 (심플한 네온 스타일)
         healthBar = SKShapeNode(rectOf: CGSize(width: barWidth, height: barHeight), cornerRadius: 4)
@@ -151,13 +151,14 @@ class HUDManager {
         healthBarFill?.position = CGPoint(x: 0, y: 0)
         healthBar?.addChild(healthBarFill!)
         
-        // 체력 라벨 (바 중앙 정렬)
+        // 체력 라벨
         let healthLabel = SKLabelNode(text: NSLocalizedString("HUD_HEALTH_LABEL", comment: "Health label"))
         healthLabel.fontName = "Arial-Bold"
         healthLabel.fontSize = 8
         healthLabel.fontColor = SKColor.white
         healthLabel.position = CGPoint(x: 0, y: -4)
         healthLabel.horizontalAlignmentMode = .center
+        healthLabel.zPosition = 300  // 최상단에 배치
         healthBar?.addChild(healthLabel)
     }
     
@@ -167,7 +168,7 @@ class HUDManager {
         
         let barWidth: CGFloat = 200
         let barHeight: CGFloat = 10
-        let barY = -sceneHeight/2 + 20  // 화면 하단에서 20pt 위쪽에 위치
+        let barY = -sceneHeight/2 + 30  // 화면 하단에서 20pt 위쪽에 위치
         
         // 탄약 바 배경 (심플한 네온 스타일)
         ammoBar = SKShapeNode(rectOf: CGSize(width: barWidth, height: barHeight), cornerRadius: 4)
@@ -184,22 +185,24 @@ class HUDManager {
         ammoBarFill?.position = CGPoint(x: 0, y: 0)
         ammoBar?.addChild(ammoBarFill!)
         
-        // 탄약 라벨 (바 중앙 정렬)
+        // 탄약 라벨 (HUD 최상단에 배치하여 잘 보이게)
         let ammoLabel = SKLabelNode(text: NSLocalizedString("HUD_AMMO_LABEL", comment: "Ammo label"))
         ammoLabel.fontName = "Arial-Bold"
         ammoLabel.fontSize = 8
         ammoLabel.fontColor = SKColor.white
         ammoLabel.position = CGPoint(x: 0, y: -4)
         ammoLabel.horizontalAlignmentMode = .center
+        ammoLabel.zPosition = 300  // 최상단에 배치
         ammoBar?.addChild(ammoLabel)
         
-        // 재장전 라벨 (네온 스타일)
+        // 재장전 라벨 (HUD 최상단에 배치하여 잘 보이게)
         reloadLabel = SKLabelNode(text: NSLocalizedString("HUD_RELOADING_LABEL", comment: "Reloading label"))
         reloadLabel?.fontName = "Arial-Bold"
-        reloadLabel?.fontSize = 16
+        reloadLabel?.fontSize = 18
         reloadLabel?.fontColor = UIConstants.Colors.HUD.reloadLabelColor
         reloadLabel?.position = CGPoint(x: barWidth/2 + 70, y: barY - 6)
         reloadLabel?.horizontalAlignmentMode = .center
+        reloadLabel?.zPosition = 300  // 최상단에 배치
         reloadLabel?.isHidden = true
         hudNode?.addChild(reloadLabel!)
     }

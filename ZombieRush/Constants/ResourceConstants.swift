@@ -64,11 +64,6 @@ struct ResourceConstants {
             static let spark = "spark"
             static let bokeh = "bokeh"
         }
-        
-        // MARK: - App Icon
-        struct AppIcon {
-            static let icon = "u9784866189_cute_2.5D_isometric_arcade_scene_a_cyan_protagoni_c6425efd-eb83-4e54-8a53-3c5fac0072b2_0"
-        }
     }
     
     // MARK: - Particle Effects

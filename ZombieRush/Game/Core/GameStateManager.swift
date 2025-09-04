@@ -39,10 +39,8 @@ struct PersonalRecord {
         return String(format: "%02d:%02d", minutes, seconds)
     }
     
-    private static let timeWeight: Int = 10  // 시간 가중치
-
     var totalScore: Int {
-        return timeInSeconds * Self.timeWeight + zombieKills
+        return Int(encoded)  // 32비트 점수 (시간 16비트 + 킬수 16비트)
     }
 }
 
@@ -250,7 +248,11 @@ class GameStateManager {
         // 기록이 없으면 새로운 기록
         guard !records.isEmpty else { return true }
         
-        let currentScore = Int(statistics.playTime) * 10 + statistics.zombieKills
+        let currentRecord = PersonalRecord(
+            timeInSeconds: Int(statistics.playTime),
+            zombieKills: statistics.zombieKills
+        )
+        let currentScore = Int(currentRecord.encoded)
         
         // 현재 점수가 기존 최고 기록보다 높으면 새로운 기록
         return currentScore > records.first?.totalScore ?? 0
