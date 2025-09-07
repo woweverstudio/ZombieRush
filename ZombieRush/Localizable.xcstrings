@@ -1072,6 +1072,24 @@
           }
         }
       }
+    },
+    "GAME_START_MESSAGE" : {
+      "comment" : "Game Start Message",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dodge the chasing blocks!"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "쫒아오는 네모를 피해 도망치세요!"
+          }
+        }
+      }
     }
   },
   "version" : "1.0"

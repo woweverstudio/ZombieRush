@@ -72,9 +72,24 @@ class GameScene: SKScene {
             self?.setupZombieSpawnSystem()
             self?.setupToastMessageManager()
             self?.setupItemSystem()
+
+            // 모든 시스템 초기화 완료 후 게임 시작 처리
+            self?.startGame()
         }
     }
     
+    // MARK: - Game Start
+    private func startGame() {
+        // 줌아웃 효과 적용
+        cameraSystem?.performGameStartZoomEffect()
+
+        // 줌아웃 효과 완료 후 게임 시작 메시지 표시
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+            let message = NSLocalizedString("GAME_START_MESSAGE", comment: "Game Start Message")
+            self?.toastMessageManager?.showToastMessage(message, duration: 4.0)
+        }
+    }
+
     // MARK: - Setup Methods
     private func setupPhysicsWorld() {
         // Top-Down View에서는 중력 없음
@@ -127,9 +142,6 @@ class GameScene: SKScene {
     private func setupSystems() {
         physicsSystem = PhysicsSystem(scene: self)
         cameraSystem = CameraSystem(scene: self, player: player, camera: cameraNode)
-
-        // 게임 시작 시 줌 효과 적용
-        cameraSystem?.performGameStartZoomEffect()
     }
     
     private func setupController() {
