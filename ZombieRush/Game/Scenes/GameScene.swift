@@ -127,6 +127,9 @@ class GameScene: SKScene {
     private func setupSystems() {
         physicsSystem = PhysicsSystem(scene: self)
         cameraSystem = CameraSystem(scene: self, player: player, camera: cameraNode)
+
+        // 게임 시작 시 줌 효과 적용
+        cameraSystem?.performGameStartZoomEffect()
     }
     
     private func setupController() {

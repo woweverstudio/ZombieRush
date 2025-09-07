@@ -67,6 +67,26 @@ class CameraSystem {
         camera.run(zoomAction)
     }
 
+    // MARK: - Game Start Camera Effects
+    func performGameStartZoomEffect() {
+        guard let camera = camera else { return }
+
+        // 원래 줌 상태 저장
+        originalCameraScale = camera.xScale
+
+        // zoomCamera 함수를 사용해서 시퀀스 구현
+        // 무조건 전체 맵이 보이도록 크게 줌아웃 (기준 스케일 1.0)
+        let zoomOutScale = 2.5
+
+        // 줌아웃 실행
+        zoomCamera(to: zoomOutScale, duration: 1.0)
+
+        // 3초 후 줌인 실행 (줌아웃 1초 + 대기 3초)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 4.0) {
+            self.zoomCamera(to: self.originalCameraScale, duration: 1.0)
+        }
+    }
+
     // MARK: - Meteor Camera Effects
     func startMeteorZoomOut() {
         guard let camera = camera else { return }
