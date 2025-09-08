@@ -12,6 +12,7 @@ class Bullet: SKSpriteNode {
     // MARK: - Properties
     private let bulletSpeed: CGFloat = GameBalance.Bullet.speed
     private let lifetime: TimeInterval = GameBalance.Bullet.lifetime
+    private var damage: Int = GameBalance.Bullet.damage
     
     // MARK: - Initialization
     init() {
@@ -77,6 +78,15 @@ class Bullet: SKSpriteNode {
         addChild(neonBullet)
     }
     
+    // MARK: - Damage Management
+    func setDamage(_ damage: Int) {
+        self.damage = damage
+    }
+
+    func getDamage() -> Int {
+        return damage
+    }
+
     // MARK: - Fire Bullet
     func fire(from startPosition: CGPoint, direction: CGVector) {
         position = startPosition
@@ -141,6 +151,8 @@ class Bullet: SKSpriteNode {
             let direction = CGVector(dx: cos(finalAngle), dy: sin(finalAngle))
 
             let bullet = createAndFire(from: position, direction: direction, in: worldNode)
+            // 샷건 데미지 설정
+            bullet.setDamage(GameBalance.Items.shotgunDamage)
             bullets.append(bullet)
         }
 

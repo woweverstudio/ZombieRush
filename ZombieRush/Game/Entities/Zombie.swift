@@ -6,6 +6,7 @@
 //
 
 import SpriteKit
+import Foundation
 
 enum ZombieType {
     case normal
@@ -26,12 +27,12 @@ class Zombie: SKSpriteNode {
     // 이미지 관련 프로퍼티 제거됨 - 단순한 사각형 사용
     
     // MARK: - Initialization
-    init(type: ZombieType) {
+    init(type: ZombieType, currentWave: Int) {
         self.zombieType = type
-        
+
         // 웨이브별 배수 적용
-        let speedMultiplier = GameStateManager.shared.getZombieSpeedMultiplier()
-        let healthMultiplier = GameStateManager.shared.getZombieHealthMultiplier()
+        let speedMultiplier = min(pow(GameBalance.Wave.speedMultiplier, Float(currentWave - 1)), GameBalance.Wave.maxSpeedMultiplier)
+        let healthMultiplier = min(pow(GameBalance.Wave.healthMultiplier, Float(currentWave - 1)), GameBalance.Wave.maxHealthMultiplier)
         
         // 타입별 속성 설정
         let size: CGSize

@@ -256,6 +256,7 @@ class GameController {
             fireShotgunBullets(from: startPosition, worldNode: worldNode)
             playSound(ResourceConstants.Audio.SoundEffects.shotgun)
             HapticManager.shared.playShotgunHaptic()
+            player.consumeAmmo()
         } else {
             fireSingleBullet(from: startPosition, worldNode: worldNode)
             playSound(ResourceConstants.Audio.SoundEffects.shoot)

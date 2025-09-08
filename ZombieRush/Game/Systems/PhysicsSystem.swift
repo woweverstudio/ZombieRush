@@ -85,8 +85,9 @@ extension PhysicsSystem: SKPhysicsContactDelegate {
 
         createSparkleEffect(at: bullet.position, in: scene)
         
-        // 좀비에게 데미지
-        let isDead = zombie.takeDamage(GameBalance.Bullet.damage)
+        // 좀비에게 데미지 (총알 타입에 따라 데미지 다름)
+        let damage = bullet.getDamage()
+        let isDead = zombie.takeDamage(damage)
         
         if isDead {
             // 점수 추가

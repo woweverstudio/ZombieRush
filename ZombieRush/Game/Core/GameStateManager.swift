@@ -191,19 +191,7 @@ class GameStateManager {
         return Float(playTimeInCurrentWave / waveDuration)
     }
     
-    func getZombieSpeedMultiplier() -> Float {
-        let multiplier = pow(GameBalance.Wave.speedMultiplier, Float(currentWaveNumber - 1))
-        return min(multiplier, GameBalance.Wave.maxSpeedMultiplier)
-    }
     
-    func getZombieHealthMultiplier() -> Float {
-        let multiplier = pow(GameBalance.Wave.healthMultiplier, Float(currentWaveNumber - 1))
-        return min(multiplier, GameBalance.Wave.maxHealthMultiplier)
-    }
-    
-    func getZombieCountMultiplier() -> Float {
-        return pow(GameBalance.Wave.zombieCountMultiplier, Float(currentWaveNumber))
-    }
     
     // MARK: - Personal Records Management
     

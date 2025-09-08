@@ -53,23 +53,28 @@ struct GameBalance {
         static let strongHealth: Int = 60
         
         static let spawnDistance: CGFloat = 10
-        static let baseSpawnInterval: TimeInterval = 0.8
-        static let minSpawnInterval: TimeInterval = 0.5
-        static let spawnIntervalDecrement: TimeInterval = 0.1
+        static let baseSpawnInterval: TimeInterval = 0.6
+        static let minSpawnInterval: TimeInterval = 0.1
+        static let spawnIntervalDecrementPerWave: TimeInterval = 0.05
         
         // Spawn Rates
         static let normalSpawnRate: Int = 60  // 60%
         static let fastSpawnRate: Int = 25    // 25%
         static let strongSpawnRate: Int = 15  // 15%
+
+        // Zombie Count Limits
+        static let baseMaxZombies: Int = 40
+        static let additionalZombiesPerWave: Int = 10
+        static let maxZombieLimit: Int = 150
     }
     
     // MARK: - Item Effects
     struct Items {
         static let size = CGSize(width: 35, height: 35)
-        static let baseSpawnCount: Int = 6
+        static let baseSpawnCount: Int = 8
         static let spawnCountMultiplier: Float = 2.0
         static let maxSpawnCount: Int = 80
-        static let spawnInterval: TimeInterval = 3.0
+        static let spawnInterval: TimeInterval = 2.0
         static let lifetime: TimeInterval = 40.0
         static let spawnMargin: CGFloat = 100
         
@@ -81,9 +86,10 @@ struct GameBalance {
         static let ammoRestoreAmount: Int = 30
         
         // Buff Effects
-        static let speedMultiplier: CGFloat = 1.5
+        static let speedMultiplier: CGFloat = 1.2
         static let shotgunBulletCount: Int = 5
         static let shotgunSpreadAngle: CGFloat = 70
+        static let shotgunDamage: Int = 999
         
         // Meteor Effects
         static let meteorDamage: Int = 999
@@ -105,11 +111,10 @@ struct GameBalance {
     struct Wave {
         static let duration: TimeInterval = 30.0
         static let announcementDuration: TimeInterval = 2.0
-        static let zombieCountMultiplier: Float = 1.4
         static let speedMultiplier: Float = 1.13
-        static let healthMultiplier: Float = 1.08
-        static let maxSpeedMultiplier: Float = 3.0
-        static let maxHealthMultiplier: Float = 5.0
+        static let healthMultiplier: Float = 1.1
+        static let maxSpeedMultiplier: Float = 3.5
+        static let maxHealthMultiplier: Float = 5.5
     }
     
     // MARK: - Scoring
