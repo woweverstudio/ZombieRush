@@ -38,8 +38,8 @@ struct GameBalance {
         static let damage: Int = 25
 
         // Auto Fire Settings
-        static let autoFireBaseRate: TimeInterval = 0.75
-        static let autoFireRateDecrement: TimeInterval = 0.09
+        static let autoFireBaseRate: TimeInterval = 0.6
+        static let autoFireRateDecrement: TimeInterval = 0.06
         static let autoFireMinRate: TimeInterval = 0.13
     }
     
@@ -82,8 +82,8 @@ struct GameBalance {
         static let size = CGSize(width: 35, height: 35)
         static let baseSpawnCount: Int = 8
         static let spawnCountMultiplier: Float = 2.0
-        static let maxSpawnCount: Int = 80
-        static let spawnInterval: TimeInterval = 2.0
+        static let maxSpawnCount: Int = 60
+        static let spawnInterval: TimeInterval = 2.5
         static let lifetime: TimeInterval = 40.0
         static let spawnMargin: CGFloat = 100
         
@@ -95,7 +95,7 @@ struct GameBalance {
         static let ammoRestoreAmount: Int = 30
         
         // Buff Effects
-        static let speedMultiplier: CGFloat = 1.2
+        static let speedMultiplier: CGFloat = 1.25
         static let shotgunBulletCount: Int = 5
         static let shotgunSpreadAngle: CGFloat = 70
         static let shotgunDamage: Int = 999

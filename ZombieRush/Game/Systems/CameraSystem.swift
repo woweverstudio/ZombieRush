@@ -16,7 +16,7 @@ class CameraSystem {
 
     // MARK: - Camera Settings
     private let cameraSmoothness: CGFloat = 0.1
-    private var originalCameraScale: CGFloat = 1.0  // 메테오 효과용 원래 줌 상태 저장
+    private var originalCameraScale: CGFloat = 1.2  // 메테오 효과용 원래 줌 상태 저장 (확대된 기본 시야)
     
     // MARK: - Initialization
     init(scene: SKScene, player: Player?, camera: SKCameraNode?) {
@@ -71,8 +71,12 @@ class CameraSystem {
     func performGameStartZoomEffect() {
         guard let camera = camera else { return }
 
-        // 원래 줌 상태 저장
-        originalCameraScale = camera.xScale
+        // 게임 시작 시점의 원래 카메라 스케일 설정 (메테오 효과용)
+        // 1.2배 확대된 시야를 기본으로 사용
+        if originalCameraScale == 1.2 { // 이미 설정된 경우 유지
+            camera.xScale = originalCameraScale
+            camera.yScale = originalCameraScale
+        }
 
         // zoomCamera 함수를 사용해서 시퀀스 구현
         // 무조건 전체 맵이 보이도록 크게 줌아웃 (기준 스케일 1.0)
@@ -91,8 +95,8 @@ class CameraSystem {
     func startMeteorZoomOut() {
         guard let camera = camera else { return }
 
-        // 메테오 배치 시 줌아웃 시작 - 원래 상태 저장
-        originalCameraScale = camera.xScale
+        // 메테오 배치 시 줌아웃 시작 - 게임 시작 시 저장된 원래 상태 사용
+        // originalCameraScale은 게임 시작 시 한 번만 저장됨
         let zoomOut = SKAction.scale(to: originalCameraScale * 1.3, duration: 0.2)
         camera.run(zoomOut)
     }
