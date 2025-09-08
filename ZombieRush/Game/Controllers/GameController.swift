@@ -16,13 +16,11 @@ class GameController {
     
     // MARK: - Touch Tracking
     private var leftTouch: UITouch?
-    private var rightTouch: UITouch?
     private var leftTouchStartLocation: CGPoint?  // 터치 시작 위치 저장
     
     // MARK: - UI Elements
     private var joystickBase: SKShapeNode?
     private var joystickThumb: SKShapeNode?
-    private var fireButton: SKShapeNode?
     
     // MARK: - Joystick System
     private var fixedJoystickPosition: CGPoint = .zero
@@ -30,6 +28,9 @@ class GameController {
     
     // MARK: - Cached Properties (성능 최적화)
     private let screenBounds: CGSize = UIScreen.main.bounds.size
+
+    // MARK: - Auto Fire System
+    private var lastAutoFireTime: TimeInterval = 0
     
     private lazy var leftBottomTouchArea: CGRect = {
         CGRect(
@@ -47,19 +48,15 @@ class GameController {
     // MARK: - Constants
     struct Constants {
         static let joystickTouchRadius: CGFloat = 20
-        static let fireButtonTouchRadius: CGFloat = 40
         static let joystickMaxDistance: CGFloat = 30
         static let joystickDeadzone: CGFloat = 5
         static let animationDuration: TimeInterval = 0.3
         static let quickAnimationDuration: TimeInterval = 0.2
-        
+
         struct Colors {
             static let joystickBase = SKColor.white.withAlphaComponent(0.3)
             static let joystickThumbFill = SKColor.white.withAlphaComponent(0.2)
             static let joystickThumbStroke = SKColor.white.withAlphaComponent(0.5)
-            static let fireButtonFill = SKColor.white.withAlphaComponent(0.1)
-            static let fireButtonStroke = SKColor.white.withAlphaComponent(0.4)
-            static let fireButtonText = SKColor.white.withAlphaComponent(0.8)
         }
     }
     
@@ -73,9 +70,8 @@ class GameController {
     // MARK: - UI Setup
     private func setupUI() {
         guard let camera = camera else { return }
-        
+
         setupJoystick(in: camera)
-        setupFireButton(in: camera)
     }
     
     private func setupJoystick(in camera: SKCameraNode) {
@@ -89,17 +85,7 @@ class GameController {
         
         [joystickBase, joystickThumb].forEach { camera.addChild($0!) }
     }
-    
-    private func setupFireButton(in camera: SKCameraNode) {
-        let firePosition = CGPoint(
-            x: screenBounds.width / 2 - UIConstants.Layout.controlMargin,
-            y: -screenBounds.height / 2 + UIConstants.Layout.controlMargin
-        )
-        
-        fireButton = createFireButton(at: firePosition)
-        camera.addChild(fireButton!)
-    }
-    
+
     private func createJoystickBase() -> SKShapeNode {
         let base = SKShapeNode(circleOfRadius: UIConstants.Controls.joystickRadius)
         base.fillColor = .clear
@@ -120,27 +106,6 @@ class GameController {
         return thumb
     }
     
-    private func createFireButton(at position: CGPoint) -> SKShapeNode {
-        let button = SKShapeNode(
-            rectOf: CGSize(width: UIConstants.Controls.fireButtonSize, height: UIConstants.Controls.fireButtonSize),
-            cornerRadius: 8
-        )
-        button.fillColor = Constants.Colors.fireButtonFill
-        button.strokeColor = Constants.Colors.fireButtonStroke
-        button.lineWidth = 2
-        button.position = position
-        button.zPosition = UIConstants.Controls.controlZPosition
-        
-        let label = SKLabelNode(text: NSLocalizedString("UI_FIRE_BUTTON", comment: "Fire button text"))
-        label.fontName = ResourceConstants.Fonts.arialBold
-        label.fontSize = 16
-        label.fontColor = Constants.Colors.fireButtonText
-        label.horizontalAlignmentMode = .center
-        label.verticalAlignmentMode = .center
-        button.addChild(label)
-        
-        return button
-    }
     
     // MARK: - Touch Handling
     func handleTouchBegan(_ touches: Set<UITouch>) {
@@ -148,23 +113,11 @@ class GameController {
         
         for touch in touches {
             let location = touch.location(in: camera)
-            
-            if handleFireButtonTouch(touch, at: location) { continue }
+
             handleJoystickTouch(touch, at: location)
         }
     }
     
-    private func handleFireButtonTouch(_ touch: UITouch, at location: CGPoint) -> Bool {
-        guard let fireButton = fireButton, rightTouch == nil else { return false }
-        
-        let distance = location.distance(to: fireButton.position)
-        if distance <= Constants.fireButtonTouchRadius {
-            rightTouch = touch
-            fireBullet()
-            return true
-        }
-        return false
-    }
     
     private func handleJoystickTouch(_ touch: UITouch, at location: CGPoint) {
         guard leftTouch == nil, leftBottomTouchArea.contains(location) else { return }
@@ -195,8 +148,6 @@ class GameController {
                 leftTouchStartLocation = nil  // 터치 시작 위치 초기화
                 returnJoystickToFixed()
                 player?.stopMoving()
-            } else if touch == rightTouch {
-                rightTouch = nil
             }
         }
     }
@@ -243,6 +194,43 @@ class GameController {
         isUsingTemporaryJoystick = false
     }
     
+    // MARK: - Auto Fire System
+    func updateAutoFire(_ currentTime: TimeInterval, zombies: [Zombie]) {
+        guard !findZombiesInCameraView(zombies).isEmpty else { return }
+
+        let currentWave = getCurrentWaveNumber()
+        let fireRateDecrement = Double(currentWave - 1) * GameBalance.Bullet.autoFireRateDecrement
+        let adjustedFireRate = max(GameBalance.Bullet.autoFireBaseRate - fireRateDecrement, GameBalance.Bullet.autoFireMinRate)
+
+        if currentTime - lastAutoFireTime >= adjustedFireRate {
+            fireBullet()
+            lastAutoFireTime = currentTime
+        }
+    }
+
+    // 카메라 뷰 내 좀비 찾기 (자동 조준과 동일한 로직)
+    private func findZombiesInCameraView(_ zombies: [Zombie]) -> [Zombie] {
+        let screenRect = calculateScreenRect()
+        return zombies.filter { zombie in
+            screenRect.contains(zombie.position)
+        }
+    }
+
+    // 카메라 뷰 사각형 계산 (공통 함수)
+    private func calculateScreenRect() -> CGRect {
+        guard let camera = camera else { return .zero }
+
+        return CGRect(
+            origin: camera.position - CGPoint(x: screenBounds.width / 2, y: screenBounds.height / 2),
+            size: screenBounds
+        )
+    }
+
+    private func getCurrentWaveNumber() -> Int {
+        // 실제 GameStateManager에서 현재 웨이브 가져오기
+        return GameStateManager.shared.getCurrentWaveNumber()
+    }
+
     // MARK: - Bullet System
     private func fireBullet() {
         guard let scene = scene,
@@ -288,29 +276,24 @@ class GameController {
     }
 
     private func getAutoAimDirection() -> CGVector? {
-        guard let scene = scene,
-              let player = player,
-              let camera = camera else { return nil }
-        
-        let screenRect = CGRect(
-            origin: camera.position - CGPoint(x: screenBounds.width / 2, y: screenBounds.height / 2),
-            size: screenBounds
-        )
-        
+        guard let scene = scene, let player = player else { return nil }
+
+        let screenRect = calculateScreenRect()
         var closestZombie: Zombie?
         var closestDistance: CGFloat = .greatestFiniteMagnitude
-        
+
+        // 카메라 뷰 내에서 가장 가까운 좀비 찾기
         scene.enumerateChildNodes(withName: "//Zombie") { node, _ in
             guard let zombie = node as? Zombie,
                   screenRect.contains(zombie.position) else { return }
-            
+
             let distance = zombie.position.distance(to: player.position)
             if distance < closestDistance {
                 closestDistance = distance
                 closestZombie = zombie
             }
         }
-        
+
         guard let target = closestZombie else { return nil }
         return (target.position - player.position).normalized.cgVector
     }
@@ -324,11 +307,11 @@ class GameController {
     
     // MARK: - UI Visibility Control
     func hideUI() {
-        [joystickBase, joystickThumb, fireButton].forEach { $0?.isHidden = true }
+        [joystickBase, joystickThumb].forEach { $0?.isHidden = true }
     }
-    
+
     func showUI() {
-        [joystickBase, joystickThumb, fireButton].forEach { $0?.isHidden = false }
+        [joystickBase, joystickThumb].forEach { $0?.isHidden = false }
     }
 }
 

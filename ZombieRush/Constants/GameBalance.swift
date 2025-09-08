@@ -36,6 +36,11 @@ struct GameBalance {
         static let speed: CGFloat = 1000
         static let lifetime: TimeInterval = 3.0
         static let damage: Int = 25
+
+        // Auto Fire Settings
+        static let autoFireBaseRate: TimeInterval = 0.75
+        static let autoFireRateDecrement: TimeInterval = 0.09
+        static let autoFireMinRate: TimeInterval = 0.13
     }
     
     // MARK: - Zombie Stats
@@ -54,8 +59,12 @@ struct GameBalance {
         
         static let spawnDistance: CGFloat = 10
         static let baseSpawnInterval: TimeInterval = 0.6
-        static let minSpawnInterval: TimeInterval = 0.1
-        static let spawnIntervalDecrementPerWave: TimeInterval = 0.05
+        static let minSpawnInterval: TimeInterval = 0.2
+        static let spawnIntervalDecrementPerWave: TimeInterval = 0.03
+
+        // Detection Settings
+        static let detectionWidth: CGFloat = 250
+        static let detectionHeight: CGFloat = 200
         
         // Spawn Rates
         static let normalSpawnRate: Int = 60  // 60%
@@ -111,10 +120,10 @@ struct GameBalance {
     struct Wave {
         static let duration: TimeInterval = 30.0
         static let announcementDuration: TimeInterval = 2.0
-        static let speedMultiplier: Float = 1.13
-        static let healthMultiplier: Float = 1.1
-        static let maxSpeedMultiplier: Float = 3.5
-        static let maxHealthMultiplier: Float = 5.5
+        static let speedMultiplier: Float = 1.11
+        static let healthMultiplier: Float = 1.11
+        static let maxSpeedMultiplier: Float = 3.0
+        static let maxHealthMultiplier: Float = 5.0
     }
     
     // MARK: - Scoring

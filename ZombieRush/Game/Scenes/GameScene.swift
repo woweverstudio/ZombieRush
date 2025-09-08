@@ -164,6 +164,7 @@ class GameScene: SKScene {
             self?.toastMessageManager?.showToastMessage(message, duration: GameBalance.Wave.announcementDuration)
             self?.player?.updateWaveSpeed(currentWave: waveNumber)
         }
+
     }
 
     private func setupToastMessageManager() {
@@ -241,6 +242,11 @@ class GameScene: SKScene {
             itemSpawnSystem?.update(currentTime)
             meteorSystem?.update(currentTime)
             hudManager?.updateTime()
+
+            // 자동 발사 시스템 업데이트
+            if let zombies = zombieSpawnSystem?.getZombies() {
+                gameController?.updateAutoFire(currentTime, zombies: zombies)
+            }
         }
 
         // 플레이어 상태 업데이트

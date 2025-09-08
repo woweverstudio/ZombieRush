@@ -22,8 +22,6 @@ struct UIConstants {
     struct Controls {
         static let joystickRadius: CGFloat = 50
         static let joystickThumbRadius: CGFloat = 20
-        static let fireButtonRadius: CGFloat = 40
-        static let fireButtonSize: CGFloat = 80
         static let joystickDeadzone: CGFloat = 10
         static let controlZPosition: CGFloat = 100
     }
