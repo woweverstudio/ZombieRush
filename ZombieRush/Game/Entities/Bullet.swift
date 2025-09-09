@@ -13,6 +13,7 @@ class Bullet: SKSpriteNode {
     private let bulletSpeed: CGFloat = GameBalance.Bullet.speed
     private let lifetime: TimeInterval = GameBalance.Bullet.lifetime
     private var damage: Int = GameBalance.Bullet.damage
+    private var isShotgunBullet: Bool = false
     
     // MARK: - Initialization
     init() {
@@ -87,6 +88,14 @@ class Bullet: SKSpriteNode {
         return damage
     }
 
+    func setShotgunBullet(_ isShotgun: Bool) {
+        self.isShotgunBullet = isShotgun
+    }
+
+    func getIsShotgunBullet() -> Bool {
+        return isShotgunBullet
+    }
+
     // MARK: - Fire Bullet
     func fire(from startPosition: CGPoint, direction: CGVector) {
         position = startPosition
@@ -153,6 +162,8 @@ class Bullet: SKSpriteNode {
             let bullet = createAndFire(from: position, direction: direction, in: worldNode)
             // 샷건 데미지 설정
             bullet.setDamage(GameBalance.Items.shotgunDamage)
+            // 샷건 총알 플래그 설정
+            bullet.setShotgunBullet(true)
             bullets.append(bullet)
         }
 

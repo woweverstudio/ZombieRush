@@ -74,25 +74,26 @@ extension PhysicsSystem: SKPhysicsContactDelegate {
         guard let bullet = bullet as? Bullet,
               let zombie = zombie as? Zombie,
               let scene = scene as? GameScene else { return }
-        
+
         // 총알 제거 (먼저 제거해서 중복 충돌 방지)
         bullet.removeFromParent()
 
-        if AudioManager.shared.isSoundEffectsEnabled {
+        // 샷건 총알이 아닐 때만 hit 사운드 플레이
+        if AudioManager.shared.isSoundEffectsEnabled && !bullet.getIsShotgunBullet() {
             let hitSound = SKAction.playSoundFileNamed(ResourceConstants.Audio.SoundEffects.hit, waitForCompletion: false)
             scene.run(hitSound)
         }
 
         createSparkleEffect(at: bullet.position, in: scene)
-        
+
         // 좀비에게 데미지 (총알 타입에 따라 데미지 다름)
         let damage = bullet.getDamage()
         let isDead = zombie.takeDamage(damage)
-        
+
         if isDead {
             // 점수 추가
             scene.addScore()
-            
+
             // 좀비 스포너에서 제거
             scene.removeZombie(zombie)
         }
