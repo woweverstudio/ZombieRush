@@ -237,9 +237,9 @@ class GameController {
               let player = player,
               let worldNode = scene.childNode(withName: "World"),
               player.canFire() else { return }
-        
+
         let startPosition = player.position
-        
+
         if player.getIsShotgunMode() {
             fireShotgunBullets(from: startPosition, worldNode: worldNode)
             playSound(ResourceConstants.Audio.SoundEffects.shotgun)
@@ -276,16 +276,23 @@ class GameController {
     }
 
     private func getAutoAimDirection() -> CGVector? {
-        guard let scene = scene, let player = player else { return nil }
+        guard let scene = scene, let player = player else {
+            return nil
+        }
 
         let screenRect = calculateScreenRect()
         var closestZombie: Zombie?
         var closestDistance: CGFloat = .greatestFiniteMagnitude
 
         // 카메라 뷰 내에서 가장 가까운 좀비 찾기
-        scene.enumerateChildNodes(withName: "//Zombie") { node, _ in
-            guard let zombie = node as? Zombie,
-                  screenRect.contains(zombie.position) else { return }
+        scene.enumerateChildNodes(withName: "//" + TextConstants.NodeNames.zombie) { node, _ in
+            guard let zombie = node as? Zombie else {
+                return
+            }
+
+            guard screenRect.contains(zombie.position) else {
+                return
+            }
 
             let distance = zombie.position.distance(to: player.position)
             if distance < closestDistance {
@@ -346,3 +353,4 @@ private extension CGPoint {
         CGVector(dx: x, dy: y)
     }
 }
+

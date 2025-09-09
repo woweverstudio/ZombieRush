@@ -56,7 +56,7 @@ class HUDManager {
         guard let camera = camera else { return }
         
         hudNode = SKNode()
-        hudNode?.name = "HUD"
+        hudNode?.name = TextConstants.NodeNames.hud
         hudNode?.zPosition = 200
         camera.addChild(hudNode!)
         

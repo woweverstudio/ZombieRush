@@ -19,7 +19,7 @@ struct GameView: View {
     
     // MARK: - Game Scene Creation
     private func makeGameScene() -> SKScene {
-        let scene = GameScene(appRouter: router)
+        let scene = GameScene(appRouter: router, ultimateSkill: NuclearAttackSkill())
         // 화면 크기를 한 번만 계산하여 캐시
         let screenSize = UIScreen.main.bounds.size
         scene.size = CGSize(width: screenSize.width, height: screenSize.height)

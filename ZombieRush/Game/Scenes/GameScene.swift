@@ -20,11 +20,13 @@ class GameScene: SKScene {
     private var cameraSystem: CameraSystem?
     private var worldSystem: WorldSystem?
     private var gameController: GameController?
+    private var ultimateController: UltimateController?
     private var hudManager: HUDManager?
     private var zombieSpawnSystem: ZombieSpawnSystem?
     private var toastMessageManager: ToastMessageManager?
     private var itemSpawnSystem: ItemSpawnSystem?
     private var itemEffectSystem: ItemEffectSystem?
+    private var ultimateSkill: UltimateSkill
     
     // MARK: - Dependencies
     private let appRouter: AppRouter
@@ -34,8 +36,9 @@ class GameScene: SKScene {
     private var lastUpdateTime: TimeInterval = 0
 
     // MARK: - Initialization
-    init(appRouter: AppRouter) {
+    init(appRouter: AppRouter, ultimateSkill: UltimateSkill) {
         self.appRouter = appRouter
+        self.ultimateSkill = ultimateSkill
         super.init(size: .zero)
     }
     
@@ -67,11 +70,13 @@ class GameScene: SKScene {
         DispatchQueue.main.async { [weak self] in
             self?.setupPhysicsSystem()
             self?.setupCameraSystem()
+            self?.setupUltimateController()  // HUD 바로 뒤로 이동
             self?.setupController()
             self?.setupHUD()
             self?.setupZombieSpawnSystem()
             self?.setupToastMessageManager()
             self?.setupItemSystem()
+            self?.setupUltimateSkill() // 제일 마지막 호출해야함
 
             // 모든 시스템 초기화 완료 후 게임 시작 처리
             self?.startGame()
@@ -130,7 +135,7 @@ class GameScene: SKScene {
         cameraNode = SKCameraNode()
         cameraNode?.name = TextConstants.NodeNames.camera
         addChild(cameraNode!)
-        
+
         self.camera = cameraNode
 
         // 카메라를 플레이어에 연결
@@ -153,10 +158,36 @@ class GameScene: SKScene {
         
         cameraSystem = CameraSystem(scene: self, player: player, camera: cameraNode)
     }
-    
+
     private func setupController() {
         guard let player else { return }
         gameController = GameController(scene: self, player: player)
+    }
+    
+    private func setupUltimateController() {
+        guard let player, let cameraNode else { return }
+
+        ultimateController = UltimateController(scene: self, cameraNode: cameraNode, player: player, skill: ultimateSkill)
+    }
+
+    private func setupUltimateSkill() {
+        switch self.ultimateSkill {
+        case let skill as NuclearAttackSkill:
+            skill.scene = self
+            skill.cameraSystem = cameraSystem
+            skill.toastMessageManager = toastMessageManager
+            skill.zombieSpawnSystem = zombieSpawnSystem
+
+            // 콜백 설정 - 점수 증가만 처리
+            skill.onZombieKilled = { [weak self] zombie in
+                guard let self = self else { return }
+
+                // 점수 증가
+                self.addScore()
+            }
+        default:
+            return
+        }
     }
     
     private func setupHUD() {
@@ -260,6 +291,11 @@ class GameScene: SKScene {
             if hudManager?.handleTouch(at: location) == true {
                 return
             }
+
+            // Ultimate 버튼 터치 처리
+            if ultimateController?.handleTouch(at: location) == true {
+                return
+            }
         }
         
         gameController?.handleTouchBegan(touches)
@@ -279,11 +315,16 @@ class GameScene: SKScene {
         if gameStateManager.isGameOver() { return }
         gameController?.handleTouchCancelled(touches)
     }
+
     
     // MARK: - Game Logic
     func addScore(_ points: Int = GameBalance.Score.perKill) {
         gameStateManager.addScore(points)
         hudManager?.addScore(points)
+    }
+
+    func addUltimateRange() {
+        ultimateController?.onZombieAttacked()
     }
     
     func removeZombie(_ zombie: Zombie) {

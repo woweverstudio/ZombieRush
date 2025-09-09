@@ -51,7 +51,7 @@ class MapSystem: MapSystemProtocol {
         backgroundRect.fillColor = UIConstants.Colors.Neon.cyberpunkBackgroundColor
         backgroundRect.strokeColor = .clear
         backgroundRect.zPosition = UIConstants.Map.backgroundZPosition
-        backgroundRect.name = "CyberpunkBackground"
+        backgroundRect.name = TextConstants.NodeNames.cyberpunkBackground
         worldNode.addChild(backgroundRect)
     }
     
@@ -105,7 +105,7 @@ class MapSystem: MapSystemProtocol {
         borderRect.strokeColor = UIConstants.Colors.Neon.borderColor
         borderRect.lineWidth = UIConstants.Map.borderLineWidth
         borderRect.zPosition = UIConstants.Map.borderZPosition
-        borderRect.name = "NeonBorder"
+        borderRect.name = TextConstants.NodeNames.neonBorder
         worldNode.addChild(borderRect)
         
         // 글로우 효과를 위한 외부 경계선
@@ -116,7 +116,7 @@ class MapSystem: MapSystemProtocol {
         outerBorderRect.strokeColor = UIConstants.Colors.Neon.borderGlowColor
         outerBorderRect.lineWidth = 2
         outerBorderRect.zPosition = UIConstants.Map.backgroundZPosition + 1
-        outerBorderRect.name = "NeonBorderGlow"
+        outerBorderRect.name = TextConstants.NodeNames.neonBorderGlow
         worldNode.addChild(outerBorderRect)
     }
     

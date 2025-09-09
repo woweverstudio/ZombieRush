@@ -101,6 +101,7 @@ class ZombieSpawnSystem {
 
         zombie.position = spawnPosition
         zombie.setTarget(player)
+        zombie.name = TextConstants.NodeNames.zombie  // 중앙 집중화된 노드 이름 사용
 
         // 씬에 추가하고 배열에 추가
         worldNode.addChild(zombie)
@@ -145,7 +146,7 @@ class ZombieSpawnSystem {
         return CGPoint(x: spawnX, y: spawnY)
     }
     
-    private func updateZombies() {
+    func updateZombies() {
         // 죽은 좀비들을 먼저 제거 (parent가 nil인 경우)
         zombies.removeAll { zombie in
             zombie.parent == nil
@@ -159,7 +160,7 @@ class ZombieSpawnSystem {
     
     func removeZombie(_ zombie: Zombie) {
         guard let index = zombies.firstIndex(of: zombie) else {
-            zombie.removeFromParent() // 안전하게 노드만 제거
+            zombie.removeFromParent()
             return
         }
 

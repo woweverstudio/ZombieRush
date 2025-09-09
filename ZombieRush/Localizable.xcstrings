@@ -1072,6 +1072,24 @@
           }
         }
       }
+    },
+    "ULTIMATE_NUCLEAR_ACTIVATED" : {
+      "comment" : "Ultimate Skill - Nuclear Attack Activation",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nuke Detected!"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "핵공격 감지!"
+          }
+        }
+      }
     }
   },
   "version" : "1.0"

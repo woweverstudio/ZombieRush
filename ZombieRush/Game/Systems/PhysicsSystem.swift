@@ -96,6 +96,7 @@ extension PhysicsSystem: SKPhysicsContactDelegate {
         if isDead {
             // 점수 추가
             scene.addScore()
+            scene.addUltimateRange()
 
             // 좀비 스포너에서 제거
             scene.removeZombie(zombie)

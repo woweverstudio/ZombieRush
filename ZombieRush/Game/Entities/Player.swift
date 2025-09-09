@@ -80,7 +80,7 @@ class Player: SKSpriteNode {
         neonRect.strokeColor = UIConstants.Colors.Neon.playerColor
         neonRect.lineWidth = 2
         neonRect.position = .zero
-        neonRect.name = "PlayerShape"
+        neonRect.name = TextConstants.NodeNames.playerShape
         
         addChild(neonRect)
         setupFaceExpressions()
@@ -92,7 +92,7 @@ class Player: SKSpriteNode {
         faceExpressionNode?.size = size
         faceExpressionNode?.position = .zero
         faceExpressionNode?.zPosition = 1
-        faceExpressionNode?.name = "FaceExpression"
+        faceExpressionNode?.name = TextConstants.NodeNames.faceExpression
         
         if let faceNode = faceExpressionNode {
             addChild(faceNode)

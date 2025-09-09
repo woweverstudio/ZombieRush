@@ -102,7 +102,7 @@ class Zombie: SKSpriteNode {
         neonRect.strokeColor = color
         neonRect.lineWidth = 2
         neonRect.position = CGPoint.zero
-        neonRect.name = "ZombieShape"
+        neonRect.name = TextConstants.NodeNames.zombieShape
         
         addChild(neonRect)
     }

@@ -54,6 +54,15 @@ struct TextConstants {
         static let joystickBase = "JoystickBase"
         static let joystickThumb = "JoystickThumb"
         static let fireButton = "FireButton"
+        static let ultimateButton = "UltimateButton"
+        static let ultimateButtonRing = "UltimateButtonRing"
+        static let playerShape = "PlayerShape"
+        static let zombieShape = "ZombieShape"
+        static let faceExpression = "FaceExpression"
+        static let hud = "HUD"
+        static let cyberpunkBackground = "CyberpunkBackground"
+        static let neonBorder = "NeonBorder"
+        static let neonBorderGlow = "NeonBorderGlow"
     }
     
     // MARK: - Game Center

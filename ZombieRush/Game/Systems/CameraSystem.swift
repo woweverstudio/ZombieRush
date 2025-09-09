@@ -111,4 +111,29 @@ class CameraSystem {
         let sequence = SKAction.sequence([wait, zoomIn])
         camera.run(sequence)
     }
+
+    // MARK: - Ultimate Camera Effects
+    func startUltimateZoomOut() {
+        guard let camera = camera else { return }
+
+        // 궁극기 발동 시 줌아웃
+        let zoomOut = SKAction.scale(to: originalCameraScale * 1.5, duration: 0.3)
+        camera.run(zoomOut)
+    }
+
+    func startUltimateZoomIn() {
+        guard let camera = camera else { return }
+
+        // 궁극기 폭발 후 줌인
+        let wait = SKAction.wait(forDuration: 1.5) // 폭발 시간 고려
+        let zoomIn = SKAction.scale(to: originalCameraScale, duration: 0.6)
+
+        let sequence = SKAction.sequence([wait, zoomIn])
+        camera.run(sequence)
+    }
+
+    func shakeCamera() {
+        // 기본값을 사용한 shake 효과
+        shakeCamera(intensity: 15.0, duration: 0.5)
+    }
 }
