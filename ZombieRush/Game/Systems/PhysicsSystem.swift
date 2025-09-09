@@ -8,9 +8,12 @@
 import SpriteKit
 
 class PhysicsSystem: NSObject {
-    
+
     // MARK: - Properties
     private weak var scene: SKScene?
+
+    // MARK: - Callbacks
+    var onPlayerDied: (() -> Void)?
     
     // MARK: - Initialization
     init(scene: SKScene) {
@@ -106,14 +109,14 @@ extension PhysicsSystem: SKPhysicsContactDelegate {
         
         // 플레이어에게 데미지
         player.takeDamage(GameBalance.Player.damagePerHit)
-        
+
         // 좀비 제거 (한 번 공격하면 사라짐)
         scene.removeZombie(zombie)
-        
+
         // 플레이어가 죽었는지 확인
         if player.isDead() {
-            // 게임 오버 처리 (나중에 구현)
-            // scene.gameOver()
+            // 게임 오버 처리 - 콜백으로 알림
+            onPlayerDied?()
         }
     }
     

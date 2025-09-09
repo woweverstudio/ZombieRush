@@ -97,8 +97,6 @@ class ItemEffectSystem {
             message = NSLocalizedString("ITEM_INVINCIBILITY_COLLECT", comment: "Invincibility item collected")
         case .shotgun:
             message = NSLocalizedString("ITEM_SHOTGUN_COLLECT", comment: "Shotgun item collected")
-        case .meteor:
-            message = NSLocalizedString("ITEM_METEOR_COLLECT", comment: "Meteor item collected")
         }
         
         toastMessageManager?.showToastMessage(message, duration: 1.5)
@@ -117,8 +115,6 @@ class ItemEffectSystem {
             message = NSLocalizedString("ITEM_INVINCIBILITY_END", comment: "Invincibility effect ended")
         case .shotgun:
             message = NSLocalizedString("ITEM_SHOTGUN_END", comment: "Shotgun effect ended")
-        case .meteor:
-            return
         default:
             return  // 즉시 효과는 메시지 없음
         }

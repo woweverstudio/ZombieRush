@@ -100,20 +100,10 @@ struct GameBalance {
         static let shotgunSpreadAngle: CGFloat = 70
         static let shotgunDamage: Int = 999
         
-        // Meteor Effects
-        static let meteorDamage: Int = 999
-        static let meteorDelayBeforeExplosion: TimeInterval = 1.0
-        static let meteorExplosionRadius: CGFloat = 800
-        static let meteorInnerExplosionRadius: CGFloat = 600
-        static let meteorCenterFlashRadius: CGFloat = 400
-        static let meteorExplosionDuration: TimeInterval = 0.3
-        static let meteorExplosionScale: CGFloat = 1.2
-        
         // Item Wave Requirements
         static let speedBoostMinWave: Int = 2
         static let invincibilityMinWave: Int = 3
         static let shotgunMinWave: Int = 3
-        static let meteorMinWave: Int = 4
     }
     
     // MARK: - Wave System

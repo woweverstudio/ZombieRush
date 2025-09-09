@@ -7,7 +7,6 @@ enum ItemType: CaseIterable {
     case ammoRestore     // 탄약 충전
     case invincibility   // 무적상태
     case shotgun         // 샷건발사
-    case meteor          // 메테오 (웨이브 7+)
     
     var name: String {
         switch self {
@@ -16,7 +15,6 @@ enum ItemType: CaseIterable {
         case .ammoRestore: return "Ammo Restore"
         case .invincibility: return "Invincibility"
         case .shotgun: return "Shotgun"
-        case .meteor: return "Meteor"
         }
     }
     
@@ -27,14 +25,13 @@ enum ItemType: CaseIterable {
         case .ammoRestore: return ResourceConstants.Images.Items.ammoRestore
         case .invincibility: return ResourceConstants.Images.Items.invincibility
         case .shotgun: return ResourceConstants.Images.Items.shotgun
-        case .meteor: return ResourceConstants.Images.Items.meteor
         }
     }
     
     var isInstantEffect: Bool {
         switch self {
         case .healthRestore, .ammoRestore: return true
-        case .speedBoost, .invincibility, .shotgun, .meteor: return false
+        case .speedBoost, .invincibility, .shotgun: return false
         }
     }
 }
@@ -77,7 +74,6 @@ class Item: SKSpriteNode {
             case .speedBoost: fallbackColor = .cyan
             case .invincibility: fallbackColor = .yellow
             case .shotgun: fallbackColor = .purple
-            case .meteor: fallbackColor = .brown
             }
             super.init(texture: nil, color: fallbackColor, size: GameBalance.Items.size)
         }

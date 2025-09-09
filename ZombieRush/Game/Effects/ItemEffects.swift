@@ -15,8 +15,6 @@ class ItemEffectFactory {
             return InvincibilityEffect()
         case .shotgun:
             return ShotgunEffect()
-        case .meteor:
-            return MeteorEffect()
         }
     }
 }
@@ -101,18 +99,3 @@ class ShotgunEffect: ItemEffect {
     }
 }
 
-// 메테오 효과 (폭탄 설치)
-class MeteorEffect: ItemEffect {
-    let duration: TimeInterval = 0
-    let isInstant: Bool = true
-    
-    func apply(to player: Player) {
-        // 플레이어 현재 위치에 메테오 폭탄 설치
-        player.deployMeteor()
-        player.temporaryFaceExpression(imageName: "face_angry", duration: 1.0)
-    }
-    
-    func remove(from player: Player) {
-        // 즉시 효과는 제거할 것이 없음
-    }
-}

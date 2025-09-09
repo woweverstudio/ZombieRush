@@ -25,7 +25,6 @@ class GameScene: SKScene {
     private var toastMessageManager: ToastMessageManager?
     private var itemSpawnSystem: ItemSpawnSystem?
     private var itemEffectSystem: ItemEffectSystem?
-    private var meteorSystem: MeteorSystem?
     
     // MARK: - Dependencies
     private let appRouter: AppRouter
@@ -66,7 +65,8 @@ class GameScene: SKScene {
         
         // UI와 상호작용 시스템들을 다음 프레임에서 초기화 (부드러운 시작)
         DispatchQueue.main.async { [weak self] in
-            self?.setupSystems()
+            self?.setupPhysicsSystem()
+            self?.setupCameraSystem()
             self?.setupController()
             self?.setupHUD()
             self?.setupZombieSpawnSystem()
@@ -139,23 +139,33 @@ class GameScene: SKScene {
         }
     }
     
-    private func setupSystems() {
+    private func setupPhysicsSystem() {
         physicsSystem = PhysicsSystem(scene: self)
+
+        // PhysicsSystem 콜백 설정
+        physicsSystem?.onPlayerDied = { [weak self] in
+            self?.triggerGameOver()
+        }
+    }
+    
+    private func setupCameraSystem() {
+        guard let player, let cameraNode else { return }
+        
         cameraSystem = CameraSystem(scene: self, player: player, camera: cameraNode)
     }
     
     private func setupController() {
-        guard let player = player else { return }
+        guard let player else { return }
         gameController = GameController(scene: self, player: player)
     }
     
     private func setupHUD() {
-        guard let cameraNode = cameraNode else { return }
+        guard let cameraNode else { return }
         hudManager = HUDManager(camera: cameraNode, appRouter: appRouter)
     }
     
     private func setupZombieSpawnSystem() {
-        guard let worldNode = worldNode, let player = player else { return }
+        guard let worldNode , let player else { return }
         zombieSpawnSystem = ZombieSpawnSystem(worldNode: worldNode, player: player)
 
         // 웨이브 시작 콜백 설정
@@ -164,18 +174,15 @@ class GameScene: SKScene {
             self?.toastMessageManager?.showToastMessage(message, duration: GameBalance.Wave.announcementDuration)
             self?.player?.updateWaveSpeed(currentWave: waveNumber)
         }
-
     }
 
     private func setupToastMessageManager() {
-        guard let cameraNode = cameraNode, let player = player else { return }
+        guard let cameraNode, let player else { return }
         toastMessageManager = ToastMessageManager(camera: cameraNode, player: player)
     }
     
     private func setupItemSystem() {
-        guard let worldNode = worldNode,
-              let player = player,
-              let toastMessageManager = toastMessageManager else { return }
+        guard let worldNode, let player, let toastMessageManager else { return }
         
         // 아이템 스포너 설정
         itemSpawnSystem = ItemSpawnSystem(worldNode: worldNode)
@@ -183,27 +190,12 @@ class GameScene: SKScene {
         // 아이템 효과 시스템 설정
         itemEffectSystem = ItemEffectSystem(player: player, toastMessageManager: toastMessageManager)
         
-        // 메테오 시스템 설정
-        meteorSystem = MeteorSystem(worldNode: worldNode)
-
-        // 메테오 배치 시 줌아웃 시작
-        meteorSystem?.onMeteorDeployed = { [weak self] in
-            self?.cameraSystem?.startMeteorZoomOut()
-        }
-
-        // 메테오 폭발 후 줌인
-        meteorSystem?.onMeteorExploded = { [weak self] in
-            self?.cameraSystem?.performMeteorExplosionZoomIn()
-        }
-
-        // 플레이어에 메테오 시스템 연결
-        player.setMeteorSystem(meteorSystem!)
-        
         // 아이템 수집 콜백 설정
         itemSpawnSystem?.onItemCollected = { [weak self] itemType in
             self?.itemEffectSystem?.applyItemEffect(type: itemType)
         }
     }
+    
     
     // MARK: - Update Loop
     override func update(_ currentTime: TimeInterval) {
@@ -226,12 +218,6 @@ class GameScene: SKScene {
             return
         }
 
-        // 플레이어 사망 체크
-        if let player = player, player.isDead() {
-            triggerGameOver()
-            return
-        }
-
         // 플레이 시간 업데이트
         gameStateManager.updatePlayTime(deltaTime: deltaTime)
 
@@ -240,7 +226,6 @@ class GameScene: SKScene {
             cameraSystem?.update(currentTime)
             zombieSpawnSystem?.update(currentTime)
             itemSpawnSystem?.update(currentTime)
-            meteorSystem?.update(currentTime)
             hudManager?.updateTime()
 
             // 자동 발사 시스템 업데이트
@@ -340,7 +325,6 @@ class GameScene: SKScene {
         zombieSpawnSystem?.removeAllZombies()
         itemSpawnSystem?.removeAllItems()
         itemEffectSystem?.removeAllEffects()
-        meteorSystem?.clearAllMeteors()
 
         // World 노드 정리
         worldNode?.removeAllChildren()

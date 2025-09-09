@@ -149,8 +149,6 @@ class ItemSpawnSystem {
                 return currentWave >= GameBalance.Items.invincibilityMinWave
             case .shotgun:
                 return currentWave >= GameBalance.Items.shotgunMinWave
-            case .meteor:
-                return currentWave >= GameBalance.Items.meteorMinWave
             }
         }
         

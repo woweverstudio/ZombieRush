@@ -30,9 +30,7 @@ class Player: SKSpriteNode {
     private var shotgunModeActive: Bool = false
     private var shotgunBulletCount: Int = 1
     private var shotgunSpreadAngle: CGFloat = 0
-    
-    // MARK: - System References
-    private weak var meteorSystem: MeteorSystem?
+
     
     // MARK: - Initialization
     init() {
@@ -284,14 +282,6 @@ class Player: SKSpriteNode {
         removeAction(forKey: "shotgunEffect")
     }
     
-    func deployMeteor() {
-        // 메테오 시스템을 통해 현재 위치에 폭탄 설치
-        meteorSystem?.deployMeteor(at: position)
-    }
-    
-    func setMeteorSystem(_ meteorSystem: MeteorSystem) {
-        self.meteorSystem = meteorSystem
-    }
     
     func changeFaceExpression(to imageName: String) {
         guard let faceNode = faceExpressionNode else { return }

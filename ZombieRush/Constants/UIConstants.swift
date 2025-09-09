@@ -83,13 +83,6 @@ struct UIConstants {
     // MARK: - Item Visual
     struct ItemVisual {
         static let zPosition: CGFloat = 5
-        static let meteorIndicatorSize: CGFloat = 30
-        static let meteorWarningLineWidth: CGFloat = 2
-        static let meteorWarningGlowWidth: CGFloat = 3
-        static let meteorWarningAlpha: CGFloat = 0.8
-        static let meteorCenterDotSize: CGFloat = 3
-        static let meteorExplosionLineWidth: CGFloat = 4
-        static let meteorExplosionGlowWidth: CGFloat = 6
     }
     
     // MARK: - Particle Effects
@@ -164,9 +157,7 @@ struct UIConstants {
         
         // MARK: - Item Colors
         struct Items {
-            static let meteorWarningColor = SKColor.orange
-            static let meteorExplosionOuterColor = SKColor.red
-            static let meteorExplosionInnerColor = SKColor.yellow
+            // 아이템 색상 상수들 (필요시 추가)
         }
         
         // MARK: - Legacy String Colors (for backward compatibility)

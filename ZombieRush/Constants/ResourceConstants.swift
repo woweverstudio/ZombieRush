@@ -27,7 +27,6 @@ struct ResourceConstants {
             static let reload = "reload.wav"
             static let button = "button.mp3"
             static let item = "item.wav"
-            static let meteor = "meteor.wav"
             static let hit = "hit.wav"
         }
     }
@@ -40,7 +39,6 @@ struct ResourceConstants {
             static let ammoRestore = "item_ammoRestore"
             static let healthRestore = "item_healthRestore"
             static let invincibility = "item_invincibility"
-            static let meteor = "item_meteor"
             static let shotgun = "item_shotgun"
             static let speedBoost = "item_speedboost"
         }

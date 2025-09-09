@@ -51,7 +51,6 @@ struct TextConstants {
         static let quitButton = "QuitButton"
         static let toastMessage = "ToastMessage"
         static let item = "Item"
-        static let meteor = "Meteor"
         static let joystickBase = "JoystickBase"
         static let joystickThumb = "JoystickThumb"
         static let fireButton = "FireButton"

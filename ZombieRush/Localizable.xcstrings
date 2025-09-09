@@ -533,24 +533,6 @@
         }
       }
     },
-    "ITEM_METEOR_COLLECT" : {
-      "comment" : "Item Effects - Collection Messages",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nuke Detected!"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "핵공격 감지!"
-          }
-        }
-      }
-    },
     "ITEM_SHOTGUN_COLLECT" : {
       "comment" : "Item Effects - Collection Messages",
       "extractionState" : "manual",
