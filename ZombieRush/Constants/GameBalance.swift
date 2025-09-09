@@ -58,8 +58,8 @@ struct GameBalance {
         static let strongHealth: Int = 60
         
         static let spawnDistance: CGFloat = 10
-        static let baseSpawnInterval: TimeInterval = 0.6
-        static let minSpawnInterval: TimeInterval = 0.2
+        static let baseSpawnInterval: TimeInterval = 0.2
+        static let minSpawnInterval: TimeInterval = 0.05
         static let spawnIntervalDecrementPerWave: TimeInterval = 0.03
 
         // Detection Settings
@@ -72,9 +72,9 @@ struct GameBalance {
         static let strongSpawnRate: Int = 15  // 15%
 
         // Zombie Count Limits
-        static let baseMaxZombies: Int = 40
+        static let baseMaxZombies: Int = 20
         static let additionalZombiesPerWave: Int = 10
-        static let maxZombieLimit: Int = 150
+        static let maxZombieLimit: Int = 180
     }
     
     // MARK: - Item Effects

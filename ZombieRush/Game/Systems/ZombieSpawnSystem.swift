@@ -58,13 +58,13 @@ class ZombieSpawnSystem {
         }
 
         // 웨이브별 스폰 방식 적용
-        if currentWave <= 8 {
-            // 웨이브 1-8: 스폰 인터벌 없이 즉시 채우기
+        if currentWave <= 5 {
+            // 웨이브 1-5: 스폰 인터벌 없이 즉시 채우기
             while zombies.count < maxZombieCount {
                 spawnZombie(currentWave: currentWave)
             }
         } else {
-            // 웨이브 8+: 스폰 인터벌 적용
+            // 웨이브 5+: 스폰 인터벌 적용
             let spawnIntervalDecrement = Double(currentWave - 1) * GameBalance.Zombie.spawnIntervalDecrementPerWave
             let adjustedSpawnInterval = max(GameBalance.Zombie.baseSpawnInterval - spawnIntervalDecrement, GameBalance.Zombie.minSpawnInterval)
 
