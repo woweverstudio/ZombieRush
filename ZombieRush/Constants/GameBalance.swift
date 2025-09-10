@@ -72,7 +72,7 @@ struct GameBalance {
         static let strongSpawnRate: Int = 15  // 15%
 
         // Zombie Count Limits
-        static let baseMaxZombies: Int = 20
+        static let baseMaxZombies: Int = 30
         static let additionalZombiesPerWave: Int = 10
         static let maxZombieLimit: Int = 180
     }

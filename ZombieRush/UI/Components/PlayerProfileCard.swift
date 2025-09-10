@@ -12,10 +12,16 @@ struct PlayerProfileCard: View {
             // 프로필 섹션
             profileSection
             
+            // TODO: GameKitManager 리팩토링 후 재활성화
+            /*
             // 전체 랭킹 섹션 (인증된 사용자만)
             if gameKitManager.isAuthenticated {
                 rankSection
             }
+            */
+
+            // 임시로 랭킹 섹션 숨김
+            // rankSection
             
             // 기록 또는 로그인 안내 섹션
             contentSection
@@ -37,6 +43,8 @@ struct PlayerProfileCard: View {
     private var profileSection: some View {
         HStack(spacing: 20) {
             
+            // TODO: GameKitManager 리팩토링 후 재활성화
+            /*
             // 프로필 이미지 (작게 만듦)
             Group {
                 if let playerPhoto = gameKitManager.playerPhoto {
@@ -48,6 +56,15 @@ struct PlayerProfileCard: View {
                         .font(.system(size: 20))
                         .foregroundColor(.white)
                 }
+            }
+            .frame(width: 50, height: 50)
+            */
+
+            // 임시 플레이스홀더
+            Group {
+                Image(systemName: "person.fill")
+                    .font(.system(size: 20))
+                    .foregroundColor(.white)
             }
             .frame(width: 50, height: 50)
             .clipShape(Circle())
@@ -63,6 +80,8 @@ struct PlayerProfileCard: View {
             )
             .shadow(color: Color.cyan, radius: 5, x: 0, y: 0)
             
+            // TODO: GameKitManager 리팩토링 후 재활성화
+            /*
             // 닉네임 (프로필 우측에 위치)
             VStack(alignment: .leading, spacing: 2) {
                 Text(gameKitManager.playerDisplayName)
@@ -70,6 +89,18 @@ struct PlayerProfileCard: View {
                     .foregroundColor(Color.cyan)
 
                 Text(gameKitManager.isAuthenticated ? NSLocalizedString("PROFILE_GAME_CENTER", comment: "Game Center label") : NSLocalizedString("PROFILE_GUEST_MODE", comment: "Guest mode label"))
+                    .font(.system(size: 14, weight: .light, design: .monospaced))
+                    .foregroundColor(.white.opacity(0.6))
+            }
+            */
+
+            // 임시 닉네임 표시
+            VStack(alignment: .leading, spacing: 2) {
+                Text("Player")
+                    .font(.system(size: 24, weight: .bold, design: .monospaced))
+                    .foregroundColor(Color.cyan)
+
+                Text("Guest")
                     .font(.system(size: 14, weight: .light, design: .monospaced))
                     .foregroundColor(.white.opacity(0.6))
             }
@@ -81,11 +112,17 @@ struct PlayerProfileCard: View {
     private var contentSection: some View {
         HStack {
             Spacer()
+            // TODO: GameKitManager 리팩토링 후 재활성화
+            /*
             if gameKitManager.isAuthenticated {
                 authenticatedContent
             } else {
                 guestContent
             }
+            */
+
+            // 임시로 게스트 콘텐츠 표시
+            guestContent
             Spacer()
         }
         .padding(.bottom, 15)
@@ -98,6 +135,8 @@ struct PlayerProfileCard: View {
                 .font(.system(size: 14, weight: .medium, design: .monospaced))
                 .foregroundColor(.white.opacity(0.7))
 
+            // TODO: GameKitManager 리팩토링 후 재활성화
+            /*
             Group {
                 if let rank = gameKitManager.playerRank {
                     Text("#\(rank)")
@@ -110,12 +149,24 @@ struct PlayerProfileCard: View {
                         .foregroundColor(.white.opacity(0.5))
                 }
             }
+            */
+
+            // 임시 랭크 표시
+            Group {
+                Text("#--")
+                    .font(.system(size: 24, weight: .bold, design: .monospaced))
+                    .foregroundColor(.white.opacity(0.6))
+                    .shadow(color: .white.opacity(0.3), radius: 3, x: 0, y: 0)
+            }
         }
         .padding(.vertical, 5)
+        // TODO: GameKitManager 리팩토링 후 재활성화
+        /*
         .task {
             // 랭킹 정보 로드
             await loadPlayerRank()
         }
+        */
     }
     
     // MARK: - Rank Color Helper
@@ -130,7 +181,7 @@ struct PlayerProfileCard: View {
     
     // MARK: - Load Player Rank
     private func loadPlayerRank() async {
-        await gameKitManager.loadPlayerRank()
+        
     }
     
     // MARK: - Open iPhone Settings

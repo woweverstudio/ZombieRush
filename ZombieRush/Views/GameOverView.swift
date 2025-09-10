@@ -104,6 +104,8 @@ struct GameOverView: View {
     // MARK: - Profile Section
     private var profileSection: some View {
         HStack(spacing: 15) {
+            // TODO: GameKitManager 리팩토링 후 재활성화
+            /*
             // 프로필 이미지
             Group {
                 if let playerPhoto = gameKitManager.playerPhoto {
@@ -115,6 +117,15 @@ struct GameOverView: View {
                         .font(.system(size: 18))
                         .foregroundColor(.white)
                 }
+            }
+            .frame(width: 40, height: 40)
+            */
+
+            // 임시 플레이스홀더
+            Group {
+                Image(systemName: "person.fill")
+                    .font(.system(size: 18))
+                    .foregroundColor(.white)
             }
             .frame(width: 40, height: 40)
             .clipShape(Circle())
@@ -130,14 +141,32 @@ struct GameOverView: View {
             )
             .shadow(color: Color.cyan, radius: 3, x: 0, y: 0)
             
-            // 닉네임
-            VStack(alignment: .leading, spacing: 2) {
-                Text(gameKitManager.playerDisplayName)
-                    .font(.system(size: 18, weight: .bold, design: .monospaced))
-                    .foregroundColor(Color.cyan)
-                    .lineLimit(1)
+                // TODO: GameKitManager 리팩토링 후 재활성화
+                /*
+                // 닉네임
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(gameKitManager.playerDisplayName)
+                        .font(.system(size: 18, weight: .bold, design: .monospaced))
+                        .foregroundColor(Color.cyan)
+                        .lineLimit(1)
+                */
+
+                // 임시 닉네임
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Player")
+                        .font(.system(size: 18, weight: .bold, design: .monospaced))
+                        .foregroundColor(Color.cyan)
+                        .lineLimit(1)
                 
+                // TODO: GameKitManager 리팩토링 후 재활성화
+                /*
                 Text(gameKitManager.isAuthenticated ? NSLocalizedString("GAME_OVER_GAME_CENTER", comment: "Game Center label") : NSLocalizedString("GAME_OVER_GUEST", comment: "Guest label"))
+                    .font(.system(size: 12, weight: .light, design: .monospaced))
+                    .foregroundColor(.white.opacity(0.6))
+                */
+
+                // 임시 상태 표시
+                Text("Guest")
                     .font(.system(size: 12, weight: .light, design: .monospaced))
                     .foregroundColor(.white.opacity(0.6))
             }

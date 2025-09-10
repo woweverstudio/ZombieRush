@@ -32,7 +32,10 @@ struct ZombieRushApp: App {
                     audioManager.playMainMenuMusic()
 
                     // 앱 시작 시 GameKit 인증 시도
-                    gameKitManager.startAuthentication()
+                    gameKitManager.loadInitialData {
+                        // 초기 데이터 로드 완료
+                        print("🎮 GameKit: 앱 시작 시 초기 데이터 로드 완료")
+                    }
                 }
         }
         .onChange(of: scenePhase) { oldPhase, newPhase in

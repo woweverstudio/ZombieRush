@@ -5,128 +5,136 @@ import UIKit
 
 @Observable
 class GameKitManager: NSObject {
-    
-    // MARK: - Observable Properties (더 이상 @Published 불필요)
+
+    // MARK: - Observable Properties
     var isAuthenticated = false
-    var authenticationStatus = "Initializing..."
+    var isLoading = false
     var playerDisplayName = "Guest"
     var playerPhoto: UIImage? = nil
-    var playerRank: Int? = nil
     var playerScore: Int64 = 0
-    var leaderboardEntries: [GKLeaderboard.Entry] = []
-    var profileImages: [String: UIImage] = [:]
-    var isLoadingLeaderboard = false
-    var showingSampleData = false
-    
-    // MARK: - Private Properties  
+    var playerRank: Int? = nil
+
+    // 리더보드 1~3등 데이터
+    var topThreeEntries: [GKLeaderboard.Entry] = []
+
+    // 리더보드 1~100등 배열 (데이터 로드 안함)
+    var top100Entries: [GKLeaderboard.Entry] = []
+
+    // MARK: - Private Properties
     private var localPlayer: GKLocalPlayer?
-    
+
     // MARK: - Initialization
     override init() {
         super.init()
         localPlayer = GKLocalPlayer.local
     }
-    
-    // MARK: - Public Authentication Methods
-    
-    /// 앱 시작 시 GameKit 인증 시도
-    func startAuthentication() {
-        print("🎮 GameKit: Starting authentication...")
-        
-        guard let localPlayer = localPlayer else {
-            print("🎮 GameKit: ❌ Local player not available")
-            return
-        }
-        
-        // 이미 인증된 경우
-        if localPlayer.isAuthenticated {
-            print("🎮 GameKit: ✅ Already authenticated")
-            Task {
-                await handleAuthenticationSuccess()
-            }
-            return
-        }
-        
-        // 인증 시도
-        authenticationStatus = "Authenticating..."
-        localPlayer.authenticateHandler = { [weak self] viewController, error in
-            DispatchQueue.main.async {
-                self?.handleAuthenticationResult(viewController: viewController, error: error)
-            }
-        }
-    }
-    
-    // MARK: - Private Authentication Methods
-    
-    private func handleAuthenticationResult(viewController: UIViewController?, error: Error?) {
-        print("🎮 GameKit: Authentication result - VC: \(viewController != nil), Error: \(error?.localizedDescription ?? "none")")
-        
-        // 에러가 있거나 사용자 액션이 필요한 경우 → 게스트 모드
-        if error != nil || viewController != nil {
-            print("🎮 GameKit: Authentication requires user action - continuing as guest")
-            handleAuthenticationFailure(error: error)
-            return
-        }
-        
-        // 인증 성공 확인
-        if localPlayer?.isAuthenticated == true {
-            print("🎮 GameKit: ✅ Authentication successful")
-            Task {
-                await handleAuthenticationSuccess()
+
+    // MARK: - 앱 시작 시 데이터 로드 (로딩화면용)
+
+    /// 앱 시작 시 모든 데이터 로드 (2초 동안)
+    func loadInitialData(completion: (() -> Void)? = nil) {
+        isLoading = true
+
+        // 1. Game Center 인증
+        if !isAuthenticated {
+            authenticateWithCallback { [weak self] success in
+                guard let self = self else { return }
+
+                // 2. 인증 성공 시 데이터 로드
+                if success {
+                    Task {
+                        await self.loadPlayerData()
+                        await self.loadTopThreeLeaderboard()
+
+                        // 로딩 완료
+                        self.isLoading = false
+                        completion?()
+                    }
+                } else {
+                    // 인증 실패 시에도 로딩 완료
+                    self.isLoading = false
+                    completion?()
+                }
             }
         } else {
-            print("🎮 GameKit: ❌ Authentication failed")
-            handleAuthenticationFailure(error: nil)
+            // 이미 인증된 경우 바로 데이터 로드
+            Task {
+                await loadPlayerData()
+                await loadTopThreeLeaderboard()
+
+                // 로딩 완료
+                isLoading = false
+                completion?()
+            }
         }
     }
-    
-    private func handleAuthenticationSuccess() async {
+
+    // MARK: - 인증
+
+
+    private func authenticateWithCallback(completion: @escaping (Bool) -> Void) {
         guard let localPlayer = localPlayer else {
-            handleAuthenticationFailure(error: nil)
+            print("🎮 GameKit: Local player unavailable")
+            completion(false)
             return
         }
-        
-        print("🎮 GameKit: ✅ Authentication successful: \(localPlayer.displayName)")
-        
-        // 상태 업데이트
-        isAuthenticated = true
-        playerDisplayName = localPlayer.displayName
-        authenticationStatus = "Connected"
-        
-        // 백그라운드에서 플레이어 데이터 로드 및 캐시
-        await loadUserData()
-    }
-    
-    private func handleAuthenticationFailure(error: Error?) {
-        print("🎮 GameKit: ❌ Authentication failed - continuing as guest")
-        if let error = error {
-            print("🎮 GameKit: Error details: \(error.localizedDescription)")
+
+        // 시나리오 1: 이미 인증된 경우
+        if localPlayer.isAuthenticated {
+            print("🎮 GameKit: Already authenticated")
+            completion(true)
+            return
         }
-        
-        // 게스트 모드 설정
-        isAuthenticated = false
-        playerDisplayName = "Guest"
-        authenticationStatus = "Guest Mode"
-        playerPhoto = nil
-        playerRank = nil
-        playerScore = 0
+
+        // 시나리오 2-3: 인증 필요
+        var isCompleted = false
+        localPlayer.authenticateHandler = { [weak self] viewController, error in
+            guard let self = self, !isCompleted else { return }
+            isCompleted = true
+
+            // 뷰 컨트롤러 표시
+            if let viewController = viewController {
+                print("🎮 GameKit: 인증 뷰 컨트롤러 표시")
+                DispatchQueue.main.async {
+                    self.presentViewController?(viewController)
+                }
+                return // 결과 기다림
+            }
+
+            // 인증 결과 처리
+            if let error = error {
+                print("🎮 GameKit: ❌ Authentication error: \(error.localizedDescription)")
+                DispatchQueue.main.async {
+                    self.dismissViewController?()
+                }
+                completion(false)
+            } else if localPlayer.isAuthenticated {
+                print("🎮 GameKit: ✅ Authentication successful")
+                DispatchQueue.main.async {
+                    self.dismissViewController?()
+                    self.onAuthenticationCompleted?()
+                }
+                completion(true)
+            } else {
+                print("🎮 GameKit: ❌ Authentication failed")
+                DispatchQueue.main.async {
+                    self.dismissViewController?()
+                }
+                completion(false)
+            }
+        }
     }
-    
-    // MARK: - User Data Loading
-    
-    private func loadUserData() async {
-        guard isAuthenticated, let _ = localPlayer else { return }
-        
+
+
+    // MARK: - 플레이어 데이터 로드
+
+    private func loadPlayerData() async {
+        guard isAuthenticated, let localPlayer = localPlayer else { return }
+
+        // 플레이어 이름
+        playerDisplayName = localPlayer.displayName
+
         // 프로필 사진 로드
-        await loadPlayerPhoto()
-        
-        // 플레이어 랭크 로드
-        await loadPlayerRank()
-    }
-    
-    private func loadPlayerPhoto() async {
-        guard let localPlayer = localPlayer, isAuthenticated else { return }
-        
         do {
             let image = try await localPlayer.loadPhoto(for: .small)
             await MainActor.run { [weak self] in
@@ -135,225 +143,135 @@ class GameKitManager: NSObject {
         } catch {
             print("🎮 GameKit: Failed to load player photo: \(error)")
         }
+
+        // 플레이어 최고 점수 및 랭크 로드
+        await loadPlayerScoreAndRank()
     }
-    
-    func loadPlayerRank() async {
-        guard isAuthenticated else {
-            await MainActor.run { [weak self] in
-                self?.playerRank = nil
-            }
-            return
-        }
-        
+
+    private func loadPlayerScoreAndRank() async {
         do {
-            let leaderboards = try await GKLeaderboard.loadLeaderboards(IDs: [TextConstants.GameCenter.LeaderboardIDs.basic])
-            
-            guard let leaderboard = leaderboards.first else {
-                await MainActor.run { [weak self] in
-                    self?.playerRank = nil
-                }
-                return
-            }
-            
+            let leaderboards = try await GKLeaderboard.loadLeaderboards(IDs: [TextConstants.GameCenter.currentLeaderboardID])
+
+            guard let leaderboard = leaderboards.first else { return }
+
+            // 플레이어의 최고 점수 및 랭크 로드
             let (localPlayerEntry, _, _) = try await leaderboard.loadEntries(
                 for: .global,
                 timeScope: .allTime,
                 range: NSRange(location: 1, length: 1)
             )
-            
+
             await MainActor.run { [weak self] in
+                self?.playerScore = Int64(localPlayerEntry?.score ?? 0)
                 self?.playerRank = localPlayerEntry?.rank
             }
         } catch {
-            print("🎮 GameKit: Failed to load player rank: \(error)")
-            await MainActor.run { [weak self] in
-                self?.playerRank = nil
-            }
+            print("🎮 GameKit: Failed to load player score/rank: \(error)")
         }
     }
-    
-    /// 리더보드 엔트리들의 플레이어 이미지를 백그라운드에서 로드
-    private func loadPlayerImages(for entries: [GKLeaderboard.Entry]) async {
-        print("🎮 GameKit: Loading player images for \(entries.count) entries...")
-        
-        // 동시에 최대 10개씩 로드하여 성능 최적화
-        await withTaskGroup(of: Void.self) { group in
-            for entry in entries.prefix(50) { // 상위 50명만 이미지 로드
-                group.addTask { [weak self] in
-                    await self?.loadSinglePlayerImage(for: entry)
-                }
-            }
-        }
-        
-        print("🎮 GameKit: ✅ Player images loading completed")
-    }
-    
-    /// 개별 플레이어 이미지 로드
-    private func loadSinglePlayerImage(for entry: GKLeaderboard.Entry) async {
-        let playerID = entry.player.gamePlayerID
-        
-        // 이미 캐시된 이미지가 있으면 건너뛰기
-        if profileImages[playerID] != nil {
-            return
-        }
-        
+
+    // MARK: - 리더보드 데이터 로드
+
+    private func loadTopThreeLeaderboard() async {
         do {
-            let image = try await entry.player.loadPhoto(for: .small)
-            
+            let leaderboards = try await GKLeaderboard.loadLeaderboards(IDs: [TextConstants.GameCenter.currentLeaderboardID])
+
+            guard let leaderboard = leaderboards.first else { return }
+
+            // 상위 3명 데이터 로드
+            let entries = try await leaderboard.loadEntries(
+                for: .global,
+                timeScope: .allTime,
+                range: NSRange(location: 1, length: 3)
+            )
+
             await MainActor.run { [weak self] in
-                self?.profileImages[playerID] = image
+                self?.topThreeEntries = entries.1
             }
+
+            // 상위 3명의 프로필 이미지 로드
+            await loadTopThreeImages()
+
         } catch {
-            // 이미지 로드 실패는 무시 (기본 이미지 사용)
-            print("🎮 GameKit: Failed to load image for player \(entry.player.displayName): \(error)")
+            print("🎮 GameKit: Failed to load top 3 leaderboard: \(error)")
         }
     }
-    
-    // MARK: - Leaderboard Methods
-    
-    /// 점수를 Game Center 리더보드에 제출
+
+    private func loadTopThreeImages() async {
+        for entry in topThreeEntries {
+            do {
+                let image = try await entry.player.loadPhoto(for: .small)
+                await MainActor.run { [weak self] in
+                    self?.profileImages[entry.player.gamePlayerID] = image
+                }
+            } catch {
+                print("🎮 GameKit: Failed to load image for \(entry.player.displayName): \(error)")
+            }
+        }
+    }
+
+    // MARK: - 점수 제출
+
     func submitScore(_ score: Int64) async throws {
         guard isAuthenticated else {
             throw NSError(domain: "GameKit", code: -1, userInfo: [NSLocalizedDescriptionKey: "Not authenticated"])
         }
-        
-        let leaderboards = try await GKLeaderboard.loadLeaderboards(IDs: [TextConstants.GameCenter.LeaderboardIDs.basic])
-        
+
+        let leaderboards = try await GKLeaderboard.loadLeaderboards(IDs: [TextConstants.GameCenter.currentLeaderboardID])
+
         guard let leaderboard = leaderboards.first else {
             throw NSError(domain: "GameKit", code: -1, userInfo: [NSLocalizedDescriptionKey: "Leaderboard not found"])
         }
-        
+
         try await leaderboard.submitScore(
             Int(score),
             context: 0,
             player: GKLocalPlayer.local
         )
-        
+
         print("🎮 GameKit: Score submitted successfully: \(score)")
     }
-    
-    /// 리더보드 진입 시 top 100 데이터 로드
-    func loadTop100Leaderboard() async throws {
-        print("🎮 GameKit: Loading top 100 leaderboard...")
-        
-        await MainActor.run { [weak self] in
-            self?.isLoadingLeaderboard = true
-        }
-        
-        defer {
-            Task { @MainActor [weak self] in
-                self?.isLoadingLeaderboard = false
+
+    // MARK: - 프로필 이미지 캐시 (Top 3용)
+    var profileImages: [String: UIImage] = [:]
+
+    // MARK: - 뷰 컨트롤러 처리 클로저
+    var presentViewController: ((UIViewController) -> Void)?
+    var dismissViewController: (() -> Void)?
+    var onAuthenticationCompleted: (() -> Void)?
+
+    // MARK: - 테스트용 데이터 확인 함수
+
+    /// 로드된 데이터를 콘솔에 출력 (테스트용)
+    func printDataStatus() {
+        print("🎮 === GameKitManager 데이터 상태 ===")
+        print("🎮 인증 상태: \(isAuthenticated ? "✅ 인증됨" : "❌ 미인증 (게스트 모드)")")
+        print("🎮 플레이어 이름: \(playerDisplayName)")
+        print("🎮 플레이어 점수: \(playerScore)")
+        print("🎮 플레이어 랭크: \(playerRank != nil ? "#\(playerRank!)" : "없음")")
+
+        print("🎮 프로필 이미지: \(playerPhoto != nil ? "✅ 로드됨" : "❌ 없음")")
+
+        print("🎮 === 리더보드 데이터 (Top 3) ===")
+        if topThreeEntries.isEmpty {
+            print("🎮 리더보드 데이터: ❌ 없음")
+        } else {
+            for (index, entry) in topThreeEntries.enumerated() {
+                let rank = index + 1
+                let name = entry.player.displayName
+                let score = entry.score
+                print("🎮 #\(rank): \(name) - \(score)점")
             }
         }
-        
-        guard isAuthenticated else {
-            print("🎮 GameKit: ❌ Not authenticated - cannot load leaderboard")
-            throw NSError(domain: "GameKit", code: -1, userInfo: [NSLocalizedDescriptionKey: "Not authenticated"])
+
+        print("🎮 프로필 이미지 캐시: \(profileImages.count)개")
+        for (playerID, _) in profileImages {
+            print("🎮   - \(playerID): ✅ 이미지 로드됨")
         }
-        
-        let leaderboards = try await GKLeaderboard.loadLeaderboards(IDs: [TextConstants.GameCenter.LeaderboardIDs.basic])
-        
-        guard let leaderboard = leaderboards.first else {
-            throw NSError(domain: "GameKit", code: -1, userInfo: [NSLocalizedDescriptionKey: "Leaderboard not found"])
-        }
-        
-        // Top 100 엔트리 로드
-        let entries = try await leaderboard.loadEntries(
-            for: .global,
-            timeScope: .allTime,
-            range: NSRange(location: 1, length: 100)
-        )
-        
-        // 플레이어 이미지들을 백그라운드에서 로드
-        await loadPlayerImages(for: entries.1)
-        
-        await MainActor.run { [weak self] in
-            self?.leaderboardEntries = entries.1
-            print("🎮 GameKit: ✅ Top 100 leaderboard loaded (\(entries.1.count) entries)")
-        }
-    }
-    
-    /// 글로벌 리더보드 데이터 로드 (기존 메서드 유지)
-    func loadGlobalLeaderboard() async throws {
-        await MainActor.run { [weak self] in
-            self?.isLoadingLeaderboard = true
-        }
-        
-        defer {
-            Task { @MainActor [weak self] in
-                self?.isLoadingLeaderboard = false
-            }
-        }
-        
-        guard isAuthenticated else {
-            // 비로그인 상태 - 샘플 데이터 표시
-            await MainActor.run { [weak self] in
-                self?.showingSampleData = true
-                self?.leaderboardEntries = []
-            }
-            return
-        }
-        
-        let leaderboards = try await GKLeaderboard.loadLeaderboards(IDs: [TextConstants.GameCenter.LeaderboardIDs.basic])
-        
-        guard let leaderboard = leaderboards.first else {
-            throw NSError(domain: "GameKit", code: -1, userInfo: [NSLocalizedDescriptionKey: "No leaderboard found"])
-        }
-        
-        let (_, entries, _) = try await leaderboard.loadEntries(
-            for: .global,
-            timeScope: .allTime,
-            range: NSRange(location: 1, length: 50)
-        )
-        
-        await MainActor.run { [weak self] in
-            self?.showingSampleData = false
-            self?.leaderboardEntries = entries
-        }
-        
-        // 프로필 이미지 비동기 로드
-        Task {
-            await loadProfileImages(for: entries)
-        }
-    }
-    
-    /// 프로필 이미지 비동기 로드
-    private func loadProfileImages(for entries: [GKLeaderboard.Entry]) async {
-        for entry in entries {
-            let playerID = entry.player.gamePlayerID
-            
-            // 이미 로드된 이미지는 스킵
-            let alreadyLoaded = await MainActor.run { [weak self] in
-                return self?.profileImages[playerID] != nil
-            }
-            
-            if alreadyLoaded { continue }
-            
-            do {
-                let image = try await entry.player.loadPhoto(for: .small)
-                await MainActor.run { [weak self] in
-                    self?.profileImages[playerID] = image
-                }
-            } catch {
-                // 이미지 로드 실패 - 무시
-            }
-        }
-    }
-    
-    // MARK: - Utility Properties
-    
-    var isGameCenterAvailable: Bool {
-        return isAuthenticated
-    }
-    
-    var playerID: String {
-        return localPlayer?.gamePlayerID ?? "guest"
+
+        print("🎮 리더보드 1~100 배열 크기: \(top100Entries.count)")
+
+        print("🎮 === 데이터 로드 완료 ===")
     }
 }
 
-// MARK: - GKGameCenterControllerDelegate
-extension GameKitManager: GKGameCenterControllerDelegate {
-    func gameCenterViewControllerDidFinish(_ gameCenterViewController: GKGameCenterViewController) {
-        gameCenterViewController.dismiss(animated: true)
-    }
-}

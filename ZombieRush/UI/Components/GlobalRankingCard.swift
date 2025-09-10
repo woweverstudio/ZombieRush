@@ -34,6 +34,8 @@ struct GlobalRankingCard: View {
     private var rankingList: some View {
         ScrollView {
             LazyVStack(spacing: 8) {
+                // TODO: GameKitManager 리팩토링 후 재활성화
+                /*
                 if gameKitManager.isLoadingLeaderboard {
                     loadingView
                 } else if !gameKitManager.isAuthenticated {
@@ -43,6 +45,10 @@ struct GlobalRankingCard: View {
                 } else {
                     realDataView
                 }
+                */
+
+                // 임시로 샘플 데이터만 표시
+                sampleDataView
             }
             .padding(.horizontal, 10)
         }
@@ -112,18 +118,20 @@ struct GlobalRankingCard: View {
     
     // MARK: - Real Data View (Authenticated with data)
     private var realDataView: some View {
+        // TODO: GameKitManager 리팩토링 후 재활성화
+        /*
         LazyVStack(spacing: 0) {
             ForEach(Array(gameKitManager.leaderboardEntries.enumerated()), id: \.offset) { index, entry in
                 let rank = entry.rank
                 let playerName = entry.player.displayName
                 let totalScore = entry.score
                 let playerID = entry.player.gamePlayerID
-                
+
                 // 16비트 인코딩에서 시간과 킬 수 분리
                 let timeInSeconds = Int((totalScore >> 16) & 0xFFFF)
                 let kills = Int(totalScore & 0xFFFF)
                 let formattedTime = String(format: "%02d:%02d", timeInSeconds / 60, timeInSeconds % 60)
-                
+
                 GlobalRankRow(
                     rank: rank,
                     nickname: playerName,
@@ -136,9 +144,13 @@ struct GlobalRankingCard: View {
                     // 추가 로딩 기능은 향후 구현 예정
                 }
             }
-            
+
             // 더 많은 데이터 로드 기능은 향후 구현 예정
         }
+        */
+
+        // 임시 빈 뷰
+        EmptyView()
     }
     
     // MARK: - Sample Data

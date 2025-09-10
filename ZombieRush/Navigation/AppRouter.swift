@@ -19,25 +19,9 @@ final class AppRouter {
 
     // MARK: - Initialization
     init() {
-        // 앱 시작 시 로딩 화면으로 시작
-        startLoadingSequence()
+        // 앱 시작 시 로딩 화면으로 시작 (초기 라우트는 .loading)
     }
 
-    // MARK: - Loading Sequence
-    private func startLoadingSequence() {
-        // 2초 후 메인메뉴로 이동
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { [weak self] in
-            guard let self = self else { return }
-
-            self.navigationDirection = .forward
-            print("🔄 Loading Complete: loading → mainMenu")
-
-            // 로딩 완료 후 메인메뉴로 이동
-            self.previousRoute = self.currentRoute
-            self.currentRoute = .mainMenu
-            self.gameData = nil
-        }
-    }
     
     // MARK: - Navigation Methods
     func navigate(to route: Route, with data: GameData? = nil, animated: Bool = true) {

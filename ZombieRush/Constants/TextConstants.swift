@@ -75,6 +75,6 @@ struct TextConstants {
             // static let space = "nnb_space_ranking"
         }
         
-        static let currentLeaderboardID = LeaderboardIDs.basic
+        static let currentLeaderboardID = "nnb_basic_ranking"
     }
 }
