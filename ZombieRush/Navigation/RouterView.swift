@@ -9,6 +9,9 @@ struct RouterView: View {
         ZStack {
             Group {
                 switch router.currentRoute {
+                case .loading:
+                    LoadingView()
+                        .id("loading")
                 case .mainMenu:
                     MainMenuView()
                         .id("mainMenu")

@@ -12,14 +12,31 @@ enum NavigationDirection {
 final class AppRouter {
     
     // MARK: - Observable Properties (직접 노출로 변경 감지 보장)
-    private(set) var currentRoute: Route = .mainMenu
+    private(set) var currentRoute: Route = .loading
     private(set) var previousRoute: Route?
     private(set) var gameData: GameData?
     private(set) var navigationDirection: NavigationDirection = .forward
-    
+
     // MARK: - Initialization
     init() {
-        // 앱 시작 시 바로 메인메뉴로 시작
+        // 앱 시작 시 로딩 화면으로 시작
+        startLoadingSequence()
+    }
+
+    // MARK: - Loading Sequence
+    private func startLoadingSequence() {
+        // 2초 후 메인메뉴로 이동
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { [weak self] in
+            guard let self = self else { return }
+
+            self.navigationDirection = .forward
+            print("🔄 Loading Complete: loading → mainMenu")
+
+            // 로딩 완료 후 메인메뉴로 이동
+            self.previousRoute = self.currentRoute
+            self.currentRoute = .mainMenu
+            self.gameData = nil
+        }
     }
     
     // MARK: - Navigation Methods
@@ -85,7 +102,7 @@ final class AppRouter {
             AudioManager.shared.playMainMenuMusic()
         case .game:
             AudioManager.shared.playGameMusic()
-        case .gameOver:
+        case .gameOver, .loading:
             // 게임오버 시에는 음악 변경하지 않음 (게임 음악 유지)
             break
         }

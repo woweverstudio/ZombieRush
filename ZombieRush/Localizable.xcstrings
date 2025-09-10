@@ -245,6 +245,24 @@
         }
       }
     },
+    "GAME_START_MESSAGE" : {
+      "comment" : "Game Start Message",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dodge the chasing blocks!"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "쫒아오는 네모를 피해 도망치세요!"
+          }
+        }
+      }
+    },
     "GAME_TITLE_LINE1" : {
       "comment" : "Game title first line - NEMO NEMO for Korean, BLOCK for English",
       "extractionState" : "manual",
@@ -622,6 +640,9 @@
           }
         }
       }
+    },
+    "LOADING..." : {
+
     },
     "PROFILE_GAME_CENTER" : {
       "comment" : "Player Profile Card",
@@ -1019,6 +1040,24 @@
         }
       }
     },
+    "ULTIMATE_NUCLEAR_ACTIVATED" : {
+      "comment" : "Ultimate Skill - Nuclear Attack Activation",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nuke Detected!"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "핵공격 감지!"
+          }
+        }
+      }
+    },
     "WAVE_ANNOUNCEMENT_FORMAT" : {
       "comment" : "Wave System",
       "extractionState" : "manual",
@@ -1051,42 +1090,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "웨이브: %d"
-          }
-        }
-      }
-    },
-    "GAME_START_MESSAGE" : {
-      "comment" : "Game Start Message",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Dodge the chasing blocks!"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "쫒아오는 네모를 피해 도망치세요!"
-          }
-        }
-      }
-    },
-    "ULTIMATE_NUCLEAR_ACTIVATED" : {
-      "comment" : "Ultimate Skill - Nuclear Attack Activation",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nuke Detected!"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "핵공격 감지!"
           }
         }
       }

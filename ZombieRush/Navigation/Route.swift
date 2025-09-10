@@ -2,6 +2,7 @@ import Foundation
 
 // MARK: - Route Enum
 enum Route: String, CaseIterable, Hashable {
+    case loading = "loading"
     case mainMenu = "main_menu"
     case game = "game"
     case settings = "settings"
@@ -10,6 +11,8 @@ enum Route: String, CaseIterable, Hashable {
     
     var title: String {
         switch self {
+        case .loading:
+            return "LOADING..."
         case .mainMenu:
             return "NEMO NEMO BEAM"
         case .game:
@@ -30,7 +33,7 @@ enum Route: String, CaseIterable, Hashable {
 
 // MARK: - Navigation State
 struct NavigationState {
-    var currentRoute: Route = .mainMenu  // 로딩 화면 제거, 바로 메인메뉴로
+    var currentRoute: Route = .loading  // 로딩 화면으로 시작
     var previousRoute: Route?
     var gameData: GameData?
     
