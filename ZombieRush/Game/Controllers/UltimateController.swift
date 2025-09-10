@@ -18,6 +18,10 @@ class UltimateController: NSObject {
     private var progressRing: SKShapeNode?
     private var buttonSprite: SKSpriteNode?
 
+    // MARK: - Managers
+    private let hapticManager = HapticManager.shared
+    private weak var toastMessageManager: ToastMessageManager?
+
     // MARK: - Ultimate Skill
     private var ultimateSkill: UltimateSkill
 
@@ -42,11 +46,12 @@ class UltimateController: NSObject {
     }
 
     // MARK: - Initialization
-    init(scene: SKScene, cameraNode: SKCameraNode, player: Player, skill: UltimateSkill) {
+    init(scene: SKScene, cameraNode: SKCameraNode, player: Player, skill: UltimateSkill, toastMessageManager: ToastMessageManager) {
         self.scene = scene
         self.cameraNode = cameraNode
         self.player = player
         self.ultimateSkill = skill
+        self.toastMessageManager = toastMessageManager
 
         super.init()
 
@@ -114,7 +119,7 @@ class UltimateController: NSObject {
 
     private func setupGameProgress() {
         // 게임 시작 시 초기화
-        ultimateGauge = 0
+        ultimateGauge = 95
     }
 
 
@@ -123,9 +128,26 @@ class UltimateController: NSObject {
     func onZombieAttacked() {
         guard ultimateGauge < 100 else { return }
 
+        let previousGauge = ultimateGauge
         ultimateGauge += 1
+
+        // 게이지가 100이 되는 순간을 감지하여 피드백 제공
+        if previousGauge < 100 && ultimateGauge >= 100 {
+            triggerUltimateReadyFeedback()
+        }
+
         updateUltimateButton()
         updateProgressRing()
+    }
+
+    // MARK: - Ultimate Ready Feedback
+    private func triggerUltimateReadyFeedback() {
+        // 강한 햅틱 피드백
+        hapticManager.playUltimateReadyHaptic()
+
+        // 토스트 메시지 표시
+        let message = TextConstants.Ultimate.ultimateReady
+        toastMessageManager?.showToastMessage(message, duration: 3.0)
     }
 
     // MARK: - UI Updates
@@ -230,6 +252,7 @@ class UltimateController: NSObject {
 
         // SKNode의 containsPoint 메소드를 사용한 간단한 터치 확인
         if ultimateButton.contains(location) {
+            hapticManager.playHeavyHaptic()
             activateUltimate()
             return true
         }

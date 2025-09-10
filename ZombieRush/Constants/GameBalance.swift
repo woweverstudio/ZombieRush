@@ -24,7 +24,7 @@ struct GameBalance {
         static let maxHealth: Int = 100
         static let maxAmmo: Int = 30
         static let reloadTime: TimeInterval = 2.0
-        static let damagePerHit: Int = 100
+        static let damagePerHit: Int = 10
         static let baseMoveSpeed: CGFloat = 180.0
         static let waveSpeedBonus: CGFloat = 10.0
         static let maxWaveSpeedBonus: CGFloat = 100.0

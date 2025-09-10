@@ -73,11 +73,11 @@ class GameScene: SKScene {
         DispatchQueue.main.async { [weak self] in
             self?.setupPhysicsSystem()
             self?.setupCameraSystem()
-            self?.setupUltimateController()  // HUD 바로 뒤로 이동
+            self?.setupToastMessageManager()
+            self?.setupZombieSpawnSystem()
+            self?.setupUltimateController()
             self?.setupController()
             self?.setupHUD()
-            self?.setupZombieSpawnSystem()
-            self?.setupToastMessageManager()
             self?.setupItemSystem()
             self?.setupUltimateSkill() // 제일 마지막 호출해야함
 
@@ -168,9 +168,9 @@ class GameScene: SKScene {
     }
     
     private func setupUltimateController() {
-        guard let player, let cameraNode else { return }
+        guard let player, let cameraNode, let toastMessageManager else { return }
 
-        ultimateController = UltimateController(scene: self, cameraNode: cameraNode, player: player, skill: ultimateSkill)
+        ultimateController = UltimateController(scene: self, cameraNode: cameraNode, player: player, skill: ultimateSkill, toastMessageManager: toastMessageManager)
     }
 
     private func setupUltimateSkill() {

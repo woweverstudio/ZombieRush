@@ -22,6 +22,7 @@ class HapticManager {
     private let impactLight = UIImpactFeedbackGenerator(style: .light)
     private let impactRigid = UIImpactFeedbackGenerator(style: .rigid)
     private let impactSoft = UIImpactFeedbackGenerator(style: .soft)
+    private let impactHeavy = UIImpactFeedbackGenerator(style: .heavy)
     
     // MARK: - Initialization
     init() {
@@ -35,6 +36,7 @@ class HapticManager {
         impactLight.prepare()
         impactRigid.prepare()
         impactSoft.prepare()
+        impactHeavy.prepare()
     }
     
     // MARK: - Haptic Methods
@@ -63,6 +65,17 @@ class HapticManager {
         impactLight.impactOccurred(intensity: CGFloat(UIConstants.Haptic.buttonIntensity))
     }
     
+    func playUltimateReadyHaptic() {
+        guard isHapticEnabled else { return }
+        impactHeavy.prepare()
+
+        for i in 0..<3 {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2 * Double(i)) {
+                self.impactHeavy.impactOccurred()
+            }
+        }
+    }
+    
     // MARK: - Generic Haptic Methods
     func playLightHaptic() {
         guard isHapticEnabled else { return }
@@ -76,7 +89,7 @@ class HapticManager {
     
     func playHeavyHaptic() {
         guard isHapticEnabled else { return }
-        impactSoft.impactOccurred()
+        impactHeavy.impactOccurred()
     }
 }
 

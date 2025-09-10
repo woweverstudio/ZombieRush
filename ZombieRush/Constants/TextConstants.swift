@@ -18,6 +18,11 @@ struct TextConstants {
         static let quitButton = NSLocalizedString("GAME_OVER_QUIT_BUTTON", comment: "Quit game button")
     }
 
+    // MARK: - Ultimate System
+    struct Ultimate {
+        static let ultimateReady = NSLocalizedString("ULTIMATE_READY", comment: "Ultimate skill is ready to use")
+    }
+
     // MARK: - HUD Display
     struct HUD {
         static let scoreFormat = NSLocalizedString("HUD_SCORE_FORMAT", comment: "Score display format")
