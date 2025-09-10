@@ -9,8 +9,8 @@ struct RankingEntryView: View {
     private var rankColor: Color {
         switch rank {
         case 1: return .yellow
-        case 2: return .gray
-        case 3: return Color.orange.opacity(0.8)
+        case 2: return .white
+        case 3: return .orange
         default: return .white
         }
     }
@@ -28,7 +28,7 @@ struct RankingEntryView: View {
         HStack(spacing: 12) {
             // 순위
             Text(rankIcon)
-                .font(.system(size: 18))
+                .font(.system(size: 28))
                 .frame(width: 30, alignment: .center)
 
             // 프로필 이미지

@@ -148,7 +148,7 @@ class GameKitManager: NSObject {
                 }
             } else if let error = error {
                 // 로그인 실패
-                print("🎮 GameKit: Login failed")
+                print("🎮 GameKit: Login failed (\(error.localizedDescription)")
                 self.isAuthenticated = false
                 completion(false)
             } else if localPlayer.isAuthenticated {
@@ -331,9 +331,9 @@ class GameKitManager: NSObject {
         try await leaderboard.submitScore(
             Int(score),
             context: 0,
-            player: GKLocalPlayer.local
+            player: localPlayer ?? .local
         )
-
+        
         print("🎮 GameKit: Score submitted successfully: \(score)")
     }
 

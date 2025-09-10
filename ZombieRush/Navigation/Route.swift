@@ -54,17 +54,13 @@ struct NavigationState {
 
 // MARK: - Game Data Transfer Object
 struct GameData {
-    let playTime: TimeInterval
+    let playTime: Int
     let score: Int
-    let wave: Int
-    let isRestart: Bool
-    let isNewRecord: Bool
+    let success: Bool
     
-    init(playTime: TimeInterval = 0, score: Int = 0, wave: Int = 0, isRestart: Bool = false, isNewRecord: Bool = false) {
+    init(playTime: Int = 0, score: Int = 0, success: Bool = false) {
         self.playTime = playTime
         self.score = score
-        self.wave = wave
-        self.isRestart = isRestart
-        self.isNewRecord = isNewRecord
+        self.success = success
     }
 }

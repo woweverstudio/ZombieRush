@@ -225,21 +225,11 @@ class UltimateController: NSObject {
 
     // MARK: - Public Methods
     func handleTouch(at location: CGPoint) -> Bool {
-        guard let ultimateButton = ultimateButton else { return false }
+        guard let ultimateButton = ultimateButton,
+              ultimateGauge >= 100 else { return false }
 
-        // 게이지가 100이 아니면 클릭 무시
-        guard ultimateGauge >= 100 else { return false }
-
-        // 버튼 영역 내 터치 확인 (계산된 buttonPosition 사용)
-        let currentButtonPosition = buttonPosition
-        let buttonFrame = CGRect(
-            x: currentButtonPosition.x - buttonSize/2,
-            y: currentButtonPosition.y - buttonSize/2,
-            width: buttonSize,
-            height: buttonSize
-        )
-
-        if buttonFrame.contains(location) {
+        // SKNode의 containsPoint 메소드를 사용한 간단한 터치 확인
+        if ultimateButton.contains(location) {
             activateUltimate()
             return true
         }

@@ -194,34 +194,52 @@ struct PlayerProfileCard: View {
     
     // MARK: - Authenticated User Content
     private var authenticatedContent: some View {
-        let personalRecords = GameStateManager.shared.getPersonalRecords()
-        let bestRecord = personalRecords.first
-        
-        return HStack {
+        HStack {
             Spacer()
-            // TIME 섹션 (GameOverView 스타일)
+
+            // 글로벌 랭킹 정보 표시
             VStack(spacing: 8) {
-                Text(NSLocalizedString("PROFILE_TIME_LABEL", comment: "Time label"))
+                Text(NSLocalizedString("PROFILE_GLOBAL_RANK", comment: "Global rank label"))
                     .font(.system(size: 16, weight: .bold, design: .monospaced))
                     .foregroundColor(Color.cyan)
 
-                Text(bestRecord?.formattedTime ?? "00:00")
-                    .font(.system(size: 28, weight: .heavy, design: .monospaced))
-                    .foregroundColor(.white)
-                    .shadow(color: Color.cyan, radius: 5, x: 0, y: 0)
-            }
-            Spacer()
-            // KILLS 섹션 (GameOverView 스타일)
-            VStack(spacing: 8) {
-                Text(NSLocalizedString("PROFILE_KILLS_LABEL", comment: "Kills label"))
-                    .font(.system(size: 16, weight: .bold, design: .monospaced))
-                    .foregroundColor(Color.cyan)
+                if let rank = gameKitManager.playerRank {
+                    Text("#\(rank)")
+                        .font(.system(size: 28, weight: .heavy, design: .monospaced))
+                        .foregroundColor(.white)
+                        .shadow(color: Color.cyan.opacity(0.5), radius: 3, x: 0, y: 0)
+                } else {
+                    Text("-")
+                        .font(.system(size: 28, weight: .heavy, design: .monospaced))
+                        .foregroundColor(.gray)
+                }
 
-                Text("\(bestRecord?.zombieKills ?? 0)")
-                    .font(.system(size: 28, weight: .heavy, design: .monospaced))
-                    .foregroundColor(.white)
-                    .shadow(color: Color.cyan, radius: 5, x: 0, y: 0)
+                Text("RANKING")
+                    .font(.system(size: 10, weight: .regular, design: .monospaced))
+                    .foregroundColor(Color.cyan.opacity(0.7))
+                    .tracking(1)
             }
+
+            Spacer()
+
+            // 플레이어 이름 표시
+            VStack(spacing: 8) {
+                Text("PLAYER")
+                    .font(.system(size: 16, weight: .bold, design: .monospaced))
+                    .foregroundColor(Color.white)
+
+                Text(gameKitManager.playerDisplayName)
+                    .font(.system(size: 18, weight: .semibold, design: .monospaced))
+                    .foregroundColor(Color.white)
+                    .lineLimit(1)
+                    .frame(maxWidth: 120)
+
+                Text("NAME")
+                    .font(.system(size: 10, weight: .regular, design: .monospaced))
+                    .foregroundColor(Color.white.opacity(0.7))
+                    .tracking(1)
+            }
+
             Spacer()
         }
     }

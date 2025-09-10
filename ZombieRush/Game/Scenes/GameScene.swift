@@ -26,18 +26,21 @@ class GameScene: SKScene {
     private var toastMessageManager: ToastMessageManager?
     private var itemSpawnSystem: ItemSpawnSystem?
     private var itemEffectSystem: ItemEffectSystem?
-    private var ultimateSkill: UltimateSkill
+    
     
     // MARK: - Dependencies
     private let appRouter: AppRouter
+    private let gameKitManager: GameKitManager
+    private var ultimateSkill: UltimateSkill
     
     // MARK: - Game State
     private let gameStateManager = GameStateManager.shared
     private var lastUpdateTime: TimeInterval = 0
 
     // MARK: - Initialization
-    init(appRouter: AppRouter, ultimateSkill: UltimateSkill) {
+    init(appRouter: AppRouter, gameKitManager:GameKitManager, ultimateSkill: UltimateSkill) {
         self.appRouter = appRouter
+        self.gameKitManager = gameKitManager
         self.ultimateSkill = ultimateSkill
         super.init(size: .zero)
     }
@@ -343,18 +346,30 @@ class GameScene: SKScene {
         hideAllGameUI()
         clearGameNodes()
 
-        let playTime = gameStateManager.getPlayTime()
-        let score = gameStateManager.getScore()
-        let wave = gameStateManager.getCurrentWave()
-        let isNewRecord = gameStateManager.saveCurrentGameRecordAndCheckNew()
-
-        DispatchQueue.main.async { [weak self] in
-            self?.appRouter.showGameOver(
-                playTime: playTime,
-                score: score,
-                wave: wave,
-                isNewRecord: isNewRecord
-            )
+        // Game Center에 점수 제출
+        Task {
+            let playTime = Int(gameStateManager.getPlayTime())
+            let score = gameStateManager.getScore()
+            
+            let points = ScoreEncodingUtils.encodeScore(timeInSeconds: playTime, zombieKills: score)
+            
+            var success = false
+            
+            do {
+                try await gameKitManager.submitScore(points)
+                success = true
+            } catch {
+                print(error.localizedDescription)
+                success = false
+            }
+            
+            DispatchQueue.main.async { [weak self] in
+                self?.appRouter.showGameOver(
+                    playTime: playTime,
+                    score: score,
+                    success: success
+                )
+            }
         }
     }
 

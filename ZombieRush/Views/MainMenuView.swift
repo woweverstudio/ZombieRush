@@ -62,16 +62,24 @@ struct MainMenuView: View {
                     Spacer()
 
                     // 메시지 박스
-                    Text(gameStartTooltip)
-                        .font(.system(size: 12, weight: .medium, design: .monospaced))
-                        .foregroundColor(.white)
-                        .lineLimit(2)
-                        .padding(.vertical, 12)
-                        .frame(minHeight: 60)
-                        .frame(maxWidth: .infinity)
-                        .multilineTextAlignment(.leading)
-                        
-                    
+                    VStack(spacing: 0) {
+                        Text(gameStartTooltip)
+                            .font(.system(size: 12, weight: .medium, design: .monospaced))
+                            .foregroundColor(.white)
+                            .lineLimit(2)
+                            .padding(.vertical, 12)
+                            .frame(minHeight: 60)
+                            .frame(maxWidth: .infinity)
+                            .multilineTextAlignment(.leading)
+                            .background(
+                                    SpeechBubble()
+                                        .fill(Color.black.opacity(0.4))
+                                        .overlay(
+                                            SpeechBubble()
+                                                .stroke(Color.white.opacity(0.3), lineWidth: 1)
+                                        )
+                                )
+                    }
 
                     NeonButton("GAME START", fullWidth: true) {
                         router.navigate(to: .game)

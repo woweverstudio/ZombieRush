@@ -25,17 +25,11 @@ struct ZombieRushApp: App {
                 .environment(audioManager)     // Audio 매니저 주입
                 .environment(hapticManager)    // Haptic 매니저 주입
                 .onAppear {
-                    // GameStateManager에 GameKitManager 의존성 주입
-                    GameStateManager.shared.setGameKitManager(gameKitManager)
-
                     // 앱 시작 시 즉시 메인메뉴 음악 재생
                     audioManager.playMainMenuMusic()
 
                     // 앱 시작 시 GameKit 인증 시도
-                    gameKitManager.loadInitialData {
-                        // 초기 데이터 로드 완료
-                        print("🎮 GameKit: 앱 시작 시 초기 데이터 로드 완료")
-                    }
+                    gameKitManager.loadInitialData(completion: {})
                 }
         }
         .onChange(of: scenePhase) { oldPhase, newPhase in

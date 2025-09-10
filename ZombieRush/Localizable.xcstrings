@@ -10,13 +10,7 @@
     "#--" : {
 
     },
-    "#%@" : {
-
-    },
     "#%lld" : {
-
-    },
-    "%@" : {
 
     },
     "%@ %@" : {
@@ -30,6 +24,9 @@
       }
     },
     "%lld" : {
+
+    },
+    "🎉 신기록 달성! 🎉" : {
 
     },
     "🏆" : {
@@ -1010,6 +1007,9 @@
         }
       }
     },
+    "NAME" : {
+
+    },
     "PLAY_TIME_LABEL" : {
       "comment" : "Player Card - Play Time Label",
       "extractionState" : "manual",
@@ -1029,6 +1029,9 @@
       }
     },
     "Player" : {
+
+    },
+    "PLAYER" : {
 
     },
     "PROFILE_GAME_CENTER" : {
@@ -1210,6 +1213,9 @@
           }
         }
       }
+    },
+    "RANKING" : {
+
     },
     "RANKING_GLOBAL_TOP_100" : {
       "comment" : "Global Ranking Card",
@@ -1552,6 +1558,15 @@
           }
         }
       }
+    },
+    "게임 종료" : {
+
+    },
+    "처치 수" : {
+
+    },
+    "플레이 시간" : {
+
     }
   },
   "version" : "1.0"

@@ -52,12 +52,12 @@ final class AppRouter {
     }
     
     func restart(animated: Bool = true) {
-        let restartData = GameData(isRestart: true)
+        let restartData = GameData()
         navigate(to: .game, with: restartData, animated: animated)
     }
     
-    func showGameOver(playTime: TimeInterval, score: Int, wave: Int, isNewRecord: Bool = false, animated: Bool = true) {
-        let gameOverData = GameData(playTime: playTime, score: score, wave: wave, isNewRecord: isNewRecord)
+    func showGameOver(playTime: Int, score: Int, success: Bool = false, animated: Bool = true) {
+        let gameOverData = GameData(playTime: playTime, score: score, success: success)
         navigate(to: .gameOver, with: gameOverData, animated: animated)
     }
     

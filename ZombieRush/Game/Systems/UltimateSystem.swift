@@ -63,7 +63,7 @@ class NuclearAttackSkill: UltimateSkill {
     }
 
     private func performNuclearExplosion(at position: CGPoint) {
-        guard let scene = scene, let zombieSpawnSystem = zombieSpawnSystem else {
+        guard let scene = scene else {
             return
         }
 

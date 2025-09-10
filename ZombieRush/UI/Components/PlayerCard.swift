@@ -57,17 +57,20 @@ struct PlayerCard: View {
                             .multilineTextAlignment(.center)
                             .lineLimit(2)
 
-                        // 플레이 시간 (GameKit 점수에서 디코딩)
-                        let playTime = ScoreEncodingUtils.formatTime(playerBestTime)
-                        Text(playTime)
-                            .font(.system(size: 28, weight: .bold, design: .monospaced))
-                            .foregroundColor(.cyan)
-                            .shadow(color: .cyan.opacity(0.5), radius: 5, x: 0, y: 0)
+                        VStack(spacing: 6) {
+                            // 플레이 시간 (GameKit 점수에서 디코딩)
+                            let playTime = ScoreEncodingUtils.formatTime(playerBestTime)
+                            Text(playTime)
+                                .font(.system(size: 28, weight: .bold, design: .monospaced))
+                                .foregroundColor(.cyan)
+                                .shadow(color: .cyan.opacity(0.5), radius: 5, x: 0, y: 0)
 
-                        Text(NSLocalizedString("PLAY_TIME_LABEL", comment: "Player Card - Play Time Label"))
-                            .font(.system(size: 12, weight: .regular, design: .monospaced))
-                            .foregroundColor(.cyan.opacity(0.7))
-                            .tracking(2)
+                            Text(NSLocalizedString("PLAY_TIME_LABEL", comment: "Player Card - Play Time Label"))
+                                .font(.system(size: 12, weight: .medium, design: .monospaced))
+                                .foregroundColor(.cyan.opacity(0.7))
+                                .tracking(2)
+                        }
+                        
 
                         // 랭킹과 킬 수 (시간 다음으로 중요)
                         HStack(spacing: 20) {
@@ -78,7 +81,7 @@ struct PlayerCard: View {
                                         .font(.system(size: 18, weight: .bold, design: .monospaced))
                                         .foregroundColor(.yellow)
                                     Text(NSLocalizedString("RANK_LABEL", comment: "Player Card - Rank Label"))
-                                        .font(.system(size: 10, weight: .regular, design: .monospaced))
+                                        .font(.system(size: 12, weight: .bold, design: .monospaced))
                                         .foregroundColor(.yellow.opacity(0.7))
                                 }
                             } else {
@@ -87,7 +90,7 @@ struct PlayerCard: View {
                                         .font(.system(size: 18, weight: .bold, design: .monospaced))
                                         .foregroundColor(.gray)
                                     Text(NSLocalizedString("RANK_LABEL", comment: "Player Card - Rank Label"))
-                                        .font(.system(size: 10, weight: .regular, design: .monospaced))
+                                        .font(.system(size: 12, weight: .bold, design: .monospaced))
                                         .foregroundColor(.yellow.opacity(0.7))
                                 }
                             }
@@ -96,10 +99,10 @@ struct PlayerCard: View {
                             VStack(spacing: 4) {
                                 Text("\(playerBestKills)")
                                     .font(.system(size: 18, weight: .bold, design: .monospaced))
-                                    .foregroundColor(.white)
+                                    .foregroundColor(.red)
                                 
                                 Text(NSLocalizedString("KILLS_LABEL", comment: "Player Card - Kills Label"))
-                                    .font(.system(size: 10, weight: .regular, design: .monospaced))
+                                    .font(.system(size: 12, weight: .bold, design: .monospaced))
                                     .foregroundColor(.red.opacity(0.7))
                             }
                         }

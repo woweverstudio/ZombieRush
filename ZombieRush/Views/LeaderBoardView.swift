@@ -79,7 +79,7 @@ struct LeaderBoardView: View {
 
                 // 부족한 만큼 placeholder 표시
                 if gameKitManager.top100Entries.count < 100 {
-                    ForEach(gameKitManager.top100Entries.count + 1...100, id: \.self) { rank in
+                    ForEach((gameKitManager.top100Entries.count + 1)...100, id: \.self) { rank in
                         LeaderboardEntryRow(
                             rank: rank,
                             entry: nil,

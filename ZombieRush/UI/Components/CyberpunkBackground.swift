@@ -3,16 +3,15 @@ import SwiftUI
 // MARK: - Cyberpunk Background Component
 struct CyberpunkBackground: View {
     var body: some View {
-        // 적당한 밝기의 그라데이션 배경 (연보라색 중앙)
-        RadialGradient(
+        // 선형 그라데이션 배경 (위에서 아래로)
+        LinearGradient(
             gradient: Gradient(colors: [
-                Color(red: 0.08, green: 0.02, blue: 0.15),   // 적당한 파란색
-                Color(red: 0.12, green: 0.04, blue: 0.12),   // 적당한 연보라색 (중앙)
-                Color(red: 0.02, green: 0.0, blue: 0.05)     // 적당한 블랙
+                Color(hex: "#0f0c29"),   // 어두운 청록색
+                Color(hex: "#302b63"),   // 중간 청록색
+                Color(hex: "#2C5364")    // 밝은 청록색
             ]),
-            center: .center,
-            startRadius: 0,
-            endRadius: 700
+            startPoint: .top,
+            endPoint: .bottom
         )
         .ignoresSafeArea()
     }
