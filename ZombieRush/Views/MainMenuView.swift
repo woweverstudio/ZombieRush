@@ -8,6 +8,20 @@ struct MainMenuView: View {
     @State private var isDataLoaded: Bool = false
     @State private var lastRefreshTime: Date? = nil
 
+    // 말풍선 메시지 결정
+    private var gameStartTooltip: String {
+        if !gameKitManager.isAuthenticated {
+            // 로그인 안됨
+            return TextConstants.GameCenter.GameStartTooltips.notLoggedIn
+        } else if let playerRank = gameKitManager.playerRank, playerRank <= 3 {
+            // 3등 안에 들었음
+            return TextConstants.GameCenter.GameStartTooltips.top3
+        } else {
+            // 로그인 됨 (일반)
+            return TextConstants.GameCenter.GameStartTooltips.loggedIn
+        }
+    }
+
     var body: some View {
         ZStack {
             // 사이버펑크 배경
@@ -47,9 +61,22 @@ struct MainMenuView: View {
 
                     Spacer()
 
+                    // 메시지 박스
+                    Text(gameStartTooltip)
+                        .font(.system(size: 12, weight: .medium, design: .monospaced))
+                        .foregroundColor(.white)
+                        .lineLimit(2)
+                        .padding(.vertical, 12)
+                        .frame(minHeight: 60)
+                        .frame(maxWidth: .infinity)
+                        .multilineTextAlignment(.leading)
+                        
+                    
+
                     NeonButton("GAME START", fullWidth: true) {
                         router.navigate(to: .game)
                     }
+                    
                 }
                 .frame(maxWidth: 240)
             }

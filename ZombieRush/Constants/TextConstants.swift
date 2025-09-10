@@ -74,7 +74,14 @@ struct TextConstants {
             // static let city = "nnb_city_ranking"
             // static let space = "nnb_space_ranking"
         }
-        
-        static let currentLeaderboardID = "nnb_basic_ranking"
+
+        static let currentLeaderboardID = "weekly_global_top100"
+        static let skeletonMessage = NSLocalizedString("SKELETON_MESSAGE", comment: "Skeleton row message")
+
+        struct GameStartTooltips {
+            static let notLoggedIn = NSLocalizedString("GAME_START_TOOLTIP_NOT_LOGGED_IN", comment: "Game start tooltip when not logged in")
+            static let loggedIn = NSLocalizedString("GAME_START_TOOLTIP_LOGGED_IN", comment: "Game start tooltip when logged in")
+            static let top3 = NSLocalizedString("GAME_START_TOOLTIP_TOP3", comment: "Game start tooltip when in top 3")
+        }
     }
 }

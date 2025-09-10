@@ -4,6 +4,9 @@
     "" : {
 
     },
+    "-" : {
+
+    },
     "#--" : {
 
     },
@@ -262,6 +265,60 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "쫒아오는 네모를 피해 도망치세요!"
+          }
+        }
+      }
+    },
+    "GAME_START_TOOLTIP_LOGGED_IN" : {
+      "comment" : "Game Start Button Tooltip - Logged In",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Challenge this week's Hall of Fame.✨"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이번 주 명예의 전당에 도전하세요.✨"
+          }
+        }
+      }
+    },
+    "GAME_START_TOOLTIP_NOT_LOGGED_IN" : {
+      "comment" : "Game Start Button Tooltip - Not Logged In",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Games won't be recorded without login.🥲"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "로그인을 하지 않으면 게임이 기록되지 않습니다.🥲"
+          }
+        }
+      }
+    },
+    "GAME_START_TOOLTIP_TOP3" : {
+      "comment" : "Game Start Button Tooltip - In Top 3",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Defend your Hall of Fame position.🔥"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "명예의 전당을 사수하세요.🔥"
           }
         }
       }
@@ -660,7 +717,7 @@
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "킬 수"
+            "value" : "처치 수"
           }
         }
       }
@@ -679,6 +736,24 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "글로벌 랭킹"
+          }
+        }
+      }
+    },
+    "LOADING_DATA" : {
+      "comment" : "Loading screen - Loading data text",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LOADING DATA..."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "데이터 로딩 중..."
           }
         }
       }
@@ -719,6 +794,222 @@
         }
       }
     },
+    "MONTH_APRIL" : {
+      "comment" : "Month name - April",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "April"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "4월"
+          }
+        }
+      }
+    },
+    "MONTH_AUGUST" : {
+      "comment" : "Month name - August",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "August"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "8월"
+          }
+        }
+      }
+    },
+    "MONTH_DECEMBER" : {
+      "comment" : "Month name - December",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "December"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "12월"
+          }
+        }
+      }
+    },
+    "MONTH_FEBRUARY" : {
+      "comment" : "Month name - February",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "February"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "2월"
+          }
+        }
+      }
+    },
+    "MONTH_JANUARY" : {
+      "comment" : "Month name - January",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "January"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1월"
+          }
+        }
+      }
+    },
+    "MONTH_JULY" : {
+      "comment" : "Month name - July",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "July"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "7월"
+          }
+        }
+      }
+    },
+    "MONTH_JUNE" : {
+      "comment" : "Month name - June",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "June"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "6월"
+          }
+        }
+      }
+    },
+    "MONTH_MARCH" : {
+      "comment" : "Month name - March",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "March"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "3월"
+          }
+        }
+      }
+    },
+    "MONTH_MAY" : {
+      "comment" : "Month name - May",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "May"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "5월"
+          }
+        }
+      }
+    },
+    "MONTH_NOVEMBER" : {
+      "comment" : "Month name - November",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "November"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "11월"
+          }
+        }
+      }
+    },
+    "MONTH_OCTOBER" : {
+      "comment" : "Month name - October",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "October"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "10월"
+          }
+        }
+      }
+    },
+    "MONTH_SEPTEMBER" : {
+      "comment" : "Month name - September",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "September"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "9월"
+          }
+        }
+      }
+    },
     "PLAY_TIME_LABEL" : {
       "comment" : "Player Card - Play Time Label",
       "extractionState" : "manual",
@@ -726,13 +1017,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "PLAY TIME"
+            "value" : "SURVIVAL TIME"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "플레이 시간"
+            "value" : "최대 생존시간"
           }
         }
       }
@@ -915,277 +1206,7 @@
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "랭킹"
-          }
-        }
-      }
-    },
-    "WEEK_FORMAT" : {
-      "comment" : "Week format for date display (e.g., September 2nd week)",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ %d%@ week"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ %d주차"
-          }
-        }
-      }
-    },
-    "MONTH_JANUARY" : {
-      "comment" : "Month name - January",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "January"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "1월"
-          }
-        }
-      }
-    },
-    "MONTH_FEBRUARY" : {
-      "comment" : "Month name - February",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "February"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "2월"
-          }
-        }
-      }
-    },
-    "MONTH_MARCH" : {
-      "comment" : "Month name - March",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "March"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "3월"
-          }
-        }
-      }
-    },
-    "MONTH_APRIL" : {
-      "comment" : "Month name - April",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "April"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "4월"
-          }
-        }
-      }
-    },
-    "MONTH_MAY" : {
-      "comment" : "Month name - May",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "May"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "5월"
-          }
-        }
-      }
-    },
-    "MONTH_JUNE" : {
-      "comment" : "Month name - June",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "June"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "6월"
-          }
-        }
-      }
-    },
-    "MONTH_JULY" : {
-      "comment" : "Month name - July",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "July"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "7월"
-          }
-        }
-      }
-    },
-    "MONTH_AUGUST" : {
-      "comment" : "Month name - August",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "August"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "8월"
-          }
-        }
-      }
-    },
-    "MONTH_SEPTEMBER" : {
-      "comment" : "Month name - September",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "September"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "9월"
-          }
-        }
-      }
-    },
-    "MONTH_OCTOBER" : {
-      "comment" : "Month name - October",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "October"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "10월"
-          }
-        }
-      }
-    },
-    "MONTH_NOVEMBER" : {
-      "comment" : "Month name - November",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "November"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "11월"
-          }
-        }
-      }
-    },
-    "MONTH_DECEMBER" : {
-      "comment" : "Month name - December",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "December"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "12월"
-          }
-        }
-      }
-    },
-    "LOADING_DATA" : {
-      "comment" : "Loading screen - Loading data text",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "LOADING DATA..."
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "데이터 로딩 중..."
-          }
-        }
-      }
-    },
-    "READY_TO_PLAY" : {
-      "comment" : "Loading screen - Ready to play text",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "READY TO PLAY!"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "게임 시작 준비 완료!"
+            "value" : "랭크"
           }
         }
       }
@@ -1316,6 +1337,24 @@
         }
       }
     },
+    "READY_TO_PLAY" : {
+      "comment" : "Loading screen - Ready to play text",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "READY TO PLAY!"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "게임 시작 준비 완료!"
+          }
+        }
+      }
+    },
     "SETTINGS_BACKGROUND_MUSIC" : {
       "comment" : "Settings View",
       "extractionState" : "manual",
@@ -1384,6 +1423,24 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "진동"
+          }
+        }
+      }
+    },
+    "SKELETON_MESSAGE" : {
+      "comment" : "Leaderboard Skeleton Row Message",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Waiting for a winner"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "승자를 기다리는 중"
           }
         }
       }
@@ -1474,6 +1531,24 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "웨이브: %d"
+          }
+        }
+      }
+    },
+    "WEEK_FORMAT" : {
+      "comment" : "Week format for date display (e.g., September 2nd week)",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ %d%@ week"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ %d주차"
           }
         }
       }

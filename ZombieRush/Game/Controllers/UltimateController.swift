@@ -114,7 +114,7 @@ class UltimateController: NSObject {
 
     private func setupGameProgress() {
         // 게임 시작 시 초기화
-        ultimateGauge = 90
+        ultimateGauge = 0
     }
 
 

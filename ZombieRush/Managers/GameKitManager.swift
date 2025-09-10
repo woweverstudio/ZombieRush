@@ -6,6 +6,13 @@ import UIKit
 @Observable
 class GameKitManager: NSObject {
 
+    // MARK: - Skeleton Entry Structure
+    struct SkeletonEntry {
+        let rank: Int
+        let message: String
+        let isSkeleton: Bool = true
+    }
+
     // MARK: - Authentication State
     var isAuthenticated = false
     var isLoading = false
@@ -227,7 +234,8 @@ class GameKitManager: NSObject {
             )
 
             await MainActor.run { [weak self] in
-                self?.topThreeEntries = entries.1
+                guard let self = self else { return }
+                self.topThreeEntries = entries.1
             }
 
             // 상위 플레이어들의 프로필 이미지 로드
@@ -235,6 +243,11 @@ class GameKitManager: NSObject {
 
         } catch {
             print("🎮 GameKit: Failed to load top 3 leaderboard: \(error)")
+            // 에러 발생 시 빈 배열로 설정
+            await MainActor.run { [weak self] in
+                guard let self = self else { return }
+                self.topThreeEntries = []
+            }
         }
     }
 
@@ -250,6 +263,7 @@ class GameKitManager: NSObject {
             }
         }
     }
+
 
     /// 상위 100명 리더보드 데이터를 로드합니다.
     func loadTop100Leaderboard(completion: (() -> Void)? = nil) async {

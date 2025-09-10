@@ -81,18 +81,23 @@ struct PlayerCard: View {
                                         .font(.system(size: 10, weight: .regular, design: .monospaced))
                                         .foregroundColor(.yellow.opacity(0.7))
                                 }
+                            } else {
+                                VStack(spacing: 4) {
+                                    Text("-")
+                                        .font(.system(size: 18, weight: .bold, design: .monospaced))
+                                        .foregroundColor(.gray)
+                                    Text(NSLocalizedString("RANK_LABEL", comment: "Player Card - Rank Label"))
+                                        .font(.system(size: 10, weight: .regular, design: .monospaced))
+                                        .foregroundColor(.yellow.opacity(0.7))
+                                }
                             }
 
                             // 킬 수
                             VStack(spacing: 4) {
-                                HStack(spacing: 4) {
-                                    Image(systemName: "flame.fill")
-                                        .foregroundColor(.red.opacity(0.8))
-                                        .font(.system(size: 14))
-                                    Text("\(playerBestKills)")
-                                        .font(.system(size: 18, weight: .bold, design: .monospaced))
-                                        .foregroundColor(.white)
-                                }
+                                Text("\(playerBestKills)")
+                                    .font(.system(size: 18, weight: .bold, design: .monospaced))
+                                    .foregroundColor(.white)
+                                
                                 Text(NSLocalizedString("KILLS_LABEL", comment: "Player Card - Kills Label"))
                                     .font(.system(size: 10, weight: .regular, design: .monospaced))
                                     .foregroundColor(.red.opacity(0.7))
