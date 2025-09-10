@@ -28,14 +28,26 @@ class ScoreEncodingUtils {
     /// - Parameter encodedScore: 인코딩된 32비트 점수
     /// - Returns: 시간 (초)
     static func decodeTime(from encodedScore: Int64) -> Int {
-        return Int((encodedScore >> Self.timeShift) & Self.mask)
+        let decodedTime = Int((encodedScore >> Self.timeShift) & Self.mask)
+        return max(0, min(decodedTime, Self.maxValue)) // 범위 검증
     }
 
     /// 인코딩된 점수에서 좀비 킬 수를 추출
     /// - Parameter encodedScore: 인코딩된 32비트 점수
     /// - Returns: 좀비 킬 수
     static func decodeKills(from encodedScore: Int64) -> Int {
-        return Int(encodedScore & Self.mask)
+        let decodedKills = Int(encodedScore & Self.mask)
+        return max(0, min(decodedKills, Self.maxValue)) // 범위 검증
+    }
+
+    /// Int 타입의 Game Center 점수를 Int64로 변환하여 디코딩
+    /// - Parameter score: Game Center 점수 (Int)
+    /// - Returns: (시간(초), 킬 수) 튜플
+    static func decodeGameCenterScore(_ score: Int) -> (timeInSeconds: Int, zombieKills: Int) {
+        let encodedScore = Int64(score)
+        let timeInSeconds = decodeTime(from: encodedScore)
+        let zombieKills = decodeKills(from: encodedScore)
+        return (timeInSeconds, zombieKills)
     }
 
     // MARK: - Formatting

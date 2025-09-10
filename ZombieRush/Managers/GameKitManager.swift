@@ -251,6 +251,54 @@ class GameKitManager: NSObject {
         }
     }
 
+    /// 상위 100명 리더보드 데이터를 로드합니다.
+    func loadTop100Leaderboard(completion: (() -> Void)? = nil) async {
+        do {
+            let leaderboards = try await GKLeaderboard.loadLeaderboards(
+                IDs: [TextConstants.GameCenter.currentLeaderboardID]
+            )
+
+            guard let leaderboard = leaderboards.first else {
+                print("🎮 GameKit: Leaderboard not found")
+                completion?()
+                return
+            }
+
+            let entries = try await leaderboard.loadEntries(
+                for: .global,
+                timeScope: .allTime,
+                range: NSRange(location: 1, length: 100)
+            )
+
+            await MainActor.run { [weak self] in
+                self?.top100Entries = entries.1
+                print("🎮 GameKit: Loaded \(entries.1.count) entries for top 100")
+            }
+
+            // 상위 100 플레이어들의 프로필 이미지 로드
+            await loadTop100Images()
+
+            completion?()
+
+        } catch {
+            print("🎮 GameKit: Failed to load top 100 leaderboard: \(error)")
+            completion?()
+        }
+    }
+
+    private func loadTop100Images() async {
+        for entry in top100Entries {
+            do {
+                let image = try await entry.player.loadPhoto(for: .small)
+                await MainActor.run { [weak self] in
+                    self?.profileImages[entry.player.gamePlayerID] = image
+                }
+            } catch {
+                print("🎮 GameKit: Failed to load image for \(entry.player.displayName): \(error)")
+            }
+        }
+    }
+
     // MARK: - Score Submission
 
     func submitScore(_ score: Int64) async throws {
