@@ -12,10 +12,19 @@ struct TextConstants {
     // MARK: - Game Over Screen
     struct GameOver {
         static let title = NSLocalizedString("GAME_OVER_TITLE", comment: "Game over screen title")
+        static let newRecordTitle = NSLocalizedString("GAME_OVER_NEW_RECORD_TITLE", comment: "New record achieved title")
         static let playTimeFormat = NSLocalizedString("GAME_OVER_PLAY_TIME_FORMAT", comment: "Play time format")
         static let zombieKillsFormat = NSLocalizedString("GAME_OVER_ZOMBIE_KILLS_FORMAT", comment: "Zombie kills format")
         static let restartButton = NSLocalizedString("GAME_OVER_RESTART_BUTTON", comment: "Restart game button")
         static let quitButton = NSLocalizedString("GAME_OVER_QUIT_BUTTON", comment: "Quit game button")
+
+        // GameOverView에서 사용하는 추가 텍스트들
+        static let playTimeLabel = NSLocalizedString("GAME_OVER_PLAY_TIME_LABEL", comment: "Play time label in game over view")
+        static let killsLabel = NSLocalizedString("GAME_OVER_KILLS_LABEL", comment: "Kills label in game over view")
+        static let firstRecord = NSLocalizedString("GAME_OVER_FIRST_RECORD", comment: "First record message")
+        static let recordExceededFormat = NSLocalizedString("GAME_OVER_RECORD_EXCEEDED_FORMAT", comment: "Record exceeded format")
+        static let recordShortageFormat = NSLocalizedString("GAME_OVER_RECORD_SHORTAGE_FORMAT", comment: "Record shortage format")
+        static let tieRecord = NSLocalizedString("GAME_OVER_TIE_RECORD", comment: "Tie record message")
     }
 
     // MARK: - Ultimate System

@@ -32,19 +32,19 @@ struct GameOverView: View {
         let timeDifference = playTime - currentBestTime
 
         if currentBestTime == 0 {
-            return "\(DateUtils.getCurrentWeekString())" + " " + "첫 기록!"
+            return "\(DateUtils.getCurrentWeekString())" + " " + TextConstants.GameOver.firstRecord
         }
 
         if timeDifference > 0 {
             let minutes = timeDifference / 60
             let seconds = timeDifference % 60
-            return String(format: "최고 기록 대비: %02d:%02d 초과", minutes, seconds)
+            return String(format: TextConstants.GameOver.recordExceededFormat, minutes, seconds)
         } else if timeDifference < 0 {
             let minutes = abs(timeDifference) / 60
             let seconds = abs(timeDifference) % 60
-            return String(format: "최고 기록 대비:%02d:%02d 부족", minutes, seconds)
+            return String(format: TextConstants.GameOver.recordShortageFormat, minutes, seconds)
         } else {
-            return "동점"
+            return TextConstants.GameOver.tieRecord
         }
     }
 
@@ -122,12 +122,12 @@ struct GameOverView: View {
 
     private var mainTitleText: some View {
         if isNewRecord {
-            Text("🎉 신기록 달성! 🎉")
+            Text(TextConstants.GameOver.newRecordTitle)
                 .font(.system(size: 28, weight: .bold, design: .monospaced))
                 .foregroundColor(.yellow)
                 .shadow(color: .yellow.opacity(0.5), radius: 5, x: 0, y: 0)
         } else {
-            Text("게임 종료")
+            Text(TextConstants.GameOver.title)
                 .font(.system(size: 28, weight: .bold, design: .monospaced))
                 .foregroundColor(.cyan)
                 .shadow(color: .cyan.opacity(0.5), radius: 5, x: 0, y: 0)
@@ -145,7 +145,7 @@ struct GameOverView: View {
         HStack(spacing: 60) {
             // 플레이 시간
             VStack(spacing: 8) {
-                Text("플레이 시간")
+                Text(TextConstants.GameOver.playTimeLabel)
                     .font(.system(size: 14, weight: .medium, design: .monospaced))
                     .foregroundColor(.cyan.opacity(0.8))
                 Text(formattedPlayTime)
@@ -156,7 +156,7 @@ struct GameOverView: View {
 
             // 처치 수
             VStack(spacing: 8) {
-                Text("처치 수")
+                Text(TextConstants.GameOver.killsLabel)
                     .font(.system(size: 14, weight: .medium, design: .monospaced))
                     .foregroundColor(.red.opacity(0.8))
                 Text("\(score)")

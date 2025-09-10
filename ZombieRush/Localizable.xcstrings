@@ -26,11 +26,26 @@
     "%lld" : {
 
     },
-    "🎉 신기록 달성! 🎉" : {
-
-    },
     "🏆" : {
 
+    },
+    "GAME_OVER_FIRST_RECORD" : {
+      "comment" : "Game Over View - First record message",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "First Record!"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "첫 기록!"
+          }
+        }
+      }
     },
     "GAME_OVER_GAME_CENTER" : {
       "comment" : "Game Over View",
@@ -122,6 +137,24 @@
         }
       }
     },
+    "GAME_OVER_NEW_RECORD_TITLE" : {
+      "comment" : "Game Over View - New record achieved title",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "🎉 New Record! 🎉"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "🎉 신기록 달성! 🎉"
+          }
+        }
+      }
+    },
     "GAME_OVER_NO_RECORDS" : {
       "comment" : "Game Over View",
       "extractionState" : "manual",
@@ -158,6 +191,24 @@
         }
       }
     },
+    "GAME_OVER_PLAY_TIME_LABEL" : {
+      "comment" : "Game Over View - Play time label",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Play Time"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "플레이 시간"
+          }
+        }
+      }
+    },
     "GAME_OVER_QUIT_BUTTON" : {
       "comment" : "Game Over Screen",
       "extractionState" : "manual",
@@ -176,6 +227,42 @@
         }
       }
     },
+    "GAME_OVER_RECORD_EXCEEDED_FORMAT" : {
+      "comment" : "Game Over View - Record exceeded format",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "vs Best Record: %02d:%02d better"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "최고 기록 대비: %02d:%02d 초과"
+          }
+        }
+      }
+    },
+    "GAME_OVER_RECORD_SHORTAGE_FORMAT" : {
+      "comment" : "Game Over View - Record shortage format",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "vs Best Record: %02d:%02d short"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "최고 기록 대비: %02d:%02d 부족"
+          }
+        }
+      }
+    },
     "GAME_OVER_RESTART_BUTTON" : {
       "comment" : "Game Over Screen",
       "extractionState" : "manual",
@@ -190,6 +277,24 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "다시하기"
+          }
+        }
+      }
+    },
+    "GAME_OVER_TIE_RECORD" : {
+      "comment" : "Game Over View - Tie record message",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tied Record"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "동점"
           }
         }
       }
@@ -1576,15 +1681,6 @@
           }
         }
       }
-    },
-    "게임 종료" : {
-
-    },
-    "처치 수" : {
-
-    },
-    "플레이 시간" : {
-
     }
   },
   "version" : "1.0"

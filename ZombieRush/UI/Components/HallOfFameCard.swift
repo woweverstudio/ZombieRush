@@ -35,6 +35,7 @@ struct HallOfFameCard: View {
                     Text(DateUtils.getCurrentWeekString())
                         .font(.system(size: 14, weight: .medium, design: .monospaced))
                         .foregroundColor(.yellow.opacity(0.8))
+                        .padding(.bottom)
 
                     // Top 3 플레이어 목록
                     VStack {
