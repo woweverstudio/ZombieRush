@@ -8,7 +8,7 @@ struct LeaderBoardView: View {
     var body: some View {
         ZStack {
             // 사이버펑크 배경
-            CyberpunkBackground(opacity: 0.5)
+            CyberpunkBackground()
                 .ignoresSafeArea()
                 .task {
                     await loadLeaderboardData()

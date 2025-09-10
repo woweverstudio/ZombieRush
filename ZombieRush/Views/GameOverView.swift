@@ -13,8 +13,7 @@ struct GameOverView: View {
     var body: some View {
         ZStack {
             // 사이버펑크 배경
-            CyberpunkBackground(opacity: 0.5)
-                .ignoresSafeArea()
+            CyberpunkBackground()
 
             VStack(spacing: 20) {
                 // 헤더 섹션
