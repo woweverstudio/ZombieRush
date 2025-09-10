@@ -24,8 +24,8 @@ struct LeaderBoardView: View {
                 }
             }
         }
-        .onAppear {
-            loadLeaderboardData()
+        .task {
+            await loadLeaderboardData()
         }
     }
 
@@ -68,12 +68,25 @@ struct LeaderBoardView: View {
     private var leaderboardContent: some View {
         ScrollView {
             LazyVStack(spacing: 8) {
+                // 실제 데이터 표시
                 ForEach(Array(gameKitManager.top100Entries.enumerated()), id: \.element.player.gamePlayerID) { index, entry in
                     LeaderboardEntryRow(
                         rank: index + 1,
                         entry: entry,
                         playerImage: gameKitManager.profileImages[entry.player.gamePlayerID]
                     )
+                }
+
+                // 부족한 만큼 placeholder 표시
+                if gameKitManager.top100Entries.count < 100 {
+                    ForEach(gameKitManager.top100Entries.count + 1...100, id: \.self) { rank in
+                        LeaderboardEntryRow(
+                            rank: rank,
+                            entry: nil,
+                            playerImage: nil,
+                            isPlaceholder: true
+                        )
+                    }
                 }
             }
             .padding(.horizontal, 16)
@@ -82,14 +95,12 @@ struct LeaderBoardView: View {
     }
 
     // MARK: - Data Loading
-    private func loadLeaderboardData() {
+    private func loadLeaderboardData() async {
         isLoading = true
 
-        Task {
-            await gameKitManager.loadTop100Leaderboard {
-                DispatchQueue.main.async {
-                    isLoading = false
-                }
+        await gameKitManager.loadTop100Leaderboard {
+            DispatchQueue.main.async {
+                isLoading = false
             }
         }
     }
@@ -98,19 +109,36 @@ struct LeaderBoardView: View {
 // MARK: - Leaderboard Entry Row
 struct LeaderboardEntryRow: View {
     let rank: Int
-    let entry: GKLeaderboard.Entry
+    let entry: GKLeaderboard.Entry?
     let playerImage: UIImage?
+    let isPlaceholder: Bool
+    
+    init(rank: Int, entry: GKLeaderboard.Entry?, playerImage: UIImage?, isPlaceholder: Bool = false) {
+        self.rank = rank
+        self.entry = entry
+        self.playerImage = playerImage
+        self.isPlaceholder = isPlaceholder
+    }
 
     var body: some View {
         HStack(spacing: 16) {
             // 랭킹 번호
             Text("#\(rank)")
                 .font(.system(size: 18, weight: .bold, design: .monospaced))
-                .foregroundColor(rankColor(for: rank))
+                .foregroundColor(isPlaceholder ? .gray : rankColor(for: rank))
                 .frame(width: 60, alignment: .center)
 
             // 프로필 이미지
-            if let image = playerImage {
+            if isPlaceholder {
+                Circle()
+                    .fill(Color.gray.opacity(0.2))
+                    .frame(width: 40, height: 40)
+                    .overlay(
+                        Image(systemName: "person.circle")
+                            .foregroundColor(.gray.opacity(0.6))
+                            .font(.system(size: 20))
+                    )
+            } else if let image = playerImage {
                 Image(uiImage: image)
                     .resizable()
                     .aspectRatio(contentMode: .fill)
@@ -128,34 +156,63 @@ struct LeaderboardEntryRow: View {
                     )
             }
 
-            // 플레이어 이름
-            Text(entry.player.displayName)
-                .font(.system(size: 16, weight: .semibold, design: .monospaced))
-                .foregroundColor(.white)
-                .lineLimit(1)
-                .frame(maxWidth: .infinity, alignment: .leading)
-
-            // 시간과 킬 수 (수평 배치)
-            let (timeInSeconds, kills) = ScoreEncodingUtils.decodeGameCenterScore(entry.score)
-
-            // 플레이 시간 (우선순위 1)
-            HStack(spacing: 6) {
-                Image(systemName: "clock.fill")
-                    .font(.system(size: 14))
-                    .foregroundColor(.cyan)
-                Text(ScoreEncodingUtils.formatTime(timeInSeconds))
-                    .font(.system(size: 16, weight: .bold, design: .monospaced))
-                    .foregroundColor(.cyan)
+            // 플레이어 이름 또는 placeholder 메시지
+            if isPlaceholder {
+                Text(NSLocalizedString("SKELETON_MESSAGE", comment: "Leaderboard skeleton message"))
+                    .font(.system(size: 16, weight: .semibold, design: .monospaced))
+                    .foregroundColor(.gray.opacity(0.7))
+                    .lineLimit(1)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            } else if let entry = entry {
+                Text(entry.player.displayName)
+                    .font(.system(size: 16, weight: .semibold, design: .monospaced))
+                    .foregroundColor(.white)
+                    .lineLimit(1)
+                    .frame(maxWidth: .infinity, alignment: .leading)
             }
 
-            // 킬 수 (우선순위 2)
-            HStack(spacing: 4) {
-                Image(systemName: "flame.fill")
-                    .font(.system(size: 12))
-                    .foregroundColor(.red)
-                Text("\(kills)")
-                    .font(.system(size: 14, weight: .medium, design: .monospaced))
-                    .foregroundColor(.red)
+            // 시간과 킬 수 (수평 배치)
+            if isPlaceholder {
+                // placeholder일 때
+                HStack(spacing: 6) {
+                    Image(systemName: "clock.fill")
+                        .font(.system(size: 14))
+                        .foregroundColor(.gray.opacity(0.5))
+                    Text("-")
+                        .font(.system(size: 16, weight: .bold, design: .monospaced))
+                        .foregroundColor(.gray.opacity(0.5))
+                }
+
+                HStack(spacing: 4) {
+                    Image(systemName: "flame.fill")
+                        .font(.system(size: 12))
+                        .foregroundColor(.gray.opacity(0.5))
+                    Text("-")
+                        .font(.system(size: 14, weight: .medium, design: .monospaced))
+                        .foregroundColor(.gray.opacity(0.5))
+                }
+            } else if let entry = entry {
+                let (timeInSeconds, kills) = ScoreEncodingUtils.decodeGameCenterScore(entry.score)
+
+                // 플레이 시간 (우선순위 1)
+                HStack(spacing: 6) {
+                    Image(systemName: "clock.fill")
+                        .font(.system(size: 14))
+                        .foregroundColor(.cyan)
+                    Text(ScoreEncodingUtils.formatTime(timeInSeconds))
+                        .font(.system(size: 16, weight: .bold, design: .monospaced))
+                        .foregroundColor(.cyan)
+                }
+
+                // 킬 수 (우선순위 2)
+                HStack(spacing: 4) {
+                    Image(systemName: "flame.fill")
+                        .font(.system(size: 12))
+                        .foregroundColor(.red)
+                    Text("\(kills)")
+                        .font(.system(size: 14, weight: .medium, design: .monospaced))
+                        .foregroundColor(.red)
+                }
             }
 
             Spacer()
@@ -165,13 +222,13 @@ struct LeaderboardEntryRow: View {
         .padding(.horizontal, 20)
         .background(
             RoundedRectangle(cornerRadius: 12)
-                .fill(Color.black.opacity(0.5))
+                .fill(isPlaceholder ? Color.gray.opacity(0.1) : Color.black.opacity(0.5))
                 .overlay(
                     RoundedRectangle(cornerRadius: 12)
-                        .stroke(rankBorderColor(for: rank), lineWidth: rank <= 3 ? 2 : 1)
+                        .stroke(isPlaceholder ? Color.gray.opacity(0.3) : rankBorderColor(for: rank), lineWidth: rank <= 3 && !isPlaceholder ? 2 : 1)
                 )
         )
-        .shadow(color: rankColor(for: rank).opacity(0.3), radius: 4, x: 0, y: 2)
+        .shadow(color: isPlaceholder ? Color.gray.opacity(0.1) : rankColor(for: rank).opacity(0.3), radius: 4, x: 0, y: 2)
     }
 
     private func rankColor(for rank: Int) -> Color {
