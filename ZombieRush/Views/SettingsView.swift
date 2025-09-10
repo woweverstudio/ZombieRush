@@ -20,7 +20,6 @@ struct SettingsView: View {
         ZStack {
             // 사이버펑크 배경
             CyberpunkBackground(opacity: 0.6)
-                .ignoresSafeArea()
             
             VStack {
                 // 상단 영역 - 제목과 뒤로가기 버튼

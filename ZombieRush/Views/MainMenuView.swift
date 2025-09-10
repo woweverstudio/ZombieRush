@@ -9,7 +9,6 @@ struct MainMenuView: View {
         ZStack {
             // 사이버펑크 배경
             CyberpunkBackground()
-                .ignoresSafeArea()
             
             VStack {
                 // 상단 영역 - 설정 및 리더보드 버튼
