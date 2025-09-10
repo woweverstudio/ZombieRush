@@ -13,13 +13,12 @@ struct LoadingView: View {
             // 사이버펑크 배경
             CyberpunkBackground()
 
-            VStack(spacing: 40) {
+            VStack(spacing: 30) {
                 Spacer()
 
                 // 게임 타이틀 (로딩 화면용으로 크게)
                 GameTitle(titleSize: 40, subtitleSize: 60)
 
-                Spacer()
 
                 // 로딩 프로그레스 바
                 VStack(spacing: 20) {
@@ -55,9 +54,9 @@ struct LoadingView: View {
 
     private func getLoadingText() -> String {
         if gameKitManager.isLoading {
-            return "LOADING DATA..."
+            return NSLocalizedString("LOADING_DATA", comment: "Loading screen - Loading data text")
         } else {
-            return "READY TO PLAY!"
+            return NSLocalizedString("READY_TO_PLAY", comment: "Loading screen - Ready to play text")
         }
     }
 
@@ -65,10 +64,9 @@ struct LoadingView: View {
         // GameKit 뷰 컨트롤러 처리 설정
         setupGameKitCallbacks()
 
-        // GameKit 데이터 로딩 시작 (콜백 기반)
-        // SwiftUI View는 struct이므로 weak self 대신 직접 참조
+        // GameKit 데이터 로딩 시작
         gameKitManager.loadInitialData {
-            // 데이터 로드 상태 확인 (테스트용)
+            // 데이터 로드 상태 확인
             self.gameKitManager.printDataStatus()
 
             // 데이터 로딩 완료 후 프로그레스 바 채우기

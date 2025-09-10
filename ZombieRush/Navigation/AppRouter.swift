@@ -26,13 +26,13 @@ final class AppRouter {
     // MARK: - Navigation Methods
     func navigate(to route: Route, with data: GameData? = nil, animated: Bool = true) {
         guard currentRoute != route else { return }
-        
+
         navigationDirection = .forward
         print("🔄 Navigation: \(currentRoute) → \(route) (FORWARD)")
-        
+
         // 오디오 처리
         handleAudioTransition(to: route)
-        
+
         // 직접 프로퍼티 업데이트 (@Observable이 감지)
         previousRoute = currentRoute
         currentRoute = route
@@ -41,10 +41,10 @@ final class AppRouter {
     
     func goBack(animated: Bool = true) {
         guard let previous = previousRoute else { return }
-        
+
         navigationDirection = .backward
         print("🔄 Navigation: \(currentRoute) ← \(previous) (BACKWARD)")
-        
+
         // 직접 프로퍼티 업데이트 (@Observable이 감지)
         currentRoute = previous
         previousRoute = nil

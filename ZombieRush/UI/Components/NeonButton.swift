@@ -21,22 +21,30 @@ enum NeonButtonStyle {
     }
 }
 
+enum NeonButtonSize {
+    case small
+    case medium
+}
+
 // MARK: - Neon Button Component
 struct NeonButton: View {
     let title: String
     let style: NeonButtonStyle
     let fullWidth: Bool
+    let size: NeonButtonSize
     let action: () -> Void
     
     init(
         _ title: String,
         style: NeonButtonStyle = .cyan,
         fullWidth: Bool = false,
+        size: NeonButtonSize = .medium,
         action: @escaping () -> Void
     ) {
         self.title = title
         self.style = style
         self.fullWidth = fullWidth
+        self.size = size
         self.action = action
     }
     
@@ -53,21 +61,22 @@ struct NeonButton: View {
         }) {
             Text(title)
                 .frame(maxWidth: fullWidth ? .infinity : nil)
-                .font(.system(size: 24, weight: .bold, design: .monospaced))
+                .font(.system(size: size == .medium ? 24 : 16, weight: .bold, design: .monospaced))
                 .foregroundColor(style.color)
                 .shadow(color: style.color, radius: 10, x: 0, y: 0)
-                .padding(.horizontal, 40)
-                .padding(.vertical, 16)
+                .padding(.horizontal, size == .medium ? 40 : 20)
+                .padding(.vertical, size == .medium ? 16 : 10)
+                .multilineTextAlignment(.center)
                 .background(
                     RoundedRectangle(cornerRadius: 8)
                         .fill(Color.black.opacity(0.8))
                         .overlay(
                             RoundedRectangle(cornerRadius: 8)
                                 .stroke(style.color, lineWidth: 2)
-                                .shadow(color: style.color, radius: 15, x: 0, y: 0)
+                                .shadow(color: style.color, radius: size == .medium ? 15 : 4, x: 0, y: 0)
                         )
                 )
-                .shadow(color: style.color.opacity(0.5), radius: 20, x: 0, y: 0)
+                .shadow(color: style.color.opacity(0.5), radius: size == .medium ? 20 : 5, x: 0, y: 0)
         }
         .buttonStyle(PlainButtonStyle())
     }

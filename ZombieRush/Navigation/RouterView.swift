@@ -43,8 +43,6 @@ struct RouterView: View {
             .transition(getTransition())
             .animation(.easeInOut(duration: UIConstants.Animation.transitionDuration), value: router.currentRoute)
         }
-        
-        
         .navigationBarHidden(true)
         .statusBarHidden(true)
     }
