@@ -18,10 +18,11 @@ class Zombie: SKSpriteNode {
     
     // MARK: - Properties
     private let zombieType: ZombieType
-    private let moveSpeed: CGFloat
-    private let health: Int
+    private var moveSpeed: CGFloat
+    private var health: Int
     private var currentHealth: Int
-    
+    private let spawnWave: Int  // 스폰된 웨이브 저장
+
     private weak var target: SKNode?
     
     // 이미지 관련 프로퍼티 제거됨 - 단순한 사각형 사용
@@ -29,6 +30,7 @@ class Zombie: SKSpriteNode {
     // MARK: - Initialization
     init(type: ZombieType, currentWave: Int) {
         self.zombieType = type
+        self.spawnWave = currentWave
 
         // 웨이브별 배수 적용
         let speedMultiplier = min(pow(GameBalance.Wave.speedMultiplier, Float(currentWave - 1)), GameBalance.Wave.maxSpeedMultiplier)
@@ -137,12 +139,52 @@ class Zombie: SKSpriteNode {
     @discardableResult
     func takeDamage(_ damage: Int = 1) -> Bool {
         currentHealth -= damage
-        
+
         if currentHealth <= 0 {
             return true
         }
-        
+
         return false
+    }
+
+    // MARK: - Stats Update Methods
+    func updateStats(forWave wave: Int) {
+        // 새로운 웨이브에 맞는 배수 계산
+        let speedMultiplier = min(pow(GameBalance.Wave.speedMultiplier, Float(wave - 1)), GameBalance.Wave.maxSpeedMultiplier)
+        let healthMultiplier = min(pow(GameBalance.Wave.healthMultiplier, Float(wave - 1)), GameBalance.Wave.maxHealthMultiplier)
+
+        // 타입별 기본 스탯 가져오기
+        let baseSpeed: CGFloat
+        let baseHealth: Int
+
+        switch zombieType {
+        case .normal:
+            baseSpeed = GameBalance.Zombie.normalSpeed
+            baseHealth = GameBalance.Zombie.normalHealth
+        case .fast:
+            baseSpeed = GameBalance.Zombie.fastSpeed
+            baseHealth = GameBalance.Zombie.fastHealth
+        case .strong:
+            baseSpeed = GameBalance.Zombie.strongSpeed
+            baseHealth = GameBalance.Zombie.strongHealth
+        }
+
+        // 새로운 스탯 계산
+        let newSpeed = baseSpeed * CGFloat(speedMultiplier)
+        let newMaxHealth = Int(Float(baseHealth) * healthMultiplier)
+        let healthIncrease = newMaxHealth - self.health
+
+        // 스탯 업데이트 (스피드는 즉시 적용, 헬스는 현재 체력도 함께 증가)
+        self.moveSpeed = newSpeed
+        self.health = newMaxHealth
+        self.currentHealth += healthIncrease
+
+        // 체력이 최대치를 넘지 않도록 보장
+        if currentHealth > health {
+            currentHealth = health
+        }
+
+        print("🧟 Zombie stats updated for wave \(wave) - Speed: \(String(format: "%.1f", moveSpeed)), Health: \(currentHealth)/\(health)")
     }
     
     // MARK: - Getters
@@ -156,5 +198,9 @@ class Zombie: SKSpriteNode {
     
     func getMaxHealth() -> Int {
         return health
+    }
+
+    func getSpawnWave() -> Int {
+        return spawnWave
     }
 }

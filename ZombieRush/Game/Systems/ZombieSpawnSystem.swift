@@ -59,13 +59,13 @@ class ZombieSpawnSystem {
         }
 
         // 웨이브별 스폰 방식 적용
-        if currentWave <= 5 {
-            // 웨이브 1-5: 스폰 인터벌 없이 즉시 채우기
+        if currentWave <= 6 {
+            // 웨이브 1-6: 스폰 인터벌 없이 즉시 채우기
             while zombies.count < maxZombieCount {
                 spawnZombie(currentWave: currentWave)
             }
         } else {
-            // 웨이브 5+: 스폰 인터벌 적용
+            // 웨이브 6+: 스폰 인터벌 적용
             let spawnIntervalDecrement = Double(currentWave - 1) * GameBalance.Zombie.spawnIntervalDecrementPerWave
             let adjustedSpawnInterval = max(GameBalance.Zombie.baseSpawnInterval - spawnIntervalDecrement, GameBalance.Zombie.minSpawnInterval)
 
@@ -89,7 +89,44 @@ class ZombieSpawnSystem {
     private func handleNewWave() {
         lastSpawnTime = 0
         let currentWave = gameStateManager.getCurrentWaveNumber()
+
+        // 오래된 좀비들 제거 (현재 웨이브와 2 이상 차이나는 좀비들)
+        removeOldZombies(currentWave: currentWave)
+
+        // 살아있는 모든 좀비들의 스탯 업데이트
+        updateExistingZombiesStats(forWave: currentWave)
+
         onNewWaveStarted?(currentWave)
+    }
+
+    private func removeOldZombies(currentWave: Int) {
+        let oldZombies = zombies.filter { zombie in
+            let waveDifference = currentWave - zombie.getSpawnWave()
+            return waveDifference >= 2
+        }
+
+        if !oldZombies.isEmpty {
+            print("🧟 Removing \(oldZombies.count) old zombies (spawned 2+ waves ago)")
+
+            for zombie in oldZombies {
+                removeZombie(zombie)
+            }
+
+            print("🧟 Successfully removed \(oldZombies.count) old zombies")
+        }
+    }
+
+    private func updateExistingZombiesStats(forWave wave: Int) {
+        let zombieCount = zombies.count
+        if zombieCount > 0 {
+            print("🧟 Updating stats for \(zombieCount) existing zombies to wave \(wave)")
+
+            for zombie in zombies {
+                zombie.updateStats(forWave: wave)
+            }
+
+            print("🧟 Successfully updated \(zombieCount) zombies for wave \(wave)")
+        }
     }
     
     private func spawnZombie(currentWave: Int) {
