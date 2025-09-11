@@ -4,7 +4,7 @@ class ItemSpawnSystem {
     
     // MARK: - Properties
     private weak var worldNode: SKNode?
-    private let gameStateManager = GameStateManager.shared
+    private let gameStateManager: GameStateManager
     
     private var activeItems: [Item] = []
     private var lastSpawnTime: TimeInterval = 0
@@ -17,8 +17,9 @@ class ItemSpawnSystem {
     var onItemCollected: ((ItemType) -> Void)?
     
     // MARK: - Initialization
-    init(worldNode: SKNode) {
+    init(worldNode: SKNode, gameStateManager: GameStateManager) {
         self.worldNode = worldNode
+        self.gameStateManager = gameStateManager
         spawnInitialItems()
     }
     

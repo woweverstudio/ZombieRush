@@ -266,16 +266,14 @@ class GameKitManager: NSObject {
 
 
     /// 상위 100명 리더보드 데이터를 로드합니다.
-    func loadTop100Leaderboard(completion: (() -> Void)? = nil) async {
+    func loadTop100Leaderboard(completion: (() -> Void)? = nil) async throws {
         do {
             let leaderboards = try await GKLeaderboard.loadLeaderboards(
                 IDs: [TextConstants.GameCenter.currentLeaderboardID]
             )
 
             guard let leaderboard = leaderboards.first else {
-                print("🎮 GameKit: Leaderboard not found")
-                completion?()
-                return
+                throw NSError(domain: "GameKit", code: 0, userInfo: nil)
             }
 
             let entries = try await leaderboard.loadEntries(
@@ -290,17 +288,17 @@ class GameKitManager: NSObject {
             }
 
             // 상위 100 플레이어들의 프로필 이미지 로드
-            await loadTop100Images()
+            try await loadTop100Images()
 
             completion?()
 
         } catch {
             print("🎮 GameKit: Failed to load top 100 leaderboard: \(error)")
-            completion?()
+            throw NSError(domain: "GameKit", code: 0, userInfo: nil)
         }
     }
 
-    private func loadTop100Images() async {
+    private func loadTop100Images() async throws {
         for entry in top100Entries {
             do {
                 let image = try await entry.player.loadPhoto(for: .small)
@@ -308,7 +306,7 @@ class GameKitManager: NSObject {
                     self?.profileImages[entry.player.gamePlayerID] = image
                 }
             } catch {
-                print("🎮 GameKit: Failed to load image for \(entry.player.displayName): \(error)")
+                throw NSError(domain: "GameKit", code: 0, userInfo: nil)
             }
         }
     }

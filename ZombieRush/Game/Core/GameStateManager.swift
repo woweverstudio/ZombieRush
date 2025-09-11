@@ -7,17 +7,8 @@ enum GameState {
     case loading
 }
 
-// MARK: - Game Statistics
-struct GameStatistics {
-    
-}
-
 // MARK: - Game State Manager
 class GameStateManager {
-    
-    // MARK: - Singleton
-    static let shared = GameStateManager()
-    
     var points: Int = 0
     var Kills: Int = 0
     var playTime: TimeInterval = 0
@@ -34,11 +25,21 @@ class GameStateManager {
     
     
     // MARK: - State Management
-    private init() {}
+    init() {}
     
     // MARK: - Public Methods
     func startNewGame() {
+        // 게임 상태 초기화
+        reset()
+
         currentState = .playing
+    }
+    
+    func reset() {
+        points = 0
+        Kills = 0
+        playTime = 0
+        currentWave = 1  // 웨이브는 1부터 시작
         
         // 웨이브 시스템 초기화
         currentWaveNumber = 1
@@ -89,13 +90,6 @@ class GameStateManager {
     
     func getCurrentWave() -> Int {
         return self.currentWave
-    }
-    
-    func reset() {
-        points = 0
-        Kills = 0
-        playTime = 0
-        currentWave = 1  // 웨이브는 1부터 시작
     }
     
     // MARK: - Wave Management

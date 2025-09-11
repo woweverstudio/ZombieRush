@@ -13,6 +13,7 @@ class HUDManager {
     private weak var camera: SKCameraNode?
     private var hudNode: SKNode?
     private weak var scene: SKScene?
+    private let gameStateManager: GameStateManager
     
     // MARK: - UI Elements
     private var scoreLabel: SKLabelNode?
@@ -30,7 +31,6 @@ class HUDManager {
     
     // MARK: - Game Data
     private(set) var score: Int = 0
-    private let gameStateManager = GameStateManager.shared
 
     // HUD 업데이트 최적화 (성능 향상)
     private var frameCount: Int = 0
@@ -44,10 +44,11 @@ class HUDManager {
     private var lastIsReloading: Bool = false
     
     // MARK: - Initialization
-    init(camera: SKCameraNode, appRouter: AppRouter) {
+    init(camera: SKCameraNode, appRouter: AppRouter, gameStateManager: GameStateManager) {
         self.camera = camera
         self.scene = camera.scene
         self.appRouter = appRouter
+        self.gameStateManager = gameStateManager
         setupHUD()
     }
     

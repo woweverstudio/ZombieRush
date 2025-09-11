@@ -12,7 +12,7 @@ class ZombieSpawnSystem {
     // MARK: - Properties
     private weak var worldNode: SKNode?
     private weak var player: Player?
-    private let gameStateManager = GameStateManager.shared
+    private let gameStateManager: GameStateManager
     
     // MARK: - Callbacks
     var onNewWaveStarted: ((Int) -> Void)?
@@ -30,9 +30,10 @@ class ZombieSpawnSystem {
     private let spawnDistance: CGFloat = GameBalance.Zombie.spawnDistance
     
     // MARK: - Initialization
-    init(worldNode: SKNode, player: Player) {
+    init(worldNode: SKNode, player: Player, gameStateManager: GameStateManager) {
         self.worldNode = worldNode
         self.player = player
+        self.gameStateManager = gameStateManager
 
         // 초기화 시점에 현재 웨이브에 맞는 최대 좀비 수 설정
         let currentWave = gameStateManager.getCurrentWaveNumber()

@@ -136,8 +136,8 @@ struct GameOverView: View {
 
     private var subtitleText: some View {
         Text(recordImprovement)
-            .font(.system(size: 12, weight: .medium, design: .monospaced))
-            .foregroundColor(.white.opacity(0.8))
+            .font(.system(size: 18, weight: .medium, design: .monospaced))
+            .foregroundColor(.white)
     }
 
     // MARK: - Game Stats Section
@@ -146,7 +146,7 @@ struct GameOverView: View {
             // 플레이 시간
             VStack(spacing: 8) {
                 Text(TextConstants.GameOver.playTimeLabel)
-                    .font(.system(size: 14, weight: .medium, design: .monospaced))
+                    .font(.system(size: 20, weight: .medium, design: .monospaced))
                     .foregroundColor(.cyan.opacity(0.8))
                 Text(formattedPlayTime)
                     .font(.system(size: 36, weight: .bold, design: .monospaced))
@@ -157,7 +157,7 @@ struct GameOverView: View {
             // 처치 수
             VStack(spacing: 8) {
                 Text(TextConstants.GameOver.killsLabel)
-                    .font(.system(size: 14, weight: .medium, design: .monospaced))
+                    .font(.system(size: 20, weight: .medium, design: .monospaced))
                     .foregroundColor(.red.opacity(0.8))
                 Text("\(score)")
                     .font(.system(size: 36, weight: .bold, design: .monospaced))

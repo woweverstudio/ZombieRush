@@ -2,7 +2,12 @@ import SwiftUI
 
 // MARK: - Main Router View
 struct RouterView: View {
+    private let gameStateManager: GameStateManager
     @Environment(AppRouter.self) var router
+    
+    init(gameStateManager: GameStateManager) {
+        self.gameStateManager = gameStateManager
+    }
     
     var body: some View {
         // ZStack으로 전환 애니메이션 지원
@@ -16,7 +21,7 @@ struct RouterView: View {
                     MainMenuView()
                         .id("mainMenu")
                 case .game:
-                    GameView()
+                    GameView(gameStateManager: self.gameStateManager)
                         .id("game")
                 case .settings:
                     SettingsView()
@@ -60,13 +65,4 @@ struct RouterView: View {
             )
         }
     }
-}
-
-// MARK: - Preview
-#Preview {
-    RouterView()
-        .environment(AppRouter())
-        .environment(GameKitManager())
-        .environment(AudioManager.shared)
-        .environment(HapticManager.shared)
 }

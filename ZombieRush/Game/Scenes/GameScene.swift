@@ -34,13 +34,18 @@ class GameScene: SKScene {
     private var ultimateSkill: UltimateSkill
     
     // MARK: - Game State
-    private let gameStateManager = GameStateManager.shared
+    private let gameStateManager: GameStateManager
     private var lastUpdateTime: TimeInterval = 0
 
     // MARK: - Initialization
-    init(appRouter: AppRouter, gameKitManager:GameKitManager, ultimateSkill: UltimateSkill) {
+    init(appRouter: AppRouter,
+         gameKitManager:GameKitManager,
+         gameStateManager: GameStateManager,
+         ultimateSkill: UltimateSkill
+    ) {
         self.appRouter = appRouter
         self.gameKitManager = gameKitManager
+        self.gameStateManager = gameStateManager
         self.ultimateSkill = ultimateSkill
         super.init(size: .zero)
     }
@@ -164,7 +169,7 @@ class GameScene: SKScene {
 
     private func setupController() {
         guard let player else { return }
-        gameController = GameController(scene: self, player: player)
+        gameController = GameController(scene: self, player: player, gameStateManager: gameStateManager)
     }
     
     private func setupUltimateController() {
@@ -195,12 +200,17 @@ class GameScene: SKScene {
     
     private func setupHUD() {
         guard let cameraNode else { return }
-        hudManager = HUDManager(camera: cameraNode, appRouter: appRouter)
+        hudManager = HUDManager(camera: cameraNode, appRouter: appRouter, gameStateManager: gameStateManager)
     }
     
     private func setupZombieSpawnSystem() {
         guard let worldNode , let player else { return }
-        zombieSpawnSystem = ZombieSpawnSystem(worldNode: worldNode, player: player)
+        
+        zombieSpawnSystem = ZombieSpawnSystem(
+            worldNode: worldNode,
+            player: player,
+            gameStateManager: gameStateManager
+        )
 
         // 웨이브 시작 콜백 설정
         zombieSpawnSystem?.onNewWaveStarted = { [weak self] waveNumber in
@@ -219,7 +229,7 @@ class GameScene: SKScene {
         guard let worldNode, let player, let toastMessageManager else { return }
         
         // 아이템 스포너 설정
-        itemSpawnSystem = ItemSpawnSystem(worldNode: worldNode)
+        itemSpawnSystem = ItemSpawnSystem(worldNode: worldNode, gameStateManager: gameStateManager)
         
         // 아이템 효과 시스템 설정
         itemEffectSystem = ItemEffectSystem(player: player, toastMessageManager: toastMessageManager)

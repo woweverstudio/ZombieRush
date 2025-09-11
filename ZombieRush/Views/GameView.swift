@@ -12,6 +12,12 @@ struct GameView: View {
     @Environment(AppRouter.self) var router
     @Environment(GameKitManager.self) var gameKitManager
     
+    private let gameStateManager: GameStateManager
+    
+    init(gameStateManager: GameStateManager) {
+        self.gameStateManager = gameStateManager
+    }
+    
     var body: some View {
         // SpriteKit 게임 씬 (풀스크린)
         SpriteView(scene: makeGameScene())
@@ -23,6 +29,7 @@ struct GameView: View {
         let scene = GameScene(
             appRouter: router,
             gameKitManager: gameKitManager,
+            gameStateManager: gameStateManager,
             ultimateSkill: NuclearAttackSkill()
         )
         // 화면 크기를 한 번만 계산하여 캐시

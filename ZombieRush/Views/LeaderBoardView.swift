@@ -6,6 +6,7 @@ struct LeaderBoardView: View {
     @Environment(AppRouter.self) var router
     @Environment(GameKitManager.self) var gameKitManager
     @State private var isLoading = true
+    @State private var showingErrorMessage: Bool = false
 
     var body: some View {
         ZStack {
@@ -25,7 +26,11 @@ struct LeaderBoardView: View {
             }
         }
         .task {
-            await loadLeaderboardData()
+            do {
+                try await loadLeaderboardData()
+            } catch {
+                //TODO: 데이터 조회 실패 시 어떻게 할 것인가 (ver 1.1.1)
+            }
         }
     }
 
@@ -37,13 +42,25 @@ struct LeaderBoardView: View {
             }
 
             Spacer()
-
-            Text(NSLocalizedString("LEADERBOARD_TITLE", comment: "Leaderboard screen title"))
-                .font(.system(size: 24, weight: .bold, design: .monospaced))
-                .foregroundColor(.cyan)
-                .shadow(color: .cyan.opacity(0.5), radius: 2, x: 0, y: 0)
+            HStack {
+                Text(DateUtils.getCurrentWeekString())
+                    .font(.system(size: 24, weight: .bold, design: .monospaced))
+                    .foregroundColor(.cyan)
+                    .shadow(color: .cyan.opacity(0.5), radius: 2, x: 0, y: 0)
+                
+                Text(NSLocalizedString("LEADERBOARD_TITLE", comment: "Leaderboard screen title"))
+                    .font(.system(size: 24, weight: .bold, design: .monospaced))
+                    .foregroundColor(.cyan)
+                    .shadow(color: .cyan.opacity(0.5), radius: 2, x: 0, y: 0)
+            }
+            
 
             Spacer()
+            
+            BackButton(style: .cyan) {
+                
+            }
+            .hidden()
         }
         .padding(.horizontal, 20)
         .padding(.vertical, 16)
@@ -95,10 +112,10 @@ struct LeaderBoardView: View {
     }
 
     // MARK: - Data Loading
-    private func loadLeaderboardData() async {
+    private func loadLeaderboardData() async throws {
         isLoading = true
-
-        await gameKitManager.loadTop100Leaderboard {
+        
+        try await gameKitManager.loadTop100Leaderboard {
             DispatchQueue.main.async {
                 isLoading = false
             }

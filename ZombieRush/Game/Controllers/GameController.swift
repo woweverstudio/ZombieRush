@@ -13,6 +13,7 @@ class GameController {
     // MARK: - Properties
     private weak var scene: GameScene?
     private weak var player: Player?
+    private let gameStateManager: GameStateManager
     
     // MARK: - Touch Tracking
     private var leftTouch: UITouch?
@@ -61,9 +62,10 @@ class GameController {
     }
     
     // MARK: - Initialization
-    init(scene: GameScene, player: Player) {
+    init(scene: GameScene, player: Player, gameStateManager: GameStateManager) {
         self.scene = scene
         self.player = player
+        self.gameStateManager = gameStateManager
         setupUI()
     }
     
@@ -228,7 +230,7 @@ class GameController {
 
     private func getCurrentWaveNumber() -> Int {
         // 실제 GameStateManager에서 현재 웨이브 가져오기
-        return GameStateManager.shared.getCurrentWaveNumber()
+        return gameStateManager.getCurrentWaveNumber()
     }
 
     // MARK: - Bullet System
