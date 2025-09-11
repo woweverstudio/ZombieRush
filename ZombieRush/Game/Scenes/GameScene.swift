@@ -7,6 +7,14 @@
 
 import SpriteKit
 import GameplayKit
+import Combine
+
+// MARK: - HUD Manager Delegate Implementation
+extension GameScene: HUDManagerDelegate {
+    func hudManagerDidRequestPause() {
+        pauseGame()
+    }
+}
 
 class GameScene: SKScene {
     
@@ -32,10 +40,73 @@ class GameScene: SKScene {
     private let appRouter: AppRouter
     private let gameKitManager: GameKitManager
     private var ultimateSkill: UltimateSkill
+
+    // MARK: - State Synchronization
+    private func setupGameStateNotifications() {
+
+        // 게임 상태 변경 알림 수신 - Block 기반
+        NotificationCenter.default.addObserver(
+            forName: GameStateManager.NotificationName.stateChanged,
+            object: gameStateManager,
+            queue: .main
+        ) { [weak self] notification in
+            guard let self = self,
+                  let userInfo = notification.userInfo,
+                  let newState = userInfo["newState"] as? GameState else {
+                return
+            }
+
+
+            // 상태 변화에 따라 GameScene의 isPaused 업데이트
+            switch newState {
+            case .paused:
+                self.isPaused = true
+            case .playing:
+                self.isPaused = false
+            case .gameOver:
+                self.isPaused = true  // 게임 오버 시에도 일시정지
+            case .loading:
+                self.isPaused = true  // 로딩 중에도 일시정지            
+            }
+        }
+    }
+
+
+
+    // MARK: - Notification Setup
+    private func setupNotifications() {
+        NotificationCenter.default.addObserver(
+            forName: GameStateManager.NotificationName.stateChanged,
+            object: gameStateManager,
+            queue: .main
+        ) { [weak self] notification in
+            guard let self = self,
+                  let userInfo = notification.userInfo,
+                  let newState = userInfo["newState"] as? GameState else {
+                return
+            }
+
+            // 상태 변화에 따라 GameScene의 isPaused 업데이트
+            switch newState {
+            case .paused:
+                self.isPaused = true
+            case .playing:
+                self.isPaused = false
+            case .gameOver:
+                self.isPaused = true  // 게임 오버 시에도 일시정지
+            case .loading:
+                self.isPaused = true  // 로딩 중에도 일시정지
+            }
+        }
+    }
+    // MARK: - Public Control Methods
+    // onResume 제거됨 - GameStateManager의 상태 변화에 따라 자동 처리
     
     // MARK: - Game State
     private let gameStateManager: GameStateManager
     private var lastUpdateTime: TimeInterval = 0
+    private var lastPauseTime: TimeInterval = 0  // 일시정지 시점 기록
+    private var accumulatedPauseTime: TimeInterval = 0  // 누적 일시정지 시간
 
     // MARK: - Initialization
     init(appRouter: AppRouter,
@@ -48,6 +119,10 @@ class GameScene: SKScene {
         self.gameStateManager = gameStateManager
         self.ultimateSkill = ultimateSkill
         super.init(size: .zero)
+
+        // init에서 바로 Notification observer 등록
+        setupNotifications()
+        setupGameStateNotifications()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -58,12 +133,22 @@ class GameScene: SKScene {
     override func didMove(to view: SKView) {
         // 멀티터치 활성화
         view.isMultipleTouchEnabled = true
-        
+
+        // 게임 시작 시점 기록 (정확한 시간 측정 시작)
+        lastUpdateTime = CACurrentMediaTime()
+        accumulatedPauseTime = 0
+        lastPauseTime = 0
+
         // 게임 시작 (GameStateManager가 이미 완벽한 초기화 제공)
         gameStateManager.startNewGame()
 
         // 게임 시스템 초기화
         initializeGameSystems()
+    }
+
+    deinit {
+        // 모든 Notification observer 해제
+        NotificationCenter.default.removeObserver(self, name: GameStateManager.NotificationName.stateChanged, object: gameStateManager)
     }
     
     // MARK: - Game System Initialization
@@ -201,6 +286,9 @@ class GameScene: SKScene {
     private func setupHUD() {
         guard let cameraNode else { return }
         hudManager = HUDManager(camera: cameraNode, appRouter: appRouter, gameStateManager: gameStateManager)
+
+        // HUDManager delegate 설정
+        hudManager?.delegate = self
     }
     
     private func setupZombieSpawnSystem() {
@@ -244,28 +332,52 @@ class GameScene: SKScene {
     // MARK: - Update Loop
     override func update(_ currentTime: TimeInterval) {
         super.update(currentTime)
-        
-        if lastUpdateTime == 0 {
-            lastUpdateTime = currentTime
+
+        // 기본 시간 초기화 (didMove에서 이미 설정됨)
+        // lastUpdateTime이 0이면 아직 초기화되지 않은 상태
+        guard lastUpdateTime > 0 else {
             return
         }
 
-        var deltaTime = currentTime - lastUpdateTime
-        let maxDeltaTime: TimeInterval = 1.0
-        deltaTime = min(deltaTime, maxDeltaTime)
-
-        if gameStateManager.isAppCurrentlyActive() {
-            lastUpdateTime = currentTime
+        // 🎯 게임 진행 조건 체크 (이 조건들을 만족하지 않으면 모든 로직 중지)
+        guard gameStateManager.isGameActive() else {
+            return  // 게임이 진행 중이 아니면 아무것도 하지 않음
         }
 
-        if gameStateManager.isGameOver() {
-            return
+        guard !gameStateManager.isGameOver() else {
+            return  // 게임 오버 상태에서는 아무것도 하지 않음
         }
 
-        // 플레이 시간 업데이트
-        gameStateManager.updatePlayTime(deltaTime: deltaTime)
+        guard !gameStateManager.isGamePaused() else {
+            return  // 일시정지 상태에서는 아무것도 하지 않음
+        }
 
+        // ✅ 게임이 정상 진행 중일 때만 업데이트 수행
         if gameStateManager.isAppCurrentlyActive() {
+            // 정확한 deltaTime 계산 (일시정지 시간 보정)
+            let currentAccurateTime = CACurrentMediaTime()
+            var deltaTime = currentAccurateTime - lastUpdateTime - accumulatedPauseTime
+
+            // 일시정지 해제 직후 accumulatedPauseTime 리셋
+            if accumulatedPauseTime > 0 {
+                accumulatedPauseTime = 0
+            }
+
+            // deltaTime 범위 제한 (너무 큰 값 방지)
+            let maxDeltaTime: TimeInterval = 1.0 / 30.0  // 30fps 기준
+            deltaTime = min(deltaTime, maxDeltaTime)
+
+            // 음수 deltaTime 방지
+            if deltaTime < 0 {
+                deltaTime = 1.0 / 60.0  // 기본값 사용
+            }
+
+            lastUpdateTime = currentAccurateTime
+
+            // 플레이 시간 업데이트
+            gameStateManager.updatePlayTime(deltaTime: deltaTime)
+
+            // 게임 시스템 업데이트
             physicsSystem?.update(currentTime)
             cameraSystem?.update(currentTime)
             zombieSpawnSystem?.update(currentTime)
@@ -278,18 +390,23 @@ class GameScene: SKScene {
             }
         }
 
-        // 플레이어 상태 업데이트
-        if let player = player, let hudManager = hudManager {
-            let health = player.getHealth()
-            let maxHealth = player.getMaxHealth()
-            let ammo = player.getAmmo()
-            let maxAmmo = player.getMaxAmmo()
-            let isReloading = player.getIsReloading()
+        // 📊 UI 업데이트 (항상 수행 - 앱 상태와 무관)
+        updatePlayerHUD()
+    }
 
-            hudManager.updateHUD(health: health, maxHealth: maxHealth,
-                               ammo: ammo, maxAmmo: maxAmmo,
-                               isReloading: isReloading)
-        }
+    // MARK: - UI Updates
+    private func updatePlayerHUD() {
+        guard let player = player, let hudManager = hudManager else { return }
+
+        let health = player.getHealth()
+        let maxHealth = player.getMaxHealth()
+        let ammo = player.getAmmo()
+        let maxAmmo = player.getMaxAmmo()
+        let isReloading = player.getIsReloading()
+
+        hudManager.updateHUD(health: health, maxHealth: maxHealth,
+                           ammo: ammo, maxAmmo: maxAmmo,
+                           isReloading: isReloading)
     }
 
     // MARK: - Touch Handling
@@ -348,6 +465,30 @@ class GameScene: SKScene {
         itemSpawnSystem?.collectItem(item)
     }
     
+    // MARK: - Pause Logic
+    private func pauseGame() {
+        // 일시정지 시점 기록
+        lastPauseTime = CACurrentMediaTime()
+
+        // GameStateManager를 통해 일시정지
+        gameStateManager.pauseGame()
+    }
+
+    func resumeGame() {
+        // 일시정지 시간 누적
+        if lastPauseTime > 0 {
+            let currentTime = CACurrentMediaTime()
+            let pauseDuration = currentTime - lastPauseTime
+            accumulatedPauseTime += pauseDuration
+            lastPauseTime = 0
+        }
+
+        // GameStateManager를 통해 재개
+        gameStateManager.resumeGame()
+
+        // 나머지는 GameStateManager의 상태 변화에 따라 자동 처리됨
+    }
+
     // MARK: - Game Over Logic
     private func triggerGameOver() {
         guard !gameStateManager.isGameOver() else { return }
@@ -402,3 +543,4 @@ class GameScene: SKScene {
         hudManager?.hideHUD()
     }
 }
+

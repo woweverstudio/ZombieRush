@@ -7,6 +7,11 @@
 
 import SpriteKit
 
+// MARK: - HUD Manager Delegate Protocol
+protocol HUDManagerDelegate: AnyObject {
+    func hudManagerDidRequestPause()
+}
+
 class HUDManager {
     
     // MARK: - Properties
@@ -28,7 +33,9 @@ class HUDManager {
     
     // MARK: - Dependencies
     private let appRouter: AppRouter
-    
+    weak var delegate: HUDManagerDelegate?
+
+
     // MARK: - Game Data
     private(set) var score: Int = 0
 
@@ -63,7 +70,7 @@ class HUDManager {
         
         setupScoreLabel()
         setupTimeLabel()
-        setupExitButton()
+        setupPauseButton()
         setupHealthBar()
         setupAmmoBar()
     }
@@ -100,32 +107,32 @@ class HUDManager {
         hudNode?.addChild(timeLabel!)
     }
     
-    private func setupExitButton() {
+    private func setupPauseButton() {
         guard let scene = scene else { return }
         let sceneHeight = scene.size.height
-        
+
         let buttonWidth: CGFloat = 80
         let buttonHeight: CGFloat = 30
         let buttonX = scene.size.width/2 - 100
         let buttonY = sceneHeight/2 - 50  // 화면 상단에서 100pt 아래쪽에 위치
-        
-        // 나가기 버튼 배경 (검은 반투명 배경)
+
+        // 일시정지 버튼 배경 (검은 반투명 배경)
         exitButton = SKShapeNode(rectOf: CGSize(width: buttonWidth, height: buttonHeight), cornerRadius: 6)
         exitButton?.fillColor = SKColor.black.withAlphaComponent(0.3)
         exitButton?.strokeColor = SKColor.white.withAlphaComponent(0.3)
         exitButton?.lineWidth = 1
         exitButton?.position = CGPoint(x: buttonX, y: buttonY)
-        exitButton?.name = "exitButton"
+        exitButton?.name = "pauseButton"
         hudNode?.addChild(exitButton!)
-        
-        // 나가기 버튼 라벨
-        exitButtonLabel = SKLabelNode(text: TextConstants.UI.exitButton)
+
+        // 일시정지 버튼 라벨 (일시정지 심볼 사용)
+        exitButtonLabel = SKLabelNode(text: "⏸️")
         exitButtonLabel?.fontName = "Arial-Bold"
-        exitButtonLabel?.fontSize = 14
+        exitButtonLabel?.fontSize = 16
         exitButtonLabel?.fontColor = SKColor.white.withAlphaComponent(0.9)
         exitButtonLabel?.position = CGPoint(x: 0, y: -5)
         exitButtonLabel?.horizontalAlignmentMode = .center
-        exitButtonLabel?.name = "exitButtonLabel"
+        exitButtonLabel?.name = "pauseButtonLabel"
         exitButton?.addChild(exitButtonLabel!)
     }
     
@@ -324,25 +331,22 @@ class HUDManager {
         // 노드 기반 터치 감지 - 훨씬 더 정확함
         let touchedNode = hudNode.atPoint(location)
         
-        // 나가기 버튼이나 버튼 라벨이 터치되었는지 확인
-        if touchedNode.name == "exitButton" || touchedNode.name == "exitButtonLabel" {
-            // 버튼 사운드 및 햅틱 효과
+        // 일시정지 버튼이나 버튼 라벨이 터치되었는지 확인
+        if touchedNode.name == "pauseButton" || touchedNode.name == "pauseButtonLabel" {
+            // 버튼 사운드 및 햅틱 효과 (isPaused 상태와 무관하게 실행)
             if AudioManager.shared.isSoundEffectsEnabled {
-                let buttonSound = SKAction.playSoundFileNamed(ResourceConstants.Audio.SoundEffects.button, waitForCompletion: false)
-                hudNode.run(buttonSound)
+                AudioManager.shared.playButtonSound()
             }
             HapticManager.shared.playButtonHaptic()
-            
-            // 나가기 버튼 터치 효과
+
+            // 일시정지 버튼 터치 효과
             exitButton?.run(SKAction.sequence([
                 SKAction.scale(to: 0.9, duration: 0.1),
                 SKAction.scale(to: 1.0, duration: 0.1)
             ]))
-            
-            // 메인화면으로 이동
-            DispatchQueue.main.async {
-                self.appRouter.quitToMainMenu()
-            }
+
+            // Delegate를 통해 일시정지 요청
+            delegate?.hudManagerDidRequestPause()
             return true
         }
         

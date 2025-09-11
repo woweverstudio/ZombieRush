@@ -5,6 +5,7 @@ enum GameState {
     case playing
     case gameOver
     case loading
+    case paused
 }
 
 // MARK: - Game State Manager
@@ -15,7 +16,16 @@ class GameStateManager {
     var currentWave: Int = 1  // 웨이브는 1부터 시작
     
     // MARK: - Properties
-    private(set) var currentState: GameState = .loading
+    private(set) var currentState: GameState = .loading {
+        didSet {
+            // 상태 변경 시 Notification 발송
+            NotificationCenter.default.post(
+                name: NotificationName.stateChanged,
+                object: self,
+                userInfo: ["newState": currentState, "oldState": oldValue]
+            )
+        }
+    }
     private(set) var isAppActive: Bool = true  // 앱 활성 상태 추적
 
     
@@ -50,13 +60,36 @@ class GameStateManager {
     func endGame() {
         currentState = .gameOver
     }
-    
+
     func isGameActive() -> Bool {
         return currentState == .playing
     }
-    
+
     func isGameOver() -> Bool {
         return currentState == .gameOver
+    }
+
+    // MARK: - Pause Management
+    func pauseGame() {
+        guard isGameActive() else {            
+            return
+        }
+        currentState = .paused
+    }
+
+    func resumeGame() {
+        guard currentState == .paused else { return }
+        currentState = .playing
+    }
+
+    func isGamePaused() -> Bool {
+        return currentState == .paused
+    }
+
+    // MARK: - Notification Names
+    enum NotificationName {
+        static let stateChanged = Notification.Name("GameStateChanged")
+        static let resumeRequested = Notification.Name("GameResumeRequested")
     }
     
     // 앱 활성 상태 확인 메소드
@@ -73,7 +106,11 @@ class GameStateManager {
     func updatePlayTime(deltaTime: TimeInterval) {
         // 앱이 비활성 상태이거나 게임이 일시정지된 경우 시간 업데이트 중지
         guard isGameActive() && isAppActive else { return }
-        self.playTime += deltaTime
+
+        // deltaTime이 너무 작거나 큰 값 방지
+        let clampedDeltaTime = min(max(deltaTime, 0.001), 1.0)  // 1ms ~ 1초 범위
+
+        self.playTime += clampedDeltaTime
     }
     
     func getScore() -> Int {
