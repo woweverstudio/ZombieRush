@@ -267,13 +267,21 @@ class GameKitManager: NSObject {
 
     /// 상위 100명 리더보드 데이터를 로드합니다.
     func loadTop100Leaderboard(completion: (() -> Void)? = nil) async throws {
+        // 인증 상태 확인
+        guard isAuthenticated else {
+            throw NSError(domain: GKErrorDomain, code: GKError.Code.notAuthenticated.rawValue,
+                         userInfo: [NSLocalizedDescriptionKey: "Not authenticated with Game Center"])
+        }
+
         do {
             let leaderboards = try await GKLeaderboard.loadLeaderboards(
                 IDs: [TextConstants.GameCenter.currentLeaderboardID]
             )
 
             guard let leaderboard = leaderboards.first else {
-                throw NSError(domain: "GameKit", code: 0, userInfo: nil)
+                // 커스텀 에러 코드 사용 (GameKit에는 leaderboardNotFound가 없음)
+                throw NSError(domain: "GameKit", code: 1001,
+                             userInfo: [NSLocalizedDescriptionKey: "Leaderboard not found"])
             }
 
             let entries = try await leaderboard.loadEntries(
@@ -287,27 +295,59 @@ class GameKitManager: NSObject {
                 print("🎮 GameKit: Loaded \(entries.1.count) entries for top 100")
             }
 
-            // 상위 100 플레이어들의 프로필 이미지 로드
-            try await loadTop100Images()
+            // 상위 100 플레이어들의 프로필 이미지 로드 (에러가 발생해도 리더보드는 성공으로 처리)
+            do {
+                try await loadTop100Images()
+            } catch {
+                print("🎮 GameKit: Failed to load some profile images, but leaderboard data is loaded: \(error)")
+                // 프로필 이미지 로드 실패는 리더보드 로드 성공에 영향을 주지 않음
+            }
 
             completion?()
 
-        } catch {
+        } catch let error as NSError {
             print("🎮 GameKit: Failed to load top 100 leaderboard: \(error)")
-            throw NSError(domain: "GameKit", code: 0, userInfo: nil)
+
+            // 이미 GameKit 에러인 경우 그대로 throw
+            if error.domain == GKErrorDomain {
+                throw error
+            }
+
+            // 그 외의 에러는 네트워크 에러로 처리
+            throw NSError(domain: GKErrorDomain, code: GKError.Code.communicationsFailure.rawValue,
+                         userInfo: [NSLocalizedDescriptionKey: "Network connection failed"])
         }
     }
 
     private func loadTop100Images() async throws {
+        var loadedCount = 0
+        var failedCount = 0
+
         for entry in top100Entries {
             do {
                 let image = try await entry.player.loadPhoto(for: .small)
                 await MainActor.run { [weak self] in
                     self?.profileImages[entry.player.gamePlayerID] = image
                 }
-            } catch {
-                throw NSError(domain: "GameKit", code: 0, userInfo: nil)
+                loadedCount += 1
+            } catch let error as NSError {
+                failedCount += 1
+                print("🎮 GameKit: Failed to load image for \(entry.player.displayName): \(error)")
+
+                // GameKit 에러인 경우는 계속 진행 (일부 이미지가 로드되지 않아도 괜찮음)
+                if error.domain == GKErrorDomain {
+                    continue
+                }
+
+                // 다른 에러의 경우 마지막에 경고만 출력하고 계속 진행
+                continue
             }
+        }
+
+        if failedCount > 0 {
+            print("🎮 GameKit: Image loading completed - Success: \(loadedCount), Failed: \(failedCount)")
+        } else if loadedCount > 0 {
+            print("🎮 GameKit: Successfully loaded \(loadedCount) profile images")
         }
     }
 

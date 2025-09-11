@@ -7,6 +7,8 @@ struct LeaderBoardView: View {
     @Environment(GameKitManager.self) var gameKitManager
     @State private var isLoading = true
     @State private var showingErrorMessage: Bool = false
+    @State private var errorMessage: String = ""
+    @State private var canRetry = true
 
     var body: some View {
         ZStack {
@@ -20,17 +22,15 @@ struct LeaderBoardView: View {
                 // 콘텐츠 영역
                 if isLoading {
                     loadingView
+                } else if showingErrorMessage {
+                    errorView
                 } else {
                     leaderboardContent
                 }
             }
         }
         .task {
-            do {
-                try await loadLeaderboardData()
-            } catch {
-                //TODO: 데이터 조회 실패 시 어떻게 할 것인가 (ver 1.1.1)
-            }
+            await loadDataWithErrorHandling()
         }
     }
 
@@ -81,6 +81,57 @@ struct LeaderBoardView: View {
         }
     }
 
+    // MARK: - Error View
+    private var errorView: some View {
+        VStack(spacing: 20) {
+            Spacer()
+
+            VStack(spacing: 16) {
+                Image(systemName: "wifi.slash")
+                    .font(.system(size: 48))
+                    .foregroundColor(.red.opacity(0.8))
+
+                Text(NSLocalizedString("LEADERBOARD_ERROR_TITLE", comment: "Leaderboard error title"))
+                    .font(.system(size: 20, weight: .bold, design: .monospaced))
+                    .foregroundColor(.red)
+                    .multilineTextAlignment(.center)
+
+                Text(errorMessage.isEmpty ?
+                     NSLocalizedString("LEADERBOARD_ERROR_MESSAGE", comment: "Leaderboard error message") :
+                     errorMessage)
+                    .font(.system(size: 14, weight: .medium, design: .monospaced))
+                    .foregroundColor(.gray)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal, 20)
+            }
+
+            if canRetry {
+                Button(action: {
+                    Task {
+                        await retryLoadData()
+                    }
+                }) {
+                    HStack(spacing: 8) {
+                        Image(systemName: "arrow.clockwise")
+                            .font(.system(size: 16))
+                        Text(NSLocalizedString("RETRY_BUTTON", comment: "Retry button text"))
+                            .font(.system(size: 16, weight: .bold, design: .monospaced))
+                    }
+                    .foregroundColor(.cyan)
+                    .padding(.horizontal, 24)
+                    .padding(.vertical, 12)
+                    .background(
+                        RoundedRectangle(cornerRadius: 8)
+                            .stroke(Color.cyan.opacity(0.5), lineWidth: 1)
+                    )
+                }
+                .padding(.top, 10)
+            }
+
+            Spacer()
+        }
+    }
+
     // MARK: - Leaderboard Content
     private var leaderboardContent: some View {
         ScrollView {
@@ -112,12 +163,55 @@ struct LeaderBoardView: View {
     }
 
     // MARK: - Data Loading
+    private func loadDataWithErrorHandling() async {
+        do {
+            try await loadLeaderboardData()
+        } catch {
+            handleError(error)
+        }
+    }
+
     private func loadLeaderboardData() async throws {
         isLoading = true
-        
+        showingErrorMessage = false
+        errorMessage = ""
+        canRetry = true
+
         try await gameKitManager.loadTop100Leaderboard {
             DispatchQueue.main.async {
-                isLoading = false
+                self.isLoading = false
+            }
+        }
+    }
+
+    private func retryLoadData() async {
+        await loadDataWithErrorHandling()
+    }
+
+    // MARK: - Error Handling
+    private func handleError(_ error: Error) {
+        DispatchQueue.main.async {
+            self.isLoading = false
+            self.showingErrorMessage = true
+            self.canRetry = true
+
+            let nsError = error as NSError
+
+            // GameKit 관련 에러 처리
+            if nsError.domain == "GameKit" || nsError.domain == GKErrorDomain {
+                switch nsError.code {
+                case GKError.Code.notAuthenticated.rawValue:
+                    self.errorMessage = NSLocalizedString("GAMEKIT_NOT_AUTHENTICATED", comment: "GameKit not authenticated error")
+                case GKError.Code.communicationsFailure.rawValue:
+                    self.errorMessage = NSLocalizedString("GAMEKIT_NETWORK_ERROR", comment: "GameKit network error")
+                case 1001: // 커스텀 리더보드 찾기 실패 에러
+                    self.errorMessage = NSLocalizedString("GAMEKIT_LEADERBOARD_NOT_FOUND", comment: "Leaderboard not found error")
+                default:
+                    self.errorMessage = NSLocalizedString("GAMEKIT_GENERIC_ERROR", comment: "Generic GameKit error")
+                }
+            } else {
+                // 일반적인 네트워크 에러
+                self.errorMessage = NSLocalizedString("GENERIC_NETWORK_ERROR", comment: "Generic network error")
             }
         }
     }
