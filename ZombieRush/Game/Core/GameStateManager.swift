@@ -9,23 +9,15 @@ enum GameState {
 }
 
 // MARK: - Game State Manager
-class GameStateManager {
+@Observable
+final class GameStateManager {
     var points: Int = 0
     var Kills: Int = 0
     var playTime: TimeInterval = 0
     var currentWave: Int = 1  // 웨이브는 1부터 시작
     
     // MARK: - Properties
-    private(set) var currentState: GameState = .loading {
-        didSet {
-            // 상태 변경 시 Notification 발송
-            NotificationCenter.default.post(
-                name: NotificationName.stateChanged,
-                object: self,
-                userInfo: ["newState": currentState, "oldState": oldValue]
-            )
-        }
-    }
+    var currentState: GameState = .loading
     private(set) var isAppActive: Bool = true  // 앱 활성 상태 추적
 
     
@@ -71,14 +63,10 @@ class GameStateManager {
 
     // MARK: - Pause Management
     func pauseGame() {
-        guard isGameActive() else {            
-            return
-        }
         currentState = .paused
     }
 
     func resumeGame() {
-        guard currentState == .paused else { return }
         currentState = .playing
     }
 

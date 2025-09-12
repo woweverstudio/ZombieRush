@@ -50,7 +50,7 @@ struct StandardButton: View {
         }) {
             Text(title)
                 .frame(width: width, height: height)
-                .font(.system(size: 16, weight: .bold, design: .monospaced))
+                .font(.system(size: 20, weight: .bold, design: .monospaced))
                 .foregroundColor(.white)
                 .background(
                     RoundedRectangle(cornerRadius: 8)

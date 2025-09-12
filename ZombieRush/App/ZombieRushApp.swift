@@ -9,24 +9,25 @@ import SwiftUI
 
 @main
 struct ZombieRushApp: App {
-    // UI 매니저들만 싱글턴 제거, 게임 로직 매니저들은 싱글턴 유지
-    @State private var gameKitManager = GameKitManager()
     @State private var appRouter = AppRouter()
+    @State private var gameKitManager = GameKitManager()
+    @State private var gameStateManager = GameStateManager()
     @State private var audioManager = AudioManager.shared  // 게임에서 사용하므로 싱글턴 유지
     @State private var hapticManager = HapticManager.shared  // 게임에서 사용하므로 싱글턴 유지
-    private var gameStateManager = GameStateManager()
     
     @Environment(\.scenePhase) private var scenePhase  // 앱 상태 모니터링
     
     var body: some Scene {
         WindowGroup {
-            RouterView(gameStateManager: gameStateManager)
+            RouterView()
                 .preferredColorScheme(.dark)
-                .environment(gameKitManager)   // GameKit 매니저 주입
-                .environment(appRouter)        // App Router 주입
-                .environment(audioManager)     // Audio 매니저 주입
-                .environment(hapticManager)    // Haptic 매니저 주입
+                .environment(appRouter)
+                .environment(gameKitManager)
+                .environment(gameStateManager)
+                .environment(audioManager)
+                .environment(hapticManager)
                 .onAppear {
+                    guard appRouter.currentRoute != .game else { return }
                     // 앱 시작 시 즉시 메인메뉴 음악 재생
                     audioManager.playMainMenuMusic()
 

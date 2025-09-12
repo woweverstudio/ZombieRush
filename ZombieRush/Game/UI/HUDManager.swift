@@ -32,7 +32,6 @@ class HUDManager {
     private var exitButtonLabel: SKLabelNode?
     
     // MARK: - Dependencies
-    private let appRouter: AppRouter
     weak var delegate: HUDManagerDelegate?
 
 
@@ -51,10 +50,9 @@ class HUDManager {
     private var lastIsReloading: Bool = false
     
     // MARK: - Initialization
-    init(camera: SKCameraNode, appRouter: AppRouter, gameStateManager: GameStateManager) {
+    init(camera: SKCameraNode, gameStateManager: GameStateManager) {
         self.camera = camera
         self.scene = camera.scene
-        self.appRouter = appRouter
         self.gameStateManager = gameStateManager
         setupHUD()
     }

@@ -72,13 +72,13 @@ struct MainMenuView: View {
                             .frame(maxWidth: .infinity)
                             .multilineTextAlignment(.leading)
                             .background(
-                                    SpeechBubble()
-                                        .fill(Color.black.opacity(0.4))
-                                        .overlay(
-                                            SpeechBubble()
-                                                .stroke(Color.white.opacity(0.3), lineWidth: 1)
-                                        )
-                                )
+                                SpeechBubble()
+                                    .fill(Color.black.opacity(0.4))
+                                    .overlay(
+                                        SpeechBubble()
+                                            .stroke(Color.white.opacity(0.3), lineWidth: 1)
+                                    )
+                            )
                     }
 
                     NeonButton("GAME START", fullWidth: true) {
@@ -91,6 +91,7 @@ struct MainMenuView: View {
             .padding(.vertical, 24)
         }
         .onAppear {
+            guard router.currentRoute == .mainMenu else { return }
             checkAndLoadData()
         }
     }

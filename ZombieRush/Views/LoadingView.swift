@@ -48,6 +48,7 @@ struct LoadingView: View {
             .padding(.horizontal, 40)
         }
         .onAppear {
+            guard router.currentRoute == .loading else { return }
             startLoadingProcess()
         }
     }

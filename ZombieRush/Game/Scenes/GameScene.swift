@@ -40,67 +40,6 @@ class GameScene: SKScene {
     private let appRouter: AppRouter
     private let gameKitManager: GameKitManager
     private var ultimateSkill: UltimateSkill
-
-    // MARK: - State Synchronization
-    private func setupGameStateNotifications() {
-
-        // 게임 상태 변경 알림 수신 - Block 기반
-        NotificationCenter.default.addObserver(
-            forName: GameStateManager.NotificationName.stateChanged,
-            object: gameStateManager,
-            queue: .main
-        ) { [weak self] notification in
-            guard let self = self,
-                  let userInfo = notification.userInfo,
-                  let newState = userInfo["newState"] as? GameState else {
-                return
-            }
-
-
-            // 상태 변화에 따라 GameScene의 isPaused 업데이트
-            switch newState {
-            case .paused:
-                self.isPaused = true
-            case .playing:
-                self.isPaused = false
-            case .gameOver:
-                self.isPaused = true  // 게임 오버 시에도 일시정지
-            case .loading:
-                self.isPaused = true  // 로딩 중에도 일시정지            
-            }
-        }
-    }
-
-
-
-    // MARK: - Notification Setup
-    private func setupNotifications() {
-        NotificationCenter.default.addObserver(
-            forName: GameStateManager.NotificationName.stateChanged,
-            object: gameStateManager,
-            queue: .main
-        ) { [weak self] notification in
-            guard let self = self,
-                  let userInfo = notification.userInfo,
-                  let newState = userInfo["newState"] as? GameState else {
-                return
-            }
-
-            // 상태 변화에 따라 GameScene의 isPaused 업데이트
-            switch newState {
-            case .paused:
-                self.isPaused = true
-            case .playing:
-                self.isPaused = false
-            case .gameOver:
-                self.isPaused = true  // 게임 오버 시에도 일시정지
-            case .loading:
-                self.isPaused = true  // 로딩 중에도 일시정지
-            }
-        }
-    }
-    // MARK: - Public Control Methods
-    // onResume 제거됨 - GameStateManager의 상태 변화에 따라 자동 처리
     
     // MARK: - Game State
     private let gameStateManager: GameStateManager
@@ -119,10 +58,9 @@ class GameScene: SKScene {
         self.gameStateManager = gameStateManager
         self.ultimateSkill = ultimateSkill
         super.init(size: .zero)
-
-        // init에서 바로 Notification observer 등록
-        setupNotifications()
-        setupGameStateNotifications()
+ 
+        gameStateManager.startNewGame()
+        initializeGameSystems()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -131,6 +69,7 @@ class GameScene: SKScene {
     
     // MARK: - Scene Lifecycle
     override func didMove(to view: SKView) {
+        super.didMove(to: view)
         // 멀티터치 활성화
         view.isMultipleTouchEnabled = true
 
@@ -138,17 +77,6 @@ class GameScene: SKScene {
         lastUpdateTime = CACurrentMediaTime()
         accumulatedPauseTime = 0
         lastPauseTime = 0
-
-        // 게임 시작 (GameStateManager가 이미 완벽한 초기화 제공)
-        gameStateManager.startNewGame()
-
-        // 게임 시스템 초기화
-        initializeGameSystems()
-    }
-
-    deinit {
-        // 모든 Notification observer 해제
-        NotificationCenter.default.removeObserver(self, name: GameStateManager.NotificationName.stateChanged, object: gameStateManager)
     }
     
     // MARK: - Game System Initialization
@@ -285,7 +213,7 @@ class GameScene: SKScene {
     
     private func setupHUD() {
         guard let cameraNode else { return }
-        hudManager = HUDManager(camera: cameraNode, appRouter: appRouter, gameStateManager: gameStateManager)
+        hudManager = HUDManager(camera: cameraNode, gameStateManager: gameStateManager)
 
         // HUDManager delegate 설정
         hudManager?.delegate = self
@@ -469,9 +397,9 @@ class GameScene: SKScene {
     private func pauseGame() {
         // 일시정지 시점 기록
         lastPauseTime = CACurrentMediaTime()
-
-        // GameStateManager를 통해 일시정지
         gameStateManager.pauseGame()
+        
+        view?.isPaused = true
     }
 
     func resumeGame() {
@@ -485,8 +413,7 @@ class GameScene: SKScene {
 
         // GameStateManager를 통해 재개
         gameStateManager.resumeGame()
-
-        // 나머지는 GameStateManager의 상태 변화에 따라 자동 처리됨
+        view?.isPaused = false
     }
 
     // MARK: - Game Over Logic

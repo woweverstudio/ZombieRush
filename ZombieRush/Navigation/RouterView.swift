@@ -2,12 +2,8 @@ import SwiftUI
 
 // MARK: - Main Router View
 struct RouterView: View {
-    private let gameStateManager: GameStateManager
     @Environment(AppRouter.self) var router
-    
-    init(gameStateManager: GameStateManager) {
-        self.gameStateManager = gameStateManager
-    }
+    @Environment(GameStateManager.self) var gameStateManager
     
     var body: some View {
         // ZStack으로 전환 애니메이션 지원
@@ -21,7 +17,7 @@ struct RouterView: View {
                     MainMenuView()
                         .id("mainMenu")
                 case .game:
-                    GameView(gameStateManager: self.gameStateManager)
+                    GameView()
                         .id("game")
                 case .settings:
                     SettingsView()

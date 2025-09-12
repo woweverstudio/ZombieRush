@@ -92,8 +92,6 @@ final class AppRouter {
         }
     }
     
-
-    
     // MARK: - Computed Properties
     var currentGameData: GameData? {
         gameData

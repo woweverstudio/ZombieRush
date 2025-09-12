@@ -13,66 +13,49 @@ import SpriteKit
 struct GameView: View {
     @Environment(AppRouter.self) var router
     @Environment(GameKitManager.self) var gameKitManager
-
-    private let gameStateManager: GameStateManager
-    @State private var showPauseOverlay = false
-
-    init(gameStateManager: GameStateManager) {
-        self.gameStateManager = gameStateManager
-    }
+    @Environment(GameStateManager.self) var gameStateManager
+    
+    @State private var gameScene: GameScene?   // SKScene 상속 객체
     
     var body: some View {
         ZStack {
             // SpriteKit 게임 씬 (풀스크린)
-            SpriteView(scene: makeGameScene())
-                .ignoresSafeArea()
+            if let gameScene = gameScene {
+                SpriteView(scene: gameScene)
+                    .ignoresSafeArea()
+            }
 
             // 일시정지 오버레이
-            if showPauseOverlay {
+            if gameStateManager.currentState == .paused {
                 pauseOverlay
             }
         }
         .onAppear {
-            // 게임 상태 변경 알림 수신 설정
-            NotificationCenter.default.addObserver(
-                forName: GameStateManager.NotificationName.stateChanged,
-                object: gameStateManager,
-                queue: .main
-            ) { notification in
-                guard let userInfo = notification.userInfo,
-                      let newState = userInfo["newState"] as? GameState else {
-                    return
-                }
-
-                // GameStateManager의 상태 변화에 따라 overlay 표시/숨김
-                switch newState {
-                case .paused:
-                    self.showPauseOverlay = true
-                case .playing:
-                    self.showPauseOverlay = false
-                case .gameOver:
-                    self.showPauseOverlay = false  // 게임 오버 시 overlay 숨김
-                case .loading:
-                    self.showPauseOverlay = false  // 로딩 중 overlay 숨김
-                }
+            if gameScene == nil {
+                let gameScene = GameScene(
+                    appRouter: router,
+                    gameKitManager: gameKitManager,
+                    gameStateManager: gameStateManager,
+                    ultimateSkill: NuclearAttackSkill()
+                )
+                
+                let screenSize = UIScreen.main.bounds.size
+                gameScene.size = CGSize(width: screenSize.width, height: screenSize.height)
+                gameScene.scaleMode = .aspectFill
+                
+                self.gameScene = gameScene
             }
-        }
-        .onDisappear {
-            // 모든 Notification observer 정리
-            NotificationCenter.default.removeObserver(self, name: GameStateManager.NotificationName.stateChanged, object: gameStateManager)
         }
     }
     
     // MARK: - Game Scene Creation
-    private func makeGameScene() -> SKScene {
+    private func makeGameScene(_ gameStateManager: GameStateManager) -> SKScene {
         let scene = GameScene(
             appRouter: router,
             gameKitManager: gameKitManager,
             gameStateManager: gameStateManager,
             ultimateSkill: NuclearAttackSkill()
         )
-
-        // 콜백 설정 제거 - GameStateManager의 상태 변화를 통해 자동 처리
 
         // 화면 크기를 한 번만 계산하여 캐시
         let screenSize = UIScreen.main.bounds.size
@@ -97,47 +80,28 @@ struct GameView: View {
                     .shadow(color: .cyan.opacity(0.5), radius: 5, x: 0, y: 0)
 
                 // 버튼들
-                VStack(spacing: 20) {
-                    // 계속하기 버튼
-                    StandardButton(
-                        NSLocalizedString("PAUSE_RESUME_BUTTON", comment: "Pause overlay - Resume button text"),
-                        width: 200,
-                        color: .main,
-                        action: {
-                            resumeGame()
-                        }
-                    )
-
+                HStack(spacing: 20) {
                     // 나가기 버튼
                     StandardButton(
                         NSLocalizedString("PAUSE_QUIT_BUTTON", comment: "Pause overlay - Quit button text"),
                         width: 200,
                         color: .warning,
                         action: {
-                            quitToMainMenu()
+                            router.quitToMainMenu()
+                        }
+                    )
+                    
+                    // 계속하기 버튼
+                    StandardButton(
+                        NSLocalizedString("PAUSE_RESUME_BUTTON", comment: "Pause overlay - Resume button text"),
+                        width: 200,
+                        color: .main,
+                        action: {
+                            gameScene?.resumeGame()
                         }
                     )
                 }
             }
         }
-    }
-
-    // MARK: - Actions
-    // showPauseMenu 제거됨 - 콜백으로 직접 처리
-
-    private func resumeGame() {
-        // GameStateManager를 통해 게임 재개
-        gameStateManager.resumeGame()
-
-        // 나머지는 GameStateManager의 상태 변화에 따라 자동 처리됨
-    }
-
-    private func quitToMainMenu() {
-        // GameStateManager를 통해 게임 재개 (나가기 전에 게임 재개)
-        gameStateManager.resumeGame()
-
-        // router.quitToMainMenu()에서 새로운 게임이 시작될 때 startNewGame()이 호출되어 상태가 초기화됨
-        // 나머지는 GameStateManager의 상태 변화에 따라 자동 처리됨
-        router.quitToMainMenu()
     }
 }
