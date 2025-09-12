@@ -61,7 +61,6 @@ class GameKitManager: NSObject {
         // 이미지 캐시 초기화
         profileImages = [:]
 
-        print("🔄 GameKit 데이터 초기화 완료")
     }
 
     /// 앱 시작 시 모든 데이터를 로드합니다.
@@ -89,7 +88,6 @@ class GameKitManager: NSObject {
 
     /// 데이터를 강제로 새로고침합니다 (캐시 초기화 후 재로드)
     func refreshData(completion: (() -> Void)? = nil) {
-        print("🔄 데이터 새로고침 시작 - 캐시 초기화")
 
         // 데이터 초기화
         resetData()
@@ -121,20 +119,17 @@ class GameKitManager: NSObject {
 
     private func authenticateWithCallback(completion: @escaping (Bool) -> Void) {
         guard let localPlayer = localPlayer else {
-            print("🎮 GameKit: No local player")
             completion(false)
             return
         }
 
         // 이미 인증된 경우
         if localPlayer.isAuthenticated {
-            print("🎮 GameKit: Already logged in")
             isAuthenticated = true
             completion(true)
             return
         }
 
-        print("🎮 GameKit: Setting up Game Center login")
 
         // Game Center 인증 핸들러 설정
         localPlayer.authenticateHandler = { [weak self] viewController, error in
@@ -142,7 +137,6 @@ class GameKitManager: NSObject {
 
             if let viewController = viewController {
                 // 로그인 화면 표시
-                print("🎮 GameKit: Showing Game Center login")
                 DispatchQueue.main.async {
                     self.presentViewController?(viewController)
                 }
@@ -292,7 +286,6 @@ class GameKitManager: NSObject {
 
             await MainActor.run { [weak self] in
                 self?.top100Entries = entries.1
-                print("🎮 GameKit: Loaded \(entries.1.count) entries for top 100")
             }
 
             // 상위 100 플레이어들의 프로필 이미지 로드 (에러가 발생해도 리더보드는 성공으로 처리)
@@ -345,9 +338,7 @@ class GameKitManager: NSObject {
         }
 
         if failedCount > 0 {
-            print("🎮 GameKit: Image loading completed - Success: \(loadedCount), Failed: \(failedCount)")
         } else if loadedCount > 0 {
-            print("🎮 GameKit: Successfully loaded \(loadedCount) profile images")
         }
     }
 
@@ -372,34 +363,6 @@ class GameKitManager: NSObject {
             player: localPlayer ?? .local
         )
         
-        print("🎮 GameKit: Score submitted successfully: \(score)")
     }
 
-    // MARK: - Debug Functions
-
-    /// 로드된 데이터를 콘솔에 출력 (디버깅용)
-    func printDataStatus() {
-        print("🎮 === GameKitManager 데이터 상태 ===")
-        print("🎮 인증 상태: \(isAuthenticated ? "✅ 인증됨" : "❌ 미인증 (게스트 모드)")")
-        print("🎮 플레이어 이름: \(playerDisplayName)")
-        print("🎮 플레이어 점수: \(playerScore)")
-        print("🎮 플레이어 랭크: \(playerRank != nil ? "#\(playerRank!)" : "없음")")
-        print("🎮 프로필 이미지: \(playerPhoto != nil ? "✅ 로드됨" : "❌ 없음")")
-
-        print("🎮 === 리더보드 데이터 (Top 3) ===")
-        if topThreeEntries.isEmpty {
-            print("🎮 리더보드 데이터: ❌ 없음")
-        } else {
-            for (index, entry) in topThreeEntries.enumerated() {
-                let rank = index + 1
-                let name = entry.player.displayName
-                let score = entry.score
-                print("🎮 #\(rank): \(name) - \(score)점")
-            }
-        }
-
-        print("🎮 프로필 이미지 캐시: \(profileImages.count)개")
-        print("🎮 리더보드 1~100 배열 크기: \(top100Entries.count)")
-        print("🎮 === 데이터 로드 완료 ===")
-    }
 }

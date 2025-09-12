@@ -23,7 +23,6 @@ class ZombieSpawnSystem {
     private var maxZombieCount: Int = GameBalance.Zombie.baseMaxZombies
     private var currentWave: Int = 1
     private var lastSpawnTime: TimeInterval = 0
-    private var lastLogTime: TimeInterval = 0
 
     // 상수들
     private let mapSize: CGSize = CGSize(width: GameBalance.Physics.worldWidth, height: GameBalance.Physics.worldHeight)
@@ -106,26 +105,18 @@ class ZombieSpawnSystem {
         }
 
         if !oldZombies.isEmpty {
-            print("🧟 Removing \(oldZombies.count) old zombies (spawned 2+ waves ago)")
-
             for zombie in oldZombies {
                 removeZombie(zombie)
             }
-
-            print("🧟 Successfully removed \(oldZombies.count) old zombies")
         }
     }
 
     private func updateExistingZombiesStats(forWave wave: Int) {
         let zombieCount = zombies.count
         if zombieCount > 0 {
-            print("🧟 Updating stats for \(zombieCount) existing zombies to wave \(wave)")
-
             for zombie in zombies {
                 zombie.updateStats(forWave: wave)
             }
-
-            print("🧟 Successfully updated \(zombieCount) zombies for wave \(wave)")
         }
     }
     

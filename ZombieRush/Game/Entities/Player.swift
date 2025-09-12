@@ -6,7 +6,6 @@
 //
 
 import SpriteKit
-import GameplayKit
 
 class Player: SKSpriteNode {
     // MARK: - Face Expression Properties

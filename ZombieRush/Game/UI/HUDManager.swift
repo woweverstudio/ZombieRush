@@ -28,8 +28,8 @@ class HUDManager {
     private var ammoBar: SKShapeNode?
     private var ammoBarFill: SKShapeNode?
     private var reloadLabel: SKLabelNode?
-    private var exitButton: SKShapeNode?
-    private var exitButtonLabel: SKLabelNode?
+    private var pauseButton: SKShapeNode?
+    private var pauseButtonLabel: SKLabelNode?
     
     // MARK: - Dependencies
     weak var delegate: HUDManagerDelegate?
@@ -115,23 +115,24 @@ class HUDManager {
         let buttonY = sceneHeight/2 - 50  // 화면 상단에서 100pt 아래쪽에 위치
 
         // 일시정지 버튼 배경 (검은 반투명 배경)
-        exitButton = SKShapeNode(rectOf: CGSize(width: buttonWidth, height: buttonHeight), cornerRadius: 6)
-        exitButton?.fillColor = SKColor.black.withAlphaComponent(0.3)
-        exitButton?.strokeColor = SKColor.white.withAlphaComponent(0.3)
-        exitButton?.lineWidth = 1
-        exitButton?.position = CGPoint(x: buttonX, y: buttonY)
-        exitButton?.name = "pauseButton"
-        hudNode?.addChild(exitButton!)
+        pauseButton = SKShapeNode(rectOf: CGSize(width: buttonWidth, height: buttonHeight), cornerRadius: 6)
+        pauseButton?.fillColor = SKColor.black.withAlphaComponent(0.3)
+        pauseButton?.strokeColor = SKColor.white.withAlphaComponent(0.3)
+        pauseButton?.lineWidth = 1
+        pauseButton?.position = CGPoint(x: buttonX, y: buttonY)
+        pauseButton?.name = "pauseButton"
+        hudNode?.addChild(pauseButton!)
 
-        // 일시정지 버튼 라벨 (일시정지 심볼 사용)
-        exitButtonLabel = SKLabelNode(text: "⏸️")
-        exitButtonLabel?.fontName = "Arial-Bold"
-        exitButtonLabel?.fontSize = 16
-        exitButtonLabel?.fontColor = SKColor.white.withAlphaComponent(0.9)
-        exitButtonLabel?.position = CGPoint(x: 0, y: -5)
-        exitButtonLabel?.horizontalAlignmentMode = .center
-        exitButtonLabel?.name = "pauseButtonLabel"
-        exitButton?.addChild(exitButtonLabel!)
+        // 일시정지 버튼 라벨 (PAUSE_TITLE 사용)
+        pauseButtonLabel = SKLabelNode(text: NSLocalizedString("PAUSE_TITLE", comment: "Pause overlay - Paused title"))
+        pauseButtonLabel?.fontName = "Arial-Bold"
+        pauseButtonLabel?.fontSize = 16
+        pauseButtonLabel?.fontColor = SKColor.white.withAlphaComponent(0.9)
+        pauseButtonLabel?.position = CGPoint(x: 0, y: 0)
+        pauseButtonLabel?.horizontalAlignmentMode = .center
+        pauseButtonLabel?.verticalAlignmentMode = .center
+        pauseButtonLabel?.name = "pauseButtonLabel"
+        pauseButton?.addChild(pauseButtonLabel!)
     }
     
     private func setupHealthBar() {
@@ -338,7 +339,7 @@ class HUDManager {
             HapticManager.shared.playButtonHaptic()
 
             // 일시정지 버튼 터치 효과
-            exitButton?.run(SKAction.sequence([
+            pauseButton?.run(SKAction.sequence([
                 SKAction.scale(to: 0.9, duration: 0.1),
                 SKAction.scale(to: 1.0, duration: 0.1)
             ]))

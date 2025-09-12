@@ -7,7 +7,6 @@ struct LoadingView: View {
     @Environment(AppRouter.self) var router
 
     @State private var progress: Double = 0.0
-    private let loadingDuration: Double = 2.0 // 2초 로딩
 
     var body: some View {
         ZStack {
@@ -67,8 +66,7 @@ struct LoadingView: View {
 
         // GameKit 데이터 로딩 시작
         gameKitManager.loadInitialData {
-            // 데이터 로드 상태 확인
-            self.gameKitManager.printDataStatus()
+            // 데이터 로드 완료
 
             // 데이터 로딩 완료 후 프로그레스 바 채우기
             withAnimation(.easeInOut(duration: 0.5)) {
@@ -77,7 +75,7 @@ struct LoadingView: View {
 
             // 프로그레스 바 애니메이션 완료 후 메인메뉴로 이동
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                if router.currentRoute != .game {
+                if router.currentRoute == .loading {
                     self.router.navigate(to: .mainMenu)
                 }
             }
@@ -105,7 +103,6 @@ struct LoadingView: View {
 
         // 인증 완료 이벤트 클로저 설정
         gameKitManager.onAuthenticationCompleted = {
-            print("🎮 GameKit: 인증 완료 이벤트 수신 - 메인화면으로 이동 준비")
             // 필요한 경우 추가 로직 수행 가능
         }
     }

@@ -8,7 +8,6 @@
 import SwiftUI
 import SpriteKit
 
-// MARK: - Game Scene ViewModel 제거됨 (GameStateManager로 통합)
 
 struct GameView: View {
     @Environment(AppRouter.self) var router

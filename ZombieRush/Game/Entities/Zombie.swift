@@ -25,8 +25,6 @@ class Zombie: SKSpriteNode {
 
     private weak var target: SKNode?
     
-    // 이미지 관련 프로퍼티 제거됨 - 단순한 사각형 사용
-    
     // MARK: - Initialization
     init(type: ZombieType, currentWave: Int) {
         self.zombieType = type
@@ -184,7 +182,6 @@ class Zombie: SKSpriteNode {
             currentHealth = health
         }
 
-        print("🧟 Zombie stats updated for wave \(wave) - Speed: \(String(format: "%.1f", moveSpeed)), Health: \(currentHealth)/\(health)")
     }
     
     // MARK: - Getters

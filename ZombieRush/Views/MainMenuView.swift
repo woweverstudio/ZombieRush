@@ -113,7 +113,6 @@ struct MainMenuView: View {
         if let lastTime = lastRefreshTime,
            currentTime.timeIntervalSince(lastTime) < 3.0 {
             // 3초가 지나지 않았으면 무시
-            print("⏰ 새로고침은 3초에 한 번만 가능합니다")
             return
         }
 
@@ -126,7 +125,6 @@ struct MainMenuView: View {
             isDataLoaded = true
 
             // 새로고침 완료 피드백 (선택사항)
-            print("📊 데이터 새로고침 완료 - 캐시 초기화됨")
         }
     }
 }

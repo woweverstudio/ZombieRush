@@ -28,7 +28,6 @@ final class AppRouter {
     func navigate(to route: Route) {
         guard currentRoute != route else { return }
 
-        print("🔄 Navigation: \(currentRoute) → \(route)")
 
         // 오디오 처리
         handleAudioTransition(to: route)
@@ -40,15 +39,12 @@ final class AppRouter {
     func goBack() {
         guard canGoBack else { return }
 
-        let current = currentRoute
-        print("🔄 Navigation: \(current) ← BACKWARD")
 
         // path에서 제거 (currentRoute는 자동으로 업데이트됨)
         path.removeLast()
     }
 
     func quitToMainMenu() {
-        print("🔄 Navigation: \(currentRoute) → mainMenu")
 
         // 오디오 처리
         handleAudioTransition(to: .mainMenu)

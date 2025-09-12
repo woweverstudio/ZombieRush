@@ -125,16 +125,6 @@ class ItemSpawnSystem {
         }
     }
     
-    // MARK: - Debug Methods
-    func getItemCounts() -> [ItemType: Int] {
-        var counts: [ItemType: Int] = [:]
-        
-        for type in ItemType.allCases {
-            counts[type] = activeItems.filter { $0.getType() == type }.count
-        }
-        
-        return counts
-    }
     
     private func getRandomItemType() -> ItemType {
         let currentWave = gameStateManager.getCurrentWaveNumber()

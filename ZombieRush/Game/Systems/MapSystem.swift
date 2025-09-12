@@ -25,7 +25,6 @@ class MapSystem: MapSystemProtocol {
     }
     
     private func createMapBackground(in worldNode: SKNode) {
-        removeCurrentMap()
         createGridBackground(in: worldNode)
     }
     
@@ -118,10 +117,6 @@ class MapSystem: MapSystemProtocol {
         outerBorderRect.zPosition = UIConstants.Map.backgroundZPosition + 1
         outerBorderRect.name = TextConstants.NodeNames.neonBorderGlow
         worldNode.addChild(outerBorderRect)
-    }
-    
-    private func removeCurrentMap() {
-        // TODO: 기존 그리드 노드들 제거 로직 구현 필요 시
     }
     
     func getMapDisplayName() -> String {
