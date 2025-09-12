@@ -451,17 +451,26 @@ class GameScene: SKScene {
         }
     }
 
-    private func clearGameNodes() {
-        player?.removeFromParent()
-        player = nil
+    func clearGameNodes() {
+        worldNode?.removeAllChildren()
+        worldNode = nil
+
+        // MARK:ame Systems
+        physicsSystem = nil
+        cameraSystem = nil
+        worldSystem = nil
+        gameController = nil
+        ultimateController = nil
+        hudManager = nil
+        zombieSpawnSystem = nil
+        toastMessageManager = nil
+        itemSpawnSystem = nil
+        itemEffectSystem = nil
 
         // 각 시스템이 스스로 정리하도록 위임
         zombieSpawnSystem?.removeAllZombies()
         itemSpawnSystem?.removeAllItems()
         itemEffectSystem?.removeAllEffects()
-
-        // World 노드 정리
-        worldNode?.removeAllChildren()
     }
     
     // MARK: - UI Control

@@ -67,7 +67,7 @@ struct SettingsView: View {
             
             Spacer()
             
-            BackButton(style: .cyan) { }
+            BackButton(style: .cyan) { router.goBack() }
             .opacity(0)
         }
     }

@@ -26,14 +26,6 @@ struct ZombieRushApp: App {
                 .environment(gameStateManager)
                 .environment(audioManager)
                 .environment(hapticManager)
-                .onAppear {
-                    guard appRouter.currentRoute != .game else { return }
-                    // 앱 시작 시 즉시 메인메뉴 음악 재생
-                    audioManager.playMainMenuMusic()
-
-                    // 앱 시작 시 GameKit 인증 시도
-                    gameKitManager.loadInitialData(completion: {})
-                }
         }
         .onChange(of: scenePhase) { oldPhase, newPhase in
             // 앱 상태 변화 감지 및 GameStateManager에 전달

@@ -1,14 +1,14 @@
 import Foundation
 
-// MARK: - Route Enum
-enum Route: String, CaseIterable, Hashable {
-    case loading = "loading"
-    case mainMenu = "main_menu"
-    case game = "game"
-    case settings = "settings"
-    case leaderboard = "leaderboard"
-    case gameOver = "game_over"
-    
+// MARK: - Route Enum (Associated Values 추가)
+enum Route: Hashable {
+    case loading
+    case mainMenu
+    case game
+    case settings
+    case leaderboard
+    case gameOver(playTime: Int, score: Int, success: Bool)
+
     var title: String {
         switch self {
         case .loading:
@@ -25,29 +25,15 @@ enum Route: String, CaseIterable, Hashable {
             return "GAME OVER"
         }
     }
-    
-    var identifier: String {
-        return rawValue
-    }
-}
 
-// MARK: - Navigation State
-struct NavigationState {
-    var currentRoute: Route = .loading  // 로딩 화면으로 시작
-    var previousRoute: Route?
-    var gameData: GameData?
-    
-    mutating func navigate(to route: Route, with data: GameData? = nil) {
-        previousRoute = currentRoute
-        currentRoute = route
-        gameData = data
-    }
-    
-    mutating func goBack() {
-        if let previous = previousRoute {
-            currentRoute = previous
-            previousRoute = nil
-            gameData = nil
+    var identifier: String {
+        switch self {
+        case .loading: return "loading"
+        case .mainMenu: return "main_menu"
+        case .game: return "game"
+        case .settings: return "settings"
+        case .leaderboard: return "leaderboard"
+        case .gameOver: return "game_over"
         }
     }
 }

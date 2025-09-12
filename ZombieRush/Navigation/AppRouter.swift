@@ -1,85 +1,68 @@
 import Foundation
 import SwiftUI
 
-// MARK: - Navigation Direction
-enum NavigationDirection {
-    case forward
-    case backward
-}
 
-// MARK: - App Router (Single Source of Truth)
+// MARK: - App Router
 @Observable
 final class AppRouter {
-    
-    // MARK: - Observable Properties (직접 노출로 변경 감지 보장)
-    private(set) var currentRoute: Route = .loading
-    private(set) var previousRoute: Route?
-    private(set) var gameData: GameData?
-    private(set) var navigationDirection: NavigationDirection = .forward
+    // MARK: - Navigation Properties
+    var path: [Route] = []
+
+    // MARK: - Computed Properties
+    var currentRoute: Route {
+        path.last ?? .loading
+    }
+
+    var canGoBack: Bool {
+        path.count > 1
+    }
 
     // MARK: - Initialization
     init() {
-        // 앱 시작 시 로딩 화면으로 시작 (초기 라우트는 .loading)
+        // 초기 route 설정
+        navigate(to: .loading)
     }
 
     
     // MARK: - Navigation Methods
-    func navigate(to route: Route, with data: GameData? = nil, animated: Bool = true) {
+    func navigate(to route: Route) {
         guard currentRoute != route else { return }
 
-        navigationDirection = .forward
-        print("🔄 Navigation: \(currentRoute) → \(route) (FORWARD)")
+        print("🔄 Navigation: \(currentRoute) → \(route)")
 
         // 오디오 처리
         handleAudioTransition(to: route)
 
-        // 직접 프로퍼티 업데이트 (@Observable이 감지)
-        previousRoute = currentRoute
-        currentRoute = route
-        gameData = data
+        // path에 추가 (currentRoute는 자동으로 업데이트됨)
+        path.append(route)
     }
-    
-    func goBack(animated: Bool = true) {
-        guard let previous = previousRoute else { return }
 
-        navigationDirection = .backward
-        print("🔄 Navigation: \(currentRoute) ← \(previous) (BACKWARD)")
+    func goBack() {
+        guard canGoBack else { return }
 
-        // 직접 프로퍼티 업데이트 (@Observable이 감지)
-        currentRoute = previous
-        previousRoute = nil
-        gameData = nil
+        let current = currentRoute
+        print("🔄 Navigation: \(current) ← BACKWARD")
+
+        // path에서 제거 (currentRoute는 자동으로 업데이트됨)
+        path.removeLast()
     }
-    
-    func restart(animated: Bool = true) {
-        let restartData = GameData()
-        navigate(to: .game, with: restartData, animated: animated)
-    }
-    
-    func showGameOver(playTime: Int, score: Int, success: Bool = false, animated: Bool = true) {
-        let gameOverData = GameData(playTime: playTime, score: score, success: success)
-        navigate(to: .gameOver, with: gameOverData, animated: animated)
-    }
-    
-    func quitToMainMenu(animated: Bool = true) {
-        // 게임에서 메인메뉴로 나가는 것은 "뒤로 가기" 개념
-        navigationDirection = .backward
-        print("🔄 Navigation: \(currentRoute) → mainMenu (BACKWARD)")
-        
+
+    func quitToMainMenu() {
+        print("🔄 Navigation: \(currentRoute) → mainMenu")
+
         // 오디오 처리
         handleAudioTransition(to: .mainMenu)
-        
-        // 직접 프로퍼티 업데이트 (@Observable이 감지)
-        previousRoute = currentRoute
-        currentRoute = .mainMenu
-        gameData = nil
+
+        // path 재설정 (currentRoute는 자동으로 업데이트됨)
+        path = [.mainMenu]
     }
-    
-    func completeLoading(animated: Bool = true) {
-        // 더 이상 사용되지 않음 - 바로 메인메뉴로 시작
-        // 호환성을 위해 메서드는 유지하되 아무것도 하지 않음
+
+
+    // MARK: - 역호환성 유지
+    func showGameOver(playTime: Int, score: Int, success: Bool = false) {
+        navigate(to: .gameOver(playTime: playTime, score: score, success: success))
     }
-    
+
     private func handleAudioTransition(to route: Route) {
         switch route {
         case .mainMenu, .settings, .leaderboard:
@@ -87,18 +70,9 @@ final class AppRouter {
         case .game:
             AudioManager.shared.playGameMusic()
         case .gameOver, .loading:
-            // 게임오버 시에는 음악 변경하지 않음 (게임 음악 유지)
+            AudioManager.shared.playMainMenuMusic()
             break
         }
-    }
-    
-    // MARK: - Computed Properties
-    var currentGameData: GameData? {
-        gameData
-    }
-    
-    var canGoBack: Bool {
-        previousRoute != nil
     }
 }
 

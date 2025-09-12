@@ -356,6 +356,7 @@ struct LeaderboardEntryRow: View {
     }
 }
 
+
 // MARK: - Preview
 #Preview {
     LeaderBoardView()

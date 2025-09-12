@@ -5,6 +5,8 @@ import GameKit
 struct MainMenuView: View {
     @Environment(AppRouter.self) var router
     @Environment(GameKitManager.self) var gameKitManager
+    @Environment(GameStateManager.self) var gameStateManager
+    
     @State private var isDataLoaded: Bool = false
     @State private var lastRefreshTime: Date? = nil
 
@@ -91,7 +93,6 @@ struct MainMenuView: View {
             .padding(.vertical, 24)
         }
         .onAppear {
-            guard router.currentRoute == .mainMenu else { return }
             checkAndLoadData()
         }
     }

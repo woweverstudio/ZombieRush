@@ -3,6 +3,7 @@ import SwiftUI
 // MARK: - Loading View
 struct LoadingView: View {
     @Environment(GameKitManager.self) var gameKitManager
+    @Environment(GameStateManager.self) var gameStateManager
     @Environment(AppRouter.self) var router
 
     @State private var progress: Double = 0.0
@@ -48,7 +49,6 @@ struct LoadingView: View {
             .padding(.horizontal, 40)
         }
         .onAppear {
-            guard router.currentRoute == .loading else { return }
             startLoadingProcess()
         }
     }
@@ -77,7 +77,9 @@ struct LoadingView: View {
 
             // 프로그레스 바 애니메이션 완료 후 메인메뉴로 이동
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                self.router.navigate(to: .mainMenu)
+                if router.currentRoute != .game {
+                    self.router.navigate(to: .mainMenu)
+                }
             }
         }
     }

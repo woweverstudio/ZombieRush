@@ -87,6 +87,7 @@ struct GameView: View {
                         width: 200,
                         color: .warning,
                         action: {
+                            gameScene?.clearGameNodes()
                             router.quitToMainMenu()
                         }
                     )
