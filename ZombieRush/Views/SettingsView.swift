@@ -30,21 +30,21 @@ struct SettingsView: View {
                     
                     // 사운드 설정
                     SettingRow(
-                        title: NSLocalizedString("SETTINGS_SOUND_EFFECTS", comment: "Sound effects setting"),
+                        title: TextConstants.Settings.soundEffects,
                         icon: "speaker.wave.2.fill",
                         isOn: $bindableAudioManager.isSoundEffectsEnabled
                     )
                     .padding(.bottom, 10)
 
                     SettingRow(
-                        title: NSLocalizedString("SETTINGS_BACKGROUND_MUSIC", comment: "Background music setting"),
+                        title: TextConstants.Settings.backgroundMusic,
                         icon: "music.note",
                         isOn: $bindableAudioManager.isBackgroundMusicEnabled
                     )
                     .padding(.bottom, 10)
 
                     SettingRow(
-                        title: NSLocalizedString("SETTINGS_VIBRATION", comment: "Vibration setting"),
+                        title: TextConstants.Settings.vibration,
                         icon: "iphone.radiowaves.left.and.right",
                         isOn: $bindableHapticManager.isHapticEnabled
                     )
@@ -63,7 +63,7 @@ struct SettingsView: View {
             Spacer()
             
             // 설정 타이틀
-            SectionTitle(NSLocalizedString("SETTINGS_TITLE", comment: "Settings screen title"), size: 28)
+            SectionTitle(TextConstants.Settings.title, size: 28)
             
             Spacer()
             

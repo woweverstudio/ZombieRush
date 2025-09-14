@@ -73,7 +73,7 @@ struct GameView: View {
             // 일시정지 메뉴
             VStack(spacing: 30) {
                 // 제목
-                Text(NSLocalizedString("PAUSE_TITLE", comment: "Pause overlay - Paused title"))
+                Text(TextConstants.Pause.title)
                     .font(.system(size: 36, weight: .bold, design: .monospaced))
                     .foregroundColor(.cyan)
                     .shadow(color: .cyan.opacity(0.5), radius: 5, x: 0, y: 0)
@@ -82,7 +82,7 @@ struct GameView: View {
                 HStack(spacing: 20) {
                     // 나가기 버튼
                     StandardButton(
-                        NSLocalizedString("PAUSE_QUIT_BUTTON", comment: "Pause overlay - Quit button text"),
+                        TextConstants.Pause.quitButton,
                         width: 200,
                         color: .warning,
                         action: {
@@ -93,7 +93,7 @@ struct GameView: View {
                     
                     // 계속하기 버튼
                     StandardButton(
-                        NSLocalizedString("PAUSE_RESUME_BUTTON", comment: "Pause overlay - Resume button text"),
+                        TextConstants.Pause.resumeButton,
                         width: 200,
                         color: .main,
                         action: {

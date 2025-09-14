@@ -60,14 +60,14 @@ struct LoadingView: View {
     private func getLoadingText() -> String {
         // 버전 체크가 완료되지 않았으면 버전 체크중 표시
         if !versionManager.hasCheckedVersion {
-            return NSLocalizedString("CHECKING_VERSION", comment: "Loading screen - Version check in progress")
+            return TextConstants.Loading.checkingVersion
         }
 
         // GameKit 로딩 상태 확인
         if gameKitManager.isLoading {
-            return NSLocalizedString("LOADING_DATA", comment: "Loading screen - Loading data text")
+            return TextConstants.Loading.loadingData
         } else {
-            return NSLocalizedString("READY_TO_PLAY", comment: "Loading screen - Ready to play text")
+            return TextConstants.Loading.readyToPlay
         }
     }
 

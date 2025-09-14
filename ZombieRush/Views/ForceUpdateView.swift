@@ -21,13 +21,13 @@ struct ForceUpdateView: View {
                 Spacer()
 
                 // 타이틀
-                Text(NSLocalizedString("NEW_VERSION_AVAILABLE", comment: "Force update screen - New version available message"))
+                Text(TextConstants.ForceUpdate.newVersionAvailable)
                     .font(.system(size: 24, weight: .bold, design: .monospaced))
                     .foregroundColor(.white)
                     .multilineTextAlignment(.center)
 
                 // 앱스토어 이동 버튼
-                NeonButton(NSLocalizedString("GO_TO_APP_STORE", comment: "Force update screen - Go to App Store button"), style: .cyan) {
+                NeonButton(TextConstants.ForceUpdate.goToAppStore, style: .cyan) {
                     openAppStore()
                 }
 

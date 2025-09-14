@@ -32,7 +32,7 @@ class DateUtils {
         let monthName = getLocalizedMonthName(month)
 
         // 현지화된 주차 포맷으로 반환
-        return String(format: NSLocalizedString("WEEK_FORMAT", comment: "Week format for date display"), monthName, weekNumber, getOrdinalSuffix(weekNumber))
+        return String(format: TextConstants.DateTime.weekFormat, monthName, weekNumber, getOrdinalSuffix(weekNumber))
     }
 
     /// 특정 날짜를 기준으로 몇월 몇번째 주인지 계산해서 문자열로 반환
@@ -63,7 +63,7 @@ class DateUtils {
         let monthName = getLocalizedMonthName(month)
 
         // 현지화된 주차 포맷으로 반환
-        return String(format: NSLocalizedString("WEEK_FORMAT", comment: "Week format for date display"), monthName, weekNumber, getOrdinalSuffix(weekNumber))
+        return String(format: TextConstants.DateTime.weekFormat, monthName, weekNumber, getOrdinalSuffix(weekNumber))
     }
 
     /// 현재 날짜의 주차 정보를 상세하게 반환

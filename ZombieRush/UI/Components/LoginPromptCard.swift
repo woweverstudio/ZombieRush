@@ -11,7 +11,7 @@ struct LoginPromptCard: View {
                 .foregroundColor(.white.opacity(0.5))
 
             VStack{
-                Text(NSLocalizedString("LOGIN_PROMPT_PLAYER_CARD", comment: "Login prompt for Player Card"))
+                Text(TextConstants.LoginPrompt.playerCard)
                     .font(.system(size: 16, weight: .medium, design: .monospaced))
                     .foregroundColor(.white.opacity(0.5))
                     .multilineTextAlignment(.center)

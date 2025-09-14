@@ -65,7 +65,7 @@ struct PlayerCard: View {
                                 .foregroundColor(.cyan)
                                 .shadow(color: .cyan.opacity(0.5), radius: 5, x: 0, y: 0)
 
-                            Text(NSLocalizedString("PLAY_TIME_LABEL", comment: "Player Card - Play Time Label"))
+                            Text(TextConstants.PlayerCard.playTimeLabel)
                                 .font(.system(size: 12, weight: .medium, design: .monospaced))
                                 .foregroundColor(.cyan.opacity(0.7))
                                 .tracking(2)
@@ -80,7 +80,7 @@ struct PlayerCard: View {
                                     Text("#\(playerRank)")
                                         .font(.system(size: 18, weight: .bold, design: .monospaced))
                                         .foregroundColor(.yellow)
-                                    Text(NSLocalizedString("RANK_LABEL", comment: "Player Card - Rank Label"))
+                                    Text(TextConstants.PlayerCard.rankLabel)
                                         .font(.system(size: 12, weight: .bold, design: .monospaced))
                                         .foregroundColor(.yellow.opacity(0.7))
                                 }
@@ -89,7 +89,7 @@ struct PlayerCard: View {
                                     Text("-")
                                         .font(.system(size: 18, weight: .bold, design: .monospaced))
                                         .foregroundColor(.gray)
-                                    Text(NSLocalizedString("RANK_LABEL", comment: "Player Card - Rank Label"))
+                                    Text(TextConstants.PlayerCard.rankLabel)
                                         .font(.system(size: 12, weight: .bold, design: .monospaced))
                                         .foregroundColor(.yellow.opacity(0.7))
                                 }
@@ -101,7 +101,7 @@ struct PlayerCard: View {
                                     .font(.system(size: 18, weight: .bold, design: .monospaced))
                                     .foregroundColor(.red)
                                 
-                                Text(NSLocalizedString("KILLS_LABEL", comment: "Player Card - Kills Label"))
+                                Text(TextConstants.PlayerCard.killsLabel)
                                     .font(.system(size: 12, weight: .bold, design: .monospaced))
                                     .foregroundColor(.red.opacity(0.7))
                             }

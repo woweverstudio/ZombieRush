@@ -78,7 +78,7 @@ class HUDManager {
         let sceneWidth = scene.size.width
         let sceneHeight = scene.size.height
         
-        scoreLabel = SKLabelNode(text: NSLocalizedString("HUD_SCORE_INITIAL", comment: "Initial score display"))
+        scoreLabel = SKLabelNode(text: TextConstants.HUD.scoreInitial)
         scoreLabel?.fontName = "Arial-Bold"
         scoreLabel?.fontSize = 18
         scoreLabel?.fontColor = SKColor.white.withAlphaComponent(0.9)
@@ -94,7 +94,7 @@ class HUDManager {
         let sceneWidth = scene.size.width
         let sceneHeight = scene.size.height
         
-        timeLabel = SKLabelNode(text: NSLocalizedString("HUD_TIME_INITIAL", comment: "Initial time display"))
+        timeLabel = SKLabelNode(text: TextConstants.HUD.timeInitial)
         timeLabel?.fontName = "Arial-Bold"
         timeLabel?.fontSize = 20
         timeLabel?.fontColor = SKColor.white.withAlphaComponent(0.9)
@@ -124,7 +124,7 @@ class HUDManager {
         hudNode?.addChild(pauseButton!)
 
         // 일시정지 버튼 라벨 (PAUSE_TITLE 사용)
-        pauseButtonLabel = SKLabelNode(text: NSLocalizedString("PAUSE_TITLE", comment: "Pause overlay - Paused title"))
+        pauseButtonLabel = SKLabelNode(text: TextConstants.Pause.title)
         pauseButtonLabel?.fontName = "Arial-Bold"
         pauseButtonLabel?.fontSize = 16
         pauseButtonLabel?.fontColor = SKColor.white.withAlphaComponent(0.9)
@@ -159,7 +159,7 @@ class HUDManager {
         healthBar?.addChild(healthBarFill!)
         
         // 체력 라벨
-        let healthLabel = SKLabelNode(text: NSLocalizedString("HUD_HEALTH_LABEL", comment: "Health label"))
+        let healthLabel = SKLabelNode(text: TextConstants.HUD.healthLabel)
         healthLabel.fontName = "Arial-Bold"
         healthLabel.fontSize = 8
         healthLabel.fontColor = SKColor.white
@@ -193,7 +193,7 @@ class HUDManager {
         ammoBar?.addChild(ammoBarFill!)
         
         // 탄약 라벨 (HUD 최상단에 배치하여 잘 보이게)
-        let ammoLabel = SKLabelNode(text: NSLocalizedString("HUD_AMMO_LABEL", comment: "Ammo label"))
+        let ammoLabel = SKLabelNode(text: TextConstants.HUD.ammoLabel)
         ammoLabel.fontName = "Arial-Bold"
         ammoLabel.fontSize = 8
         ammoLabel.fontColor = SKColor.white
@@ -203,7 +203,7 @@ class HUDManager {
         ammoBar?.addChild(ammoLabel)
         
         // 재장전 라벨 (HUD 최상단에 배치하여 잘 보이게)
-        reloadLabel = SKLabelNode(text: NSLocalizedString("HUD_RELOADING_LABEL", comment: "Reloading label"))
+        reloadLabel = SKLabelNode(text: TextConstants.HUD.reloadingLabel)
         reloadLabel?.fontName = "Arial-Bold"
         reloadLabel?.fontSize = 18
         reloadLabel?.fontColor = UIConstants.Colors.HUD.reloadLabelColor

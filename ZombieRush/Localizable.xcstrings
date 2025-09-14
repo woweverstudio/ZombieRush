@@ -52,42 +52,6 @@
         }
       }
     },
-    "GAME_OVER_GAME_CENTER" : {
-      "comment" : "Game Over View",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Game Center"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "게임센터"
-          }
-        }
-      }
-    },
-    "GAME_OVER_GUEST" : {
-      "comment" : "Game Over View",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Guest"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "게스트"
-          }
-        }
-      }
-    },
     "GAME_OVER_KILLS_LABEL" : {
       "comment" : "Game Over View",
       "extractionState" : "manual",
@@ -106,42 +70,6 @@
         }
       }
     },
-    "GAME_OVER_MY_RECORDS_TITLE" : {
-      "comment" : "Game Over View",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "My Records Top 10"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "내 기록 탑 10"
-          }
-        }
-      }
-    },
-    "GAME_OVER_NEW_RECORD" : {
-      "comment" : "Game Over View",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "NEW RECORD"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "새 기록"
-          }
-        }
-      }
-    },
     "GAME_OVER_NEW_RECORD_TITLE" : {
       "comment" : "Game Over View - New record achieved title",
       "extractionState" : "manual",
@@ -156,24 +84,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "🎉 신기록 달성! 🎉"
-          }
-        }
-      }
-    },
-    "GAME_OVER_NO_RECORDS" : {
-      "comment" : "Game Over View",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "No records yet"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "아직 기록이 없어요"
           }
         }
       }
@@ -300,24 +210,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "동점"
-          }
-        }
-      }
-    },
-    "GAME_OVER_TIME_LABEL" : {
-      "comment" : "Game Over View",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "TIME"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "시간"
           }
         }
       }
@@ -1348,96 +1240,6 @@
         }
       }
     },
-    "PROFILE_GAME_CENTER" : {
-      "comment" : "Player Profile Card",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Game Center"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "게임센터"
-          }
-        }
-      }
-    },
-    "PROFILE_GLOBAL_RANK" : {
-      "comment" : "Player Profile Card",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Global Rank"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "글로벌 랭킹"
-          }
-        }
-      }
-    },
-    "PROFILE_GUEST_MODE" : {
-      "comment" : "Player Profile Card",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Guest Mode"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "게스트 모드"
-          }
-        }
-      }
-    },
-    "PROFILE_KILLS_LABEL" : {
-      "comment" : "Player Profile Card",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "KILLS"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "킬수"
-          }
-        }
-      }
-    },
-    "PROFILE_OPEN_SETTINGS" : {
-      "comment" : "Player Profile Card",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Open Settings"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "설정 열기"
-          }
-        }
-      }
-    },
     "PROFILE_SETTINGS_PATH" : {
       "comment" : "Player Profile Card",
       "extractionState" : "manual",
@@ -1456,60 +1258,6 @@
         }
       }
     },
-    "PROFILE_SIGN_IN_BENEFIT" : {
-      "comment" : "Player Profile Card",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sign in to challenge global rankings."
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "로그인 하시면 글로벌 랭킹에 도전하실 수 있습니다."
-          }
-        }
-      }
-    },
-    "PROFILE_SIGN_IN_PROMPT" : {
-      "comment" : "Player Profile Card",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Please sign in to Game Center!"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "게임센터에 로그인 하세요!"
-          }
-        }
-      }
-    },
-    "PROFILE_TIME_LABEL" : {
-      "comment" : "Player Profile Card",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "TIME"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "시간"
-          }
-        }
-      }
-    },
     "RANK_LABEL" : {
       "comment" : "Player Card - Rank Label",
       "extractionState" : "manual",
@@ -1524,132 +1272,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "랭크"
-          }
-        }
-      }
-    },
-    "RANKING_GLOBAL_TOP_100" : {
-      "comment" : "Global Ranking Card",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Global Top 100"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "글로벌 탑 100"
-          }
-        }
-      }
-    },
-    "RANKING_KILLS_SUFFIX" : {
-      "comment" : "Global Ranking Card",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "kills"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "킬"
-          }
-        }
-      }
-    },
-    "RANKING_LOADING" : {
-      "comment" : "Global Ranking Card",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Loading..."
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "로딩 중..."
-          }
-        }
-      }
-    },
-    "RANKING_NO_DATA" : {
-      "comment" : "Global Ranking Card",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "No rankings yet"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "아직 랭킹이 없어요"
-          }
-        }
-      }
-    },
-    "RANKING_PLAY_TO_SEE" : {
-      "comment" : "Global Ranking Card",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Play games to see rankings!"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "게임을 플레이해서 랭킹을 확인하세요!"
-          }
-        }
-      }
-    },
-    "RANKING_SAMPLE_TITLE" : {
-      "comment" : "Global Ranking Card",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sample Rankings"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "샘플 랭킹"
-          }
-        }
-      }
-    },
-    "RANKING_SIGN_IN_REAL" : {
-      "comment" : "Global Ranking Card",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sign in to see real rankings"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "실제 랭킹을 보려면 로그인하세요"
           }
         }
       }
@@ -1780,42 +1402,6 @@
         }
       }
     },
-    "UI_EXIT_BUTTON" : {
-      "comment" : "UI Elements",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Exit"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "나가기"
-          }
-        }
-      }
-    },
-    "UI_FIRE_BUTTON" : {
-      "comment" : "UI Elements",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "FIRE"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "발사"
-          }
-        }
-      }
-    },
     "ULTIMATE_NUCLEAR_ACTIVATED" : {
       "comment" : "Ultimate Skill - Nuclear Attack Activation",
       "extractionState" : "manual",
@@ -1866,24 +1452,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "웨이브 %d"
-          }
-        }
-      }
-    },
-    "WAVE_FORMAT" : {
-      "comment" : "Wave System",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Wave: %d"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "웨이브: %d"
           }
         }
       }

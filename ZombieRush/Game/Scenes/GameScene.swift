@@ -110,7 +110,7 @@ class GameScene: SKScene {
 
         // 줌아웃 효과 완료 후 게임 시작 메시지 표시
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
-            let message = NSLocalizedString("GAME_START_MESSAGE", comment: "Game Start Message")
+            let message = TextConstants.GameStart.message
             self?.toastMessageManager?.showToastMessage(message, duration: 4.0)
         }
     }

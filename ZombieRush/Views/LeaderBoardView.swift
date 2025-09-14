@@ -48,7 +48,7 @@ struct LeaderBoardView: View {
                     .foregroundColor(.cyan)
                     .shadow(color: .cyan.opacity(0.5), radius: 2, x: 0, y: 0)
                 
-                Text(NSLocalizedString("LEADERBOARD_TITLE", comment: "Leaderboard screen title"))
+                Text(TextConstants.Leaderboard.title)
                     .font(.system(size: 24, weight: .bold, design: .monospaced))
                     .foregroundColor(.cyan)
                     .shadow(color: .cyan.opacity(0.5), radius: 2, x: 0, y: 0)
@@ -73,7 +73,7 @@ struct LeaderBoardView: View {
             ProgressView()
                 .scaleEffect(1.5)
                 .tint(.cyan)
-            Text(NSLocalizedString("LOADING_DATA", comment: "Loading screen - Loading data text"))
+            Text(TextConstants.Loading.loadingData)
                 .font(.system(size: 16, weight: .bold, design: .monospaced))
                 .foregroundColor(.cyan.opacity(0.8))
                 .padding(.top, 20)
@@ -91,13 +91,13 @@ struct LeaderBoardView: View {
                     .font(.system(size: 48))
                     .foregroundColor(.red.opacity(0.8))
 
-                Text(NSLocalizedString("LEADERBOARD_ERROR_TITLE", comment: "Leaderboard error title"))
+                Text(TextConstants.Leaderboard.errorTitle)
                     .font(.system(size: 20, weight: .bold, design: .monospaced))
                     .foregroundColor(.red)
                     .multilineTextAlignment(.center)
 
                 Text(errorMessage.isEmpty ?
-                     NSLocalizedString("LEADERBOARD_ERROR_MESSAGE", comment: "Leaderboard error message") :
+                     TextConstants.Leaderboard.errorMessage :
                      errorMessage)
                     .font(.system(size: 14, weight: .medium, design: .monospaced))
                     .foregroundColor(.gray)
@@ -114,7 +114,7 @@ struct LeaderBoardView: View {
                     HStack(spacing: 8) {
                         Image(systemName: "arrow.clockwise")
                             .font(.system(size: 16))
-                        Text(NSLocalizedString("RETRY_BUTTON", comment: "Retry button text"))
+                        Text(TextConstants.Leaderboard.retryButton)
                             .font(.system(size: 16, weight: .bold, design: .monospaced))
                     }
                     .foregroundColor(.cyan)
@@ -201,17 +201,17 @@ struct LeaderBoardView: View {
             if nsError.domain == "GameKit" || nsError.domain == GKErrorDomain {
                 switch nsError.code {
                 case GKError.Code.notAuthenticated.rawValue:
-                    self.errorMessage = NSLocalizedString("GAMEKIT_NOT_AUTHENTICATED", comment: "GameKit not authenticated error")
+                    self.errorMessage = TextConstants.Error.gameKitNotAuthenticated
                 case GKError.Code.communicationsFailure.rawValue:
-                    self.errorMessage = NSLocalizedString("GAMEKIT_NETWORK_ERROR", comment: "GameKit network error")
+                    self.errorMessage = TextConstants.Error.gameKitNetworkError
                 case 1001: // 커스텀 리더보드 찾기 실패 에러
-                    self.errorMessage = NSLocalizedString("GAMEKIT_LEADERBOARD_NOT_FOUND", comment: "Leaderboard not found error")
+                    self.errorMessage = TextConstants.Error.gameKitLeaderboardNotFound
                 default:
-                    self.errorMessage = NSLocalizedString("GAMEKIT_GENERIC_ERROR", comment: "Generic GameKit error")
+                    self.errorMessage = TextConstants.Error.gameKitGeneric
                 }
             } else {
                 // 일반적인 네트워크 에러
-                self.errorMessage = NSLocalizedString("GENERIC_NETWORK_ERROR", comment: "Generic network error")
+                self.errorMessage = TextConstants.Error.genericNetwork
             }
         }
     }
@@ -269,7 +269,7 @@ struct LeaderboardEntryRow: View {
 
             // 플레이어 이름 또는 placeholder 메시지
             if isPlaceholder {
-                Text(NSLocalizedString("SKELETON_MESSAGE", comment: "Leaderboard skeleton message"))
+                        Text(TextConstants.Leaderboard.skeletonMessage)
                     .font(.system(size: 16, weight: .semibold, design: .monospaced))
                     .foregroundColor(.gray.opacity(0.7))
                     .lineLimit(1)

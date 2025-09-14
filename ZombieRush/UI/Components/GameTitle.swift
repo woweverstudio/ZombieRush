@@ -12,13 +12,13 @@ struct GameTitle: View {
     
     var body: some View {
         VStack(spacing: max(titleSize * 0.2, 8)) {
-            Text(NSLocalizedString("GAME_TITLE_LINE1", comment: "First line of game title"))
+            Text(TextConstants.GameStart.titleLine1)
                 .font(.system(size: titleSize, weight: .heavy, design: .monospaced))
                 .foregroundColor(Color(red: 1.0, green: 0.0, blue: 1.0))
                 .shadow(color: Color(red: 1.0, green: 0.0, blue: 1.0), radius: 15, x: 0, y: 0)
                 .shadow(color: Color(red: 1.0, green: 0.0, blue: 1.0).opacity(0.5), radius: 30, x: 0, y: 0)
 
-            Text(NSLocalizedString("GAME_TITLE_LINE2", comment: "Second line of game title"))
+            Text(TextConstants.GameStart.titleLine2)
                 .font(.system(size: subtitleSize, weight: .heavy, design: .monospaced))
                 .foregroundColor(Color(red: 0.0, green: 0.8, blue: 1.0))
                 .shadow(color: Color(red: 0.0, green: 0.8, blue: 1.0), radius: 20, x: 0, y: 0)

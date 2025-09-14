@@ -88,15 +88,15 @@ class ItemEffectSystem {
         
         switch type {
         case .speedBoost:
-            message = NSLocalizedString("ITEM_SPEED_BOOST_COLLECT", comment: "Speed boost item collected")
+            message = TextConstants.ItemEffect.Collection.speedBoost
         case .healthRestore:
-            message = NSLocalizedString("ITEM_HEALTH_RESTORE_COLLECT", comment: "Health restore item collected")
+            message = TextConstants.ItemEffect.Collection.healthRestore
         case .ammoRestore:
-            message = NSLocalizedString("ITEM_AMMO_RESTORE_COLLECT", comment: "Ammo restore item collected")
+            message = TextConstants.ItemEffect.Collection.ammoRestore
         case .invincibility:
-            message = NSLocalizedString("ITEM_INVINCIBILITY_COLLECT", comment: "Invincibility item collected")
+            message = TextConstants.ItemEffect.Collection.invincibility
         case .shotgun:
-            message = NSLocalizedString("ITEM_SHOTGUN_COLLECT", comment: "Shotgun item collected")
+            message = TextConstants.ItemEffect.Collection.shotgun
         }
         
         toastMessageManager?.showToastMessage(message, duration: 1.5)
@@ -110,11 +110,11 @@ class ItemEffectSystem {
         
         switch type {
         case .speedBoost:
-            message = NSLocalizedString("ITEM_SPEED_BOOST_END", comment: "Speed boost effect ended")
+            message = TextConstants.ItemEffect.End.speedBoost
         case .invincibility:
-            message = NSLocalizedString("ITEM_INVINCIBILITY_END", comment: "Invincibility effect ended")
+            message = TextConstants.ItemEffect.End.invincibility
         case .shotgun:
-            message = NSLocalizedString("ITEM_SHOTGUN_END", comment: "Shotgun effect ended")
+            message = TextConstants.ItemEffect.End.shotgun
         default:
             return  // 즉시 효과는 메시지 없음
         }

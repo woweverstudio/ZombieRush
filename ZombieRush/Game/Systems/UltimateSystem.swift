@@ -49,7 +49,7 @@ class NuclearAttackSkill: UltimateSkill {
 
     func execute(at position: CGPoint, in scene: SKScene) {
         // 토스트 메시지 표시
-        let message = NSLocalizedString("ULTIMATE_NUCLEAR_ACTIVATED", comment: "Nuclear attack activated")
+        let message = TextConstants.Ultimate.nuclearActivated
         toastMessageManager?.showToastMessage(message, duration: 2.0)
 
         // 줌아웃 시작
