@@ -1851,6 +1851,24 @@
           }
         }
       }
+    },
+    "CHECKING_VERSION" : {
+      "comment" : "Loading screen - Version check in progress",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Checking version..."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "버전 체크중..."
+          }
+        }
+      }
     }
   },
   "version" : "1.0"

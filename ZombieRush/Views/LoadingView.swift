@@ -7,6 +7,7 @@ struct LoadingView: View {
     @Environment(AppRouter.self) var router
 
     @State private var progress: Double = 0.0
+    @State private var versionManager = VersionManager.shared
 
     var body: some View {
         ZStack {
@@ -50,9 +51,19 @@ struct LoadingView: View {
         .onAppear {
             startLoadingProcess()
         }
+        .fullScreenCover(isPresented: .constant(versionManager.shouldForceUpdate)) {
+            // 강제 업데이트 화면 (닫을 수 없음)
+            ForceUpdateView()
+        }
     }
 
     private func getLoadingText() -> String {
+        // 버전 체크가 완료되지 않았으면 버전 체크중 표시
+        if !versionManager.hasCheckedVersion {
+            return NSLocalizedString("CHECKING_VERSION", comment: "Loading screen - Version check in progress")
+        }
+
+        // GameKit 로딩 상태 확인
         if gameKitManager.isLoading {
             return NSLocalizedString("LOADING_DATA", comment: "Loading screen - Loading data text")
         } else {
@@ -61,6 +72,22 @@ struct LoadingView: View {
     }
 
     private func startLoadingProcess() {
+        // 1. 먼저 버전 체크 수행
+        Task {
+            await versionManager.checkAppVersion()
+
+            // 2. 버전 체크 완료 후 처리
+            if versionManager.shouldForceUpdate {
+                // 업데이트가 필요하면 여기서 끝남 (ForceUpdateView가 표시됨)
+                return
+            }
+
+        // 3. 업데이트가 필요 없으면 GameKit 로딩 진행
+        await proceedWithGameKitLoading()
+        }
+    }
+
+    private func proceedWithGameKitLoading() async {
         // GameKit 뷰 컨트롤러 처리 설정
         setupGameKitCallbacks()
 
