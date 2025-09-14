@@ -20,9 +20,9 @@ class DateUtils {
         // 첫 번째 날짜의 요일 (1: 일요일, 2: 월요일, ..., 7: 토요일)
         let firstWeekday = calendar.component(.weekday, from: firstDayOfMonth)
 
-        // 첫 번째 날짜가 속한 주의 시작일 계산
-        // (첫 번째 날짜가 일요일이면 그 주의 시작, 아니면 이전 주의 시작)
-        let weekStartOffset = (firstWeekday == 1) ? 0 : -(firstWeekday - 1)
+        // 첫 번째 날짜가 속한 주의 시작일 계산 (월요일 기준)
+        // (첫 번째 날짜가 월요일이면 그 주의 시작, 아니면 이전 월요일로 돌아감)
+        let weekStartOffset = (firstWeekday == 2) ? 0 : -(firstWeekday - 2)
         let weekStartDate = calendar.date(byAdding: .day, value: weekStartOffset, to: firstDayOfMonth)!
 
         // 오늘 날짜가 몇 번째 주인지 계산
@@ -52,8 +52,8 @@ class DateUtils {
         // 첫 번째 날짜의 요일 (1: 일요일, 2: 월요일, ..., 7: 토요일)
         let firstWeekday = calendar.component(.weekday, from: firstDayOfMonth)
 
-        // 첫 번째 날짜가 속한 주의 시작일 계산
-        let weekStartOffset = (firstWeekday == 1) ? 0 : -(firstWeekday - 1)
+        // 첫 번째 날짜가 속한 주의 시작일 계산 (월요일 기준)
+        let weekStartOffset = (firstWeekday == 2) ? 0 : -(firstWeekday - 2)
         let weekStartDate = calendar.date(byAdding: .day, value: weekStartOffset, to: firstDayOfMonth)!
 
         // 해당 날짜가 몇 번째 주인지 계산
@@ -81,8 +81,8 @@ class DateUtils {
 
         let firstWeekday = calendar.component(.weekday, from: firstDayOfMonth)
 
-        // 첫 번째 날짜가 속한 주의 시작일 계산
-        let weekStartOffset = (firstWeekday == 1) ? 0 : -(firstWeekday - 1)
+        // 첫 번째 날짜가 속한 주의 시작일 계산 (월요일 기준)
+        let weekStartOffset = (firstWeekday == 2) ? 0 : -(firstWeekday - 2)
         let weekStartDate = calendar.date(byAdding: .day, value: weekStartOffset, to: firstDayOfMonth)!
 
         // 오늘 날짜가 몇 번째 주인지 계산

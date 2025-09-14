@@ -293,6 +293,7 @@ struct LeaderboardEntryRow: View {
                         .font(.system(size: 16, weight: .bold, design: .monospaced))
                         .foregroundColor(.gray.opacity(0.5))
                 }
+                .frame(width: 120)
 
                 HStack(spacing: 4) {
                     Image(systemName: "flame.fill")
@@ -302,6 +303,7 @@ struct LeaderboardEntryRow: View {
                         .font(.system(size: 14, weight: .medium, design: .monospaced))
                         .foregroundColor(.gray.opacity(0.5))
                 }
+                .frame(width: 100)
             } else if let entry = entry {
                 let (timeInSeconds, kills) = ScoreEncodingUtils.decodeGameCenterScore(entry.score)
 
@@ -313,7 +315,9 @@ struct LeaderboardEntryRow: View {
                     Text(ScoreEncodingUtils.formatTime(timeInSeconds))
                         .font(.system(size: 16, weight: .bold, design: .monospaced))
                         .foregroundColor(.cyan)
+                    Spacer()
                 }
+                .frame(width: 120)
 
                 // 킬 수 (우선순위 2)
                 HStack(spacing: 4) {
@@ -323,7 +327,9 @@ struct LeaderboardEntryRow: View {
                     Text("\(kills)")
                         .font(.system(size: 14, weight: .medium, design: .monospaced))
                         .foregroundColor(.red)
+                    Spacer()
                 }
+                .frame(width: 100)
             }
 
             Spacer()
