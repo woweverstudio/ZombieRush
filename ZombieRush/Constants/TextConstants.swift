@@ -62,8 +62,6 @@ struct TextConstants {
         static let reloading = NSLocalizedString("HUD_RELOADING", comment: "Reloading status text")
 
         // HUDManager specific
-        static let scoreInitial = NSLocalizedString("HUD_SCORE_INITIAL", comment: "Initial score display")
-        static let timeInitial = NSLocalizedString("HUD_TIME_INITIAL", comment: "Initial time display")
         static let healthLabel = NSLocalizedString("HUD_HEALTH_LABEL", comment: "Health label")
         static let ammoLabel = NSLocalizedString("HUD_AMMO_LABEL", comment: "Ammo label")
         static let reloadingLabel = NSLocalizedString("HUD_RELOADING_LABEL", comment: "Reloading label")

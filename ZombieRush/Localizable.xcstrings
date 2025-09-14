@@ -16,6 +16,24 @@
     "🏆" : {
 
     },
+    "APP_TITLE" : {
+      "comment" : "App display name for notifications",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Block Buster"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "네모네모빔"
+          }
+        }
+      }
+    },
     "CHECKING_VERSION" : {
       "comment" : "Loading screen - Version check in progress",
       "extractionState" : "manual",
@@ -23,12 +41,12 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Checking version..."
+            "value" : "CHECKING VERSION…"
           }
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "버전 체크중..."
           }
         }
@@ -605,25 +623,7 @@
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Score: %d"
-          }
-        }
-      }
-    },
-    "HUD_SCORE_INITIAL" : {
-      "comment" : "HUD Manager",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "SCORE: 0"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "점수: 0"
+            "value" : "점수: %d"
           }
         }
       }
@@ -642,24 +642,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%02d:%02d"
-          }
-        }
-      }
-    },
-    "HUD_TIME_INITIAL" : {
-      "comment" : "HUD Manager",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "00:00"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "00:00"
           }
         }
       }
@@ -1168,6 +1150,24 @@
         }
       }
     },
+    "NOTIFICATION_HALL_OF_FAME_CHALLENGE" : {
+      "comment" : "Weekly notification to challenge Hall of Fame",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ Hall of Fame Challenge!"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ 명예의 전당에 도전하세요"
+          }
+        }
+      }
+    },
     "PAUSE_QUIT_BUTTON" : {
       "comment" : "Pause overlay - Quit button text",
       "extractionState" : "manual",
@@ -1470,42 +1470,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@ %d주차"
-          }
-        }
-      }
-    },
-    "NOTIFICATION_HALL_OF_FAME_CHALLENGE" : {
-      "comment" : "Weekly notification to challenge Hall of Fame",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ Hall of Fame Challenge!"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ 명예의 전당에 도전하세요"
-          }
-        }
-      }
-    },
-    "APP_TITLE" : {
-      "comment" : "App display name for notifications",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Block Buster"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "네모네모빔"
           }
         }
       }

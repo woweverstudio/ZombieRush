@@ -78,7 +78,7 @@ class HUDManager {
         let sceneWidth = scene.size.width
         let sceneHeight = scene.size.height
         
-        scoreLabel = SKLabelNode(text: TextConstants.HUD.scoreInitial)
+        scoreLabel = SKLabelNode(text: String(format: TextConstants.HUD.scoreFormat, 0))
         scoreLabel?.fontName = "Arial-Bold"
         scoreLabel?.fontSize = 18
         scoreLabel?.fontColor = SKColor.white.withAlphaComponent(0.9)
@@ -94,7 +94,7 @@ class HUDManager {
         let sceneWidth = scene.size.width
         let sceneHeight = scene.size.height
         
-        timeLabel = SKLabelNode(text: TextConstants.HUD.timeInitial)
+        timeLabel = SKLabelNode(text: String(format: TextConstants.HUD.timeFormat, 0, 0))
         timeLabel?.fontName = "Arial-Bold"
         timeLabel?.fontSize = 20
         timeLabel?.fontColor = SKColor.white.withAlphaComponent(0.9)
