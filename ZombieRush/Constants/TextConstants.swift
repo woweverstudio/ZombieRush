@@ -149,6 +149,16 @@ struct TextConstants {
         static let gameKitGeneric = NSLocalizedString("GAMEKIT_GENERIC_ERROR", comment: "Generic GameKit error")
     }
 
+    // MARK: - Notifications
+    struct Notification {
+        static let hallOfFameChallenge = NSLocalizedString("NOTIFICATION_HALL_OF_FAME_CHALLENGE", comment: "Weekly notification to challenge Hall of Fame")
+    }
+
+    // MARK: - App Info
+    struct App {
+        static let title = NSLocalizedString("APP_TITLE", comment: "App display name for notifications")
+    }
+
     // MARK: - Date/Time
     struct DateTime {
         static let weekFormat = NSLocalizedString("WEEK_FORMAT", comment: "Week format for date display")

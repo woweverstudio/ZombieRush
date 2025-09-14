@@ -475,6 +475,7 @@ class GameScene: SKScene {
     // MARK: - UI Control
     private func hideAllGameUI() {
         gameController?.hideUI()
+        ultimateController?.hideUI()
         hudManager?.hideHUD()
     }
 }

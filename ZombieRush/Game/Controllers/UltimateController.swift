@@ -301,6 +301,10 @@ class UltimateController: NSObject {
 
         progressRing.run(flashAction)
     }
+    
+    func hideUI() {
+        ultimateButton?.isHidden = true
+    }
 
     // MARK: - Cleanup
     func removeFromScene() {

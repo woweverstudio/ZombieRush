@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import UIKit
 
 @main
 struct ZombieRushApp: App {
@@ -14,6 +15,7 @@ struct ZombieRushApp: App {
     @State private var gameStateManager = GameStateManager()
     @State private var audioManager = AudioManager.shared  // 게임에서 사용하므로 싱글턴 유지
     @State private var hapticManager = HapticManager.shared  // 게임에서 사용하므로 싱글턴 유지
+    @State private var notificationManager = NotificationManager.shared
 
     @Environment(\.scenePhase) private var scenePhase  // 앱 상태 모니터링
 
@@ -27,16 +29,21 @@ struct ZombieRushApp: App {
                 .environment(gameStateManager)
                 .environment(audioManager)
                 .environment(hapticManager)
+                .task {
+                    // 앱 시작 시 Notification 설정
+                    notificationManager.setupNotifications()
+                }
         }
         .onChange(of: scenePhase) { oldPhase, newPhase in
             // 앱 상태 변화 감지 및 GameStateManager에 전달
             switch newPhase {
             case .active:
                 gameStateManager.setAppActive(true)
-                print("📱 앱이 활성화됨 - 플레이 시간 측정 재개")
+                UIApplication.shared.applicationIconBadgeNumber = 0
+
             case .inactive, .background:
                 gameStateManager.setAppActive(false)
-                print("📱 앱이 비활성화됨 - 플레이 시간 측정 일시정지")
+                
             @unknown default:
                 break
             }

@@ -1473,6 +1473,42 @@
           }
         }
       }
+    },
+    "NOTIFICATION_HALL_OF_FAME_CHALLENGE" : {
+      "comment" : "Weekly notification to challenge Hall of Fame",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ Hall of Fame Challenge!"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ 명예의 전당에 도전하세요"
+          }
+        }
+      }
+    },
+    "APP_TITLE" : {
+      "comment" : "App display name for notifications",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Block Buster"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "네모네모빔"
+          }
+        }
+      }
     }
   },
   "version" : "1.0"
