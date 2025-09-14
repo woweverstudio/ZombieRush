@@ -14,49 +14,26 @@ struct ForceUpdateView: View {
 
     var body: some View {
         ZStack {
-            // 배경
-            Color.black
-                .ignoresSafeArea()
+            // 사이버펑크 배경
+            CyberpunkBackground()
 
-            VStack(spacing: 30) {
+            VStack(spacing: 40) {
                 Spacer()
-
-                // 아이콘/이미지
-                Image(systemName: "arrow.up.circle.fill")
-                    .font(.system(size: 80))
-                    .foregroundColor(.cyan)
 
                 // 타이틀
-                Text("앱 업데이트 필요")
-                    .font(.system(size: 28, weight: .bold, design: .monospaced))
+                Text(NSLocalizedString("NEW_VERSION_AVAILABLE", comment: "Force update screen - New version available message"))
+                    .font(.system(size: 24, weight: .bold, design: .monospaced))
                     .foregroundColor(.white)
-
-                // 설명
-                Text("새 버전이 출시되었습니다.\n최신 버전으로 업데이트해주세요.")
-                    .font(.system(size: 16, design: .monospaced))
-                    .foregroundColor(.gray)
                     .multilineTextAlignment(.center)
-                    .lineSpacing(8)
 
-                Spacer()
-
-                // 업데이트 버튼
-                Button(action: {
+                // 앱스토어 이동 버튼
+                NeonButton(NSLocalizedString("GO_TO_APP_STORE", comment: "Force update screen - Go to App Store button"), style: .cyan) {
                     openAppStore()
-                }) {
-                    Text("앱스토어로 이동")
-                        .font(.system(size: 18, weight: .bold, design: .monospaced))
-                        .foregroundColor(.black)
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 60)
-                        .background(Color.cyan)
-                        .cornerRadius(12)
-                        .padding(.horizontal, 40)
                 }
 
                 Spacer()
-                    .frame(height: 50)
             }
+            .padding(.horizontal, 40)
         }
         .statusBar(hidden: true)
         // iOS 15+에서 제스처로 닫는 것을 막음

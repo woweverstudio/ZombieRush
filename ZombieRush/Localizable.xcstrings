@@ -16,6 +16,24 @@
     "🏆" : {
 
     },
+    "CHECKING_VERSION" : {
+      "comment" : "Loading screen - Version check in progress",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Checking version..."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "버전 체크중..."
+          }
+        }
+      }
+    },
     "GAME_OVER_FIRST_RECORD" : {
       "comment" : "Game Over View - First record message",
       "extractionState" : "manual",
@@ -534,6 +552,24 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "네트워크 연결 오류입니다. 다시 시도해주세요."
+          }
+        }
+      }
+    },
+    "GO_TO_APP_STORE" : {
+      "comment" : "Force update screen - Go to App Store button",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Go to App Store"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "앱스토어로 이동"
           }
         }
       }
@@ -1222,6 +1258,24 @@
         }
       }
     },
+    "NEW_VERSION_AVAILABLE" : {
+      "comment" : "Force update screen - New version available message",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "🎉New version available.🎉"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "🎉새로운 버전이 나왔습니다.🎉"
+          }
+        }
+      }
+    },
     "PAUSE_QUIT_BUTTON" : {
       "comment" : "Pause overlay - Quit button text",
       "extractionState" : "manual",
@@ -1848,24 +1902,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@ %d주차"
-          }
-        }
-      }
-    },
-    "CHECKING_VERSION" : {
-      "comment" : "Loading screen - Version check in progress",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Checking version..."
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "버전 체크중..."
           }
         }
       }
