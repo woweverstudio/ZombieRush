@@ -159,4 +159,15 @@ class NotificationManager {
         scheduleWeeklyHallOfFameNotifications()
     }
 
+    /// 앱 아이콘 배지 제거
+    func clearBadge() {
+        notificationCenter.setBadgeCount(0) { error in
+            if let error = error {
+                print("❌ 배지 제거 실패: \(error.localizedDescription)")
+            } else {
+                print("🔔 배지가 제거되었습니다.")
+            }
+        }
+    }
+
 }

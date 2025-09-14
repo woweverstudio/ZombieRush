@@ -39,7 +39,8 @@ struct ZombieRushApp: App {
             switch newPhase {
             case .active:
                 gameStateManager.setAppActive(true)
-                UIApplication.shared.applicationIconBadgeNumber = 0
+                // 배지 제거
+                notificationManager.clearBadge()
 
             case .inactive, .background:
                 gameStateManager.setAppActive(false)
