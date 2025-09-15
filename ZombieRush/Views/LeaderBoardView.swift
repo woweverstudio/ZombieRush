@@ -292,6 +292,7 @@ struct LeaderboardEntryRow: View {
                     Text("-")
                         .font(.system(size: 16, weight: .bold, design: .monospaced))
                         .foregroundColor(.gray.opacity(0.5))
+                    Spacer()
                 }
                 .frame(width: 100)
 
@@ -302,6 +303,7 @@ struct LeaderboardEntryRow: View {
                     Text("-")
                         .font(.system(size: 14, weight: .medium, design: .monospaced))
                         .foregroundColor(.gray.opacity(0.5))
+                    Spacer()
                 }
                 .frame(width: 80)
             } else if let entry = entry {

@@ -23,6 +23,10 @@ struct MainMenuView: View {
             return TextConstants.GameCenter.GameStartTooltips.loggedIn
         }
     }
+    
+    private var isPhoneSize: Bool {
+        return UIDevice.current.userInterfaceIdiom == .phone
+    }
 
     var body: some View {
         ZStack {
@@ -31,14 +35,24 @@ struct MainMenuView: View {
 
             HStack(spacing: 24) {
                 // 좌측: 두 개의 카드
-                HStack(spacing: 20) {
-                    PlayerCard()
-                        .frame(maxHeight: .infinity)
-                        .frame(width: 200)
+                if isPhoneSize {
+                    HStack(spacing: 20) {
+                        PlayerCard()
+                            .frame(maxHeight: .infinity)
+                            .frame(width: 200)
 
-                    HallOfFameCard()
-                        .frame(maxHeight: .infinity)
-                        .frame(minWidth: 230)
+                        HallOfFameCard()
+                            .frame(maxHeight: .infinity)
+                            .frame(minWidth: 230)
+                    }
+                } else {
+                    VStack(spacing: 20) {
+                        PlayerCard()
+                            .frame(maxWidth: .infinity)
+                            
+                        HallOfFameCard()
+                            .frame(maxWidth: .infinity)
+                    }
                 }
 
                 // 우측: 설정과 게임 시작 버튼
@@ -88,9 +102,10 @@ struct MainMenuView: View {
                     }
                     
                 }
-                .frame(maxWidth: 240)
+                .frame(maxWidth: isPhoneSize ? 240 : 300)
             }
             .padding(.vertical, 24)
+            .padding(.horizontal, isPhoneSize ? 0 : 24)
         }
         .onAppear {
             checkAndLoadData()

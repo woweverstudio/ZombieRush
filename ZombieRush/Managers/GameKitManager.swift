@@ -198,7 +198,7 @@ class GameKitManager: NSObject {
 
             let (localPlayerEntry, _, _) = try await leaderboard.loadEntries(
                 for: .global,
-                timeScope: .allTime,
+                timeScope: .week,
                 range: NSRange(location: 1, length: 1)
             )
 
@@ -223,7 +223,7 @@ class GameKitManager: NSObject {
 
             let entries = try await leaderboard.loadEntries(
                 for: .global,
-                timeScope: .allTime,
+                timeScope: .week,
                 range: NSRange(location: 1, length: 3)
             )
 
@@ -280,7 +280,7 @@ class GameKitManager: NSObject {
 
             let entries = try await leaderboard.loadEntries(
                 for: .global,
-                timeScope: .allTime,
+                timeScope: .week,
                 range: NSRange(location: 1, length: 100)
             )
 
