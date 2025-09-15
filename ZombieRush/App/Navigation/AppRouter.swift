@@ -61,7 +61,7 @@ final class AppRouter {
 
     private func handleAudioTransition(to route: Route) {
         switch route {
-        case .main, .settings, .leaderboard:
+        case .main, .settings, .leaderboard, .market:
             AudioManager.shared.playMainMenuMusic()
         case .game:
             AudioManager.shared.playGameMusic()

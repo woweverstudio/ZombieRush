@@ -82,7 +82,7 @@ struct MainView: View {
                         
                         // 상점 버튼
                         NeonIconButton(icon: "storefront.fill", style: .orange) {
-                            router.navigate(to: .leaderboard)
+                            router.navigate(to: .market)
                         }
                     }
                     

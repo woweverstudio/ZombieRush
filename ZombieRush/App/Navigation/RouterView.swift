@@ -35,6 +35,9 @@ struct RouterView: View {
         case .leaderboard:
             LeaderBoardView()
                 .navigationBarBackButtonHidden(true)
+        case .market:
+            MarketView()
+                .navigationBarBackButtonHidden(true)
         case .gameOver(let playTime, let score, let success):
             GameOverView(
                 playTime: playTime,

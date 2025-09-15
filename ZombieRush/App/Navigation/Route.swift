@@ -7,6 +7,7 @@ enum Route: Hashable {
     case game
     case settings
     case leaderboard
+    case market
     case gameOver(playTime: Int, score: Int, success: Bool)
 
     var title: String {
@@ -21,6 +22,8 @@ enum Route: Hashable {
             return "SETTINGS"
         case .leaderboard:
             return "LEADERBOARD"
+        case .market:
+            return "MARKET"
         case .gameOver:
             return "GAME OVER"
         }
@@ -33,6 +36,7 @@ enum Route: Hashable {
         case .game: return "game"
         case .settings: return "settings"
         case .leaderboard: return "leaderboard"
+        case .market: return "market"
         case .gameOver: return "game_over"
         }
     }
