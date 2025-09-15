@@ -29,49 +29,49 @@ struct PlayerCard: View {
                 LoginPromptCard()
             }
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+        .padding()
         .background(background)
     }
     
     private var background: some View {
-        RoundedRectangle(cornerRadius: 20)
+        RoundedRectangle(cornerRadius: 8)
             .fill(Color.white.opacity(0.1))
             .background(
-                RoundedRectangle(cornerRadius: 20)
+                RoundedRectangle(cornerRadius: 8)
                     .stroke(Color.cyan.opacity(0.3), lineWidth: 1)
                     .blur(radius: 0.5)
             )
             .shadow(color: Color.cyan.opacity(0.2), radius: 10, x: 0, y: 0)
+            
     }
     
     private var phoneLayout: some View {
-        VStack(spacing: 12) {
+        VStack(alignment: .leading, spacing: 12) {
             // 로그인된 경우 - 플레이어 정보 표시
-            Spacer()
-            HStack {
-//                profileImage(size: 24) // 프로필 이미지
+            HStack(spacing: 12) {
+                profileImage(size: 32) // 프로필 이미지
                 playerName // 플레이어 이름
             }
+            playerLevel
             servivalTime // 최대 생존시간
-            rankAndKills // 랭크 & 처치수
-            
-            characterSkin(padding: 16) // 캐릭터 스킨
+            rank
+            kills
         }
     }
     
     private var padLayout: some View {
-        HStack {
-            Spacer()
-            // 로그인된 경우 - 플레이어 정보 표시
-            VStack(spacing: 24) {
+        
+        // 로그인된 경우 - 플레이어 정보 표시
+        VStack(alignment: .leading,spacing: 24) {
+            HStack(spacing: 24) {
                 profileImage(size: 48) // 프로필 이미지
                 playerName // 플레이어 이름
-                servivalTime // 최대 생존시간
-                rankAndKills // 랭크 & 처치수
             }
-            Spacer()
-            
-            characterSkin(padding: 24) // 캐릭터 스킨
-            Spacer()
+            servivalTime // 최대 생존시간
+            rank // 랭크 & 처치수
+            kills
+            playerLevel
         }
         .frame(maxWidth: .infinity)
     }
@@ -100,11 +100,12 @@ struct PlayerCard: View {
     private var playerName: some View {
         // 플레이어 이름
         Text(gameKitManager.playerDisplayName)
-            .font(.system(size: 18, weight: .bold, design: .monospaced))
+            .font(.system(size: 24, weight: .bold, design: .monospaced))
             .foregroundColor(.white)
-            .lineLimit(2)
+            .lineLimit(1)
+            .minimumScaleFactor(0.5)
             .truncationMode(.tail)
-            .padding(8)
+            
     }
     
     private var servivalTime: some View {
@@ -118,59 +119,69 @@ struct PlayerCard: View {
                 .shadow(color: .cyan.opacity(0.5), radius: 5, x: 0, y: 0)
             
             Text(TextConstants.PlayerCard.playTimeLabel)
-                .font(.system(size: 10, weight: .bold, design: .monospaced))
+                .font(.system(size: 12, weight: .bold, design: .monospaced))
                 .foregroundColor(.cyan.opacity(0.7))
         }
     }
     
-    private var rankAndKills: some View {
-        HStack(spacing: 20) {
-            // 랭킹
-            if let playerRank = gameKitManager.playerRank {
-                HStack(alignment: .bottom, spacing: 4) {
-                    Text("#\(playerRank)")
-                        .font(.system(size: 16, weight: .bold, design: .monospaced))
-                        .foregroundColor(.yellow)
-                    Text(TextConstants.PlayerCard.rankLabel)
-                        .font(.system(size: 10, weight: .bold, design: .monospaced))
-                        .foregroundColor(.yellow.opacity(0.7))
-                }
-            } else {
-                HStack(alignment: .bottom, spacing: 4) {
-                    Text("-")
-                        .font(.system(size: 16, weight: .bold, design: .monospaced))
-                        .foregroundColor(.gray)
-                    Text(TextConstants.PlayerCard.rankLabel)
-                        .font(.system(size: 10, weight: .bold, design: .monospaced))
-                        .foregroundColor(.yellow.opacity(0.7))
-                }
-            }
-            
-            // 킬 수
+    private var rank: some View {
+        // 랭킹
+        if let playerRank = gameKitManager.playerRank {
             HStack(alignment: .bottom, spacing: 4) {
-                Text("\(playerBestKills)")
-                    .font(.system(size: 16, weight: .bold, design: .monospaced))
-                    .foregroundColor(.red)
-                
-                Text(TextConstants.PlayerCard.killsLabel)
-                    .font(.system(size: 10, weight: .bold, design: .monospaced))
-                    .foregroundColor(.red.opacity(0.7))
+                Text("\(playerRank)")
+                    .font(.system(size: 20, weight: .bold, design: .monospaced))
+                    .foregroundColor(.yellow)
+                Text(TextConstants.PlayerCard.rankLabel)
+                    .font(.system(size: 12, weight: .bold, design: .monospaced))
+                    .foregroundColor(.yellow.opacity(0.7))
+            }
+        } else {
+            HStack(alignment: .bottom, spacing: 4) {
+                Text("-")
+                    .font(.system(size: 20, weight: .bold, design: .monospaced))
+                    .foregroundColor(.gray)
+                Text(TextConstants.PlayerCard.rankLabel)
+                    .font(.system(size: 12, weight: .bold, design: .monospaced))
+                    .foregroundColor(.yellow.opacity(0.7))
             }
         }
     }
     
-    private func characterSkin(padding: CGFloat) -> some View {
-        RoundedRectangle(cornerRadius: 20)
-            .fill(Color.white.opacity(0.1))
-            .background(
-                RoundedRectangle(cornerRadius: 20)
-                    .stroke(Color.cyan.opacity(0.3), lineWidth: 1)
-                    .blur(radius: 0.5)
-            )
-            .aspectRatio(1, contentMode: .fill)
-            .frame(maxWidth: 200)
-            .padding(padding)
+    private var kills: some View {
+        HStack(alignment: .bottom, spacing: 4) {
+            Text("\(playerBestKills)")
+                .font(.system(size: 20, weight: .bold, design: .monospaced))
+                .foregroundColor(.red)
             
+            Text(TextConstants.PlayerCard.killsLabel)
+                .font(.system(size: 12, weight: .bold, design: .monospaced))
+                .foregroundColor(.red.opacity(0.7))
+        }
+    }
+    
+    private var playerLevel: some View {
+        HStack(alignment: .bottom, spacing: 4) {
+            Text("5")
+                .font(.system(size: 20, weight: .bold, design: .monospaced))
+                .foregroundColor(.white)
+            
+            Text("Lv")
+                .font(.system(size: 12, weight: .bold, design: .monospaced))
+                .foregroundColor(.white.opacity(0.7))
+            
+            ZStack(alignment: .leading) {
+                // 배경 바
+                RoundedRectangle(cornerRadius: 4)
+                    .fill(Color.white.opacity(0.2))
+                    .frame(height: 8)
+
+                // 진행 바
+                RoundedRectangle(cornerRadius: 4)
+                    .fill(Color.purple.opacity(0.8))
+                    .frame(width: 0.8 * 150, height: 8)
+            }
+            .frame(width: 150)
+        }
     }
 }
 

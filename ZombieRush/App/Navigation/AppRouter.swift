@@ -44,13 +44,13 @@ final class AppRouter {
         path.removeLast()
     }
 
-    func quitToMainMenu() {
+    func quitToMain() {
 
         // 오디오 처리
-        handleAudioTransition(to: .mainMenu)
+        handleAudioTransition(to: .main)
 
         // path 재설정 (currentRoute는 자동으로 업데이트됨)
-        path = [.mainMenu]
+        path = [.main]
     }
 
 
@@ -61,7 +61,7 @@ final class AppRouter {
 
     private func handleAudioTransition(to route: Route) {
         switch route {
-        case .mainMenu, .settings, .leaderboard:
+        case .main, .settings, .leaderboard:
             AudioManager.shared.playMainMenuMusic()
         case .game:
             AudioManager.shared.playGameMusic()

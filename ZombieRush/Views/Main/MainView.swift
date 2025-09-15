@@ -2,7 +2,7 @@ import SwiftUI
 import GameKit
 
 // MARK: - Main Menu View
-struct MainMenuView: View {
+struct MainView: View {
     @Environment(AppRouter.self) var router
     @Environment(GameKitManager.self) var gameKitManager
     @Environment(GameStateManager.self) var gameStateManager
@@ -33,22 +33,29 @@ struct MainMenuView: View {
             // 사이버펑크 배경
             CyberpunkBackground()
 
-            HStack(spacing: 24) {
+            HStack(spacing: 12) {
                 // 좌측: 두 개의 카드
                 if isPhoneSize {
-                    HStack(spacing: 20) {
-                        PlayerCard()
-                            .frame(maxHeight: .infinity)
-                            .frame(width: 200)
+                    HStack(spacing: 12) {
+                        VStack(spacing: 12) {
+                            PlayerCard()
+                                .frame(maxWidth:.infinity, maxHeight: .infinity)
+                            CharacterCard()
+                                .frame(maxWidth:.infinity, maxHeight: .infinity)
+                        }
 
                         HallOfFameCard()
                             .frame(maxHeight: .infinity)
-                            .frame(minWidth: 230)
+                            .frame(minWidth: 260)
                     }
                 } else {
-                    VStack(spacing: 20) {
-                        PlayerCard()
-                            .frame(maxWidth: .infinity)
+                    VStack(spacing: 24) {
+                        HStack(spacing: 24) {
+                            PlayerCard()
+                                .frame(maxWidth:.infinity, maxHeight: .infinity)
+                            CharacterCard()
+                                .frame(maxWidth:.infinity, maxHeight: .infinity)
+                        }
                             
                         HallOfFameCard()
                             .frame(maxWidth: .infinity)
@@ -70,6 +77,11 @@ struct MainMenuView: View {
                     HStack(spacing: 24) {
                         // 리더보드 버튼
                         NeonIconButton(icon: "trophy.fill", style: .yellow) {
+                            router.navigate(to: .leaderboard)
+                        }
+                        
+                        // 상점 버튼
+                        NeonIconButton(icon: "storefront.fill", style: .orange) {
                             router.navigate(to: .leaderboard)
                         }
                     }
@@ -146,5 +158,5 @@ struct MainMenuView: View {
 
 // MARK: - Preview
 #Preview {
-    MainMenuView()
+    MainView()
 }

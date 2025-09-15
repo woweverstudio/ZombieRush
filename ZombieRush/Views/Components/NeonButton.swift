@@ -6,6 +6,7 @@ enum NeonButtonStyle {
     case magenta
     case white
     case yellow
+    case orange
     
     var color: Color {
         switch self {
@@ -17,6 +18,8 @@ enum NeonButtonStyle {
             return Color.white
         case .yellow:
             return Color(red: 1.0, green: 0.8, blue: 0.0)
+        case .orange:
+            return Color(red: 0.5, green: 1.0, blue: 0.3)
         }
     }
 }
@@ -114,8 +117,7 @@ struct NeonIconButton: View {
         }) {
             Image(systemName: icon)
                 .font(.system(size: size))
-                .foregroundColor(style.color)
-                .shadow(color: style.color, radius: 8, x: 0, y: 0)
+                .foregroundColor(style.color)                
                 .padding()
                 .background(
                     Circle()
@@ -125,7 +127,7 @@ struct NeonIconButton: View {
                                 .stroke(style.color, lineWidth: 2)
                         )
                 )
-                .shadow(color: style.color.opacity(0.4), radius: 15, x: 0, y: 0)
+                .shadow(color: style.color.opacity(0.4), radius: 8, x: 0, y: 0)
         }
         .buttonStyle(PlainButtonStyle())
     }

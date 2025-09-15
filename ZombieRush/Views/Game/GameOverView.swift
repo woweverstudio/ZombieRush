@@ -71,7 +71,7 @@ struct GameOverView: View {
                             HapticManager.shared.playButtonHaptic()
                         }
                         gameKitManager.refreshData()
-                        router.navigate(to: .mainMenu)
+                        router.quitToMain()                        
                     }) {
                         Image(systemName: "xmark")
                             .font(.system(size: 20, weight: .bold))

@@ -56,6 +56,7 @@ struct RankingEntryView: View {
                         .font(.system(size: 14, weight: .medium, design: .monospaced))
                         .foregroundColor(.white)
                         .lineLimit(1)
+                        .truncationMode(.tail)
 
                     // 플레이 시간 (가장 크게 표시)
                     let (timeInSeconds, _) = ScoreEncodingUtils.decodeScore(Int64(realEntry.score))

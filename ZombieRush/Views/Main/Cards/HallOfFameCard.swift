@@ -14,10 +14,10 @@ struct HallOfFameCard: View {
 
     // MARK: - Card Background
     private var cardBackground: some View {
-        RoundedRectangle(cornerRadius: 20)
+        RoundedRectangle(cornerRadius: 8)
             .fill(Color.white.opacity(0.1))
             .background(
-                RoundedRectangle(cornerRadius: 20)
+                RoundedRectangle(cornerRadius: 8)
                     .stroke(Color.yellow.opacity(0.3), lineWidth: 1)
                     .blur(radius: 0.5)
             )

@@ -16,6 +16,9 @@
     "🏆" : {
 
     },
+    "5" : {
+
+    },
     "APP_TITLE" : {
       "comment" : "App display name for notifications",
       "extractionState" : "manual",
@@ -915,6 +918,9 @@
           }
         }
       }
+    },
+    "Lv" : {
+
     },
     "MONTH_APRIL" : {
       "comment" : "Month name - April",

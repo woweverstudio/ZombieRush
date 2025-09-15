@@ -103,7 +103,7 @@ struct LoadingView: View {
             // 프로그레스 바 애니메이션 완료 후 메인메뉴로 이동
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                 if router.currentRoute == .loading {
-                    self.router.navigate(to: .mainMenu)
+                    self.router.navigate(to: .main)
                 }
             }
         }

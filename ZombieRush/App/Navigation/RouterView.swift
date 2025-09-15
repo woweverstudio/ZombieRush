@@ -23,8 +23,8 @@ struct RouterView: View {
         case .loading:
             LoadingView()
                 .navigationBarBackButtonHidden(true)
-        case .mainMenu:
-            MainMenuView()
+        case .main:
+            MainView()
                 .navigationBarBackButtonHidden(true)
         case .game:
             GameView()
@@ -41,7 +41,7 @@ struct RouterView: View {
                 score: score,
                 success: success,
                 onQuit: {
-                    router.quitToMainMenu()
+                    router.quitToMain()
                 }
             )
             .navigationBarBackButtonHidden(true)
