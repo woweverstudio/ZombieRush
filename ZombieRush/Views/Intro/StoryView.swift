@@ -72,7 +72,7 @@ struct StoryView: View {
     private var previousButton: some View {
         NeonIconButton(
             icon: "chevron.left",
-            style: .magenta,
+            style: .white,
             size: 24
         ) {
             withAnimation(.easeInOut) {
@@ -85,7 +85,7 @@ struct StoryView: View {
     private var nextButton: some View {
         NeonIconButton(
             icon: "chevron.right",
-            style: .magenta,
+            style: .white,
             size: 24
         ) {
             withAnimation(.easeInOut) {

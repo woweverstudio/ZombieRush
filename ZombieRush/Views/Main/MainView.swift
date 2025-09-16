@@ -65,9 +65,9 @@ struct MainView: View {
                 // 우측: 설정과 게임 시작 버튼
                 VStack(alignment: .trailing, spacing: 24) {
                     HStack(spacing: 24) {
-                        NeonIconButton(icon: "arrow.clockwise", style: .white) {
+                        NeonIconButton(icon: "book.fill", style: .white) {
                             // 데이터 새로고침
-                            refreshData()
+                            router.navigate(to: .story)
                         }
                         NeonIconButton(icon: "gearshape.fill", style: .magenta) {
                             router.navigate(to: .settings)
