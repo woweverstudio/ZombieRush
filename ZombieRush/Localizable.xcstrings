@@ -16,10 +16,16 @@
     "🏆" : {
 
     },
+    "0/100" : {
+
+    },
     "2,500" : {
 
     },
     "5" : {
+
+    },
+    "25" : {
 
     },
     "APP_TITLE" : {
@@ -925,6 +931,26 @@
     "Lv" : {
 
     },
+    "Lv. 1" : {
+
+    },
+    "MAIN_START" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Game Start"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "게임시작"
+          }
+        }
+      }
+    },
     "MARKET" : {
 
     },
@@ -1414,78 +1440,6 @@
         }
       }
     },
-    "ULTIMATE_NUCLEAR_ACTIVATED" : {
-      "comment" : "Ultimate Skill - Nuclear Attack Activation",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nuke Detected!"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "핵공격 감지!"
-          }
-        }
-      }
-    },
-    "ULTIMATE_READY" : {
-      "comment" : "Ultimate skill is ready to use",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ultimate Ready! 💥"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "궁극기 준비 완료! 💥"
-          }
-        }
-      }
-    },
-    "WAVE_ANNOUNCEMENT_FORMAT" : {
-      "comment" : "Wave System",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Wave %d"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "웨이브 %d"
-          }
-        }
-      }
-    },
-    "WEEK_FORMAT" : {
-      "comment" : "Week format for date display (e.g., September 2nd week)",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ %d%@ week"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ %d주차"
-          }
-        }
-      }
-    },
     "STORY_1" : {
       "comment" : "Story 1 text",
       "extractionState" : "manual",
@@ -1630,7 +1584,100 @@
         }
       }
     },
+    "ULTIMATE_NUCLEAR_ACTIVATED" : {
+      "comment" : "Ultimate Skill - Nuclear Attack Activation",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nuke Detected!"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "핵공격 감지!"
+          }
+        }
+      }
+    },
+    "ULTIMATE_READY" : {
+      "comment" : "Ultimate skill is ready to use",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ultimate Ready! 💥"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "궁극기 준비 완료! 💥"
+          }
+        }
+      }
+    },
+    "WAVE_ANNOUNCEMENT_FORMAT" : {
+      "comment" : "Wave System",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wave %d"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "웨이브 %d"
+          }
+        }
+      }
+    },
+    "WEEK_FORMAT" : {
+      "comment" : "Week format for date display (e.g., September 2nd week)",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ %d%@ week"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ %d주차"
+          }
+        }
+      }
+    },
     "가격:" : {
+
+    },
+    "각진 마법의 기본" : {
+
+    },
+    "각진 힘의 수호자" : {
+
+    },
+    "공격력" : {
+
+    },
+    "기본 마법봉" : {
+
+    },
+    "네모구출: 0" : {
+
+    },
+    "네모나라의 수호자" : {
+
+    },
+    "마법사" : {
 
     },
     "무기 효과" : {
@@ -1652,6 +1699,9 @@
 
     },
     "좌측에서 아이템을 클릭하면\n상세 정보를 확인할 수 있습니다" : {
+
+    },
+    "플레이어" : {
 
     }
   },

@@ -44,6 +44,10 @@ struct TextConstants {
         static let previousButton = NSLocalizedString("STORY_PREVIOUS_BUTTON", comment: "Previous story button")
         static let startAdventureButton = NSLocalizedString("STORY_START_ADVENTURE_BUTTON", comment: "Start adventure button")
     }
+    
+    struct Main {
+        static let startButton = NSLocalizedString("MAIN_START", comment: "Start button")
+    }
 
     // MARK: - Game Over Screen
     struct GameOver {
