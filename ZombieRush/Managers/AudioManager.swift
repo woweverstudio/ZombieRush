@@ -38,7 +38,7 @@ class AudioManager: NSObject {
     
     // MARK: - Music Types
     enum MusicType {
-        case mainMenu, game, fallback
+        case mainMenu, game, fallback, market, story
     }
     
     // MARK: - Initialization
@@ -85,8 +85,10 @@ class AudioManager: NSObject {
     }
     
     // MARK: - Background Music
+    func playStoryMusic() { playBackgroundMusic(type: .story) }
     func playMainMenuMusic() { playBackgroundMusic(type: .mainMenu) }
     func playGameMusic() { playBackgroundMusic(type: .game) }
+    func playMarketMusic() { playBackgroundMusic(type: .market) }
     
     func playBackgroundMusic(type: MusicType = .fallback) {
         guard isBackgroundMusicEnabled else { return }
@@ -103,8 +105,22 @@ class AudioManager: NSObject {
     
     private func selectMusicFile(for type: MusicType) -> String {
         switch type {
-        case .mainMenu:
+        case .story:
             return ResourceConstants.Audio.BackgroundMusic.mainMenuTrack
+            
+        case .mainMenu:
+            let today = Date()
+            let calendar = Calendar.current
+            let day = calendar.component(.day, from: today)
+
+            if day % 2 == 0 {            
+                return ResourceConstants.Audio.BackgroundMusic.mainMenuTrack
+            } else {
+                return ResourceConstants.Audio.BackgroundMusic.mainMenuTrack2
+            }
+            
+        case .market:
+            return ResourceConstants.Audio.BackgroundMusic.marketTrack
         case .game:
             return ResourceConstants.Audio.BackgroundMusic.gameTrack
         case .fallback:

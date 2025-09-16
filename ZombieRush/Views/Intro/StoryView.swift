@@ -6,10 +6,6 @@ struct StoryView: View {
 
     @State private var currentStoryIndex = 1
     private let totalStories = 5
-    
-    private var isPhoneSize: Bool {
-        return UIDevice.current.userInterfaceIdiom == .phone
-    }
 
     var body: some View {
         ZStack {
@@ -17,14 +13,14 @@ struct StoryView: View {
             getCurrentStoryImage()
                 .resizable()
                 .scaledToFit()
-                .ignoresSafeArea()
+                
 
             HStack {
                 previousButton
                 Spacer()
                 nextButton
             }
-            .padding(.horizontal, isPhoneSize ? 0 : 30)
+            .padding(.horizontal, 30)
 
             VStack(spacing: 0) {
                 Spacer()

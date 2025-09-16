@@ -157,6 +157,8 @@ struct CardBackground: View {
 
 // MARK: - Player Info Card (프로필 + 스탯 통합)
 struct PlayerInfoCard: View {
+    @Environment(GameKitManager.self) var gameKitManager
+
     var body: some View {
         ZStack {
             CardBackground()
@@ -164,21 +166,30 @@ struct PlayerInfoCard: View {
             VStack(spacing: 16) {
                 // 상단: 프로필 정보
                 HStack(spacing: 12) {
-                    // 프로필 이미지
+                    // GameKit 프로필 이미지
                     ZStack {
-                        Circle()
-                            .fill(Color.purple.opacity(0.3))
-                            .frame(width: 60, height: 60)
+                        if let playerPhoto = gameKitManager.playerPhoto {
+                            Image(uiImage: playerPhoto)
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 40, height: 40)
+                                .clipShape(Circle())
+                        } else {
+                            Circle()
+                                .fill(Color.purple.opacity(0.3))
+                                .frame(width: 40, height: 40)
 
-                        Image(systemName: "person.fill")
-                            .foregroundColor(.white)
-                            .font(.system(size: 28))
+                            Image(systemName: "person.fill")
+                                .foregroundColor(.white)
+                                .font(.system(size: 20))
+                        }
                     }
 
                     VStack(alignment: .leading, spacing: 4) {
-                        Text("플레이어")
+                        Text(gameKitManager.playerDisplayName)
                             .font(.system(size: 18, weight: .bold, design: .monospaced))
                             .foregroundColor(.white)
+                            .lineLimit(1)
 
                         Text("네모나라의 수호자")
                             .font(.system(size: 12, design: .monospaced))
@@ -191,54 +202,102 @@ struct PlayerInfoCard: View {
                 Divider()
                     .background(Color.white.opacity(0.3))
 
-                // 하단: 레벨 & 네모구출 정보
+                // 중간: 기본 스탯 정보
                 HStack(spacing: 16) {
-                    VStack(alignment: .leading, spacing: 8) {
+                    VStack(alignment: .leading, spacing: 12) {
                         HStack(spacing: 8) {
                             Image(systemName: "star.fill")
                                 .foregroundColor(.yellow)
                                 .font(.system(size: 16))
-
+                            
                             Text("Lv. 1")
                                 .font(.system(size: 16, weight: .bold, design: .monospaced))
                                 .foregroundColor(.white)
+                            
+                            Spacer()
                         }
+                        
+                        // 경험치 바
+                        VStack(alignment: .leading, spacing: 6) {
+                            Text("네모 구출 0/100")
+                                .font(.system(size: 12, design: .monospaced))
+                                .foregroundColor(.white.opacity(0.6))
+                            
+                            ZStack(alignment: .leading) {
+                                RoundedRectangle(cornerRadius: 3)
+                                    .fill(Color.white.opacity(0.2))
+                                    .frame(height: 8)
 
-                        HStack(spacing: 8) {
-                            Image(systemName: "square.fill")
-                                .foregroundColor(.green)
-                                .font(.system(size: 16))
-
-                            Text("네모구출: 0")
-                                .font(.system(size: 14, design: .monospaced))
-                                .foregroundColor(.white.opacity(0.8))
+                                RoundedRectangle(cornerRadius: 3)
+                                    .fill(Color.green)
+                                    .frame(width: 50, height: 8) // 0/100 = 24% 진행
+                            }
+                            .frame(width: 150)
+                            
+                            
+                            
+                            
                         }
-                    }
-
-                    Spacer()
-
-                    // 경험치 바
-                    VStack(alignment: .trailing, spacing: 6) {
-                        Text("0/100")
-                            .font(.system(size: 12, design: .monospaced))
-                            .foregroundColor(.white.opacity(0.6))
-
-                        ZStack(alignment: .leading) {
-                            RoundedRectangle(cornerRadius: 3)
-                                .fill(Color.white.opacity(0.2))
-                                .frame(height: 8)
-
-                            RoundedRectangle(cornerRadius: 3)
-                                .fill(Color.green)
-                                .frame(width: 24, height: 8) // 0/100 = 24% 진행
-                        }
-                        .frame(width: 80)
                     }
                 }
+
+                Divider()
+                    .background(Color.white.opacity(0.3))
+
+                    
+                VStack(alignment: .leading, spacing: 8) {
+                    StatRow(icon: "heart.fill", label: "체력", value: "100", color: .red)
+                    StatRow(icon: "bolt.fill", label: "에너지", value: "50", color: .blue)
+                    StatRow(icon: "flame.fill", label: "궁극기", value: "유성 소환", color: .orange)
+                }
+                
+                Divider()
+                    .background(Color.white.opacity(0.3))
+                    
+                VStack(alignment: .leading, spacing: 8) {
+                    StatRow(icon: "shoeprints.fill", label: "이동속도", value: "1.2", color: .green)
+                    StatRow(icon: "bolt.horizontal.fill", label: "공격속도", value: "1.5", color: .yellow)
+                    StatRow(icon: "target", label: "크리티컬", value: "15%", color: .purple)
+                }
+                
             }
             .padding(.vertical, 20)
             .padding(.horizontal, 16)
         }
+    }
+}
+
+// MARK: - Stat Row Component
+struct StatRow: View {
+    let icon: String
+    let label: String
+    let value: String
+    let color: Color
+
+    init(icon: String, label: String, value: String, color: Color) {
+        self.icon = icon
+        self.label = label
+        self.value = value
+        self.color = color
+    }
+
+    var body: some View {
+        HStack(spacing: 6) {
+            Image(systemName: icon)
+                .foregroundColor(color)
+                .font(.system(size: 12))
+                .frame(width: 20, alignment: .leading)
+
+            Text("\(label):")
+                .font(.system(size: 11, design: .monospaced))
+                .foregroundColor(.white.opacity(0.7))
+                .frame(width: 50, alignment: .leading)
+
+            Text(value)
+                .font(.system(size: 12, weight: .bold, design: .monospaced))
+                .foregroundColor(.white)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 }
 
@@ -247,43 +306,16 @@ struct CurrentClassCard: View {
     var body: some View {
         ZStack {
             CardBackground()
-
-            HStack(spacing: 12) {
-                // 캐릭터 스킨 (임시로 마법사 아이콘)
-                ZStack {
-                    Circle()
-                        .fill(Color.blue.opacity(0.3))
-                        .frame(width: 50, height: 50)
-
-                    Image(systemName: "wand.and.stars")
-                        .foregroundColor(.white)
-                        .font(.system(size: 24))
-                }
-
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("마법사")
-                        .font(.system(size: 16, weight: .bold, design: .monospaced))
-                        .foregroundColor(.white)
-
-                    Text("각진 힘의 수호자")
-                        .font(.system(size: 12, design: .monospaced))
-                        .foregroundColor(.white.opacity(0.7))
-                }
-
-                Spacer()
-
-                // 궁극기 아이콘
-                ZStack {
-                    Circle()
-                        .fill(Color.red.opacity(0.3))
-                        .frame(width: 40, height: 40)
-
-                    Image(systemName: "flame.fill")
-                        .foregroundColor(.orange)
-                        .font(.system(size: 16))
-                }
+            VStack {
+                Image("sample")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                
+                Text("마법사")
+                    .font(.system(size: 16, weight: .bold, design: .monospaced))
             }
-            .padding(.horizontal, 16)
+            .padding()
         }
     }
 }
@@ -294,42 +326,16 @@ struct SelectedWeaponCard: View {
         ZStack {
             CardBackground()
 
-            HStack(spacing: 12) {
-                // 무기 아이콘
-                ZStack {
-                    Circle()
-                        .fill(Color.purple.opacity(0.3))
-                        .frame(width: 40, height: 40)
-
-                    Image(systemName: "wand.and.rays")
-                        .foregroundColor(.white)
-                        .font(.system(size: 20))
-                }
-
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("기본 마법봉")
-                        .font(.system(size: 14, weight: .bold, design: .monospaced))
-                        .foregroundColor(.white)
-
-                    Text("각진 마법의 기본")
-                        .font(.system(size: 10, design: .monospaced))
-                        .foregroundColor(.white.opacity(0.7))
-                }
-
-                Spacer()
-
-                // 공격력 표시
-                VStack(alignment: .trailing, spacing: 2) {
-                    Text("공격력")
-                        .font(.system(size: 10, design: .monospaced))
-                        .foregroundColor(.white.opacity(0.6))
-
-                    Text("25")
-                        .font(.system(size: 16, weight: .bold, design: .monospaced))
-                        .foregroundColor(.cyan)
-                }
+            VStack {
+                Image("sample_weapon")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    
+                Text("딱총나무 지팡이")
+                    .font(.system(size: 16, weight: .bold, design: .monospaced))
             }
-            .padding(.horizontal, 16)
+            .padding()
         }
     }
 }

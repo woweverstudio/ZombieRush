@@ -39,7 +39,7 @@ struct MarketView: View {
         HStack {
             // 뒤로가기 버튼
             NeonIconButton(icon: "chevron.left", style: .white) {
-                router.goBack()
+                router.quitToMain()
             }
 
             Spacer()

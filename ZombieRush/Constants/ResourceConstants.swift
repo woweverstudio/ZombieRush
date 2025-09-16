@@ -15,7 +15,9 @@ struct ResourceConstants {
         // MARK: - Background Music
         struct BackgroundMusic {
             static let mainMenuTrack = "main_background"
+            static let mainMenuTrack2 = "main_background2"
             static let gameTrack = "game_background"
+            static let marketTrack = "market_background"
             static let fileExtension = "mp3"
             static let volume: Float = 0.2
         }
