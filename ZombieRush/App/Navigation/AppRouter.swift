@@ -67,6 +67,7 @@ final class AppRouter {
             AudioManager.shared.playGameMusic()
         case .gameOver, .loading:
             AudioManager.shared.playMainMenuMusic()
+        case .story:
             break
         }
     }

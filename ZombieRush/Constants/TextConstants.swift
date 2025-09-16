@@ -22,6 +22,29 @@ struct TextConstants {
         static let readyToPlay = NSLocalizedString("READY_TO_PLAY", comment: "Loading screen - Ready to play text")
     }
 
+    // MARK: - Story Screen
+    struct Story {
+        // Story 1: 평화로운 네모나라
+        static let story1 = NSLocalizedString("STORY_1", comment: "Story 1 text")
+
+        // Story 2: 동그라미의 침공
+        static let story2 = NSLocalizedString("STORY_2", comment: "Story 2 text")
+
+        // Story 3: 네모의 마지막 희망
+        static let story3 = NSLocalizedString("STORY_3", comment: "Story 3 text")
+
+        // Story 4: 마법사의 탄생
+        static let story4 = NSLocalizedString("STORY_4", comment: "Story 4 text")
+
+        // Story 5: 여정의 시작
+        static let story5 = NSLocalizedString("STORY_5", comment: "Story 5 text")
+
+        // Navigation buttons
+        static let nextButton = NSLocalizedString("STORY_NEXT_BUTTON", comment: "Next story button")
+        static let previousButton = NSLocalizedString("STORY_PREVIOUS_BUTTON", comment: "Previous story button")
+        static let startAdventureButton = NSLocalizedString("STORY_START_ADVENTURE_BUTTON", comment: "Start adventure button")
+    }
+
     // MARK: - Game Over Screen
     struct GameOver {
         static let title = NSLocalizedString("GAME_OVER_TITLE", comment: "Game over screen title")

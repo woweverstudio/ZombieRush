@@ -23,6 +23,9 @@ struct RouterView: View {
         case .loading:
             LoadingView()
                 .navigationBarBackButtonHidden(true)
+        case .story:
+            StoryView()
+                .navigationBarBackButtonHidden(true)
         case .main:
             MainView()
                 .navigationBarBackButtonHidden(true)

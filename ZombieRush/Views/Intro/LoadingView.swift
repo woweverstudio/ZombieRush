@@ -100,10 +100,19 @@ struct LoadingView: View {
                 self.progress = 1.0
             }
 
-            // 프로그레스 바 애니메이션 완료 후 메인메뉴로 이동
+            // 프로그레스 바 애니메이션 완료 후 다음 화면으로 이동
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                 if router.currentRoute == .loading {
-                    self.router.navigate(to: .main)
+                    // 앱 처음 실행인지 확인
+                    let hasSeenStory = UserDefaults.standard.bool(forKey: "hasSeenStory")
+
+                    if hasSeenStory {
+                        // 이미 본 적이 있으면 메인 화면으로 이동
+                        self.router.navigate(to: .main)
+                    } else {
+                        // 처음이면 스토리 화면으로 이동
+                        self.router.navigate(to: .story)
+                    }
                 }
             }
         }

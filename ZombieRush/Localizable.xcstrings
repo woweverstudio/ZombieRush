@@ -1486,6 +1486,150 @@
         }
       }
     },
+    "STORY_1" : {
+      "comment" : "Story 1 text",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Everything had a perfect angle. Until the shadow of the circle fell upon the peaceful Square Kingdom."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "모든 것이 완벽한 각을 이루고 있었습니다. 평화로운 네모나라에 동그라미의 그림자가 드리우기 전까지는."
+          }
+        }
+      }
+    },
+    "STORY_2" : {
+      "comment" : "Story 2 text",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The Circle Tribe invaded. Every square began to crumble, turning into a curve."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "동그라미 종족이 침공했습니다. 모든 네모가 곡선으로 변하며 무너지기 시작했습니다."
+          }
+        }
+      }
+    },
+    "STORY_3" : {
+      "comment" : "Story 3 text",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In despair, you discover the Hexahedron Crystal, the only existence that protects 'angles'."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "절망 속에서, 당신은 오직 '각'을 지키는 존재인 정육면체 결정을 발견합니다."
+          }
+        }
+      }
+    },
+    "STORY_4" : {
+      "comment" : "Story 4 text",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The power of the Hexahedron flows into you, awakening you as a Square Mage."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "정육면체의 힘이 당신에게 흘러들어와, 네모 마법사로 각성했습니다."
+          }
+        }
+      }
+    },
+    "STORY_5" : {
+      "comment" : "Story 5 text",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Now, your journey to save the Square Kingdom begins."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이제, 네모나라를 구하기 위한 당신의 여정이 시작됩니다."
+          }
+        }
+      }
+    },
+    "STORY_NEXT_BUTTON" : {
+      "comment" : "Next story button",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Next"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "다음"
+          }
+        }
+      }
+    },
+    "STORY_PREVIOUS_BUTTON" : {
+      "comment" : "Previous story button",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Previous"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이전"
+          }
+        }
+      }
+    },
+    "STORY_START_ADVENTURE_BUTTON" : {
+      "comment" : "Start adventure button",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start Adventure"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "네모 구출하러가기"
+          }
+        }
+      }
+    },
     "가격:" : {
 
     },
