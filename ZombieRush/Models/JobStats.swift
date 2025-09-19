@@ -14,7 +14,9 @@ struct JobStats {
     let energy: Int      // 에너지
     let move: Int        // 이동 속도
     let attackSpeed: Int // 공격 속도
-
+    
+    private static let defaults = JobStats(jobKey: "novice", hp: 100, energy: 100, move: 10, attackSpeed: 10)
+    
     // 정적 데이터 딕셔너리
     private static let statsData: [String: JobStats] = [
         "novice": JobStats(jobKey: "novice", hp: 100, energy: 100, move: 10, attackSpeed: 10),
@@ -28,9 +30,9 @@ struct JobStats {
     static var allStats: [JobStats] {
         return Array(statsData.values)
     }
-
+    
     /// 특정 jobKey의 스탯을 가져옴
-    static func getStats(for jobKey: String) -> JobStats? {
-        return statsData[jobKey]
+    static func getStats(for jobKey: String) -> JobStats {
+        return statsData[jobKey, default: defaults]
     }
 }

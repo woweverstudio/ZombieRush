@@ -56,20 +56,20 @@ struct Jobs: Codable, Identifiable {
     }
 
     /// 선택된 직업 타입
-    var selectedJobType: JobType? {
+    var selectedJobType: JobType {
         switch selectedJob {
         case "novice": return .novice
         case "fire_mage": return .fireMage
         case "ice_mage": return .iceMage
         case "lightning_mage": return .lightningMage
         case "dark_mage": return .darkMage
-        default: return nil
+        default: return .novice
         }
     }
 }
 
 /// 직업 타입 열거형
-enum JobType: String {
+enum JobType: String, CaseIterable {
     case novice = "novice"
     case fireMage = "fire_mage"
     case iceMage = "ice_mage"
@@ -83,6 +83,16 @@ enum JobType: String {
         case .iceMage: return "얼음 마법사"
         case .lightningMage: return "번개 마법사"
         case .darkMage: return "어둠 마법사"
+        }
+    }
+
+    var iconName: String {
+        switch self {
+        case .novice: return "person.fill"
+        case .fireMage: return "flame.fill"
+        case .iceMage: return "snowflake"
+        case .lightningMage: return "bolt.fill"
+        case .darkMage: return "moon.fill"
         }
     }
 }

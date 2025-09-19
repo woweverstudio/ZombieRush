@@ -6,7 +6,8 @@ struct MainView: View {
     @Environment(AppRouter.self) var router
     @Environment(GameKitManager.self) var gameKitManager
     @Environment(GameStateManager.self) var gameStateManager
-    
+    @Environment(JobsStateManager.self) var jobsStateManager
+
     @State private var isDataLoaded: Bool = false
     @State private var lastRefreshTime: Date? = nil
 
@@ -23,7 +24,7 @@ struct MainView: View {
             return TextConstants.GameCenter.GameStartTooltips.loggedIn
         }
     }
-    
+
     private var isPhoneSize: Bool {
         return UIDevice.current.userInterfaceIdiom == .phone
     }
@@ -34,14 +35,14 @@ struct MainView: View {
             CyberpunkBackground()
 
             HStack(spacing: 12) {
-                // 좌측: 플레이어 정보 통합 카드
+                // 좌측: 플레이어 정보 통합 카드 (JobsStateManager의 스탯 사용)
                 PlayerInfoCard()
 
                 // 우측: 현재 클래스 & 무기 정보 + 메뉴 버튼들
                 VStack(spacing: 12) {
-                    // 현재 직업 정보
-                    CurrentClassCard()
-                        
+                    // 현재 직업 정보 (JobsStateManager의 탭 상태 사용)
+                    JobCard()
+
                     // 선택된 무기 정보
                     SelectedWeaponCard()
                 }
@@ -127,142 +128,126 @@ struct PlayerInfoCard: View {
     @Environment(UserStateManager.self) var userStateManager
     @Environment(JobsStateManager.self) var jobsStateManager
 
-    // JobsStateManager의 개별 스탯 프로퍼티 사용 (옵셔널 체이닝 완전 제거)
-
     var body: some View {
         ZStack {
             CardBackground()
 
             VStack(spacing: 16) {
-                // 상단: 프로필 정보
-                HStack(spacing: 12) {
-                    // GameKit 프로필 이미지
-                    ZStack {
-                        if let playerPhoto = userStateManager.userImage {
-                            Image(uiImage: playerPhoto)
-                                .resizable()
-                                .scaledToFill()
-                                .frame(width: 40, height: 40)
-                                .clipShape(Circle())
-                        } else {
-                            Circle()
-                                .fill(Color.purple.opacity(0.3))
-                                .frame(width: 40, height: 40)
+                profileInfo
 
-                            Image(systemName: "person.fill")
-                                .foregroundColor(.white)
-                                .font(.system(size: 20))
-                        }
-                    }
+                Divider()
+                    .background(Color.white.opacity(0.3))
+                    .frame(maxHeight: .infinity)
 
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text(userStateManager.nickname)
-                            .font(.system(size: 18, weight: .bold, design: .monospaced))
+                levelInfo
+                Divider()
+                    .background(Color.white.opacity(0.3))
+                    .frame(maxHeight: .infinity)
+                statInfo
+            }
+            .padding()
+        }
+    }
+    
+    var profileInfo: some View {
+        HStack(spacing: 12) {
+            // GameKit 프로필 이미지
+            if let playerPhoto = userStateManager.userImage {
+                Image(uiImage: playerPhoto)
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 44, height: 44)
+                    .clipShape(Circle())
+            } else {
+                ZStack {
+                    Circle()
+                        .fill(Color.purple.opacity(0.3))
+                        .frame(width: 44, height: 44)
+
+                    Image(systemName: "person.fill")
+                        .foregroundColor(.white)
+                        .font(.system(size: 20))
+                }
+            }
+        
+
+            VStack(alignment: .leading, spacing: 4) {
+                Text(userStateManager.nickname)
+                    .font(.system(size: 20, weight: .bold, design: .monospaced))
+                    .foregroundColor(.white)
+                    .lineLimit(1)
+
+                Text("네모나라의 수호자")
+                    .font(.system(size: 12, design: .monospaced))
+                    .foregroundColor(.white.opacity(0.7))
+            }
+
+            Spacer()
+        }
+    }
+    
+    var levelInfo: some View {
+        HStack(spacing: 16) {
+            VStack(alignment: .leading, spacing: 12) {
+                HStack(spacing: 8) {
+                    Image(systemName: "star.fill")
+                        .foregroundColor(.yellow)
+                        .font(.system(size: 16))
+
+                    if let levelInfo = userStateManager.currentLevel {
+                        Text("Lv. \(levelInfo.currentLevel)")
+                            .font(.system(size: 16, weight: .bold, design: .monospaced))
                             .foregroundColor(.white)
-                            .lineLimit(1)
-
-                        Text("네모나라의 수호자")
-                            .font(.system(size: 12, design: .monospaced))
-                            .foregroundColor(.white.opacity(0.7))
+                    } else {
+                        Text("Lv. --")
+                            .font(.system(size: 16, weight: .bold, design: .monospaced))
+                            .foregroundColor(.white.opacity(0.5))
                     }
 
                     Spacer()
                 }
-
-                Divider()
-                    .background(Color.white.opacity(0.3))
-
-                // 중간: 기본 스탯 정보
-                HStack(spacing: 16) {
-                    VStack(alignment: .leading, spacing: 12) {
-                        HStack(spacing: 8) {
-                            Image(systemName: "star.fill")
-                                .foregroundColor(.yellow)
-                                .font(.system(size: 16))
-
-                            if let levelInfo = userStateManager.currentLevel {
-                                Text("Lv. \(levelInfo.currentLevel)")
-                                    .font(.system(size: 16, weight: .bold, design: .monospaced))
-                                    .foregroundColor(.white)
-                            } else {
-                                Text("Lv. --")
-                                    .font(.system(size: 16, weight: .bold, design: .monospaced))
-                                    .foregroundColor(.white.opacity(0.5))
+                
+                // 경험치 바
+                VStack(alignment: .leading, spacing: 8) {
+                    if let levelInfo = userStateManager.currentLevel {
+                        let currentLevelExp = levelInfo.currentExp - levelInfo.levelMinExp
+                        let requiredExp = levelInfo.expToNextLevel
+                        let percentage = Int(levelInfo.progress * 100)
+                        
+                        Text("네모 구출 \(currentLevelExp)/\(requiredExp)")
+                            .font(.system(size: 14, weight: .medium, design: .monospaced))
+                            .foregroundColor(.white.opacity(0.8))
+                        
+                        HStack(spacing: 4) {
+                            ZStack(alignment: .leading) {
+                                RoundedRectangle(cornerRadius: 4)
+                                    .fill(Color.white.opacity(0.2))
+                                    .frame(height: 10)
+                                
+                                RoundedRectangle(cornerRadius: 4)
+                                    .fill(Color.green)
+                                    .frame(width: 150 * levelInfo.progress, height: 10)
                             }
-
-                            Spacer()
+                            .frame(width: 150)
+                            
+                            Text("(\(percentage)%)")
+                                .font(.system(size: 12, weight: .bold, design: .monospaced))
+                                .foregroundColor(.green)
                         }
                         
-                        // 경험치 바
-                        VStack(alignment: .leading, spacing: 8) {
-                            if let levelInfo = userStateManager.currentLevel {
-                                let currentLevelExp = levelInfo.currentExp - levelInfo.levelMinExp
-                                let requiredExp = levelInfo.expToNextLevel
-                                let percentage = Int(levelInfo.progress * 100)
-
-                                Text("네모 구출 \(currentLevelExp)/\(requiredExp)")
-                                        .font(.system(size: 14, weight: .medium, design: .monospaced))
-                                        .foregroundColor(.white.opacity(0.8))
-                                
-                                HStack(spacing: 4) {
-                                    ZStack(alignment: .leading) {
-                                        RoundedRectangle(cornerRadius: 4)
-                                            .fill(Color.white.opacity(0.2))
-                                            .frame(height: 10)
-
-                                        RoundedRectangle(cornerRadius: 4)
-                                            .fill(Color.green)
-                                            .frame(width: 150 * levelInfo.progress, height: 10)
-                                    }
-                                    .frame(width: 150)
-                                    
-                                    Text("(\(percentage)%)")
-                                        .font(.system(size: 12, weight: .bold, design: .monospaced))
-                                        .foregroundColor(.green)
-                                }
-                                
-                            } else {
-                                // 로딩 중이거나 데이터 없을 때
-                                HStack(spacing: 4) {
-                                    Text("네모 구출 로딩중...")
-                                        .font(.system(size: 14, weight: .medium, design: .monospaced))
-                                        .foregroundColor(.white.opacity(0.6))
-
-                                    Text("(0%)")
-                                        .font(.system(size: 12, weight: .bold, design: .monospaced))
-                                        .foregroundColor(.gray)
-                                }
-
-                                ZStack(alignment: .leading) {
-                                    RoundedRectangle(cornerRadius: 4)
-                                        .fill(Color.white.opacity(0.2))
-                                        .frame(height: 10)
-
-                                    RoundedRectangle(cornerRadius: 4)
-                                        .fill(Color.gray.opacity(0.5))
-                                        .frame(width: 8, height: 10)
-                                }
-                                .frame(width: 150)
-                            }
-                        }
                     }
                 }
-
-                Divider()
-                    .background(Color.white.opacity(0.3))
-
-                    
-                VStack(alignment: .leading, spacing: 8) {
-                    StatRow(icon: "heart.fill", label: "체력", value: "\(jobsStateManager.hp)", color: .red)
-                    StatRow(icon: "bolt.fill", label: "에너지", value: "\(jobsStateManager.energy)", color: .blue)
-                    StatRow(icon: "shoeprints.fill", label: "이동속도", value: "\(jobsStateManager.move)", color: .green)
-                    StatRow(icon: "bolt.horizontal.fill", label: "공격속도", value: "\(jobsStateManager.attackSpeed)", color: .yellow)
-                    StatRow(icon: "flame.fill", label: "궁극기", value: jobsStateManager.currentJobName, color: .orange)
-                }
-                
             }
-            .padding(.vertical, 20)
-            .padding(.horizontal, 16)
+        }
+    }
+    
+    var statInfo: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            StatRow(icon: "heart.fill", label: "체력", value: "\(jobsStateManager.hp)", color: .red)
+            StatRow(icon: "bolt.fill", label: "에너지", value: "\(jobsStateManager.energy)", color: .blue)
+            StatRow(icon: "shoeprints.fill", label: "이동속도", value: "\(jobsStateManager.move)", color: .green)
+            StatRow(icon: "bolt.horizontal.fill", label: "공격속도", value: "\(jobsStateManager.attackSpeed)", color: .yellow)
+            StatRow(icon: "flame.fill", label: "궁극기", value: "궁극기 이름 들어감", color: .orange)
         }
     }
 }
@@ -289,8 +274,8 @@ struct StatRow: View {
                 .frame(width: 20, alignment: .leading)
 
             Text("\(label):")
-                .font(.system(size: 11, design: .monospaced))
-                .foregroundColor(.white.opacity(0.7))
+                .font(.system(size: 12, design: .monospaced))
+                .foregroundColor(.white.opacity(0.8))
                 .frame(width: 50, alignment: .leading)
 
             Text(value)
@@ -301,27 +286,84 @@ struct StatRow: View {
     }
 }
 
-// MARK: - Current Class Card
-struct CurrentClassCard: View {
+// MARK: - Job Card (TabView로 모든 job 표시)
+struct JobCard: View {
     @Environment(JobsStateManager.self) var jobsStateManager
 
-    // JobsStateManager의 currentJobName 직접 사용
+    // 이전/다음 탭으로 이동
+    private func previousTab() {
+        withAnimation {
+            if let currentIndex = JobType.allCases.firstIndex(of: jobsStateManager.selectedJobType) {
+                let prevIndex = currentIndex > 0 ? currentIndex - 1 : JobType.allCases.count - 1
+                jobsStateManager.currentJobs.selectedJob = JobType.allCases[prevIndex].rawValue
+            }
+        }
+    }
+
+    private func nextTab() {
+        withAnimation {
+            if let currentIndex = JobType.allCases.firstIndex(of: jobsStateManager.selectedJobType) {
+                let nextIndex = currentIndex < JobType.allCases.count - 1 ? currentIndex + 1 : 0
+                jobsStateManager.currentJobs.selectedJob = JobType.allCases[nextIndex].rawValue
+            }
+        }
+    }
 
     var body: some View {
+        @Bindable var jobState = jobsStateManager
         ZStack {
             CardBackground()
-            VStack {
-                Image("sample")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-
-                Text(jobsStateManager.currentJobName)
-                    .font(.system(size: 16, weight: .bold, design: .monospaced))
-                    .foregroundColor(.white)
+            
+            // TabView로 job 표시 (indicator 제거)
+            TabView(selection: $jobState.currentJobs.selectedJob) {
+                ForEach(JobType.allCases, id: \.self) { jobType in
+                    JobDetailView()
+                        .tag(jobType.rawValue)
+                }
             }
-            .padding()
+            .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+            
+            HStack {
+                Button(action: previousTab) {
+                    Image(systemName: "chevron.left")
+                        .font(.system(size: 16, weight: .bold))
+                        .foregroundColor(.white.opacity(0.7))
+                        .padding(20)
+                        .clipShape(Rectangle())
+                }
+
+                Spacer()
+
+                // 우측 chevron 버튼
+                Button(action: nextTab) {
+                    Image(systemName: "chevron.right")
+                        .font(.system(size: 16, weight: .bold))
+                        .foregroundColor(.white.opacity(0.7))
+                        .padding(20)
+                        .clipShape(Rectangle())
+                }
+            }
         }
+    }
+}
+
+// MARK: - 개별 Job 상세 정보 View
+struct JobDetailView: View {
+    @Environment(JobsStateManager.self) var jobsStateManager
+
+    var body: some View {
+        VStack(spacing: 8) {
+            Image("sample")
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                
+            // Job 이름 (간단하게 표시)
+            Text(jobsStateManager.currentJobName)
+                .font(.system(size: 16, weight: .bold, design: .monospaced))
+                .foregroundColor(.white)
+                .multilineTextAlignment(.center)
+        }
+        .padding()
     }
 }
 

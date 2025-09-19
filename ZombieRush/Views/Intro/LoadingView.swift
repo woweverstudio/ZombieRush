@@ -94,6 +94,15 @@ struct LoadingView: View {
         }
     }
 
+    private func updateStage(to newStage: LoadingStage) async {
+        await MainActor.run {
+            currentStage = newStage
+            withAnimation(.easeInOut(duration: 0.5)) {
+                progress = newStage.progress
+            }
+        }
+    }
+    
     private func getLoadingText() -> String {
         return currentStage.message
     }
@@ -118,15 +127,6 @@ struct LoadingView: View {
             // 단계 2: Game Center 인증
             await updateStage(to: .gameCenterAuth)
             await proceedWithGameKitLoading()
-        }
-    }
-
-    private func updateStage(to newStage: LoadingStage) async {
-        await MainActor.run {
-            currentStage = newStage
-            withAnimation(.easeInOut(duration: 0.5)) {
-                progress = newStage.progress
-            }
         }
     }
 

@@ -22,7 +22,7 @@ class GameKitManager: NSObject {
     var presentViewController: ((UIViewController) -> Void)?
     var dismissViewController: (() -> Void)?
 
-    // MARK: - Private Properties
+    // MARK: - Properties
     private var localPlayer: GKLocalPlayer?
 
     // MARK: - Initialization
@@ -52,8 +52,43 @@ class GameKitManager: NSObject {
             }
         }
     }
+    
+    /// 플레이어 정보를 로드하여 반환
+    private func loadPlayerInfoAsync() async -> PlayerInfo? {
+        guard isAuthenticated, let localPlayer = localPlayer else {
+            isLoading = false
+            return nil
+        }
+
+        // 플레이어 기본 정보 가져오기
+        let playerID = localPlayer.gamePlayerID
+        let nickname = localPlayer.displayName
+
+        // 프로필 사진 로드
+        var photo: UIImage? = nil
+        do {
+            photo = try await localPlayer.loadPhoto(for: .small)
+            print("🎮 GameKit: Player photo loaded successfully")
+        } catch {
+            print("🎮 GameKit: Failed to load player photo: \(error.localizedDescription)")
+            // 사진 로드 실패해도 다른 정보들은 정상 반환
+        }
+
+        isLoading = false
+
+        return PlayerInfo(playerID: playerID, nickname: nickname, photo: photo)
+    }
 
     // MARK: - Authentication
+    
+    /// Async 버전: Game Center 인증
+    private func authenticateAsync() async -> Bool {
+        return await withCheckedContinuation { continuation in
+            authenticateWithCallback { success in
+                continuation.resume(returning: success)
+            }
+        }
+    }
 
     /// Game Center 인증 (한 번만 completion 호출 보장)
     private func authenticateWithCallback(completion: @escaping (Bool) -> Void) {
@@ -101,43 +136,5 @@ class GameKitManager: NSObject {
                 completion(false)
             }
         }
-    }
-
-    // MARK: - Player Data Loading
-
-
-    /// Async 버전: Game Center 인증
-    private func authenticateAsync() async -> Bool {
-        return await withCheckedContinuation { continuation in
-            authenticateWithCallback { success in
-                continuation.resume(returning: success)
-            }
-        }
-    }
-
-    /// 플레이어 정보를 로드하여 반환
-    private func loadPlayerInfoAsync() async -> PlayerInfo? {
-        guard isAuthenticated, let localPlayer = localPlayer else {
-            isLoading = false
-            return nil
-        }
-
-        // 플레이어 기본 정보 가져오기
-        let playerID = localPlayer.gamePlayerID
-        let nickname = localPlayer.displayName
-
-        // 프로필 사진 로드
-        var photo: UIImage? = nil
-        do {
-            photo = try await localPlayer.loadPhoto(for: .small)
-            print("🎮 GameKit: Player photo loaded successfully")
-        } catch {
-            print("🎮 GameKit: Failed to load player photo: \(error.localizedDescription)")
-            // 사진 로드 실패해도 다른 정보들은 정상 반환
-        }
-
-        isLoading = false
-
-        return PlayerInfo(playerID: playerID, nickname: nickname, photo: photo)
     }
 }
