@@ -134,18 +134,22 @@ struct LoadingView: View {
         // GameKit 뷰 컨트롤러 처리 설정
         setupGameKitCallbacks()
 
-        // GameKit 데이터 로딩 대기 (async 함수 사용)
-        await gameKitManager.loadInitialDataAsync()
+        // GameKit에서 플레이어 정보 가져오기
+        guard let playerInfo = await gameKitManager.getPlayerInfoAsync() else {
+            print("⚠️ 로딩: Game Center 인증 실패")
+            isLoading = false
+            return
+        }
 
         // 단계 3: Supabase 데이터 로딩 (사용자 + 스탯)
         await updateStage(to: .dataLoading)
-        await loadUserDataAndStats()
+        await loadUserDataAndStats(with: playerInfo)
     }
 
-    private func loadUserDataAndStats() async {
-        // GameKit에서 얻은 playerID와 nickname으로 데이터 로드/생성
-        let playerID = gameKitManager.playerID
-        let nickname = gameKitManager.playerDisplayName
+    private func loadUserDataAndStats(with playerInfo: GameKitManager.PlayerInfo) async {
+        // GameKit에서 얻은 플레이어 정보로 데이터 로드/생성
+        let playerID = playerInfo.playerID
+        let nickname = playerInfo.nickname
 
         guard !playerID.isEmpty else {
             print("⚠️ 로딩: playerID가 비어있음")
@@ -154,7 +158,7 @@ struct LoadingView: View {
         }
 
         // 사용자 데이터, 스탯 데이터, 정령 데이터, 직업 데이터 동시에 로드
-        async let userTask: () = userStateManager.loadOrCreateUser(playerID: playerID, nickname: nickname)
+        async let userTask: () = userStateManager.loadOrCreateUser(playerID: playerID, nickname: nickname, photo: playerInfo.photo)
         async let statsTask: () = statsStateManager.loadOrCreateStats(playerID: playerID)
         async let spiritsTask: () = spiritsStateManager.loadOrCreateSpirits(playerID: playerID)
         async let jobsTask: () = jobsStateManager.loadOrCreateJobs(playerID: playerID)

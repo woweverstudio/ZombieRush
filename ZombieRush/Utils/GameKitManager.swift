@@ -10,10 +10,13 @@ class GameKitManager: NSObject {
     var isAuthenticated = false
     var isLoading = false
 
-    // MARK: - Player Data
-    var playerID: String = ""
-    var playerDisplayName = "Guest"
-    var playerPhoto: UIImage? = nil
+    // MARK: - Player Data Structure
+    /// Game Center 플레이어 정보 구조체
+    struct PlayerInfo {
+        let playerID: String
+        let nickname: String
+        let photo: UIImage?
+    }
 
     // MARK: - UI Callbacks
     var presentViewController: ((UIViewController) -> Void)?
@@ -28,64 +31,24 @@ class GameKitManager: NSObject {
         localPlayer = GKLocalPlayer.local
     }
 
-    // MARK: - Initial Data Loading
+    // MARK: - Player Info Loading
 
-    /// 플레이어 데이터를 초기화합니다.
-    func resetData() {
-        playerID = ""
-        playerDisplayName = "Guest"
-        playerPhoto = nil
-    }
-
-    /// 앱 시작 시 플레이어 데이터를 로드합니다 (콜백 방식).
-    func loadInitialData(completion: (() -> Void)? = nil) {
+    /// Async 버전: 플레이어 정보를 가져옵니다.
+    func getPlayerInfoAsync() async -> PlayerInfo? {
         isLoading = true
 
         if isAuthenticated {
             // 이미 인증된 경우 바로 데이터 로드
-            loadAuthenticatedData(completion: completion)
-        } else {
-            // 인증이 필요한 경우
-            authenticateWithCallback { [weak self] success in
-                guard let self = self else { return }
-
-                if success {
-                    self.loadAuthenticatedData(completion: completion)
-                } else {
-                    // 인증 실패 시 로딩 완료
-                    self.isLoading = false
-                    completion?()
-                }
-            }
-        }
-    }
-
-    /// Async 버전: 앱 시작 시 플레이어 데이터를 로드합니다.
-    func loadInitialDataAsync() async {
-        isLoading = true
-
-        if isAuthenticated {
-            // 이미 인증된 경우 바로 데이터 로드
-            await loadAuthenticatedDataAsync()
+            return await loadPlayerInfoAsync()
         } else {
             // 인증이 필요한 경우
             let success = await authenticateAsync()
             if success {
-                await loadAuthenticatedDataAsync()
+                return await loadPlayerInfoAsync()
             } else {
-                // 인증 실패 시 로딩 완료
+                // 인증 실패
                 isLoading = false
-            }
-        }
-    }
-
-    /// 인증된 플레이어 데이터 로드 (콜백 방식)
-    private func loadAuthenticatedData(completion: (() -> Void)?) {
-        Task {
-            await loadPlayerData()
-            await MainActor.run {
-                self.isLoading = false
-                completion?()
+                return nil
             }
         }
     }
@@ -142,34 +105,6 @@ class GameKitManager: NSObject {
 
     // MARK: - Player Data Loading
 
-    /// 플레이어 기본 정보 로드
-    private func loadPlayerData() async {
-        guard isAuthenticated, let localPlayer = localPlayer else { return }
-
-        await MainActor.run { [weak self] in
-            self?.playerID = localPlayer.gamePlayerID
-            self?.playerDisplayName = localPlayer.displayName
-        }
-
-        // 프로필 사진 로드
-        await loadPlayerPhoto()
-    }
-
-    /// 플레이어 프로필 사진 로드
-    private func loadPlayerPhoto() async {
-        guard let localPlayer = localPlayer else { return }
-
-        do {
-            let image = try await localPlayer.loadPhoto(for: .small)
-            await MainActor.run { [weak self] in
-                self?.playerPhoto = image
-            }
-            print("🎮 GameKit: Player photo loaded successfully")
-        } catch {
-            print("🎮 GameKit: Failed to load player photo: \(error.localizedDescription)")
-            // 사진 로드 실패해도 다른 기능들은 정상 작동하도록 함
-        }
-    }
 
     /// Async 버전: Game Center 인증
     private func authenticateAsync() async -> Bool {
@@ -180,11 +115,29 @@ class GameKitManager: NSObject {
         }
     }
 
-    /// Async 버전: 인증된 플레이어 데이터 로드
-    private func loadAuthenticatedDataAsync() async {
-        await loadPlayerData()
-        await MainActor.run { [weak self] in
-            self?.isLoading = false
+    /// 플레이어 정보를 로드하여 반환
+    private func loadPlayerInfoAsync() async -> PlayerInfo? {
+        guard isAuthenticated, let localPlayer = localPlayer else {
+            isLoading = false
+            return nil
         }
+
+        // 플레이어 기본 정보 가져오기
+        let playerID = localPlayer.gamePlayerID
+        let nickname = localPlayer.displayName
+
+        // 프로필 사진 로드
+        var photo: UIImage? = nil
+        do {
+            photo = try await localPlayer.loadPhoto(for: .small)
+            print("🎮 GameKit: Player photo loaded successfully")
+        } catch {
+            print("🎮 GameKit: Failed to load player photo: \(error.localizedDescription)")
+            // 사진 로드 실패해도 다른 정보들은 정상 반환
+        }
+
+        isLoading = false
+
+        return PlayerInfo(playerID: playerID, nickname: nickname, photo: photo)
     }
 }

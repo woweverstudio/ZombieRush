@@ -4,6 +4,12 @@
     "" : {
 
     },
+    "(%lld%%)" : {
+
+    },
+    "(0%)" : {
+
+    },
     "%@:" : {
 
     },
@@ -45,24 +51,6 @@
           "stringUnit" : {
             "state" : "needs_review",
             "value" : "버전 체크중..."
-          }
-        }
-      }
-    },
-    "SYNCING_USER_DATA" : {
-      "comment" : "Loading screen - Syncing user data text",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "SYNCING USER DATA…"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "사용자 데이터 동기화 중..."
           }
         }
       }
@@ -931,7 +919,10 @@
         }
       }
     },
-    "Lv. 1" : {
+    "Lv. --" : {
+
+    },
+    "Lv. %lld" : {
 
     },
     "MAIN_START" : {
@@ -1620,6 +1611,24 @@
         }
       }
     },
+    "SYNCING_USER_DATA" : {
+      "comment" : "Loading screen - Syncing user data text",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "SYNCING USER DATA…"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "사용자 데이터 동기화 중..."
+          }
+        }
+      }
+    },
     "ULTIMATE_NUCLEAR_ACTIVATED" : {
       "comment" : "Ultimate Skill - Nuclear Attack Activation",
       "extractionState" : "manual",
@@ -1695,16 +1704,23 @@
     "가격:" : {
 
     },
-    "네모 구출 0/100" : {
+    "네모 구출 %lld/%lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "네모 구출 %1$lld/%2$lld"
+          }
+        }
+      }
+    },
+    "네모 구출 로딩중..." : {
 
     },
     "네모나라의 수호자" : {
 
     },
     "딱총나무 지팡이" : {
-
-    },
-    "마법사" : {
 
     },
     "무기 효과" : {

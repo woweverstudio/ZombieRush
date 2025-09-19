@@ -164,6 +164,48 @@ class JobsStateManager {
         print("⚔️ Jobs: 로그아웃 완료")
     }
 
+    // MARK: - Computed Properties for UI
+
+    /// 현재 선택된 직업의 스탯 정보
+    var currentJobStats: JobStats? {
+        guard let selectedJob = currentJobs?.selectedJob else {
+            return nil
+        }
+        return JobStats.getStats(for: selectedJob)
+    }
+
+    /// 현재 선택된 직업의 표시 이름
+    var currentJobName: String {
+        currentJobs?.selectedJobType?.displayName ?? "초보자"
+    }
+
+    /// 현재 선택된 직업 타입
+    var currentJobType: JobType? {
+        currentJobs?.selectedJobType
+    }
+
+    // MARK: - Individual Stat Properties (No Optional Chaining in Views)
+
+    /// 현재 직업의 체력 (기본값: 100)
+    var hp: Int {
+        currentJobStats?.hp ?? 100
+    }
+
+    /// 현재 직업의 에너지 (기본값: 50)
+    var energy: Int {
+        currentJobStats?.energy ?? 50
+    }
+
+    /// 현재 직업의 이동속도 (기본값: 10)
+    var move: Int {
+        currentJobStats?.move ?? 10
+    }
+
+    /// 현재 직업의 공격속도 (기본값: 10)
+    var attackSpeed: Int {
+        currentJobStats?.attackSpeed ?? 10
+    }
+
     // MARK: - Private Methods
 
     /// 직업 조회
