@@ -3,6 +3,7 @@ import Foundation
 // MARK: - Route Enum (Associated Values 추가)
 enum Route: Hashable {
     case loading
+    case serviceUnavailable
     case story
     case main
     case game
@@ -15,6 +16,8 @@ enum Route: Hashable {
         switch self {
         case .loading:
             return "LOADING..."
+        case .serviceUnavailable:
+            return "SERVICE UNAVAILABLE"
         case .story:
             return "STORY"
         case .main:
@@ -35,6 +38,7 @@ enum Route: Hashable {
     var identifier: String {
         switch self {
         case .loading: return "loading"
+        case .serviceUnavailable: return "service_unavailable"
         case .story: return "story"
         case .main: return "main"
         case .game: return "game"

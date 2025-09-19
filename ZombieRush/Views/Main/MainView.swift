@@ -15,7 +15,7 @@ struct MainView: View {
         if !gameKitManager.isAuthenticated {
             // 로그인 안됨
             return TextConstants.GameCenter.GameStartTooltips.notLoggedIn
-        } else if let playerRank = gameKitManager.playerRank, playerRank <= 3 {
+        } else if true {
             // 3등 안에 들었음
             return TextConstants.GameCenter.GameStartTooltips.top3
         } else {
@@ -103,40 +103,6 @@ struct MainView: View {
             }
             .padding(.vertical, 24)
             .padding(.horizontal, isPhoneSize ? 16 : 24)
-        }
-        .onAppear {
-            checkAndLoadData()
-        }
-    }
-
-    private func checkAndLoadData() {
-        if gameKitManager.topThreeEntries.isEmpty || gameKitManager.playerScore == 0 {
-            gameKitManager.loadInitialData {
-                isDataLoaded = true
-            }
-        } else {
-            isDataLoaded = true
-        }
-    }
-
-    private func refreshData() {
-        // 3초 제한 체크
-        let currentTime = Date()
-        if let lastTime = lastRefreshTime,
-           currentTime.timeIntervalSince(lastTime) < 3.0 {
-            // 3초가 지나지 않았으면 무시
-            return
-        }
-
-        // 마지막 새로고침 시간 업데이트
-        lastRefreshTime = currentTime
-
-        // 캐시 초기화 후 데이터 새로고침
-        gameKitManager.refreshData {
-            // 데이터 새로고침 완료
-            isDataLoaded = true
-
-            // 새로고침 완료 피드백 (선택사항)
         }
     }
 }

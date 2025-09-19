@@ -63,6 +63,9 @@ final class AppRouter {
         switch route {
         case .loading, .story:
             AudioManager.shared.playStoryMusic()
+        case .serviceUnavailable:
+            // 서비스 이용 불가 화면에서는 배경음악 재생하지 않음
+            AudioManager.shared.stopBackgroundMusic()
         case .main, .settings, .leaderboard:
             AudioManager.shared.playMainMenuMusic()
         case .market:

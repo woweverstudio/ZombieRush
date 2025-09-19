@@ -15,10 +15,17 @@ struct TextConstants {
         static let goToAppStore = NSLocalizedString("GO_TO_APP_STORE", comment: "Force update screen - Go to App Store button")
     }
 
+    // MARK: - Service Unavailable
+    struct ServiceUnavailable {
+        static let title = NSLocalizedString("SERVICE_UNAVAILABLE_TITLE", comment: "Service unavailable screen - Title")
+        static let message = NSLocalizedString("SERVICE_UNAVAILABLE_MESSAGE", comment: "Service unavailable screen - Message")
+    }
+
     // MARK: - Loading Screen
     struct Loading {
         static let checkingVersion = NSLocalizedString("CHECKING_VERSION", comment: "Loading screen - Version check in progress")
         static let loadingData = NSLocalizedString("LOADING_DATA", comment: "Loading screen - Loading data text")
+        static let syncingUserData = NSLocalizedString("SYNCING_USER_DATA", comment: "Loading screen - Loading game data from server")
         static let readyToPlay = NSLocalizedString("READY_TO_PLAY", comment: "Loading screen - Ready to play text")
     }
 

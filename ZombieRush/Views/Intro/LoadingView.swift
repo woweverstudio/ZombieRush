@@ -1,12 +1,45 @@
 import SwiftUI
 
 // MARK: - Loading View
+
+/// 로딩 단계 정의
+enum LoadingStage: Int, CaseIterable {
+    case versionCheck = 0
+    case gameCenterAuth
+    case dataLoading
+    case completed
+
+    var progress: Double {
+        switch self {
+        case .versionCheck: return 0.0
+        case .gameCenterAuth: return 0.33
+        case .dataLoading: return 0.66
+        case .completed: return 1.0
+        }
+    }
+
+    var message: String {
+        switch self {
+        case .versionCheck: return TextConstants.Loading.checkingVersion
+        case .gameCenterAuth: return TextConstants.Loading.loadingData
+        case .dataLoading: return TextConstants.Loading.syncingUserData
+        case .completed: return TextConstants.Loading.readyToPlay
+        }
+    }
+}
+
 struct LoadingView: View {
     @Environment(GameKitManager.self) var gameKitManager
     @Environment(GameStateManager.self) var gameStateManager
+    @Environment(UserStateManager.self) var userStateManager
+    @Environment(StatsStateManager.self) var statsStateManager
+    @Environment(SpiritsStateManager.self) var spiritsStateManager
+    @Environment(JobsStateManager.self) var jobsStateManager
     @Environment(AppRouter.self) var router
 
+    @State private var currentStage: LoadingStage = .versionCheck
     @State private var progress: Double = 0.0
+    @State private var isLoading = true
     @State private var versionManager = VersionManager.shared
 
     var body: some View {
@@ -51,39 +84,49 @@ struct LoadingView: View {
         .onAppear {
             startLoadingProcess()
         }
-        .fullScreenCover(isPresented: .constant(versionManager.shouldForceUpdate)) {
+        .fullScreenCover(isPresented: .constant(versionManager.shouldForceUpdate && !isLoading)) {
             // 강제 업데이트 화면 (닫을 수 없음)
             ForceUpdateView()
+        }
+        .fullScreenCover(isPresented: .constant(!versionManager.isServiceAvailable && versionManager.hasCheckedVersion && !isLoading)) {
+            // 서비스 이용 불가 화면
+            ServiceUnavailableView()
         }
     }
 
     private func getLoadingText() -> String {
-        // 버전 체크가 완료되지 않았으면 버전 체크중 표시
-        if !versionManager.hasCheckedVersion {
-            return TextConstants.Loading.checkingVersion
-        }
-
-        // GameKit 로딩 상태 확인
-        if gameKitManager.isLoading {
-            return TextConstants.Loading.loadingData
-        } else {
-            return TextConstants.Loading.readyToPlay
-        }
+        return currentStage.message
     }
 
     private func startLoadingProcess() {
-        // 1. 먼저 버전 체크 수행
         Task {
+            // 단계 1: 버전 체크 (서비스 체크 포함)
+            await updateStage(to: .versionCheck)
             await versionManager.checkAppVersion()
 
-            // 2. 버전 체크 완료 후 처리
-            if versionManager.shouldForceUpdate {
-                // 업데이트가 필요하면 여기서 끝남 (ForceUpdateView가 표시됨)
+            // 서비스 불가 또는 강제 업데이트 체크
+            if !versionManager.isServiceAvailable {
+                isLoading = false
                 return
             }
 
-        // 3. 업데이트가 필요 없으면 GameKit 로딩 진행
-        await proceedWithGameKitLoading()
+            if versionManager.shouldForceUpdate {
+                isLoading = false
+                return
+            }
+
+            // 단계 2: Game Center 인증
+            await updateStage(to: .gameCenterAuth)
+            await proceedWithGameKitLoading()
+        }
+    }
+
+    private func updateStage(to newStage: LoadingStage) async {
+        await MainActor.run {
+            currentStage = newStage
+            withAnimation(.easeInOut(duration: 0.5)) {
+                progress = newStage.progress
+            }
         }
     }
 
@@ -91,24 +134,55 @@ struct LoadingView: View {
         // GameKit 뷰 컨트롤러 처리 설정
         setupGameKitCallbacks()
 
-        // GameKit 데이터 로딩 시작
-        gameKitManager.loadInitialData {
-            // 데이터 로드 완료
+        // GameKit 데이터 로딩 대기 (async 함수 사용)
+        await gameKitManager.loadInitialDataAsync()
 
-            // 데이터 로딩 완료 후 프로그레스 바 채우기
-            withAnimation(.easeInOut(duration: 0.5)) {
-                self.progress = 1.0
-            }
+        // 단계 3: Supabase 데이터 로딩 (사용자 + 스탯)
+        await updateStage(to: .dataLoading)
+        await loadUserDataAndStats()
+    }
 
-            // 프로그레스 바 애니메이션 완료 후 다음 화면으로 이동
+    private func loadUserDataAndStats() async {
+        // GameKit에서 얻은 playerID와 nickname으로 데이터 로드/생성
+        let playerID = gameKitManager.playerID
+        let nickname = gameKitManager.playerDisplayName
+
+        guard !playerID.isEmpty else {
+            print("⚠️ 로딩: playerID가 비어있음")
+            isLoading = false
+            return
+        }
+
+        // 사용자 데이터, 스탯 데이터, 정령 데이터, 직업 데이터 동시에 로드
+        async let userTask: () = userStateManager.loadOrCreateUser(playerID: playerID, nickname: nickname)
+        async let statsTask: () = statsStateManager.loadOrCreateStats(playerID: playerID)
+        async let spiritsTask: () = spiritsStateManager.loadOrCreateSpirits(playerID: playerID)
+        async let jobsTask: () = jobsStateManager.loadOrCreateJobs(playerID: playerID)
+
+        // 네 작업 모두 완료될 때까지 대기
+        await userTask
+        await statsTask
+        await spiritsTask
+        await jobsTask
+
+        // 단계 4: 완료
+        await updateStage(to: .completed)
+        isLoading = false
+
+        // 완료 후 다음 화면으로 이동
+        await MainActor.run {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                if router.currentRoute == .loading {
+                if self.router.currentRoute == .loading {
                     // 앱 처음 실행인지 확인
                     let hasSeenStory = UserDefaults.standard.bool(forKey: "hasSeenStory")
 
                     if hasSeenStory {
                         // 이미 본 적이 있으면 메인 화면으로 이동
                         self.router.navigate(to: .main)
+                        userStateManager.printCurrentUser()
+                        statsStateManager.printCurrentStats()
+                        spiritsStateManager.printCurrentSpirits()
+                        jobsStateManager.printCurrentJobs()
                     } else {
                         // 처음이면 스토리 화면으로 이동
                         self.router.navigate(to: .story)
@@ -136,11 +210,6 @@ struct LoadingView: View {
                 rootViewController.dismiss(animated: true)
             }
         }
-
-        // 인증 완료 이벤트 클로저 설정
-        gameKitManager.onAuthenticationCompleted = {
-            // 필요한 경우 추가 로직 수행 가능
-        }
     }
 }
 
@@ -148,5 +217,9 @@ struct LoadingView: View {
 #Preview {
     LoadingView()
         .environment(GameKitManager())
+        .environment(UserStateManager())
+        .environment(StatsStateManager())
+        .environment(SpiritsStateManager())
+        .environment(JobsStateManager())
         .environment(AppRouter())
 }

@@ -423,31 +423,8 @@ class GameScene: SKScene {
         hideAllGameUI()
         clearGameNodes()
 
-        // Game Center에 점수 제출
-        Task {
-            let playTime = Int(gameStateManager.getPlayTime())
-            let score = gameStateManager.getScore()
-            
-            let points = ScoreEncodingUtils.encodeScore(timeInSeconds: playTime, zombieKills: score)
-            
-            var success = false
-            
-            do {
-                try await gameKitManager.submitScore(points)
-                success = true
-            } catch {
-                print(error.localizedDescription)
-                success = false
-            }
-            
-            DispatchQueue.main.async { [weak self] in
-                self?.appRouter.showGameOver(
-                    playTime: playTime,
-                    score: score,
-                    success: success
-                )
-            }
-        }
+        // Game Center에 점수 제출 (삭제함 더이상 필요없음)
+        
     }
 
     func clearGameNodes() {

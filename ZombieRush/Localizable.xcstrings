@@ -4,25 +4,13 @@
     "" : {
 
     },
-    "-" : {
-
-    },
-    "#%lld" : {
-
-    },
     "%@:" : {
 
     },
     "%lld" : {
 
     },
-    "🏆" : {
-
-    },
     "2,500" : {
-
-    },
-    "5" : {
 
     },
     "APP_TITLE" : {
@@ -57,6 +45,24 @@
           "stringUnit" : {
             "state" : "needs_review",
             "value" : "버전 체크중..."
+          }
+        }
+      }
+    },
+    "SYNCING_USER_DATA" : {
+      "comment" : "Loading screen - Syncing user data text",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "SYNCING USER DATA…"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "사용자 데이터 동기화 중..."
           }
         }
       }
@@ -925,9 +931,6 @@
         }
       }
     },
-    "Lv" : {
-
-    },
     "Lv. 1" : {
 
     },
@@ -1343,6 +1346,42 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "다시 시도"
+          }
+        }
+      }
+    },
+    "SERVICE_UNAVAILABLE_MESSAGE" : {
+      "comment" : "Service unavailable screen - Message",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "We’ll reopen the battlefield very soon.\n👉 Please close the app and come back later!"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "곧 다시 전장을 열테니 조금만 기다려 주세요.\n👉 앱을 닫고 잠시 후 다시 도전해 주세요!"
+          }
+        }
+      }
+    },
+    "SERVICE_UNAVAILABLE_TITLE" : {
+      "comment" : "Service unavailable screen - Title",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "🚧 “Emergency Maintenance! ⚡”"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "🚧 “긴급 점검 중! ⚡”"
           }
         }
       }

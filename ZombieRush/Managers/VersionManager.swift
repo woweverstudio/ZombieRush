@@ -16,6 +16,7 @@ class VersionManager {
     var shouldForceUpdate = false
     var hasCheckedVersion = false
     var isCheckingVersion = false
+    var isServiceAvailable = true
 
     // Supabase 설정 - block_buster 프로젝트
     private let supabase = SupabaseClient(
@@ -25,7 +26,7 @@ class VersionManager {
 
     // MARK: - Public Methods
 
-    /// 앱 시작 시 버전 체크 수행
+    /// 앱 시작 시 서비스 사용 가능 여부와 버전 체크 수행
     func checkAppVersion() async {
         guard !hasCheckedVersion else { return }
 
@@ -33,25 +34,49 @@ class VersionManager {
         defer { isCheckingVersion = false }
 
         do {
-            // Supabase에서 버전 정보 가져오기
+            // Supabase에서 리모트 설정 정보 한 번만 가져오기
             let config = try await fetchRemoteConfig()
 
-            // 버전 비교 및 강제 업데이트 결정
-            if let forceUpdateVersion = config["force_update_version"] as? String {
-                shouldForceUpdate = needsForceUpdate(currentVersion: getCurrentAppVersion(),
-                                                   forceUpdateVersion: forceUpdateVersion)
+            // 1. 서비스 사용 가능 여부 체크 (캐시된 값 사용)
+            checkServiceAvailability(from: config)
+
+            // 2. 서비스가 사용 가능할 때만 버전 체크 진행 (캐시된 값 사용)
+            if isServiceAvailable {
+                checkVersionRequirements(from: config)
             }
 
             hasCheckedVersion = true
 
         } catch {
-            // 네트워크 실패 등 조회 실패시 그냥 무시하고 진행
-            print("⚠️ 버전 체크 실패: \(error.localizedDescription)")
+            // 네트워크 실패 등 조회 실패시 서비스 사용 가능으로 간주하고 진행
+            print("⚠️ 리모트 설정 조회 실패: \(error.localizedDescription)")
+            isServiceAvailable = true
             hasCheckedVersion = true
         }
     }
 
-    // MARK: - Public Methods
+    /// 서비스 사용 가능 여부 체크 (캐시된 설정 사용)
+    private func checkServiceAvailability(from config: [String: Any]) {
+        if let serviceAvailable = config["is_service_available"] as? String {
+            isServiceAvailable = serviceAvailable.lowercased() == "true"
+            print("📱 Version: 서비스 상태 확인 - \(isServiceAvailable ? "사용 가능" : "사용 불가")")
+        } else {
+            print("⚠️ 서비스 상태 값이 없음, 기본적으로 사용 가능으로 설정")
+            isServiceAvailable = true
+        }
+    }
+
+    /// 버전 요구사항 체크 (캐시된 설정 사용)
+    private func checkVersionRequirements(from config: [String: Any]) {
+        if let forceUpdateVersion = config["force_update_version"] as? String {
+            shouldForceUpdate = needsForceUpdate(currentVersion: getCurrentAppVersion(),
+                                               forceUpdateVersion: forceUpdateVersion)
+            print("📱 Version: 버전 체크 완료 - 강제 업데이트: \(shouldForceUpdate)")
+        } else {
+            print("⚠️ 강제 업데이트 버전 값이 없음, 업데이트 필요 없음으로 설정")
+            shouldForceUpdate = false
+        }
+    }
 
     // MARK: - Private Methods
 
