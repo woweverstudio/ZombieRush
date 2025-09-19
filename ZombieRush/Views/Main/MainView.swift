@@ -194,7 +194,7 @@ struct PlayerInfoCard: View {
                         .foregroundColor(.yellow)
                         .font(.system(size: 16))
 
-                    if let levelInfo = userStateManager.currentLevel {
+                    if let levelInfo = userStateManager.level {
                         Text("Lv. \(levelInfo.currentLevel)")
                             .font(.system(size: 16, weight: .bold, design: .monospaced))
                             .foregroundColor(.white)
@@ -209,7 +209,7 @@ struct PlayerInfoCard: View {
                 
                 // 경험치 바
                 VStack(alignment: .leading, spacing: 8) {
-                    if let levelInfo = userStateManager.currentLevel {
+                    if let levelInfo = userStateManager.level {
                         let currentLevelExp = levelInfo.currentExp - levelInfo.levelMinExp
                         let requiredExp = levelInfo.expToNextLevel
                         let percentage = Int(levelInfo.progress * 100)
@@ -356,6 +356,7 @@ struct JobDetailView: View {
             Image("sample")
                 .resizable()
                 .aspectRatio(contentMode: .fit)
+                .frame(maxWidth: 100)
                 
             // Job 이름 (간단하게 표시)
             Text(jobsStateManager.currentJobName)
@@ -373,16 +374,6 @@ struct SelectedWeaponCard: View {
         ZStack {
             CardBackground()
 
-            VStack {
-                Image("sample_weapon")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    
-                Text("딱총나무 지팡이")
-                    .font(.system(size: 16, weight: .bold, design: .monospaced))
-            }
-            .padding()
         }
     }
 }

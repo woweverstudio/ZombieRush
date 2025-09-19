@@ -19,14 +19,6 @@ class UserStateManager {
     var isLoading = false
     var error: Error?
 
-    // MARK: - Level Management
-
-    /// 현재 레벨 정보 (경험치로부터 계산된 값)
-    var currentLevel: Level? {
-        guard let user = currentUser else { return nil }
-        return Level(currentExp: user.exp)
-    }
-
     // Supabase 클라이언트
     private let supabase: SupabaseClient
 
@@ -41,8 +33,10 @@ class UserStateManager {
         currentUser?.nickname ?? ""
     }
     
-    var level: Int {
-        currentUser?.level ?? 1
+    /// 현재 레벨 정보 (경험치로부터 계산된 값)
+    var level: Level? {
+        guard let user = currentUser else { return nil }
+        return Level(currentExp: user.exp)
     }
     
     var experience: Int {
@@ -121,7 +115,7 @@ class UserStateManager {
             print("📱 =================================")
 
             // 레벨 정보도 출력
-            if let level = currentLevel {
+            if let level {
                 print("📱 Level Info: \(level.levelInfo)")
                 print("📱 Progress: \(level.progressPercentage)")
                 print("📱 To Next Level: \(level.remainingExp) EXP")
@@ -175,17 +169,17 @@ class UserStateManager {
 
     /// 현재 레벨 진행률 (0.0 ~ 1.0)
     var levelProgress: Double {
-        return currentLevel?.progress ?? 0.0
+        return level?.progress ?? 0.0
     }
 
     /// 다음 레벨까지 남은 경험치
     var expToNextLevel: Int {
-        return currentLevel?.remainingExp ?? 0
+        return level?.remainingExp ?? 0
     }
 
     /// 레벨 업 가능 여부 확인
     func canLevelUp(withAdditionalExp exp: Int) -> Bool {
-        guard let currentLevel = currentLevel else { return false }
+        guard let currentLevel = level else { return false }
         let result = currentLevel.addExperience(exp)
         return result.leveledUp
     }
