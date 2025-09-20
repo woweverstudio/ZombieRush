@@ -43,6 +43,10 @@ class UserStateManager {
         currentUser?.exp ?? 0
     }
 
+    var remainingPoints: Int {
+        currentUser?.remainingPoints ?? 0
+    }
+
     // MARK: - Public Methods
 
     /// Game Center playerID를 사용해 사용자 데이터 로드 또는 생성
@@ -108,6 +112,7 @@ class UserStateManager {
             print("📱 Level: \(user.level)")
             print("📱 EXP: \(user.exp)")
             print("📱 Nemo Fruit: \(user.nemoFruit)")
+            print("📱 Remaining Points: \(user.remainingPoints)")
             print("📱 Cheer Buff: \(user.cheerBuff)")
             print("📱 Profile Photo: \(userImage != nil ? "✅" : "❌")")
             print("📱 Created At: \(user.createdAt)")
@@ -147,7 +152,11 @@ class UserStateManager {
         // 사용자 정보 업데이트
         var updatedUser = currentUser
         updatedUser.exp = newLevel.currentExp
-        // level은 exp로부터 자동 계산됨
+
+        // 레벨업 시 remaining_points 3개씩 증가
+        if leveledUp {
+            updatedUser.remainingPoints += levelsGained * 3
+        }
 
         // DB 업데이트
         do {
@@ -156,6 +165,7 @@ class UserStateManager {
 
             if leveledUp {
                 print("📱 UserState: 레벨 업! \(currentUser.level) → \(newLevel.currentLevel) (\(levelsGained)레벨 상승)")
+                print("📱 UserState: 남은 포인트 증가: \(savedUser.remainingPoints)개")
             }
             print("📱 UserState: 경험치 추가 완료 - 총 EXP: \(newLevel.currentExp)")
 
@@ -182,6 +192,28 @@ class UserStateManager {
         guard let currentLevel = level else { return false }
         let result = currentLevel.addExperience(exp)
         return result.leveledUp
+    }
+
+    /// 남은 포인트 소비
+    func consumeRemainingPoints(_ points: Int) async -> Bool {
+        guard let currentUser = currentUser, currentUser.remainingPoints >= points else {
+            print("📱 UserState: 포인트가 부족합니다.")
+            return false
+        }
+
+        var updatedUser = currentUser
+        updatedUser.remainingPoints -= points
+
+        do {
+            let savedUser = try await updateUserInDatabase(updatedUser)
+            self.currentUser = savedUser
+            print("📱 UserState: 포인트 소비 완료 - 남은 포인트: \(savedUser.remainingPoints)")
+            return true
+        } catch {
+            self.error = error
+            print("📱 UserState: 포인트 소비 실패 - \(error.localizedDescription)")
+            return false
+        }
     }
 
     // MARK: - Private Methods
@@ -220,6 +252,7 @@ class UserStateManager {
                 "level": String(user.level),
                 "exp": String(user.exp),
                 "nemo_fruit": String(user.nemoFruit),
+                "remaining_points": String(user.remainingPoints),
                 "cheer_buff": user.cheerBuff ? "true" : "false"
             ])
             .eq("player_id", value: user.playerId)

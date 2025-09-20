@@ -7,6 +7,8 @@ struct MainView: View {
     @Environment(GameKitManager.self) var gameKitManager
     @Environment(GameStateManager.self) var gameStateManager
     @Environment(JobsStateManager.self) var jobsStateManager
+    @Environment(StatsStateManager.self) var statsStateManager
+    @Environment(UserStateManager.self) var userStateManager
 
     @State private var isDataLoaded: Bool = false
     @State private var lastRefreshTime: Date? = nil
@@ -43,8 +45,8 @@ struct MainView: View {
                     // 현재 직업 정보 (JobsStateManager의 탭 상태 사용)
                     JobCard()
 
-                    // 선택된 무기 정보
-                    SelectedWeaponCard()
+                    // 스탯 관리 카드
+                    StatsCard()
                 }
 
                 // 메뉴 버튼들과 게임 시작
@@ -368,13 +370,122 @@ struct JobDetailView: View {
     }
 }
 
-// MARK: - Selected Weapon Card
-struct SelectedWeaponCard: View {
+// MARK: - Stats Card
+struct StatsCard: View {
+    @Environment(StatsStateManager.self) var statsStateManager
+    @Environment(UserStateManager.self) var userStateManager
+
     var body: some View {
         ZStack {
             CardBackground()
 
+            VStack(spacing: 8) {
+                // 타이틀
+                // 남은 포인트 표시
+                HStack(spacing: 4) {
+                    Image(systemName: "star.fill")
+                        .foregroundColor(.yellow)
+                        .font(.system(size: 12))
+
+                    Text("남은 포인트: \(userStateManager.remainingPoints)")
+                        .font(.system(size: 12, weight: .medium, design: .monospaced))
+                        .foregroundColor(.white.opacity(0.8))
+                }
+
+                // 스텟 그리드 (3x2)
+                LazyVGrid(columns: [
+                    GridItem(.flexible(), spacing: 8),
+                    GridItem(.flexible(), spacing: 8),
+                    GridItem(.flexible(), spacing: 8)
+                ], spacing: 8) {
+                    // 첫 번째 행 (3개)
+                    StatMiniCard(
+                        icon: "heart.fill",
+                        label: "HP 회복",
+                        value: statsStateManager.currentStats?.hpRecovery ?? 0,
+                        color: .red
+                    )
+
+                    StatMiniCard(
+                        icon: "figure.run",
+                        label: "이동속도",
+                        value: statsStateManager.currentStats?.moveSpeed ?? 0,
+                        color: .green
+                    )
+
+                    StatMiniCard(
+                        icon: "bolt.fill",
+                        label: "에너지 회복",
+                        value: statsStateManager.currentStats?.energyRecovery ?? 0,
+                        color: .blue
+                    )
+
+                    // 두 번째 행 (2개)
+                    StatMiniCard(
+                        icon: "target",
+                        label: "공격속도",
+                        value: statsStateManager.currentStats?.attackSpeed ?? 0,
+                        color: .yellow
+                    )
+
+                    StatMiniCard(
+                        icon: "building.columns",
+                        label: "토템",
+                        value: statsStateManager.currentStats?.totemCount ?? 0,
+                        color: .orange
+                    )
+
+                    // 빈 공간 (3x2 그리드를 맞추기 위해)
+                    StatMiniCard(
+                        icon: "sparkles",
+                        label: "네모의 응원",
+                        value: statsStateManager.currentStats?.totemCount ?? 0,
+                        color: .orange
+                    )
+                }                
+            }
+            .padding()
         }
+    }
+}
+
+// MARK: - Mini Stat Card Component
+struct StatMiniCard: View {
+    let icon: String
+    let label: String
+    let value: Int
+    let color: Color
+
+    var body: some View {
+        VStack(spacing: 4) {
+            // 아이콘
+            Image(systemName: icon)
+                .foregroundColor(color)
+                .font(.system(size: 12, weight: .bold))
+
+            // 라벨
+            Text(label)
+                .font(.system(size: 10, design: .monospaced))
+                .foregroundColor(.white.opacity(0.7))
+                .multilineTextAlignment(.center)
+                .lineLimit(2)
+                .minimumScaleFactor(0.8)
+
+            // 값
+            Text("\(value)")
+                .font(.system(size: 10, weight: .bold, design: .monospaced))
+                .foregroundColor(.white)
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 6)
+        .background(
+            RoundedRectangle(cornerRadius: 6)
+                .fill(Color.white.opacity(0.05))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 6)
+                        .stroke(color.opacity(0.3), lineWidth: 0.5)
+                )
+        )
     }
 }
 
