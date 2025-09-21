@@ -68,7 +68,7 @@ final class AppRouter {
             AudioManager.shared.stopBackgroundMusic()
         case .main, .settings, .leaderboard:
             AudioManager.shared.playMainMenuMusic()
-        case .market:
+        case .market, .myInfo:
             AudioManager.shared.playMarketMusic()
         case .game:
             AudioManager.shared.playGameMusic()

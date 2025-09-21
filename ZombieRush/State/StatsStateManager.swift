@@ -50,92 +50,7 @@ class StatsStateManager {
         }
     }
 
-    /// 스탯 데이터 업데이트
-    func updateStats(_ updates: Stats) async {
-        guard let stats = currentStats else { return }
-
-        do {
-            currentStats = try await updateStatsInDatabase(stats)
-            print("📊 Stats: 스탯 업데이트 성공")
-        } catch {
-            self.error = error
-            print("📊 Stats: 스탯 업데이트 실패 - \(error.localizedDescription)")
-        }
-    }
-
-    /// 특정 스탯 값 업데이트
-    func updateStat(type: StatType, value: Int) async {
-        guard var stats = currentStats else { return }
-
-        switch type {
-        case .hpRecovery:
-            stats.hpRecovery = value
-        case .moveSpeed:
-            stats.moveSpeed = value
-        case .energyRecovery:
-            stats.energyRecovery = value
-        case .attackSpeed:
-            stats.attackSpeed = value
-        case .totemCount:
-            stats.totemCount = value
-        }
-
-        await updateStats(stats)
-    }
-
-    /// 스탯 값 증가
-    func increaseStat(type: StatType, amount: Int = 1) async {
-        guard var stats = currentStats else { return }
-
-        switch type {
-        case .hpRecovery:
-            stats.hpRecovery += amount
-        case .moveSpeed:
-            stats.moveSpeed += amount
-        case .energyRecovery:
-            stats.energyRecovery += amount
-        case .attackSpeed:
-            stats.attackSpeed += amount
-        case .totemCount:
-            stats.totemCount += amount
-        }
-
-        await updateStats(stats)
-    }
-
-    /// 스탯 값 감소
-    func decreaseStat(type: StatType, amount: Int = 1) async {
-        guard var stats = currentStats else { return }
-
-        switch type {
-        case .hpRecovery:
-            stats.hpRecovery = max(0, stats.hpRecovery - amount)
-        case .moveSpeed:
-            stats.moveSpeed = max(0, stats.moveSpeed - amount)
-        case .energyRecovery:
-            stats.energyRecovery = max(0, stats.energyRecovery - amount)
-        case .attackSpeed:
-            stats.attackSpeed = max(0, stats.attackSpeed - amount)
-        case .totemCount:
-            stats.totemCount = max(0, stats.totemCount - amount)
-        }
-
-        await updateStats(stats)
-    }
-
-    /// 스탯 초기화
-    func resetStats() {
-        guard var stats = currentStats else { return }
-        stats.hpRecovery = 0
-        stats.moveSpeed = 0
-        stats.energyRecovery = 0
-        stats.attackSpeed = 0
-        stats.totemCount = 0
-
-        Task {
-            await updateStats(stats)
-        }
-    }
+    // MARK: - 디버깅 및 기타
 
     /// 현재 스탯 정보 출력 (테스트용)
     func printCurrentStats() {
@@ -154,6 +69,40 @@ class StatsStateManager {
 
         if let error = error {
             print("📊 Stats: 마지막 에러 - \(error.localizedDescription)")
+        }
+    }
+
+    // MARK: - 스탯 업그레이드
+
+    /// 스탯 업그레이드
+    func upgradeStat(_ statType: StatType) async {
+        guard var stats = currentStats else {
+            print("📊 Stats: 업그레이드 실패 - 스탯 데이터가 없습니다")
+            return
+        }
+
+        // 해당 스텟 값 증가
+        switch statType {
+        case .hpRecovery:
+            stats.hpRecovery += 1
+        case .moveSpeed:
+            stats.moveSpeed += 1
+        case .energyRecovery:
+            stats.energyRecovery += 1
+        case .attackSpeed:
+            stats.attackSpeed += 1
+        case .totemCount:
+            stats.totemCount += 1
+        }
+
+        // 데이터베이스 업데이트 및 로컬 상태 업데이트
+        do {
+            let updatedStats = try await updateStatsInDatabase(stats)
+            currentStats = updatedStats
+            print("📊 Stats: \(statType.displayName) 업그레이드 완료 (+1)")
+        } catch {
+            self.error = error
+            print("📊 Stats: \(statType.displayName) 업그레이드 실패 - \(error.localizedDescription)")
         }
     }
 
@@ -213,10 +162,53 @@ class StatsStateManager {
 }
 
 /// 스탯 타입 열거형
-enum StatType {
+enum StatType: String, CaseIterable {
     case hpRecovery
     case moveSpeed
     case energyRecovery
     case attackSpeed
     case totemCount
+}
+
+// MARK: - StatType Extensions
+extension StatType {
+    var displayName: String {
+        switch self {
+        case .hpRecovery: return "HP 회복"
+        case .moveSpeed: return "이동속도"
+        case .energyRecovery: return "에너지 회복"
+        case .attackSpeed: return "공격속도"
+        case .totemCount: return "토템"
+        }
+    }
+
+    var iconName: String {
+        switch self {
+        case .hpRecovery: return "heart.fill"
+        case .moveSpeed: return "figure.run"
+        case .energyRecovery: return "bolt.fill"
+        case .attackSpeed: return "target"
+        case .totemCount: return "building.columns"
+        }
+    }
+
+    var color: Color {
+        switch self {
+        case .hpRecovery: return .red
+        case .moveSpeed: return .green
+        case .energyRecovery: return .blue
+        case .attackSpeed: return .yellow
+        case .totemCount: return .orange
+        }
+    }
+
+    var description: String {
+        switch self {
+        case .hpRecovery: return "시간당 체력 회복량"
+        case .moveSpeed: return "플레이어 이동 속도"
+        case .energyRecovery: return "시간당 에너지 회복량"
+        case .attackSpeed: return "무기 공격 속도"
+        case .totemCount: return "배치 가능한 토템 수"
+        }
+    }
 }

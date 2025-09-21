@@ -1,5 +1,11 @@
 import Foundation
 
+// MARK: - 내 정보 카테고리
+enum MyInfoCategory: String, CaseIterable {
+    case jobs = "직업"
+    case stats = "스텟"
+}
+
 // MARK: - Route Enum (Associated Values 추가)
 enum Route: Hashable {
     case loading
@@ -10,6 +16,7 @@ enum Route: Hashable {
     case settings
     case leaderboard
     case market
+    case myInfo(category: MyInfoCategory)
     case gameOver(playTime: Int, score: Int, success: Bool)
 
     var title: String {
@@ -30,6 +37,8 @@ enum Route: Hashable {
             return "LEADERBOARD"
         case .market:
             return "MARKET"
+        case .myInfo:
+            return "MYINFO"
         case .gameOver:
             return "GAME OVER"
         }
@@ -45,20 +54,8 @@ enum Route: Hashable {
         case .settings: return "settings"
         case .leaderboard: return "leaderboard"
         case .market: return "market"
+        case .myInfo: return "my_info"
         case .gameOver: return "game_over"
         }
-    }
-}
-
-// MARK: - Game Data Transfer Object
-struct GameData {
-    let playTime: Int
-    let score: Int
-    let success: Bool
-    
-    init(playTime: Int = 0, score: Int = 0, success: Bool = false) {
-        self.playTime = playTime
-        self.score = score
-        self.success = success
     }
 }
