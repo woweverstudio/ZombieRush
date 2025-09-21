@@ -939,9 +939,6 @@
         }
       }
     },
-    "MARKET" : {
-
-    },
     "MONTH_APRIL" : {
       "comment" : "Month name - April",
       "extractionState" : "manual",
@@ -1708,9 +1705,6 @@
 
     },
     "남은 포인트: %lld" : {
-
-    },
-    "내 정보" : {
 
     },
     "네모 구출 %lld/%lld" : {

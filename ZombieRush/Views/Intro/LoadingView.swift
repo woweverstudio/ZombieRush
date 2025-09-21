@@ -45,7 +45,7 @@ struct LoadingView: View {
     var body: some View {
         ZStack {
             // 사이버펑크 배경
-            CyberpunkBackground()
+            Background()
 
             VStack(spacing: 30) {
                 Spacer()

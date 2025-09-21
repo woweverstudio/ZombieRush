@@ -22,7 +22,7 @@ struct MyInfoView: View {
     var body: some View {
         ZStack {
             // 사이버펑크 배경
-            CyberpunkBackground()
+            Background()
 
             VStack(spacing: 0) {
                 headerView
@@ -41,35 +41,24 @@ struct MyInfoView: View {
 // MARK: - Sub Views
 extension MyInfoView {
     private var headerView: some View {
-        HStack {
-            // 뒤로가기 버튼
-            IconButton(iconName: "chevron.left", style: .white) {
+        Header(
+            title: "내 정보",
+            badges: currentBadges,
+            onBack: {
                 router.quitToMain()
             }
+        )
+    }
 
-            Spacer()
-
-            // 타이틀
-            Text("내 정보")
-                .font(.system(size: 28, weight: .bold, design: .monospaced))
-                .foregroundColor(Color.dsTextPrimary)
-                .shadow(color: Color.cyan, radius: 10, x: 0, y: 0)
-
-            Spacer()
-
-            // 스텟 포인트 표시 (스텟 카테고리일 때)
-            if selectedCategory == .stats {
-                StatsPointBadge()
-            }
-
-            // 네모열매 개수 표시 (정령 카테고리일 때)
-            if selectedCategory == .spirits {
-                NemoFruitsBadge()
-            }
+    private var currentBadges: [HeaderBadgeType] {
+        switch selectedCategory {
+        case .stats:
+            return [.statsPoints]
+        case .spirits:
+            return [.nemoFruits]
+        default:
+            return []
         }
-        .padding(.horizontal, 20)
-        .padding(.top, 20)
-        .padding(.bottom, 16)
     }
 
     private var leftPanelView: some View {

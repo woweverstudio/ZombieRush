@@ -13,7 +13,7 @@ struct GameOverView: View {
     var body: some View {
         ZStack {
             // 사이버펑크 배경
-            CyberpunkBackground()
+            Background()
 
             VStack {
                 // 우측 상단 X 버튼

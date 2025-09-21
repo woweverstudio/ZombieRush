@@ -60,7 +60,7 @@ struct MarketView: View {
     var body: some View {
         ZStack {
             // 사이버펑크 배경
-            CyberpunkBackground()
+            Background()
 
             VStack(spacing: 0) {
                 headerView
@@ -71,45 +71,13 @@ struct MarketView: View {
 
     // MARK: - Sub Views
     private var headerView: some View {
-        HStack {
-            // 뒤로가기 버튼
-            IconButton(iconName: "chevron.left", style: .white) {
+        Header(
+            title: "MARKET",
+            badges: [.nemoFruits],
+            onBack: {
                 router.quitToMain()
             }
-
-            Spacer()
-
-            // 타이틀
-            Text("MARKET")
-                .font(.system(size: 28, weight: .bold, design: .monospaced))
-                .foregroundColor(Color.dsTextPrimary)
-                .shadow(color: Color.cyan, radius: 10, x: 0, y: 0)
-
-            Spacer()
-
-            // 네모열매 표시
-            HStack(spacing: 8) {
-                Image(systemName: "diamond.fill")
-                    .foregroundColor(Color.dsCoin)
-                    .font(.system(size: 20))
-                Text("\(userStateManager.nemoFruits)")
-                    .font(.system(size: 16, weight: .bold, design: .monospaced))
-                    .foregroundColor(Color.dsCoin)
-            }
-            .padding(.horizontal, 16)
-            .padding(.vertical, 8)
-            .background(
-                RoundedRectangle(cornerRadius: 20)
-                    .fill(Color.dsOverlay)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 20)
-                            .stroke(Color.neonYellow.opacity(0.5), lineWidth: 1)
-                    )
-            )
-        }
-        .padding(.horizontal, 20)
-        .padding(.top, 20)
-        .padding(.bottom, 16)
+        )
     }
 
     private var itemsGridView: some View {

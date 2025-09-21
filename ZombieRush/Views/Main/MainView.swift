@@ -21,7 +21,7 @@ struct MainView: View {
     var body: some View {
         ZStack {
             // 사이버펑크 배경
-            CyberpunkBackground()
+            Background()
 
             HStack(spacing: 12) {
                 // 좌측: 플레이어 정보 통합 카드 (JobsStateManager의 스탯 사용)

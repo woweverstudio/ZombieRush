@@ -19,7 +19,7 @@ struct SettingsView: View {
         
         ZStack {
             // 사이버펑크 배경
-            CyberpunkBackground()
+            Background()
             
             VStack {
                 // 상단 영역 - 제목과 뒤로가기 버튼
@@ -51,25 +51,16 @@ struct SettingsView: View {
                     
                 }
             }
-            .padding()
         }
     }
     
     var headerSection: some View {
-        HStack {
-            // 뒤로가기 버튼
-            BackButton(style: .cyan) { router.goBack() }
-            
-            Spacer()
-            
-            // 설정 타이틀
-            SectionTitle(TextConstants.Settings.title, size: 28)
-            
-            Spacer()
-            
-            BackButton(style: .cyan) { router.goBack() }
-            .opacity(0)
-        }
+        Header(
+            title: TextConstants.Settings.title,
+            onBack: {
+                router.quitToMain()
+            }
+        )
     }
 }
 

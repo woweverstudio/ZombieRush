@@ -15,7 +15,7 @@ struct ForceUpdateView: View {
     var body: some View {
         ZStack {
             // 사이버펑크 배경
-            CyberpunkBackground()
+            Background()
 
             VStack(spacing: 40) {
                 Spacer()

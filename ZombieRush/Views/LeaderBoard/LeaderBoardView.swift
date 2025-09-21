@@ -8,7 +8,7 @@ struct LeaderBoardView: View {
     var body: some View {
         ZStack {
             // 사이버펑크 배경
-            CyberpunkBackground()
+            Background()
 
             VStack(spacing: 0) {
                 // 헤더
@@ -20,8 +20,8 @@ struct LeaderBoardView: View {
     // MARK: - Header Section
     private var headerSection: some View {
         HStack {
-            BackButton(style: .cyan) {
-                router.goBack()
+            IconButton(iconName: "chevron.left", style: .white) {
+                router.quitToMain()
             }
 
             Spacer()
@@ -40,8 +40,8 @@ struct LeaderBoardView: View {
 
             Spacer()
             
-            BackButton(style: .cyan) {
-                
+            IconButton(iconName: "chevron.left", style: .white) {
+                router.quitToMain()
             }
             .hidden()
         }

@@ -1,7 +1,7 @@
 import SwiftUI
 
-// MARK: - Cyberpunk Background Component
-struct CyberpunkBackground: View {
+// MARK: - Background Component
+struct Background: View {
     var body: some View {
         // 선형 그라데이션 배경 (위에서 아래로)
         LinearGradient(
@@ -19,5 +19,5 @@ struct CyberpunkBackground: View {
 
 // MARK: - Preview
 #Preview {
-    CyberpunkBackground()
+    Background()
 }
