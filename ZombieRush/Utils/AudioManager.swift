@@ -10,12 +10,12 @@ import AVFoundation
 
 @Observable
 class AudioManager: NSObject {
-    // 게임 로직에서 사용하므로 싱글턴 유지
+    // 싱글턴
     static let shared = AudioManager()
     
     // MARK: - Properties
     private var backgroundMusicPlayer: AVAudioPlayer?
-    private var buttonSoundPlayer: AVAudioPlayer?
+    private var buttonSoundPlayer: AVAudioPlayer?   // 버튼 사운드를 미리 로드해서 재사용
     private var currentMusicName: String?
     private var currentMusicType: MusicType = .mainMenu
     
@@ -50,6 +50,7 @@ class AudioManager: NSObject {
         
         setupAudioSession()
         setupNotifications()
+        preloadButtonSound()   // 버튼 사운드 미리 로드
         
         if isBackgroundMusicEnabled {
             playBackgroundMusic()
@@ -95,7 +96,7 @@ class AudioManager: NSObject {
         
         let musicName = selectMusicFile(for: type)
         
-        // 같은 음악이 재생 중이면 스킵
+        // 같은 음악이 이미 재생 중이면 스킵
         if currentMusicName == musicName && backgroundMusicPlayer?.isPlaying == true {
             return
         }
@@ -112,19 +113,15 @@ class AudioManager: NSObject {
             let today = Date()
             let calendar = Calendar.current
             let day = calendar.component(.day, from: today)
-
-            if day % 2 == 0 {            
-                return ResourceConstants.Audio.BackgroundMusic.mainMenuTrack
-            } else {
-                return ResourceConstants.Audio.BackgroundMusic.mainMenuTrack2
-            }
+            return (day % 2 == 0)
+                ? ResourceConstants.Audio.BackgroundMusic.mainMenuTrack
+                : ResourceConstants.Audio.BackgroundMusic.mainMenuTrack2
             
         case .market:
             return ResourceConstants.Audio.BackgroundMusic.marketTrack
         case .game:
             return ResourceConstants.Audio.BackgroundMusic.gameTrack
         case .fallback:
-            // 메인 메뉴 음악을 fallback으로 사용
             return ResourceConstants.Audio.BackgroundMusic.mainMenuTrack
         }
     }
@@ -137,26 +134,19 @@ class AudioManager: NSObject {
             return
         }
         
-        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-            do {
-                let player = try AVAudioPlayer(contentsOf: url)
-                player.numberOfLoops = -1
-                player.volume = ResourceConstants.Audio.BackgroundMusic.volume
-                player.prepareToPlay()
-                
-                DispatchQueue.main.async {
-                    guard let self = self else { return }
-                    self.backgroundMusicPlayer = player
-                    self.currentMusicName = musicName
-                    self.currentMusicType = type
-                    player.play()
-                }
-            } catch {
-                if type != .fallback {
-                    DispatchQueue.main.async { [weak self] in
-                        self?.playBackgroundMusic(type: .fallback)
-                    }
-                }
+        do {
+            let player = try AVAudioPlayer(contentsOf: url)
+            player.numberOfLoops = -1
+            player.volume = ResourceConstants.Audio.BackgroundMusic.volume
+            player.prepareToPlay()
+            
+            self.backgroundMusicPlayer = player
+            self.currentMusicName = musicName
+            self.currentMusicType = type
+            player.play()
+        } catch {
+            if type != .fallback {
+                playBackgroundMusic(type: .fallback)
             }
         }
     }
@@ -167,28 +157,28 @@ class AudioManager: NSObject {
         currentMusicName = nil
     }
     
-    // MARK: - Sound Effects (SwiftUI용)
+    // MARK: - Button Sound (Preload + Play)
+    private func preloadButtonSound() {
+        guard let url = Bundle.main.url(forResource: "button", withExtension: "mp3") else { return }
+        do {
+            let player = try AVAudioPlayer(contentsOf: url)
+            player.volume = 0.8
+            player.prepareToPlay()
+            self.buttonSoundPlayer = player
+        } catch {
+            // 로드 실패 시 무시
+        }
+    }
+    
     func playButtonSound() {
         guard isSoundEffectsEnabled else { return }
-        guard let url = Bundle.main.url(forResource: "button", withExtension: "mp3") else { return }
+        guard let player = buttonSoundPlayer else { return }
         
-        // 기존 버튼 사운드가 재생 중이면 정지
-        buttonSoundPlayer?.stop()
-        
-        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-            do {
-                let player = try AVAudioPlayer(contentsOf: url)
-                player.volume = 0.8
-                player.prepareToPlay()
-                
-                DispatchQueue.main.async {
-                    self?.buttonSoundPlayer = player
-                    player.play()
-                }
-            } catch {
-                // 재생 실패 시 무시
-            }
+        if player.isPlaying {
+            player.stop()
         }
+        player.currentTime = 0
+        player.play()
     }
     
     // MARK: - Cleanup

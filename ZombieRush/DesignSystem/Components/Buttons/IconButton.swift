@@ -48,11 +48,8 @@ struct IconButton: View {
 
     var body: some View {
         Button(action: {
-            // 오디오/햅틱은 비동기로 처리 (UI 블로킹 방지)
-            DispatchQueue.global(qos: .userInteractive).async {
-                AudioManager.shared.playButtonSound()
-                HapticManager.shared.playButtonHaptic()
-            }
+            AudioManager.shared.playButtonSound()
+            HapticManager.shared.playButtonHaptic()
 
             // 즉시 액션 실행 (UI 반응성 최우선)
             action()
