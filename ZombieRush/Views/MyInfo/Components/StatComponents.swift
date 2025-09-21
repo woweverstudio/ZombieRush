@@ -8,38 +8,14 @@ struct StatInfoCard: View {
     let onTap: () -> Void
 
     var body: some View {
-        Button(action: onTap) {
-            VStack(spacing: 8) {
-                // 스텟 아이콘
-                Image(systemName: statType.iconName)
-                    .font(.system(size: 24, weight: .bold))
-                    .foregroundColor(statType.color)
-                    .frame(width: 50, height: 50)
-
-                // 스텟 이름
-                Text(statType.displayName)
-                    .font(.system(size: 12, weight: .medium, design: .monospaced))
-                    .foregroundColor(.white)
-                    .multilineTextAlignment(.center)
-                    .lineLimit(2)
-
-                // 현재 값
-                Text("\(currentValue)")
-                    .font(.system(size: 14, weight: .bold, design: .monospaced))
-                    .foregroundColor(statType.color)
-            }
-            .frame(maxWidth: .infinity)
-            .padding(.vertical, 12)
-            .padding(.horizontal, 8)
-            .background(
-                RoundedRectangle(cornerRadius: 8)
-                    .fill(isSelected ? Color.cyan.opacity(0.2) : Color.white.opacity(0.05))
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 8)
-                            .stroke(isSelected ? Color.cyan : Color.white.opacity(0.2), lineWidth: 1)
-                    )
-            )
-        }
+        SelectionInfoCard(
+            title: statType.displayName,
+            iconName: statType.iconName,
+            iconColor: statType.color,
+            value: "\(currentValue)",
+            isSelected: isSelected,
+            action: onTap
+        )
     }
 }
 
@@ -59,7 +35,7 @@ struct StatDetailPanel: View {
 
                 Text(statType.displayName)
                     .font(.system(size: 20, weight: .bold, design: .monospaced))
-                    .foregroundColor(.white)
+                    .foregroundColor(Color.dsTextPrimary)
 
                 Spacer()
 
@@ -70,7 +46,7 @@ struct StatDetailPanel: View {
             }
 
             Divider()
-                .background(Color.white.opacity(0.3))
+                .background(Color.dsTextSecondary.opacity(0.3))
 
             // 설명
             VStack(alignment: .leading, spacing: 12) {
@@ -87,54 +63,15 @@ struct StatDetailPanel: View {
             Spacer()
 
             // 업그레이드 버튼
-            Button(action: {
-                // 오디오/햅틱은 비동기로 처리 (UI 블로킹 방지)
-                DispatchQueue.global(qos: .userInteractive).async {
-                    AudioManager.shared.playButtonSound()
-                    HapticManager.shared.playButtonHaptic()
-                }
-                
+            PrimaryButton(
+                title: "업그레이드",
+                style: userStateManager.remainingPoints >= 1 ? .cyan : .disabled,
+                fullWidth: true
+            ) {
                 Task {
                     await upgradeStat()
                 }
-            }) {
-                HStack(spacing: 8) {
-                    Image(systemName: "arrow.up.circle.fill")
-                        .font(.system(size: 16, weight: .bold))
-                        .foregroundColor(userStateManager.remainingPoints >= 1 ? statType.color : .gray.opacity(0.5))
-
-                    Text("업그레이드")
-                        .font(.system(size: 14, weight: .bold, design: .monospaced))
-                        .foregroundColor(userStateManager.remainingPoints >= 1 ? .white : .gray.opacity(0.5))
-
-                    Spacer()
-
-                    HStack(spacing: 4) {
-                        Image(systemName: "star.fill")
-                            .font(.system(size: 12))
-                            .foregroundColor(userStateManager.remainingPoints >= 1 ? .yellow : .gray.opacity(0.5))
-
-                        Text("1")
-                            .font(.system(size: 12, weight: .bold, design: .monospaced))
-                            .foregroundColor(userStateManager.remainingPoints >= 1 ? .yellow : .gray.opacity(0.5))
-                    }
-                }
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 12)
-                .padding(.horizontal, 16)
-                .background(
-                    RoundedRectangle(cornerRadius: 8)
-                        .fill(userStateManager.remainingPoints >= 1 ?
-                              statType.color.opacity(0.2) : Color.gray.opacity(0.1))
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 8)
-                                .stroke(userStateManager.remainingPoints >= 1 ?
-                                        statType.color.opacity(0.5) : Color.gray.opacity(0.3),
-                                        lineWidth: 1)
-                        )
-                )
             }
-            .disabled(userStateManager.remainingPoints < 1)
         }
         .padding(20)
     }

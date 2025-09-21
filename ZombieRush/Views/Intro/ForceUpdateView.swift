@@ -23,7 +23,7 @@ struct ForceUpdateView: View {
                 // 타이틀
                 Text(TextConstants.ForceUpdate.newVersionAvailable)
                     .font(.system(size: 24, weight: .bold, design: .monospaced))
-                    .foregroundColor(.white)
+                    .foregroundColor(Color.dsTextPrimary)
                     .multilineTextAlignment(.center)
 
                 // 앱스토어 이동 버튼

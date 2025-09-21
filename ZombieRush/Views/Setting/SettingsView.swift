@@ -82,26 +82,26 @@ struct SettingRow: View {
         HStack {
             Image(systemName: icon)
                 .font(.system(size: 20))
-                .foregroundColor(.white)
+                .foregroundColor(Color.dsTextPrimary)
                 .frame(width: 30)
             
             Text(title)
                 .font(.system(size: 18, weight: .medium))
-                .foregroundColor(.white)
+                .foregroundColor(Color.dsTextPrimary)
             
             Spacer()
             
             Toggle("", isOn: $isOn)
-                .toggleStyle(SwitchToggleStyle(tint: Color(red: 0.0, green: 0.8, blue: 1.0)))
+                .toggleStyle(SwitchToggleStyle(tint: Color.cyan))
         }
         .padding(.horizontal, 20)
         .padding(.vertical, 15)
         .background(
             RoundedRectangle(cornerRadius: 15)
-                .fill(Color.black.opacity(0.7))
+                .fill(Color.dsOverlay)
                 .overlay(
                     RoundedRectangle(cornerRadius: 15)
-                        .stroke(Color(red: 0.0, green: 0.8, blue: 1.0).opacity(0.3), lineWidth: 1)
+                        .stroke(Color.cyan.opacity(0.3), lineWidth: 1)
                 )
         )
     }

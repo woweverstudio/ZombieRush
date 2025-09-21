@@ -60,12 +60,12 @@ struct LoadingView: View {
                     ZStack(alignment: .leading) {
                         // 배경 바
                         RoundedRectangle(cornerRadius: 4)
-                            .fill(Color.white.opacity(0.2))
+                            .fill(Color.dsCard)
                             .frame(height: 8)
 
                         // 진행 바
                         RoundedRectangle(cornerRadius: 4)
-                            .fill(Color.purple.opacity(0.8))
+                            .fill(Color.magenta.opacity(0.8))
                             .frame(width: progress * 300, height: 8)
                     }
                     .frame(width: 300)

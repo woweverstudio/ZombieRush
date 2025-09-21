@@ -29,7 +29,7 @@ struct StoryView: View {
                 VStack(spacing: 20) {
                     Text(getStoryText(for: currentStoryIndex))
                         .font(.system(size: 18, weight: .medium, design: .default))
-                        .foregroundColor(.white)
+                        .foregroundColor(Color.dsTextPrimary)
                         .multilineTextAlignment(.center)
                         .lineSpacing(8)
                         .padding(.horizontal, 20)
@@ -41,7 +41,7 @@ struct StoryView: View {
                 .frame(height: 100)
                 .background(
                     RoundedRectangle(cornerRadius: 10)
-                        .fill(Color.black.opacity(0.5))
+                        .fill(Color.dsSurface)
                 )
                 
             }
@@ -71,8 +71,8 @@ struct StoryView: View {
     }
     
     private var previousButton: some View {
-        NeonIconButton(
-            icon: "chevron.left",
+        IconButton(
+            iconName: "chevron.left",
             style: .white,
             size: 24
         ) {
@@ -84,15 +84,15 @@ struct StoryView: View {
     }
     
     private var nextButton: some View {
-        NeonIconButton(
-            icon: "chevron.right",
+        IconButton(
+            iconName: "chevron.right",
             style: .white,
             size: 24
         ) {
             withAnimation(.easeInOut) {
                 currentStoryIndex += 1
             }
-            
+
             if currentStoryIndex == totalStories + 1 {
                 UserDefaults.standard.set(true, forKey: "hasSeenStory")
                 UserDefaults.standard.synchronize()

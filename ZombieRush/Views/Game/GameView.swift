@@ -75,7 +75,7 @@ struct GameView: View {
                 // 제목
                 Text(TextConstants.Pause.title)
                     .font(.system(size: 36, weight: .bold, design: .monospaced))
-                    .foregroundColor(.cyan)
+                    .foregroundColor(Color.cyan)
                     .shadow(color: .cyan.opacity(0.5), radius: 5, x: 0, y: 0)
 
                 // 버튼들

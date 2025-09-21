@@ -51,7 +51,7 @@ struct StandardButton: View {
             Text(title)
                 .frame(width: width, height: height)
                 .font(.system(size: 20, weight: .bold, design: .monospaced))
-                .foregroundColor(.white)
+                .foregroundColor(Color.dsTextPrimary)
                 .background(
                     RoundedRectangle(cornerRadius: 8)
                         .fill(color.color)
@@ -70,5 +70,5 @@ struct StandardButton: View {
         StandardButton("QUIT", width: 180, color: .warning) {}
     }
     .padding()
-    .background(Color.black)
+    .background(Color.dsBackground)
 }

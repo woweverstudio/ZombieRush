@@ -29,23 +29,23 @@ struct MainMenuPanel: View {
         VStack(alignment: .trailing, spacing: 24) {
             HStack(spacing: 24) {
                 // 스토리 버튼 (book.fill)
-                NeonIconButton(icon: "book.fill", style: .white) {
+                IconButton(iconName: "book.fill", style: .white) {
                     router.navigate(to: .story)
                 }
                 // 설정 버튼 (gearshape.fill)
-                NeonIconButton(icon: "gearshape.fill", style: .magenta) {
+                IconButton(iconName: "gearshape.fill", style: .magenta) {
                     router.navigate(to: .settings)
                 }
             }
 
             HStack(spacing: 24) {
                 // 내 정보 버튼 (person.fill)
-                NeonIconButton(icon: "person.fill", style: .yellow) {
+                IconButton(iconName: "person.fill", style: .yellow) {
                     router.navigate(to: .myInfo(category: .jobs))
                 }
 
                 // 상점 버튼 (storefront.fill)
-                NeonIconButton(icon: "storefront.fill", style: .orange) {
+                IconButton(iconName: "storefront.fill", style: .orange) {
                     router.navigate(to: .market)
                 }
             }
@@ -56,7 +56,7 @@ struct MainMenuPanel: View {
             VStack(spacing: 0) {
                 Text(gameStartTooltip)
                     .font(.system(size: 12, weight: .medium, design: .monospaced))
-                    .foregroundColor(.white)
+                    .foregroundColor(Color.dsTextPrimary)
                     .lineLimit(2)
                     .padding(.vertical, 12)
                     .frame(minHeight: 60)
@@ -64,10 +64,10 @@ struct MainMenuPanel: View {
                     .multilineTextAlignment(.leading)
                     .background(
                         SpeechBubble()
-                            .fill(Color.black.opacity(0.4))
+                            .fill(Color.dsSurface)
                             .overlay(
                                 SpeechBubble()
-                                    .stroke(Color.white.opacity(0.3), lineWidth: 1)
+                                    .stroke(Color.dsTextSecondary.opacity(0.3), lineWidth: 1)
                             )
                     )
             }

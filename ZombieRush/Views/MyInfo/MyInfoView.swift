@@ -43,7 +43,7 @@ extension MyInfoView {
     private var headerView: some View {
         HStack {
             // 뒤로가기 버튼
-            NeonIconButton(icon: "chevron.left", style: .white) {
+            IconButton(iconName: "chevron.left", style: .white) {
                 router.quitToMain()
             }
 
@@ -52,7 +52,7 @@ extension MyInfoView {
             // 타이틀
             Text("내 정보")
                 .font(.system(size: 28, weight: .bold, design: .monospaced))
-                .foregroundColor(.white)
+                .foregroundColor(Color.dsTextPrimary)
                 .shadow(color: Color.cyan, radius: 10, x: 0, y: 0)
 
             Spacer()
@@ -120,10 +120,10 @@ extension MyInfoView {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(
             RoundedRectangle(cornerRadius: 12)
-                .fill(Color.black.opacity(0.3))
+                .fill(Color.dsSurface)
                 .overlay(
                     RoundedRectangle(cornerRadius: 12)
-                        .stroke(Color.white.opacity(0.1), lineWidth: 1)
+                        .stroke(Color.dsCard, lineWidth: 1)
                 )
         )
     }
@@ -145,20 +145,21 @@ extension MyInfoView {
                     selectedSpirit = nil
                 }) {
                     Text(category.rawValue)
-                        .font(.system(size: 16, weight: .bold, design: .monospaced))
+                        .font(.system(size: 14, weight: .bold, design: .monospaced))
                         .foregroundColor(selectedCategory == category ? .white : .gray)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 10)
-                        .padding(.horizontal, 16)
+                        .padding(.horizontal, 12)
                         .background(
                             RoundedRectangle(cornerRadius: 6)
-                                .fill(selectedCategory == category ? Color.cyan.opacity(0.2) : Color.clear)
+                                .fill(selectedCategory == category ? Color.cyan.opacity(0.2) : Color.gray.opacity(0.1))
                                 .overlay(
                                     RoundedRectangle(cornerRadius: 6)
                                         .stroke(selectedCategory == category ? Color.cyan : Color.gray.opacity(0.3), lineWidth: 1)
                                 )
                         )
                 }
+                .buttonStyle(PlainButtonStyle())
             }
         }
     }
@@ -166,7 +167,6 @@ extension MyInfoView {
     private var jobsGridView: some View {
         ScrollView {
             LazyVGrid(columns: [
-                GridItem(.flexible(), spacing: 8),
                 GridItem(.flexible(), spacing: 8),
                 GridItem(.flexible(), spacing: 8),
                 GridItem(.flexible(), spacing: 8)
@@ -191,7 +191,6 @@ extension MyInfoView {
     private var statsGridView: some View {
         ScrollView {
             LazyVGrid(columns: [
-                GridItem(.flexible(), spacing: 8),
                 GridItem(.flexible(), spacing: 8),
                 GridItem(.flexible(), spacing: 8),
                 GridItem(.flexible(), spacing: 8)

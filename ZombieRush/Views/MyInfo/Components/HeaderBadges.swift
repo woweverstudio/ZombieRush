@@ -7,20 +7,20 @@ struct StatsPointBadge: View {
     var body: some View {
         HStack(spacing: 8) {
             Image(systemName: "star.fill")
-                .foregroundColor(.yellow)
+                .foregroundColor(Color.dsCoin)
                 .font(.system(size: 20))
             Text("\(userStateManager.remainingPoints)")
                 .font(.system(size: 16, weight: .bold, design: .monospaced))
-                .foregroundColor(.yellow)
+                .foregroundColor(Color.dsCoin)
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 8)
         .background(
             RoundedRectangle(cornerRadius: 20)
-                .fill(Color.black.opacity(0.6))
+                .fill(Color.dsOverlay)
                 .overlay(
                     RoundedRectangle(cornerRadius: 20)
-                        .stroke(Color.yellow.opacity(0.5), lineWidth: 1)
+                        .stroke(Color.neonYellow.opacity(0.5), lineWidth: 1)
                 )
         )
     }
@@ -32,17 +32,17 @@ struct NemoFruitsBadge: View {
     var body: some View {
         HStack(spacing: 8) {
             Image(systemName: "diamond.fill")
-                .foregroundColor(.cyan)
+                .foregroundColor(Color.cyan)
                 .font(.system(size: 20))
             Text("\(userStateManager.nemoFruits)")
                 .font(.system(size: 16, weight: .bold, design: .monospaced))
-                .foregroundColor(.cyan)
+                .foregroundColor(Color.cyan)
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 8)
         .background(
             RoundedRectangle(cornerRadius: 20)
-                .fill(Color.black.opacity(0.6))
+                .fill(Color.dsOverlay)
                 .overlay(
                     RoundedRectangle(cornerRadius: 20)
                         .stroke(Color.cyan.opacity(0.5), lineWidth: 1)

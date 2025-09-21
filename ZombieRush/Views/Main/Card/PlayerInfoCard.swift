@@ -14,12 +14,12 @@ struct PlayerInfoCard: View {
                 profileInfo
 
                 Divider()
-                    .background(Color.white.opacity(0.3))
+                    .background(Color.dsTextSecondary.opacity(0.3))
                     .frame(maxHeight: .infinity)
 
                 levelInfo
                 Divider()
-                    .background(Color.white.opacity(0.3))
+                    .background(Color.dsTextSecondary.opacity(0.3))
                     .frame(maxHeight: .infinity)
                 statInfo
             }
@@ -43,7 +43,7 @@ struct PlayerInfoCard: View {
                         .frame(width: 44, height: 44)
 
                     Image(systemName: "person.fill")
-                        .foregroundColor(.white)
+                        .foregroundColor(Color.dsTextPrimary)
                         .font(.system(size: 20))
                 }
             }
@@ -69,13 +69,13 @@ struct PlayerInfoCard: View {
             VStack(alignment: .leading, spacing: 12) {
                 HStack(spacing: 8) {
                     Image(systemName: "star.fill")
-                        .foregroundColor(.yellow)
+                        .foregroundColor(Color.dsCoin)
                         .font(.system(size: 16))
 
                     if let levelInfo = userStateManager.level {
                         Text("Lv. \(levelInfo.currentLevel)")
                             .font(.system(size: 16, weight: .bold, design: .monospaced))
-                            .foregroundColor(.white)
+                            .foregroundColor(Color.dsTextPrimary)
                     } else {
                         Text("Lv. --")
                             .font(.system(size: 16, weight: .bold, design: .monospaced))

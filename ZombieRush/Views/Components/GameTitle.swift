@@ -55,5 +55,5 @@ struct SectionTitle: View {
         SectionTitle("GAME OVER", style: .magenta, size: 32)
     }
     .padding()
-    .background(Color.black)
+    .background(Color.dsBackground)
 }

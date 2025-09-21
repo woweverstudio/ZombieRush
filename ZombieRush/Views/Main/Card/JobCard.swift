@@ -34,7 +34,7 @@ struct JobCard: View {
                 // 진척 인디케이터
                 HStack(spacing: 4) {
                     Image(systemName: "star.fill")
-                        .foregroundColor(.yellow)
+                        .foregroundColor(Color.dsCoin)
                         .font(.system(size: 10))
 
                     Text("직업 \(jobsStateManager.currentJobs.unlockedJobs.count)/\(JobType.allCases.count) 해금됨")
@@ -95,7 +95,7 @@ struct JobDetailView: View {
             // Job 이름 (간단하게 표시)
             Text(jobsStateManager.currentJobName)
                 .font(.system(size: 12, weight: .medium, design: .monospaced))
-                .foregroundColor(.white)
+                .foregroundColor(Color.dsTextPrimary)
                 .multilineTextAlignment(.center)
         }
         .padding(.vertical, 8)

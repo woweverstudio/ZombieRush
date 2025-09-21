@@ -19,7 +19,7 @@ struct ServiceUnavailableView: View {
                 // 타이틀
                 Text(TextConstants.ServiceUnavailable.title)
                     .font(.system(size: 32, weight: .bold, design: .monospaced))
-                    .foregroundColor(.white)
+                    .foregroundColor(Color.dsTextPrimary)
                     .multilineTextAlignment(.center)
 
                 // 메시지

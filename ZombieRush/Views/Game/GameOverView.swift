@@ -29,14 +29,14 @@ struct GameOverView: View {
                     }) {
                         Image(systemName: "xmark")
                             .font(.system(size: 20, weight: .bold))
-                            .foregroundColor(.white)
+                            .foregroundColor(Color.dsTextPrimary)
                             .padding(12)
                             .background(
                                 Circle()
-                                    .fill(Color.black.opacity(0.6))
+                                    .fill(Color.dsOverlay)
                                     .overlay(
                                         Circle()
-                                            .stroke(Color.white.opacity(0.3), lineWidth: 1)
+                                            .stroke(Color.dsTextSecondary.opacity(0.3), lineWidth: 1)
                                     )
                             )
                     }

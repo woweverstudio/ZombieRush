@@ -73,7 +73,7 @@ struct MarketView: View {
     private var headerView: some View {
         HStack {
             // 뒤로가기 버튼
-            NeonIconButton(icon: "chevron.left", style: .white) {
+            IconButton(iconName: "chevron.left", style: .white) {
                 router.quitToMain()
             }
 
@@ -82,7 +82,7 @@ struct MarketView: View {
             // 타이틀
             Text("MARKET")
                 .font(.system(size: 28, weight: .bold, design: .monospaced))
-                .foregroundColor(.white)
+                .foregroundColor(Color.dsTextPrimary)
                 .shadow(color: Color.cyan, radius: 10, x: 0, y: 0)
 
             Spacer()
@@ -90,20 +90,20 @@ struct MarketView: View {
             // 네모열매 표시
             HStack(spacing: 8) {
                 Image(systemName: "diamond.fill")
-                    .foregroundColor(.yellow)
+                    .foregroundColor(Color.dsCoin)
                     .font(.system(size: 20))
                 Text("\(userStateManager.nemoFruits)")
                     .font(.system(size: 16, weight: .bold, design: .monospaced))
-                    .foregroundColor(.yellow)
+                    .foregroundColor(Color.dsCoin)
             }
             .padding(.horizontal, 16)
             .padding(.vertical, 8)
             .background(
                 RoundedRectangle(cornerRadius: 20)
-                    .fill(Color.black.opacity(0.6))
+                    .fill(Color.dsOverlay)
                     .overlay(
                         RoundedRectangle(cornerRadius: 20)
-                            .stroke(Color.yellow.opacity(0.5), lineWidth: 1)
+                            .stroke(Color.neonYellow.opacity(0.5), lineWidth: 1)
                     )
             )
         }
@@ -157,17 +157,17 @@ struct MarketItemCard: View {
                 .frame(width: 60, height: 60)
                 .background(
                     Circle()
-                        .fill(Color.black.opacity(0.3))
+                        .fill(Color.dsSurface)
                         .overlay(
                             Circle()
-                                .stroke(item.currencyType == .won ? Color.yellow.opacity(0.5) : Color.cyan.opacity(0.5), lineWidth: 2)
+                                .stroke(item.currencyType == .won ? Color.neonYellow.opacity(0.5) : Color.cyan.opacity(0.5), lineWidth: 2)
                         )
                 )
 
             // 이름
             Text(item.name)
                 .font(.system(size: 14, weight: .bold, design: .monospaced))
-                .foregroundColor(.white)
+                .foregroundColor(Color.dsTextPrimary)
                 .multilineTextAlignment(.center)
 
             // 설명
@@ -195,7 +195,7 @@ struct MarketItemCard: View {
             }) {
                 Text("구매")
                     .font(.system(size: 12, weight: .bold, design: .monospaced))
-                    .foregroundColor(.white)
+                    .foregroundColor(Color.dsTextPrimary)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 8)
                     .background(
@@ -209,10 +209,10 @@ struct MarketItemCard: View {
         .padding(16)
         .background(
             RoundedRectangle(cornerRadius: 12)
-                .fill(Color.black.opacity(0.4))
+                .fill(Color.dsSurface)
                 .overlay(
                     RoundedRectangle(cornerRadius: 12)
-                        .stroke(Color.white.opacity(0.1), lineWidth: 1)
+                        .stroke(Color.dsCard, lineWidth: 1)
                 )
         )
     }

@@ -8,38 +8,14 @@ struct SpiritInfoCard: View {
     let onTap: () -> Void
 
     var body: some View {
-        Button(action: onTap) {
-            VStack(spacing: 8) {
-                // 정령 아이콘
-                Image(systemName: spiritType.iconName)
-                    .font(.system(size: 24, weight: .bold))
-                    .foregroundColor(spiritType.color)
-                    .frame(width: 50, height: 50)
-
-                // 정령 이름
-                Text(spiritType.displayName)
-                    .font(.system(size: 12, weight: .medium, design: .monospaced))
-                    .foregroundColor(.white)
-                    .multilineTextAlignment(.center)
-                    .lineLimit(2)
-
-                // 현재 개수
-                Text("\(currentCount)")
-                    .font(.system(size: 14, weight: .bold, design: .monospaced))
-                    .foregroundColor(spiritType.color)
-            }
-            .frame(maxWidth: .infinity)
-            .padding(.vertical, 12)
-            .padding(.horizontal, 8)
-            .background(
-                RoundedRectangle(cornerRadius: 8)
-                    .fill(isSelected ? Color.cyan.opacity(0.2) : Color.white.opacity(0.05))
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 8)
-                            .stroke(isSelected ? Color.cyan : Color.white.opacity(0.2), lineWidth: 1)
-                    )
-            )
-        }
+        SelectionInfoCard(
+            title: spiritType.displayName,
+            iconName: spiritType.iconName,
+            iconColor: spiritType.color,
+            value: "\(currentCount)",
+            isSelected: isSelected,
+            action: onTap
+        )
     }
 }
 
@@ -62,7 +38,7 @@ struct SpiritDetailPanel: View {
 
                 Text(spiritType.displayName)
                     .font(.system(size: 20, weight: .bold, design: .monospaced))
-                    .foregroundColor(.white)
+                    .foregroundColor(Color.dsTextPrimary)
 
                 Spacer()
 
@@ -73,19 +49,20 @@ struct SpiritDetailPanel: View {
             }
 
             Divider()
-                .background(Color.white.opacity(0.3))
+                .background(Color.dsTextSecondary.opacity(0.3))
 
             Text(spiritType.description)
                 .font(.system(size: 14, design: .monospaced))
                 .foregroundColor(.white.opacity(0.8))
                 .lineSpacing(4)
             
+            Spacer()
 
             // 수량 선택
             VStack(alignment: .leading, spacing: 12) {
                 Text("구매 수량")
                     .font(.system(size: 14, weight: .bold, design: .monospaced))
-                    .foregroundColor(.cyan)
+                    .foregroundColor(Color.cyan)
 
                 HStack(spacing: 8) {
                     QuantityButton(quantity: 1, isSelected: selectedQuantity == 1) {
@@ -107,54 +84,15 @@ struct SpiritDetailPanel: View {
             }
 
             // 구매 버튼
-            Button(action: {
-                // 오디오/햅틱은 비동기로 처리 (UI 블로킹 방지)
-                DispatchQueue.global(qos: .userInteractive).async {
-                    AudioManager.shared.playButtonSound()
-                    HapticManager.shared.playButtonHaptic()
-                }
-
+            PrimaryButton(
+                title: "정령 얻기",
+                style: canAfford() ? .cyan : .disabled,
+                fullWidth: true
+            ) {
                 Task {
                     await purchaseSpirits()
                 }
-            }) {
-                HStack(spacing: 8) {
-                    Image(systemName: "sparkles")
-                        .font(.system(size: 16, weight: .bold))
-                        .foregroundColor(canAfford() ? spiritType.color : .gray.opacity(0.5))
-
-                    Text("정령 얻기")
-                        .font(.system(size: 14, weight: .bold, design: .monospaced))
-                        .foregroundColor(canAfford() ? .white : .gray.opacity(0.5))
-
-                    Spacer()
-
-                    HStack(spacing: 4) {
-                        Image(systemName: "diamond.fill")
-                            .font(.system(size: 12))
-                            .foregroundColor(canAfford() ? .cyan : .gray.opacity(0.5))
-
-                        Text("\(selectedQuantity)")
-                            .font(.system(size: 12, weight: .bold, design: .monospaced))
-                            .foregroundColor(canAfford() ? .cyan : .gray.opacity(0.5))
-                    }
-                }
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 12)
-                .padding(.horizontal, 16)
-                .background(
-                    RoundedRectangle(cornerRadius: 8)
-                        .fill(canAfford() ?
-                              spiritType.color.opacity(0.2) : Color.gray.opacity(0.1))
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 8)
-                                .stroke(canAfford() ?
-                                        spiritType.color.opacity(0.5) : Color.gray.opacity(0.3),
-                                        lineWidth: 1)
-                        )
-                )
             }
-            .disabled(!canAfford())
         }
         .padding(20)
     }
@@ -204,19 +142,10 @@ struct QuantityButton: View {
     let action: () -> Void
 
     var body: some View {
-        Button(action: action) {
-            Text(label ?? "\(quantity)")
-                .font(.system(size: 12, weight: .bold, design: .monospaced))
-                .foregroundColor(isSelected ? .white : .gray)
-                .frame(width: 50, height: 32)
-                .background(
-                    RoundedRectangle(cornerRadius: 6)
-                        .fill(isSelected ? Color.cyan.opacity(0.3) : Color.gray.opacity(0.2))
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 6)
-                                .stroke(isSelected ? Color.cyan : Color.gray.opacity(0.5), lineWidth: 1)
-                        )
-                )
-        }
+        SecondaryButton(
+            title: label ?? "\(quantity)",
+            style: isSelected ? .selected : .default,
+            action: action
+        )
     }
 }

@@ -4,7 +4,7 @@ import SwiftUI
 struct CardBackground: View {
     var body: some View {
         RoundedRectangle(cornerRadius: 8)
-            .fill(Color.white.opacity(0.1))
+            .fill(Color.dsCard)
             .background(
                 RoundedRectangle(cornerRadius: 8)
                     .stroke(Color.cyan.opacity(0.3), lineWidth: 1)
@@ -43,7 +43,7 @@ struct StatRow: View {
 
             Text(value)
                 .font(.system(size: 12, weight: .bold, design: .monospaced))
-                .foregroundColor(.white)
+                .foregroundColor(Color.dsTextPrimary)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }
@@ -66,7 +66,7 @@ struct StatMiniCard: View {
             // 라벨
             Text(label)
                 .font(.system(size: 10, design: .monospaced))
-                .foregroundColor(.white.opacity(0.7))
+                .foregroundColor(Color.dsTextSecondary)
                 .multilineTextAlignment(.center)
                 .lineLimit(2)
                 .minimumScaleFactor(0.8)
@@ -74,13 +74,13 @@ struct StatMiniCard: View {
             // 값
             Text("\(value)")
                 .font(.system(size: 10, weight: .bold, design: .monospaced))
-                .foregroundColor(.white)
+                .foregroundColor(Color.dsTextPrimary)
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, 6)
         .background(
             RoundedRectangle(cornerRadius: 6)
-                .fill(Color.white.opacity(0.05))
+                .fill(Color.dsCard)
                 .overlay(
                     RoundedRectangle(cornerRadius: 6)
                         .stroke(color.opacity(0.3), lineWidth: 0.5)

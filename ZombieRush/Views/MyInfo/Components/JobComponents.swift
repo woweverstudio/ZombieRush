@@ -9,48 +9,39 @@ struct JobInfoCard: View {
 
     var body: some View {
         Button(action: onTap) {
-            VStack(spacing: 8) {
-                ZStack {
-                    // 직업 아이콘
-                    Image(systemName: jobType.iconName)
-                        .font(.system(size: 24, weight: .bold))
-                        .foregroundColor(isUnlocked ? .white : .gray.opacity(0.5))
-                        .frame(width: 50, height: 50)
+            Card(style: isSelected ? .selected : (isUnlocked ? .default : .disabled)) {
+                VStack(spacing: 8) {
+                    ZStack {
+                        // 직업 아이콘
+                        Image(systemName: jobType.iconName)
+                            .font(.system(size: 24, weight: .bold))
+                            .foregroundColor(isUnlocked ? .white : .gray.opacity(0.5))
+                            .frame(width: 50, height: 50)
 
-                    // 잠금 오버레이
-                    if !isUnlocked {
-                        Image(systemName: "lock.fill")
-                            .font(.system(size: 16, weight: .bold))
-                            .foregroundColor(.orange)
+                        // 잠금 오버레이
+                        if !isUnlocked {
+                            Image(systemName: "lock.fill")
+                                .font(.system(size: 16, weight: .bold))
+                                .foregroundColor(.orange)
                             .background(
                                 Circle()
-                                    .fill(Color.black.opacity(0.7))
+                                    .fill(Color.dsOverlay)
                                     .frame(width: 24, height: 24)
                             )
+                        }
                     }
-                }
 
-                // 직업 이름
-                Text(jobType.displayName)
-                    .font(.system(size: 12, weight: .medium, design: .monospaced))
-                    .foregroundColor(isUnlocked ? .white : .gray.opacity(0.5))
-                    .multilineTextAlignment(.center)
-                    .lineLimit(2)
+                    // 직업 이름
+                    Text(jobType.displayName)
+                        .font(.system(size: 12, weight: .medium, design: .monospaced))
+                        .foregroundColor(isUnlocked ? .white : .gray.opacity(0.5))
+                        .multilineTextAlignment(.center)
+                        .lineLimit(2)
+                }
             }
-            .frame(maxWidth: .infinity)
-            .padding(.vertical, 12)
-            .padding(.horizontal, 8)
-            .background(
-                RoundedRectangle(cornerRadius: 8)
-                    .fill(isSelected ? Color.cyan.opacity(0.2) : Color.white.opacity(0.05))
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 8)
-                            .stroke(isSelected ? Color.cyan : (isUnlocked ? Color.white.opacity(0.2) : Color.gray.opacity(0.3)), lineWidth: 1)
-                    )
-            )
-            .opacity(isUnlocked ? 1.0 : 0.6)
         }
         .disabled(!isUnlocked)
+        .opacity(isUnlocked ? 1.0 : 0.6)
     }
 }
 
@@ -64,21 +55,21 @@ struct JobDetailPanel: View {
             HStack {
                 Image(systemName: jobType.iconName)
                     .font(.system(size: 24))
-                    .foregroundColor(.cyan)
+                    .foregroundColor(Color.cyan)
 
                 Text(jobType.displayName)
                     .font(.system(size: 20, weight: .bold, design: .monospaced))
-                    .foregroundColor(.white)
+                    .foregroundColor(Color.dsTextPrimary)
             }
 
             Divider()
-                .background(Color.white.opacity(0.3))
+                .background(Color.dsTextSecondary.opacity(0.3))
 
             // 스텟 정보
             VStack(alignment: .leading, spacing: 12) {
                 Text("기본 스텟")
                     .font(.system(size: 16, weight: .bold, design: .monospaced))
-                    .foregroundColor(.cyan)
+                    .foregroundColor(Color.cyan)
 
                 let stats = JobStats.getStats(for: jobType.rawValue)
 
@@ -115,7 +106,7 @@ struct StatInfoRow: View {
 
             Text("\(value)")
                 .font(.system(size: 14, weight: .bold, design: .monospaced))
-                .foregroundColor(.white)
+                .foregroundColor(Color.dsTextPrimary)
         }
     }
 }

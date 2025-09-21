@@ -24,7 +24,7 @@ struct StatsCard: View {
                     // 남은 포인트 표시
                     HStack(spacing: 4) {
                         Image(systemName: "star.fill")
-                            .foregroundColor(.yellow)
+                            .foregroundColor(Color.dsCoin)
                             .font(.system(size: 10))
                         
                         Text("남은 포인트: \(userStateManager.remainingPoints)")
