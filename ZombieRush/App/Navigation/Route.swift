@@ -4,6 +4,7 @@ import Foundation
 enum MyInfoCategory: String, CaseIterable {
     case jobs = "직업"
     case stats = "스텟"
+    case spirits = "정령"
 }
 
 // MARK: - Route Enum (Associated Values 추가)

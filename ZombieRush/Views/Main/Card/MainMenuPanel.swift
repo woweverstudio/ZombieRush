@@ -53,51 +53,24 @@ struct MainMenuPanel: View {
             Spacer()
 
             // 메시지 박스
-//            VStack(spacing: 0) {
-//                Text(gameStartTooltip)
-//                    .font(.system(size: 12, weight: .medium, design: .monospaced))
-//                    .foregroundColor(.white)
-//                    .lineLimit(2)
-//                    .padding(.vertical, 12)
-//                    .frame(minHeight: 60)
-//                    .frame(maxWidth: .infinity)
-//                    .multilineTextAlignment(.leading)
-//                    .background(
-//                        SpeechBubble()
-//                            .fill(Color.black.opacity(0.4))
-//                            .overlay(
-//                                SpeechBubble()
-//                                    .stroke(Color.white.opacity(0.3), lineWidth: 1)
-//                            )
-//                    )
-//            }
-
-            // 테스트 버튼 (EXP +10)
-            Button(action: {
-                Task {
-                    let result = await userStateManager.addExperience(10)
-                    if result.leveledUp {
-                        print("🎉 레벨업! \(result.levelsGained)레벨 상승, 포인트 +\(result.levelsGained * 3)")
-                    } else {
-                        print("📈 경험치 +10 (현재 레벨: \(userStateManager.level?.currentLevel ?? 0))")
-                    }
-                }
-            }) {
-                Text("EXP +10")
-                    .font(.system(size: 10, weight: .bold, design: .monospaced))
-                    .foregroundColor(.gray)
-                    .padding(.horizontal, 8)
-                    .padding(.vertical, 4)
+            VStack(spacing: 0) {
+                Text(gameStartTooltip)
+                    .font(.system(size: 12, weight: .medium, design: .monospaced))
+                    .foregroundColor(.white)
+                    .lineLimit(2)
+                    .padding(.vertical, 12)
+                    .frame(minHeight: 60)
+                    .frame(maxWidth: .infinity)
+                    .multilineTextAlignment(.leading)
                     .background(
-                        RoundedRectangle(cornerRadius: 4)
-                            .fill(Color.black.opacity(0.5))
+                        SpeechBubble()
+                            .fill(Color.black.opacity(0.4))
                             .overlay(
-                                RoundedRectangle(cornerRadius: 4)
-                                    .stroke(Color.gray.opacity(0.3), lineWidth: 1)
+                                SpeechBubble()
+                                    .stroke(Color.white.opacity(0.3), lineWidth: 1)
                             )
                     )
             }
-            .padding(.bottom, 8)
 
             // 게임 시작 버튼
             NeonButton(TextConstants.Main.startButton, fullWidth: true) {
