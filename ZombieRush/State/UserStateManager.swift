@@ -47,6 +47,10 @@ class UserStateManager {
         currentUser?.remainingPoints ?? 0
     }
 
+    var nemoFruits: Int {
+        currentUser?.nemoFruit ?? 0
+    }
+
     // MARK: - Public Methods
 
     /// Game Center playerID를 사용해 사용자 데이터 로드 또는 생성
@@ -192,6 +196,50 @@ class UserStateManager {
         guard let currentLevel = level else { return false }
         let result = currentLevel.addExperience(exp)
         return result.leveledUp
+    }
+
+    /// 네모열매 소비
+    func consumeNemoFruits(_ fruits: Int) async -> Bool {
+        guard let currentUser = currentUser, currentUser.nemoFruit >= fruits else {
+            print("📱 UserState: 네모열매가 부족합니다.")
+            return false
+        }
+
+        var updatedUser = currentUser
+        updatedUser.nemoFruit -= fruits
+
+        do {
+            let savedUser = try await updateUserInDatabase(updatedUser)
+            self.currentUser = savedUser
+            print("📱 UserState: 네모열매 소비 완료 - 남은 네모열매: \(savedUser.nemoFruit)")
+            return true
+        } catch {
+            self.error = error
+            print("📱 UserState: 네모열매 소비 실패 - \(error.localizedDescription)")
+            return false
+        }
+    }
+
+    /// 네모열매 추가
+    func addNemoFruits(_ fruits: Int) async -> Bool {
+        guard let currentUser = currentUser else {
+            print("📱 UserState: 사용자 정보가 없어 네모열매를 추가할 수 없습니다.")
+            return false
+        }
+
+        var updatedUser = currentUser
+        updatedUser.nemoFruit += fruits
+
+        do {
+            let savedUser = try await updateUserInDatabase(updatedUser)
+            self.currentUser = savedUser
+            print("📱 UserState: 네모열매 추가 완료 - 총 네모열매: \(savedUser.nemoFruit)")
+            return true
+        } catch {
+            self.error = error
+            print("📱 UserState: 네모열매 추가 실패 - \(error.localizedDescription)")
+            return false
+        }
     }
 
     /// 남은 포인트 소비

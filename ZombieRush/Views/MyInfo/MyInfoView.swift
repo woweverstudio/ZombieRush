@@ -1,6 +1,5 @@
 import SwiftUI
 
-
 // MARK: - 내 정보 View
 struct MyInfoView: View {
     @Environment(AppRouter.self) var router
@@ -27,6 +26,7 @@ struct MyInfoView: View {
 
             VStack(spacing: 0) {
                 headerView
+                Spacer()
 
                 // 메인 콘텐츠: 좌측 아이템 리스트 + 우측 상세정보
                 HStack(spacing: 20) {
@@ -57,26 +57,14 @@ extension MyInfoView {
 
             Spacer()
 
-            // 스텟 포인트 표시 (스텟 카테고리일 때만)
+            // 스텟 포인트 표시 (스텟 카테고리일 때)
             if selectedCategory == .stats {
-                HStack(spacing: 8) {
-                    Image(systemName: "star.fill")
-                        .foregroundColor(.yellow)
-                        .font(.system(size: 20))
-                    Text("\(userStateManager.remainingPoints)")
-                        .font(.system(size: 16, weight: .bold, design: .monospaced))
-                        .foregroundColor(.yellow)
-                }
-                .padding(.horizontal, 16)
-                .padding(.vertical, 8)
-                .background(
-                    RoundedRectangle(cornerRadius: 20)
-                        .fill(Color.black.opacity(0.6))
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 20)
-                                .stroke(Color.yellow.opacity(0.5), lineWidth: 1)
-                        )
-                )
+                StatsPointBadge()
+            }
+
+            // 네모열매 개수 표시 (정령 카테고리일 때)
+            if selectedCategory == .spirits {
+                NemoFruitsBadge()
             }
         }
         .padding(.horizontal, 20)
@@ -127,10 +115,9 @@ extension MyInfoView {
 
                     Spacer()
                 }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
         }
-        .frame(width: 320)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(
             RoundedRectangle(cornerRadius: 12)
                 .fill(Color.black.opacity(0.3))

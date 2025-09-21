@@ -162,6 +162,36 @@ class SpiritsStateManager {
         }
     }
 
+    /// 정령 추가 (구매용)
+    func addSpirit(_ spiritType: SpiritType, count: Int = 1) async {
+        guard var spirits = currentSpirits else {
+            print("🔥 Spirits: 정령 추가 실패 - 데이터가 없습니다")
+            return
+        }
+
+        // 해당 정령 개수 증가
+        switch spiritType {
+        case .fire:
+            spirits.fire += count
+        case .ice:
+            spirits.ice += count
+        case .lightning:
+            spirits.lightning += count
+        case .dark:
+            spirits.dark += count
+        }
+
+        // 데이터베이스 업데이트
+        do {
+            let updatedSpirits = try await updateSpiritsInDatabase(spirits)
+            currentSpirits = updatedSpirits
+            print("🔥 Spirits: \(spiritType.displayName) \(count)마리 추가 완료")
+        } catch {
+            self.error = error
+            print("🔥 Spirits: \(spiritType.displayName) 추가 실패 - \(error.localizedDescription)")
+        }
+    }
+
     /// 로그아웃 - 정령 데이터 초기화
     func logout() {
         currentSpirits = nil
