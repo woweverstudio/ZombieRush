@@ -111,13 +111,14 @@ enum PrimaryButtonSize {
 }
 
 // MARK: - Primary Button Component
-struct PrimaryButton: View {
+struct PrimaryButton<TrailingContent: View>: View {
     let title: String
     let style: PrimaryButtonStyle
     let size: PrimaryButtonSize
     let fullWidth: Bool
     let width: CGFloat?
     let height: CGFloat?
+    let trailingContent: TrailingContent?
     let action: () -> Void
 
     init(
@@ -128,6 +129,26 @@ struct PrimaryButton: View {
         width: CGFloat? = nil,
         height: CGFloat? = nil,
         action: @escaping () -> Void
+    ) where TrailingContent == EmptyView {
+        self.title = title
+        self.style = style
+        self.size = size
+        self.fullWidth = fullWidth
+        self.width = width
+        self.height = height
+        self.trailingContent = nil
+        self.action = action
+    }
+
+    init(
+        title: String,
+        style: PrimaryButtonStyle = .cyan,
+        size: PrimaryButtonSize = .medium,
+        fullWidth: Bool = true,
+        width: CGFloat? = nil,
+        height: CGFloat? = nil,
+        @ViewBuilder trailingContent: () -> TrailingContent,
+        action: @escaping () -> Void
     ) {
         self.title = title
         self.style = style
@@ -135,6 +156,7 @@ struct PrimaryButton: View {
         self.fullWidth = fullWidth
         self.width = width
         self.height = height
+        self.trailingContent = trailingContent()
         self.action = action
     }
 
@@ -145,22 +167,32 @@ struct PrimaryButton: View {
 
             action()
         }) {
-            Text(title)
-                .font(.system(size: size.fontSize, weight: .bold, design: .monospaced))
-                .foregroundColor(style.textColor)
-                .frame(width: width, height: height)
-                .frame(maxWidth: fullWidth ? .infinity : nil)
-                .padding(.vertical, height == nil ? size.verticalPadding : 0)
-                .padding(.horizontal, width == nil ? size.horizontalPadding : 0)
-                .background(
-                    RoundedRectangle(cornerRadius: 8)
-                        .fill(style.backgroundColor)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 8)
-                                .stroke(style.borderColor, lineWidth: 1)
-                        )
-                )
-                .shadow(color: style.shadowColor.opacity(0.3), radius: 4, x: 0, y: 0)
+            HStack(spacing: 8) {
+                Text(title)
+                    .font(.system(size: size.fontSize, weight: .bold, design: .monospaced))
+                    .foregroundColor(style.textColor)
+
+                if let trailingContent = trailingContent {
+                    trailingContent
+                }
+
+                if trailingContent == nil {
+                    Spacer()
+                }
+            }
+            .frame(width: width, height: height)
+            .frame(maxWidth: fullWidth ? .infinity : nil)
+            .padding(.vertical, height == nil ? size.verticalPadding : 0)
+            .padding(.horizontal, width == nil ? size.horizontalPadding : 0)
+            .background(
+                RoundedRectangle(cornerRadius: 8)
+                    .fill(style.backgroundColor)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 8)
+                            .stroke(style.borderColor, lineWidth: 1)
+                    )
+            )
+            .shadow(color: style.shadowColor.opacity(0.3), radius: 4, x: 0, y: 0)
         }
         .disabled(style == .disabled)
         .buttonStyle(PlainButtonStyle())
@@ -199,6 +231,45 @@ struct PrimaryButton: View {
             PrimaryButton(title: "QUIT", style: .red, width: 100, height: 44) {
                 print("Quit tapped")
             }
+        }
+
+        // Buttons with trailing content (like stat upgrade and spirit purchase)
+        VStack(spacing: 12) {
+            PrimaryButton(title: "업그레이드", style: .cyan, trailingContent: {
+                HStack(spacing: 4) {
+                    Image(systemName: "star.fill")
+                        .font(.system(size: 12))
+                    Text("1")
+                        .font(.system(size: 12, weight: .bold, design: .monospaced))
+                }
+                .foregroundColor(.yellow)
+            }, action: {
+                print("Upgrade tapped")
+            })
+
+            PrimaryButton(title: "정령 얻기", style: .cyan, trailingContent: {
+                HStack(spacing: 4) {
+                    Image(systemName: "diamond.fill")
+                        .font(.system(size: 12))
+                    Text("5")
+                        .font(.system(size: 12, weight: .bold, design: .monospaced))
+                }
+                .foregroundColor(.cyan)
+            }, action: {
+                print("Purchase spirit tapped")
+            })
+
+            PrimaryButton(title: "구매하기", style: .yellow, trailingContent: {
+                HStack(spacing: 4) {
+                    Image(systemName: "wonsign.circle.fill")
+                        .font(.system(size: 12))
+                    Text("₩1,000")
+                        .font(.system(size: 12, weight: .bold, design: .monospaced))
+                }
+                .foregroundColor(.green)
+            }, action: {
+                print("Purchase with cost tapped")
+            })
         }
 
         PrimaryButton(title: "비활성화", style: .disabled, fullWidth: true) {

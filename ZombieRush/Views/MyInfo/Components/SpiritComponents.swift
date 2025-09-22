@@ -87,12 +87,21 @@ struct SpiritDetailPanel: View {
             PrimaryButton(
                 title: "정령 얻기",
                 style: canAfford() ? .cyan : .disabled,
-                fullWidth: true
-            ) {
-                Task {
-                    await purchaseSpirits()
+                trailingContent: {
+                    HStack(spacing: 4) {
+                        Image(systemName: "diamond.fill")
+                            .font(.system(size: 12))
+                        Text("\(selectedQuantity)")
+                            .font(.system(size: 12, weight: .bold, design: .monospaced))
+                    }
+                    .foregroundColor(canAfford() ? .cyan : .gray.opacity(0.5))
+                },
+                action: {
+                    Task {
+                        await purchaseSpirits()
+                    }
                 }
-            }
+            )
         }
         .padding(20)
     }

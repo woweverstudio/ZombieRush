@@ -23,7 +23,12 @@ struct SettingsView: View {
             
             VStack {
                 // 상단 영역 - 제목과 뒤로가기 버튼
-                headerSection
+                Header(
+                    title: TextConstants.Settings.title,
+                    onBack: {
+                        router.quitToMain()
+                    }
+                )
                 
                 // 설정 옵션들 (스크롤 가능)
                 ScrollView {
@@ -52,15 +57,6 @@ struct SettingsView: View {
                 }
             }
         }
-    }
-    
-    var headerSection: some View {
-        Header(
-            title: TextConstants.Settings.title,
-            onBack: {
-                router.quitToMain()
-            }
-        )
     }
 }
 

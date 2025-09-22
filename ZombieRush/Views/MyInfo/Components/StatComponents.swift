@@ -66,12 +66,21 @@ struct StatDetailPanel: View {
             PrimaryButton(
                 title: "업그레이드",
                 style: userStateManager.remainingPoints >= 1 ? .cyan : .disabled,
-                fullWidth: true
-            ) {
-                Task {
-                    await upgradeStat()
+                trailingContent: {
+                    HStack(spacing: 4) {
+                        Image(systemName: "star.fill")
+                            .font(.system(size: 12))
+                        Text("1")
+                            .font(.system(size: 12, weight: .bold, design: .monospaced))
+                    }
+                    .foregroundColor(userStateManager.remainingPoints >= 1 ? .yellow : .gray.opacity(0.5))
+                },
+                action: {
+                    Task {
+                        await upgradeStat()
+                    }
                 }
-            }
+            )
         }
         .padding(20)
     }
