@@ -16,14 +16,16 @@ class StatsStateManager {
     var isLoading = false
     var error: Error?
 
-    // Supabase 클라이언트
-    private let supabase: SupabaseClient
+    // Repository
+    private let statsRepository: StatsRepository
 
-    init() {
-        self.supabase = SupabaseClient(
-            supabaseURL: URL(string: SupabaseConfig.supabaseURL)!,
-            supabaseKey: SupabaseConfig.supabaseAnonKey
-        )
+    init(statsRepository: StatsRepository = SupabaseStatsRepository()) {
+        self.statsRepository = statsRepository
+    }
+
+    // Legacy init for backward compatibility
+    convenience init() {
+        self.init(statsRepository: SupabaseStatsRepository())
     }
 
     // MARK: - Public Methods
@@ -35,13 +37,13 @@ class StatsStateManager {
 
         do {
             // 1. 스탯 조회 시도
-            if let existingStats = try await fetchStats(by: playerID) {
+            if let existingStats = try await statsRepository.getStats(by: playerID) {
                 currentStats = existingStats
                 print("📊 Stats: 기존 스탯 로드 성공 - HP: \(existingStats.hpRecovery), Speed: \(existingStats.moveSpeed)")
             } else {
                 // 2. 스탯이 없으면 새로 생성
                 let newStats = Stats.defaultStats(for: playerID)
-                currentStats = try await createStats(newStats)
+                currentStats = try await statsRepository.createStats(newStats)
                 print("📊 Stats: 새 스탯 생성 성공 - 기본값으로 초기화")
             }
         } catch {
@@ -76,29 +78,14 @@ class StatsStateManager {
 
     /// 스탯 업그레이드
     func upgradeStat(_ statType: StatType) async {
-        guard var stats = currentStats else {
+        guard let currentStats = currentStats else {
             print("📊 Stats: 업그레이드 실패 - 스탯 데이터가 없습니다")
             return
         }
 
-        // 해당 스텟 값 증가
-        switch statType {
-        case .hpRecovery:
-            stats.hpRecovery += 1
-        case .moveSpeed:
-            stats.moveSpeed += 1
-        case .energyRecovery:
-            stats.energyRecovery += 1
-        case .attackSpeed:
-            stats.attackSpeed += 1
-        case .totemCount:
-            stats.totemCount += 1
-        }
-
-        // 데이터베이스 업데이트 및 로컬 상태 업데이트
         do {
-            let updatedStats = try await updateStatsInDatabase(stats)
-            currentStats = updatedStats
+            let updatedStats = try await statsRepository.upgradeStat(for: currentStats.playerId, statType: statType)
+            self.currentStats = updatedStats
             print("📊 Stats: \(statType.displayName) 업그레이드 완료 (+1)")
         } catch {
             self.error = error
@@ -113,52 +100,6 @@ class StatsStateManager {
         print("📊 Stats: 로그아웃 완료")
     }
 
-    // MARK: - Private Methods
-
-    /// 스탯 조회
-    private func fetchStats(by playerID: String) async throws -> Stats? {
-        let stats: [Stats] = try await supabase
-            .from("stats")
-            .select("*")
-            .eq("player_id", value: playerID)
-            .execute()
-            .value
-
-        return stats.first
-    }
-
-    /// 스탯 생성
-    private func createStats(_ stats: Stats) async throws -> Stats {
-        let createdStats: Stats = try await supabase
-            .from("stats")
-            .insert(stats)
-            .select("*")
-            .single()
-            .execute()
-            .value
-
-        return createdStats
-    }
-
-    /// 스탯 업데이트
-    private func updateStatsInDatabase(_ stats: Stats) async throws -> Stats {
-        let updatedStats: Stats = try await supabase
-            .from("stats")
-            .update([
-                "hp_recovery": String(stats.hpRecovery),
-                "move_speed": String(stats.moveSpeed),
-                "energy_recovery": String(stats.energyRecovery),
-                "attack_speed": String(stats.attackSpeed),
-                "totem_count": String(stats.totemCount)
-            ])
-            .eq("player_id", value: stats.playerId)
-            .select("*")
-            .single()
-            .execute()
-            .value
-
-        return updatedStats
-    }
 }
 
 /// 스탯 타입 열거형

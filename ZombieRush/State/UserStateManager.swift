@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Supabase
 import SwiftUI
 
 // MARK: - UserStateManager
@@ -19,14 +18,16 @@ class UserStateManager {
     var isLoading = false
     var error: Error?
 
-    // Supabase 클라이언트
-    private let supabase: SupabaseClient
+    // Repository
+    private let userRepository: UserRepository
 
-    init() {
-        self.supabase = SupabaseClient(
-            supabaseURL: URL(string: SupabaseConfig.supabaseURL)!,
-            supabaseKey: SupabaseConfig.supabaseAnonKey
-        )
+    init(userRepository: UserRepository = SupabaseUserRepository()) {
+        self.userRepository = userRepository
+    }
+
+    // Legacy init for backward compatibility
+    convenience init() {
+        self.init(userRepository: SupabaseUserRepository())
     }
     
     var nickname: String {
@@ -67,13 +68,13 @@ class UserStateManager {
             userImage = photo
 
             // 1. 사용자 조회 시도
-            if let existingUser = try await fetchUser(by: playerID) {
+            if let existingUser = try await userRepository.getUser(by: playerID) {
                 // 2. 닉네임 확인 및 업데이트
                 currentUser = try await checkAndUpdateNicknameIfNeeded(existingUser, newNickname: nickname)
             } else {
                 // 3. 사용자가 없으면 새로 생성
                 let newUser = User(playerId: playerID, nickname: nickname)
-                currentUser = try await createUser(newUser)
+                currentUser = try await userRepository.createUser(newUser)
                 print("📱 UserState: 새 사용자 생성 성공 - \(newUser.nickname)")
             }
         } catch {
@@ -89,7 +90,7 @@ class UserStateManager {
             print("📱 UserState: 닉네임 변경 감지 - 기존: '\(existingUser.nickname)' → 새로고침: '\(newNickname)'")
             var updatedUser = existingUser
             updatedUser.nickname = newNickname
-            let result = try await updateUserInDatabase(updatedUser)
+            let result = try await userRepository.updateUser(updatedUser)
             print("📱 UserState: 닉네임 업데이트 완료 - \(newNickname)")
             return result
         } else {
@@ -100,10 +101,8 @@ class UserStateManager {
 
     /// 사용자 데이터 업데이트
     func updateUser(_ updates: User) async {
-        guard let user = currentUser else { return }
-
         do {
-            currentUser = try await updateUserInDatabase(user)
+            currentUser = try await userRepository.updateUser(updates)
             print("📱 UserState: 사용자 업데이트 성공")
         } catch {
             self.error = error
@@ -151,31 +150,21 @@ class UserStateManager {
             return (false, 0)
         }
 
-        // 새로운 레벨 정보 계산
-        let result = Level.addExperience(currentExp: currentUser.exp, expToAdd: exp)
-        let newLevel = result.newLevel
-        let leveledUp = result.leveledUp
-        let levelsGained = result.levelsGained
-
-        // 사용자 정보 업데이트
-        var updatedUser = currentUser
-        updatedUser.exp = newLevel.currentExp
-
-        // 레벨업 시 remaining_points 3개씩 증가
-        if leveledUp {
-            updatedUser.remainingPoints += levelsGained * 3
-        }
-
-        // DB 업데이트
         do {
-            let savedUser = try await updateUserInDatabase(updatedUser)
-            self.currentUser = savedUser
+            let updatedUser = try await userRepository.addExperience(to: currentUser.playerId, exp: exp)
+            self.currentUser = updatedUser
+
+            // 레벨 계산 결과
+            let oldLevel = Level(currentExp: currentUser.exp)
+            let newLevel = Level(currentExp: updatedUser.exp)
+            let leveledUp = newLevel.currentLevel > oldLevel.currentLevel
+            let levelsGained = newLevel.currentLevel - oldLevel.currentLevel
 
             if leveledUp {
-                print("📱 UserState: 레벨 업! \(currentUser.level) → \(newLevel.currentLevel) (\(levelsGained)레벨 상승)")
-                print("📱 UserState: 남은 포인트 증가: \(savedUser.remainingPoints)개")
+                print("📱 UserState: 레벨 업! \(oldLevel.currentLevel) → \(newLevel.currentLevel) (\(levelsGained)레벨 상승)")
+                print("📱 UserState: 남은 포인트 증가: \(updatedUser.remainingPoints)개")
             }
-            print("📱 UserState: 경험치 추가 완료 - 총 EXP: \(newLevel.currentExp)")
+            print("📱 UserState: 경험치 추가 완료 - 총 EXP: \(updatedUser.exp)")
 
             return (leveledUp, levelsGained)
         } catch {
@@ -204,18 +193,15 @@ class UserStateManager {
 
     /// 네모열매 소비
     func consumeNemoFruits(_ fruits: Int) async -> Bool {
-        guard let currentUser = currentUser, currentUser.nemoFruit >= fruits else {
-            print("📱 UserState: 네모열매가 부족합니다.")
+        guard let currentUser = currentUser else {
+            print("📱 UserState: 사용자 정보가 없습니다.")
             return false
         }
 
-        var updatedUser = currentUser
-        updatedUser.nemoFruit -= fruits
-
         do {
-            let savedUser = try await updateUserInDatabase(updatedUser)
-            self.currentUser = savedUser
-            print("📱 UserState: 네모열매 소비 완료 - 남은 네모열매: \(savedUser.nemoFruit)")
+            let updatedUser = try await userRepository.addNemoFruits(to: currentUser.playerId, count: -fruits)
+            self.currentUser = updatedUser
+            print("📱 UserState: 네모열매 소비 완료 - 남은 네모열매: \(updatedUser.nemoFruit)")
             return true
         } catch {
             self.error = error
@@ -231,27 +217,10 @@ class UserStateManager {
             return false
         }
 
-        // 이미 활성화된 응원이 있는지 확인
-        if currentUser.isCheerBuffActive {
-            print("📱 UserState: 네모의 응원이 이미 활성화되어 있습니다.")
-            return false
-        }
-
-        // IAP 구현 전까지는 무조건 구매 가능 (테스트용)
-        // TODO: IAP 구현 후 실제 결제 처리 및 네모열매 차감 제거
-
-        // 3일 후 만료 시간 계산
-        let expirationDate = Calendar.current.date(byAdding: .day, value: 3, to: Date())!
-
-        var updatedUser = currentUser
-        // IAP 구현 전까지는 네모열매 차감하지 않음
-        // updatedUser.nemoFruit -= 3000
-        updatedUser.cheerBuffExpiresAt = expirationDate
-
         do {
-            let savedUser = try await updateUserInDatabase(updatedUser)
-            self.currentUser = savedUser
-            print("📱 UserState: 네모의 응원 구매 완료 - 만료일: \(expirationDate)")
+            let updatedUser = try await userRepository.purchaseCheerBuff(for: currentUser.playerId, duration: 3 * 24 * 60 * 60) // 3일
+            self.currentUser = updatedUser
+            print("📱 UserState: 네모의 응원 구매 완료 - 만료일: \(updatedUser.cheerBuffExpiresAt ?? Date())")
             return true
         } catch {
             self.error = error
@@ -267,13 +236,10 @@ class UserStateManager {
             return false
         }
 
-        var updatedUser = currentUser
-        updatedUser.nemoFruit += fruits
-
         do {
-            let savedUser = try await updateUserInDatabase(updatedUser)
-            self.currentUser = savedUser
-            print("📱 UserState: 네모열매 추가 완료 - 총 네모열매: \(savedUser.nemoFruit)")
+            let updatedUser = try await userRepository.addNemoFruits(to: currentUser.playerId, count: fruits)
+            self.currentUser = updatedUser
+            print("📱 UserState: 네모열매 추가 완료 - 총 네모열매: \(updatedUser.nemoFruit)")
             return true
         } catch {
             self.error = error
@@ -284,18 +250,15 @@ class UserStateManager {
 
     /// 남은 포인트 소비
     func consumeRemainingPoints(_ points: Int) async -> Bool {
-        guard let currentUser = currentUser, currentUser.remainingPoints >= points else {
-            print("📱 UserState: 포인트가 부족합니다.")
+        guard let currentUser = currentUser else {
+            print("📱 UserState: 사용자 정보가 없습니다.")
             return false
         }
 
-        var updatedUser = currentUser
-        updatedUser.remainingPoints -= points
-
         do {
-            let savedUser = try await updateUserInDatabase(updatedUser)
-            self.currentUser = savedUser
-            print("📱 UserState: 포인트 소비 완료 - 남은 포인트: \(savedUser.remainingPoints)")
+            let updatedUser = try await userRepository.consumePoints(of: currentUser.playerId, points: points)
+            self.currentUser = updatedUser
+            print("📱 UserState: 포인트 소비 완료 - 남은 포인트: \(updatedUser.remainingPoints)")
             return true
         } catch {
             self.error = error
@@ -304,58 +267,4 @@ class UserStateManager {
         }
     }
 
-    // MARK: - Private Methods
-
-    /// 사용자 조회
-    private func fetchUser(by playerID: String) async throws -> User? {
-        let users: [User] = try await supabase
-            .from("users")
-            .select("*")
-            .eq("player_id", value: playerID)
-            .execute()
-            .value
-
-        return users.first
-    }
-
-    /// 사용자 생성
-    private func createUser(_ user: User) async throws -> User {
-        let createdUser: User = try await supabase
-            .from("users")
-            .insert(user)
-            .select("*")
-            .single()
-            .execute()
-            .value
-
-        return createdUser
-    }
-
-    /// 사용자 업데이트
-    private func updateUserInDatabase(_ user: User) async throws -> User {
-        // 기본 필드들
-        var updateData: [String: String] = [
-            "nickname": user.nickname,
-            "level": String(user.level),
-            "exp": String(user.exp),
-            "nemo_fruit": String(user.nemoFruit),
-            "remaining_points": String(user.remainingPoints)
-        ]
-
-        // cheer_buff_expires_at이 있는 경우에만 추가 (nil이면 키 자체를 포함하지 않음)
-        if let expiresAt = user.cheerBuffExpiresAt {
-            updateData["cheer_buff_expires_at"] = expiresAt.ISO8601Format()
-        }
-
-        let updatedUser: User = try await supabase
-            .from("users")
-            .update(updateData)
-            .eq("player_id", value: user.playerId)
-            .select("*")
-            .single()
-            .execute()
-            .value
-
-        return updatedUser
-    }
 }
