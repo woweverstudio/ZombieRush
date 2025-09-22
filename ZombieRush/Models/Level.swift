@@ -42,8 +42,8 @@ struct Level {
         self.levelMinExp = Level.getMinExpForLevel(self.currentLevel)
         self.levelMaxExp = Level.getMaxExpForLevel(self.currentLevel)
         self.expToNextLevel = self.levelMaxExp - self.levelMinExp
-        self.remainingExp = self.levelMaxExp - self.currentExp
         self.isMaxLevel = self.currentLevel >= Level.maxLevel
+        self.remainingExp = self.isMaxLevel ? 0 : self.levelMaxExp - self.currentExp
 
         // 진행률 계산 (현재 레벨 내에서의 진행률)
         if self.isMaxLevel {
