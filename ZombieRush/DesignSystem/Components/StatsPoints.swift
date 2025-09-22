@@ -1,11 +1,11 @@
 import SwiftUI
 
-// MARK: - Nemo Fruit Icon Sizes
-enum NemoFruitIconSize {
-    case small   // 12pt
-    case medium  // 16pt
-    case large   // 24pt
-
+// MARK: - Stats Point Icon Sizes
+enum StatsPointIconSize {
+    case small
+    case medium
+    case large
+    
     var frame: CGFloat {
         switch self {
         case .small:
@@ -18,33 +18,33 @@ enum NemoFruitIconSize {
     }
 }
 
-// MARK: - Nemo Fruit Icon Component
-struct NemoFruitIcon: View {
-    let size: NemoFruitIconSize
+// MARK: - Stats Point Icon Component
+struct StatsPointIcon: View {
+    let size: StatsPointIconSize
 
-    init(size: NemoFruitIconSize = .medium) {
+    init(size: StatsPointIconSize = .medium) {
         self.size = size
     }
 
     var body: some View {
-        Image(systemName: "diamond.fill")
+        Image(systemName: "star.fill")
             .resizable()
             .scaledToFit()
-            .foregroundColor(.yellow)
+            .foregroundColor(Color.cyan)
             .frame(width: size.frame, height: size.frame)
     }
 }
 
-// MARK: - Nemo Fruit Badge Component (잔여 네모열매 표시)
-struct NemoFruitBadge: View {
+// MARK: - Stats Point Badge Component (잔여 스텟포인트 표시)
+struct StatsPointBadge: View {
     @Environment(UserStateManager.self) var userStateManager
 
     var body: some View {
         HStack(spacing: 6) {
-            NemoFruitIcon(size: .medium)
-            Text("\(userStateManager.nemoFruits)")
+            StatsPointIcon(size: .medium)
+            Text("\(userStateManager.remainingPoints)")
                 .font(.system(size: 18, weight: .bold, design: .monospaced))
-                .foregroundColor(.yellow)
+                .foregroundColor(Color.cyan)
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 10)
@@ -53,22 +53,22 @@ struct NemoFruitBadge: View {
                 .fill(Color.black.opacity(0.6))
                 .overlay(
                     RoundedRectangle(cornerRadius: 16)
-                        .stroke(Color.yellow.opacity(0.3), lineWidth: 1)
+                        .stroke(Color.cyan.opacity(0.3), lineWidth: 1)
                 )
         )
     }
 }
 
-// MARK: - Nemo Fruit Cost Component (비용 표시)
-struct NemoFruitCost: View {
+// MARK: - Stats Point Cost Component (비용 표시)
+struct StatsPointCost: View {
     let count: Int
 
     var body: some View {
         HStack(spacing: 4) {
-            NemoFruitIcon(size: .small)
+            StatsPointIcon(size: .small)
             Text("\(count)")
                 .font(.system(size: 12, weight: .bold, design: .monospaced))
-                .foregroundColor(.yellow)
+                .foregroundColor(Color.cyan)
         }
     }
 }
@@ -79,27 +79,27 @@ struct NemoFruitCost: View {
         // 아이콘 크기별 표시
         HStack(spacing: 16) {
             VStack {
-                NemoFruitIcon(size: .small)
+                StatsPointIcon(size: .small)
                 Text("Small").font(.caption)
             }
             VStack {
-                NemoFruitIcon(size: .medium)
+                StatsPointIcon(size: .medium)
                 Text("Medium").font(.caption)
             }
             VStack {
-                NemoFruitIcon(size: .large)
+                StatsPointIcon(size: .large)
                 Text("Large").font(.caption)
             }
         }
 
-        // 뱃지 표시 (실제 잔여 개수 표시)
-        NemoFruitBadge()
+        // 뱃지 표시 (실제 잔여 포인트 표시)
+        StatsPointBadge()
 
         // 비용 표시
         HStack(spacing: 16) {
-            NemoFruitCost(count: 5)
-            NemoFruitCost(count: 25)
-            NemoFruitCost(count: 100)
+            StatsPointCost(count: 1)
+            StatsPointCost(count: 5)
+            StatsPointCost(count: 10)
         }
     }
     .padding()

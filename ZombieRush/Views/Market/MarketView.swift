@@ -122,7 +122,6 @@ struct MarketItemCard: View {
             // 아이콘
             if item.currencyType == .fruit {
                 NemoFruitIcon(size: .large)
-                    .frame(width: 60, height: 60)
                     .background(
                         Circle()
                             .fill(Color.dsSurface)

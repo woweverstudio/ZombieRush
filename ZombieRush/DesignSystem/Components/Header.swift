@@ -69,31 +69,6 @@ struct Header: View {
     }
 }
 
-// MARK: - Badge Components (Header에서 사용)
-struct StatsPointBadge: View {
-    @Environment(UserStateManager.self) var userStateManager
-
-    var body: some View {
-        HStack(spacing: 8) {
-            Image(systemName: "star.fill")
-                .foregroundColor(Color.dsCoin)
-                .font(.system(size: 20))
-            Text("\(userStateManager.remainingPoints)")
-                .font(.system(size: 16, weight: .bold, design: .monospaced))
-                .foregroundColor(Color.dsCoin)
-        }
-        .padding(.horizontal, 16)
-        .padding(.vertical, 8)
-        .background(
-            RoundedRectangle(cornerRadius: 20)
-                .fill(Color.dsOverlay)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 20)
-                        .stroke(Color.neonYellow.opacity(0.5), lineWidth: 1)
-                )
-        )
-    }
-}
 
 
 // MARK: - Preview

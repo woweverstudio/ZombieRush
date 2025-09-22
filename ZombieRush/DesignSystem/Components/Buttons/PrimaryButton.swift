@@ -236,13 +236,7 @@ struct PrimaryButton<TrailingContent: View>: View {
         // Buttons with trailing content (like stat upgrade and spirit purchase)
         VStack(spacing: 12) {
             PrimaryButton(title: "업그레이드", style: .cyan, trailingContent: {
-                HStack(spacing: 4) {
-                    Image(systemName: "star.fill")
-                        .font(.system(size: 12))
-                    Text("1")
-                        .font(.system(size: 12, weight: .bold, design: .monospaced))
-                }
-                .foregroundColor(.yellow)
+                StatsPointCost(count: 1)
             }, action: {
                 print("Upgrade tapped")
             })

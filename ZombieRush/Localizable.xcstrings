@@ -16,9 +16,6 @@
     "%lld마리" : {
 
     },
-    "1" : {
-
-    },
     "APP_TITLE" : {
       "comment" : "App display name for notifications",
       "extractionState" : "manual",
