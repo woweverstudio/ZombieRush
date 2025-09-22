@@ -27,7 +27,7 @@ struct ForceUpdateView: View {
                     .multilineTextAlignment(.center)
 
                 // 앱스토어 이동 버튼
-                NeonButton(TextConstants.ForceUpdate.goToAppStore, style: .cyan) {
+                PrimaryButton(title: TextConstants.ForceUpdate.goToAppStore, style: .cyan, fullWidth: true) {
                     openAppStore()
                 }
 

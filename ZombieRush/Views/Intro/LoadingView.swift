@@ -51,7 +51,19 @@ struct LoadingView: View {
                 Spacer()
 
                 // 게임 타이틀 (로딩 화면용으로 크게)
-                GameTitle(titleSize: 40, subtitleSize: 60)
+                VStack(spacing: max(40 * 0.2, 8)) {
+                    Text(TextConstants.GameStart.titleLine1)
+                        .font(.system(size: 40, weight: .heavy, design: .monospaced))
+                        .foregroundColor(Color(red: 1.0, green: 0.0, blue: 1.0))
+                        .shadow(color: Color(red: 1.0, green: 0.0, blue: 1.0), radius: 15, x: 0, y: 0)
+                        .shadow(color: Color(red: 1.0, green: 0.0, blue: 1.0).opacity(0.5), radius: 30, x: 0, y: 0)
+
+                    Text(TextConstants.GameStart.titleLine2)
+                        .font(.system(size: 60, weight: .heavy, design: .monospaced))
+                        .foregroundColor(Color(red: 0.0, green: 0.8, blue: 1.0))
+                        .shadow(color: Color(red: 0.0, green: 0.8, blue: 1.0), radius: 20, x: 0, y: 0)
+                        .shadow(color: Color(red: 0.0, green: 0.8, blue: 1.0).opacity(0.5), radius: 40, x: 0, y: 0)
+                }
 
 
                 // 로딩 프로그레스 바

@@ -8,12 +8,9 @@ struct StatsCard: View {
     
     var body: some View {
         Button(action: {
-            // 오디오/햅틱은 비동기로 처리 (UI 블로킹 방지)
-            DispatchQueue.global(qos: .userInteractive).async {
-                AudioManager.shared.playButtonSound()
-                HapticManager.shared.playButtonHaptic()
-            }
-
+            AudioManager.shared.playButtonSound()
+            HapticManager.shared.playButtonHaptic()
+            
             router.navigate(to: .myInfo(category: .stats))
         }) {
             ZStack {

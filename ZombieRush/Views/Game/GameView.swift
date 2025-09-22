@@ -8,7 +8,6 @@
 import SwiftUI
 import SpriteKit
 
-
 struct GameView: View {
     @Environment(AppRouter.self) var router
     @Environment(GameKitManager.self) var gameKitManager
@@ -81,21 +80,23 @@ struct GameView: View {
                 // 버튼들
                 HStack(spacing: 20) {
                     // 나가기 버튼
-                    StandardButton(
-                        TextConstants.Pause.quitButton,
+                    PrimaryButton(
+                        title: TextConstants.Pause.quitButton,
+                        style: .red,
                         width: 200,
-                        color: .warning,
+                        height: 50,
                         action: {
                             gameScene?.clearGameNodes()
                             router.quitToMain()
                         }
                     )
-                    
+
                     // 계속하기 버튼
-                    StandardButton(
-                        TextConstants.Pause.resumeButton,
+                    PrimaryButton(
+                        title: TextConstants.Pause.resumeButton,
+                        style: .cyan,
                         width: 200,
-                        color: .main,
+                        height: 50,
                         action: {
                             gameScene?.resumeGame()
                         }

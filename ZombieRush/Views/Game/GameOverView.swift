@@ -20,10 +20,8 @@ struct GameOverView: View {
                 HStack {
                     Spacer()
                     Button(action: {
-                        DispatchQueue.global(qos: .userInteractive).async {
-                            AudioManager.shared.playButtonSound()
-                            HapticManager.shared.playButtonHaptic()
-                        }
+                        AudioManager.shared.playButtonSound()
+                        HapticManager.shared.playButtonHaptic()
                         
                         router.quitToMain()                        
                     }) {

@@ -7,6 +7,7 @@ enum PrimaryButtonStyle {
     case white
     case yellow
     case orange
+    case red
     case disabled
 
     var backgroundColor: Color {
@@ -21,6 +22,8 @@ enum PrimaryButtonStyle {
             return Color.yellow.opacity(0.2)
         case .orange:
             return Color.orange.opacity(0.2)
+        case .red:
+            return Color.red.opacity(0.2)
         case .disabled:
             return Color.gray.opacity(0.1)
         }
@@ -38,6 +41,8 @@ enum PrimaryButtonStyle {
             return Color.yellow.opacity(0.5)
         case .orange:
             return Color.orange.opacity(0.5)
+        case .red:
+            return Color.red.opacity(0.5)
         case .disabled:
             return Color.gray.opacity(0.3)
         }
@@ -64,8 +69,43 @@ enum PrimaryButtonStyle {
             return Color.yellow
         case .orange:
             return Color.orange
+        case .red:
+            return Color.red
         case .disabled:
             return Color.clear
+        }
+    }
+}
+
+// MARK: - Primary Button Size
+enum PrimaryButtonSize {
+    case small
+    case medium
+
+    var fontSize: CGFloat {
+        switch self {
+        case .small:
+            return 12
+        case .medium:
+            return 16
+        }
+    }
+
+    var horizontalPadding: CGFloat {
+        switch self {
+        case .small:
+            return 16
+        case .medium:
+            return 20
+        }
+    }
+
+    var verticalPadding: CGFloat {
+        switch self {
+        case .small:
+            return 8
+        case .medium:
+            return 12
         }
     }
 }
@@ -74,18 +114,27 @@ enum PrimaryButtonStyle {
 struct PrimaryButton: View {
     let title: String
     let style: PrimaryButtonStyle
+    let size: PrimaryButtonSize
     let fullWidth: Bool
+    let width: CGFloat?
+    let height: CGFloat?
     let action: () -> Void
 
     init(
         title: String,
         style: PrimaryButtonStyle = .cyan,
+        size: PrimaryButtonSize = .medium,
         fullWidth: Bool = false,
+        width: CGFloat? = nil,
+        height: CGFloat? = nil,
         action: @escaping () -> Void
     ) {
         self.title = title
         self.style = style
+        self.size = size
         self.fullWidth = fullWidth
+        self.width = width
+        self.height = height
         self.action = action
     }
 
@@ -96,25 +145,22 @@ struct PrimaryButton: View {
 
             action()
         }) {
-            HStack(spacing: 8) {
-                Text(title)
-                    .font(.system(size: 14, weight: .bold, design: .monospaced))
-                    .foregroundColor(style.textColor)
-
-                Spacer()
-            }
-            .frame(maxWidth: fullWidth ? .infinity : nil)
-            .padding(.vertical, 12)
-            .padding(.horizontal, 16)
-            .background(
-                RoundedRectangle(cornerRadius: 8)
-                    .fill(style.backgroundColor)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 8)
-                            .stroke(style.borderColor, lineWidth: 1)
-                    )
-            )
-            .shadow(color: style.shadowColor.opacity(0.3), radius: 4, x: 0, y: 0)
+            Text(title)
+                .font(.system(size: size.fontSize, weight: .bold, design: .monospaced))
+                .foregroundColor(style.textColor)
+                .frame(width: width, height: height)
+                .frame(maxWidth: fullWidth ? .infinity : nil)
+                .padding(.vertical, height == nil ? size.verticalPadding : 0)
+                .padding(.horizontal, width == nil ? size.horizontalPadding : 0)
+                .background(
+                    RoundedRectangle(cornerRadius: 8)
+                        .fill(style.backgroundColor)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 8)
+                                .stroke(style.borderColor, lineWidth: 1)
+                        )
+                )
+                .shadow(color: style.shadowColor.opacity(0.3), radius: 4, x: 0, y: 0)
         }
         .disabled(style == .disabled)
         .buttonStyle(PlainButtonStyle())
@@ -124,12 +170,35 @@ struct PrimaryButton: View {
 // MARK: - Preview
 #Preview {
     VStack(spacing: 16) {
+        // Full width buttons
         PrimaryButton(title: "구매하기", style: .cyan, fullWidth: true) {
             print("Purchase tapped")
         }
 
-        PrimaryButton(title: "취소", style: .magenta) {
+        PrimaryButton(title: "취소", style: .magenta, fullWidth: true) {
             print("Cancel tapped")
+        }
+
+        // Size variations
+        HStack(spacing: 12) {
+            PrimaryButton(title: "Small", style: .yellow, size: .small) {
+                print("Small tapped")
+            }
+
+            PrimaryButton(title: "Medium", style: .orange) {
+                print("Medium tapped")
+            }
+        }
+
+        // Fixed size buttons (like StandardButton)
+        HStack(spacing: 12) {
+            PrimaryButton(title: "RESUME", style: .cyan, width: 120, height: 44) {
+                print("Resume tapped")
+            }
+
+            PrimaryButton(title: "QUIT", style: .red, width: 100, height: 44) {
+                print("Quit tapped")
+            }
         }
 
         PrimaryButton(title: "비활성화", style: .disabled, fullWidth: true) {

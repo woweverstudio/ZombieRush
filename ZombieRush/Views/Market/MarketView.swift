@@ -117,72 +117,64 @@ struct MarketItemCard: View {
     @Environment(UserStateManager.self) var userStateManager
 
     var body: some View {
-        VStack(spacing: 12) {
-            // 아이콘
-            Image(systemName: item.iconName)
-                .font(.system(size: 32, weight: .bold))
-                .foregroundColor(item.currencyType == .won ? .yellow : .cyan)
-                .frame(width: 60, height: 60)
-                .background(
-                    Circle()
-                        .fill(Color.dsSurface)
-                        .overlay(
-                            Circle()
-                                .stroke(item.currencyType == .won ? Color.neonYellow.opacity(0.5) : Color.cyan.opacity(0.5), lineWidth: 2)
-                        )
-                )
-
-            // 이름
-            Text(item.name)
-                .font(.system(size: 14, weight: .bold, design: .monospaced))
-                .foregroundColor(Color.dsTextPrimary)
-                .multilineTextAlignment(.center)
-
-            // 설명
-            Text(item.description)
-                .font(.system(size: 10, design: .monospaced))
-                .foregroundColor(.white.opacity(0.7))
-                .multilineTextAlignment(.center)
-                .lineLimit(2)
-                .frame(height: 30)
-
-            // 가격
-            HStack(spacing: 4) {
-                Image(systemName: item.currencyType == .won ? "wonsign.circle.fill" : "diamond.fill")
-                    .font(.system(size: 12))
-                    .foregroundColor(item.currencyType == .won ? .green : .yellow)
-
-                Text("\(item.price)")
-                    .font(.system(size: 12, weight: .bold, design: .monospaced))
-                    .foregroundColor(item.currencyType == .won ? .green : .yellow)
-            }
-
-            // 구매 버튼
-            Button(action: {
-                purchaseItem()
-            }) {
-                Text("구매")
-                    .font(.system(size: 12, weight: .bold, design: .monospaced))
-                    .foregroundColor(Color.dsTextPrimary)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 8)
+        Card(style: .cyberpunk) {
+            VStack(spacing: 12) {
+                // 아이콘
+                Image(systemName: item.iconName)
+                    .font(.system(size: 32, weight: .bold))
+                    .foregroundColor(item.currencyType == .won ? .yellow : .cyan)
+                    .frame(width: 60, height: 60)
                     .background(
-                        RoundedRectangle(cornerRadius: 6)
-                            .fill(canAfford() ? Color.cyan.opacity(0.8) : Color.gray.opacity(0.3))
+                        Circle()
+                            .fill(Color.dsSurface)
+                            .overlay(
+                                Circle()
+                                    .stroke(item.currencyType == .won ? Color.neonYellow.opacity(0.5) : Color.cyan.opacity(0.5), lineWidth: 2)
+                            )
                     )
+
+                // 이름
+                Text(item.name)
+                    .font(.system(size: 14, weight: .bold, design: .monospaced))
+                    .foregroundColor(Color.dsTextPrimary)
+                    .multilineTextAlignment(.center)
+
+                // 설명
+                Text(item.description)
+                    .font(.system(size: 10, design: .monospaced))
+                    .foregroundColor(.white.opacity(0.7))
+                    .multilineTextAlignment(.center)
+                    .lineLimit(2)
+                    .frame(height: 30)
+
+                // 가격
+                HStack(spacing: 4) {
+                    Image(systemName: item.currencyType == .won ? "wonsign.circle.fill" : "diamond.fill")
+                        .font(.system(size: 12))
+                        .foregroundColor(item.currencyType == .won ? .green : .yellow)
+
+                    Text("\(item.price)")
+                        .font(.system(size: 12, weight: .bold, design: .monospaced))
+                        .foregroundColor(item.currencyType == .won ? .green : .yellow)
+                }
+
+                // 구매 버튼
+                Button(action: {
+                    purchaseItem()
+                }) {
+                    Text("구매")
+                        .font(.system(size: 12, weight: .bold, design: .monospaced))
+                        .foregroundColor(Color.dsTextPrimary)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 8)
+                        .background(
+                            RoundedRectangle(cornerRadius: 6)
+                                .fill(canAfford() ? Color.cyan.opacity(0.8) : Color.gray.opacity(0.3))
+                        )
+                }
+                .disabled(!canAfford())
             }
-            .disabled(!canAfford())
         }
-        .frame(maxWidth: .infinity)
-        .padding(16)
-        .background(
-            RoundedRectangle(cornerRadius: 12)
-                .fill(Color.dsSurface)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 12)
-                        .stroke(Color.dsCard, lineWidth: 1)
-                )
-        )
     }
 
     private func canAfford() -> Bool {

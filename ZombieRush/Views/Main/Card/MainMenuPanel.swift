@@ -73,7 +73,7 @@ struct MainMenuPanel: View {
             }
 
             // 게임 시작 버튼
-            NeonButton(TextConstants.Main.startButton, fullWidth: true) {
+            PrimaryButton(title: TextConstants.Main.startButton, style: .cyan, fullWidth: true) {
                 router.navigate(to: .game)
             }
         }
