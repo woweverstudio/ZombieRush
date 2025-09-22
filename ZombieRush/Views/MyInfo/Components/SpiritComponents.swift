@@ -122,7 +122,11 @@ struct SpiritDetailPanel: View {
 
     private func purchaseSpirits() async {
         let success = await userStateManager.purchaseSpirits(spiritType, quantity: selectedQuantity)
-        if !success {
+        if success {
+            // 정령 구매 성공 시 최신 데이터 재조회하여 UI 업데이트
+            await spiritsStateManager.refreshSpirits()
+            print("💎 Spirit: 정령 구매 및 UI 업데이트 완료")
+        } else {
             print("💎 Spirit: 정령 구매 실패")
         }
     }

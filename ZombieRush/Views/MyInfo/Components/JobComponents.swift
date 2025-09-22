@@ -172,6 +172,7 @@ struct JobDetailPanel: View {
 
         // 정령 개수 차감 및 해금
         await unlockJobWithSpirits(requirement: requirement)
+        await jobsStateManager.refreshJobs()
     }
 
     private func canUnlockJob(requirement: JobUnlockRequirement) -> Bool {
@@ -226,6 +227,7 @@ struct JobDetailPanel: View {
     private func unlockJobDirectly() async {
         // 직업 해금 로직
         await jobsStateManager.unlockJob(jobType)
+        await jobsStateManager.refreshJobs()
         print("🔓 직업 \(jobType.displayName) 해금됨")
     }
 

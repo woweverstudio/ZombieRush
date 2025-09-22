@@ -108,6 +108,29 @@ class UserStateManager {
         }
     }
 
+    /// 사용자 데이터 재조회 (최신 데이터 새로고침)
+    func refreshUser() async {
+        guard let playerId = currentUser?.playerId, !playerId.isEmpty else {
+            print("📱 UserState: 재조회 실패 - playerID가 없습니다")
+            return
+        }
+
+        isLoading = true
+        defer { isLoading = false }
+
+        do {
+            if let refreshedUser = try await userRepository.getUser(by: playerId) {
+                currentUser = refreshedUser
+                print("📱 UserState: 사용자 데이터 재조회 성공")
+            } else {
+                print("📱 UserState: 재조회 실패 - 사용자 데이터를 찾을 수 없습니다")
+            }
+        } catch {
+            self.error = error
+            print("📱 UserState: 사용자 데이터 재조회 실패 - \(error.localizedDescription)")
+        }
+    }
+
     /// 현재 사용자 정보 출력 (테스트용)
     func printCurrentUser() {
         if let user = currentUser {

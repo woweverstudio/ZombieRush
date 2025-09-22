@@ -56,6 +56,29 @@ class SpiritsStateManager {
             print("🔥 Spirits: 정령 업데이트 실패 - \(error.localizedDescription)")
         }
     }
+
+    /// 정령 데이터 재조회 (최신 데이터 새로고침)
+    func refreshSpirits() async {
+        guard let playerId = currentSpirits?.playerId, !playerId.isEmpty else {
+            print("🔥 Spirits: 재조회 실패 - playerID가 없습니다")
+            return
+        }
+
+        isLoading = true
+        defer { isLoading = false }
+
+        do {
+            if let refreshedSpirits = try await spiritsRepository.getSpirits(by: playerId) {
+                currentSpirits = refreshedSpirits
+                print("🔥 Spirits: 정령 데이터 재조회 성공")
+            } else {
+                print("🔥 Spirits: 재조회 실패 - 정령 데이터를 찾을 수 없습니다")
+            }
+        } catch {
+            self.error = error
+            print("🔥 Spirits: 정령 데이터 재조회 실패 - \(error.localizedDescription)")
+        }
+    }
     
     // MARK: - Private Helper Methods
 

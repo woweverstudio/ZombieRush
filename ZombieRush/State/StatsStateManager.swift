@@ -49,6 +49,29 @@ class StatsStateManager {
         }
     }
 
+    /// 스탯 데이터 재조회 (최신 데이터 새로고침)
+    func refreshStats() async {
+        guard let playerId = currentStats?.playerId, !playerId.isEmpty else {
+            print("📊 Stats: 재조회 실패 - playerID가 없습니다")
+            return
+        }
+
+        isLoading = true
+        defer { isLoading = false }
+
+        do {
+            if let refreshedStats = try await statsRepository.getStats(by: playerId) {
+                currentStats = refreshedStats
+                print("📊 Stats: 스탯 데이터 재조회 성공")
+            } else {
+                print("📊 Stats: 재조회 실패 - 스탯 데이터를 찾을 수 없습니다")
+            }
+        } catch {
+            self.error = error
+            print("📊 Stats: 스탯 데이터 재조회 실패 - \(error.localizedDescription)")
+        }
+    }
+
     // MARK: - 디버깅 및 기타
 
     /// 현재 스탯 정보 출력 (테스트용)

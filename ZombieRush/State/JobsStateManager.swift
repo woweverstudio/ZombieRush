@@ -103,6 +103,29 @@ class JobsStateManager {
         }
     }
 
+    /// 직업 데이터 재조회 (최신 데이터 새로고침)
+    func refreshJobs() async {
+        guard !currentJobs.playerId.isEmpty else {
+            print("⚔️ Jobs: 재조회 실패 - playerID가 없습니다")
+            return
+        }
+
+        isLoading = true
+        defer { isLoading = false }
+
+        do {
+            if let refreshedJobs = try await jobsRepository.getJobs(by: currentJobs.playerId) {
+                currentJobs = refreshedJobs
+                print("⚔️ Jobs: 직업 데이터 재조회 성공")
+            } else {
+                print("⚔️ Jobs: 재조회 실패 - 직업 데이터를 찾을 수 없습니다")
+            }
+        } catch {
+            self.error = error
+            print("⚔️ Jobs: 직업 데이터 재조회 실패 - \(error.localizedDescription)")
+        }
+    }
+
     /// 직업 잠금 해제
     func unlockJob(_ jobType: JobType) async {
         do {

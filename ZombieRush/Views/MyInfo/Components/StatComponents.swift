@@ -99,7 +99,7 @@ struct StatDetailPanel: View {
         if success {
             // 스텟 업그레이드
             await statsStateManager.upgradeStat(statType)
-
+            await statsStateManager.refreshStats()
             // UI 업데이트 강제
             await MainActor.run {
                 print("🔄 스텟 업그레이드 완료 - 포인트: \(userStateManager.remainingPoints)")
