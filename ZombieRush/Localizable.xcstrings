@@ -13,6 +13,16 @@
     "%lld" : {
 
     },
+    "%lld/%lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lld/%2$lld"
+          }
+        }
+      }
+    },
     "%lld마리" : {
 
     },
@@ -922,6 +932,16 @@
     "Lv. %lld" : {
 
     },
+    "Lv.%lld/%lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Lv.%1$lld/%2$lld"
+          }
+        }
+      }
+    },
     "MAIN_START" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1190,6 +1210,12 @@
           }
         }
       }
+    },
+    "OFF" : {
+
+    },
+    "ON" : {
+
     },
     "PAUSE_QUIT_BUTTON" : {
       "comment" : "Pause overlay - Quit button text",
@@ -1701,7 +1727,7 @@
     "구매 수량" : {
 
     },
-    "기본 스텟" : {
+    "기본 직업" : {
 
     },
     "남은 포인트: %lld" : {
@@ -1721,6 +1747,15 @@
 
     },
     "네모열매 패키지" : {
+
+    },
+    "네모의 응원" : {
+
+    },
+    "네모의 응원 OFF" : {
+
+    },
+    "네모의 응원 ON" : {
 
     },
     "설명" : {

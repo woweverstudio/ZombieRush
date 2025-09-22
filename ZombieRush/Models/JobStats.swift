@@ -7,6 +7,13 @@
 
 import Foundation
 
+/// 직업 해금 요구사항
+struct JobUnlockRequirement {
+    let spiritType: String // SpiritType의 rawValue
+    let count: Int        // 필요한 개수
+    let requiredLevel: Int // 필요한 레벨
+}
+
 /// 직업별 스탯 데이터 모델 (정적 데이터)
 struct JobStats {
     let jobKey: String    // 직업 키
@@ -14,16 +21,17 @@ struct JobStats {
     let energy: Int      // 에너지
     let move: Int        // 이동 속도
     let attackSpeed: Int // 공격 속도
-    
-    private static let defaults = JobStats(jobKey: "novice", hp: 100, energy: 100, move: 10, attackSpeed: 10)
+    let unlockRequirement: JobUnlockRequirement? // 해금 조건
+
+    private static let defaults = JobStats(jobKey: "novice", hp: 100, energy: 100, move: 10, attackSpeed: 10, unlockRequirement: nil)
     
     // 정적 데이터 딕셔너리
     private static let statsData: [String: JobStats] = [
-        "novice": JobStats(jobKey: "novice", hp: 100, energy: 100, move: 10, attackSpeed: 10),
-        "fire_mage": JobStats(jobKey: "fire_mage", hp: 120, energy: 110, move: 10, attackSpeed: 10),
-        "ice_mage": JobStats(jobKey: "ice_mage", hp: 90, energy: 80, move: 10, attackSpeed: 10),
-        "lightning_mage": JobStats(jobKey: "lightning_mage", hp: 100, energy: 110, move: 14, attackSpeed: 10),
-        "dark_mage": JobStats(jobKey: "dark_mage", hp: 85, energy: 115, move: 10, attackSpeed: 14)
+        "novice": JobStats(jobKey: "novice", hp: 100, energy: 100, move: 10, attackSpeed: 10, unlockRequirement: nil),
+        "fire_mage": JobStats(jobKey: "fire_mage", hp: 120, energy: 110, move: 10, attackSpeed: 10, unlockRequirement: JobUnlockRequirement(spiritType: "fire", count: 15, requiredLevel: 10)),
+        "ice_mage": JobStats(jobKey: "ice_mage", hp: 90, energy: 80, move: 10, attackSpeed: 10, unlockRequirement: JobUnlockRequirement(spiritType: "ice", count: 15, requiredLevel: 10)),
+        "lightning_mage": JobStats(jobKey: "lightning_mage", hp: 100, energy: 110, move: 14, attackSpeed: 10, unlockRequirement: JobUnlockRequirement(spiritType: "lightning", count: 20, requiredLevel: 10)),
+        "dark_mage": JobStats(jobKey: "dark_mage", hp: 85, energy: 115, move: 10, attackSpeed: 14, unlockRequirement: JobUnlockRequirement(spiritType: "dark", count: 25, requiredLevel: 20))
     ]
 
     /// 모든 스탯 데이터 (배열 형태로 반환)

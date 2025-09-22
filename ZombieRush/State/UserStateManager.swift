@@ -50,6 +50,10 @@ class UserStateManager {
     var nemoFruits: Int {
         currentUser?.nemoFruit ?? 0
     }
+    
+    var isCheerBuffActive: Bool {
+        currentUser?.isCheerBuffActive ?? false
+    }
 
     // MARK: - Public Methods
 
@@ -117,7 +121,7 @@ class UserStateManager {
             print("📱 EXP: \(user.exp)")
             print("📱 Nemo Fruit: \(user.nemoFruit)")
             print("📱 Remaining Points: \(user.remainingPoints)")
-            print("📱 Cheer Buff: \(user.cheerBuff)")
+            print("📱 Cheer Buff: \(user.cheerBuffExpiresAt ?? .distantPast)")
             print("📱 Profile Photo: \(userImage != nil ? "✅" : "❌")")
             print("📱 Created At: \(user.createdAt)")
             print("📱 Updated At: \(user.updatedAt)")
@@ -220,6 +224,42 @@ class UserStateManager {
         }
     }
 
+    /// 네모의 응원 구매 (3000원, 3일) - IAP 구현 전까지 테스트용
+    func purchaseCheerBuff() async -> Bool {
+        guard let currentUser = currentUser else {
+            print("📱 UserState: 사용자가 없습니다.")
+            return false
+        }
+
+        // 이미 활성화된 응원이 있는지 확인
+        if currentUser.isCheerBuffActive {
+            print("📱 UserState: 네모의 응원이 이미 활성화되어 있습니다.")
+            return false
+        }
+
+        // IAP 구현 전까지는 무조건 구매 가능 (테스트용)
+        // TODO: IAP 구현 후 실제 결제 처리 및 네모열매 차감 제거
+
+        // 3일 후 만료 시간 계산
+        let expirationDate = Calendar.current.date(byAdding: .day, value: 3, to: Date())!
+
+        var updatedUser = currentUser
+        // IAP 구현 전까지는 네모열매 차감하지 않음
+        // updatedUser.nemoFruit -= 3000
+        updatedUser.cheerBuffExpiresAt = expirationDate
+
+        do {
+            let savedUser = try await updateUserInDatabase(updatedUser)
+            self.currentUser = savedUser
+            print("📱 UserState: 네모의 응원 구매 완료 - 만료일: \(expirationDate)")
+            return true
+        } catch {
+            self.error = error
+            print("📱 UserState: 네모의 응원 구매 실패 - \(error.localizedDescription)")
+            return false
+        }
+    }
+
     /// 네모열매 추가
     func addNemoFruits(_ fruits: Int) async -> Bool {
         guard let currentUser = currentUser else {
@@ -293,16 +333,23 @@ class UserStateManager {
 
     /// 사용자 업데이트
     private func updateUserInDatabase(_ user: User) async throws -> User {
+        // 기본 필드들
+        var updateData: [String: String] = [
+            "nickname": user.nickname,
+            "level": String(user.level),
+            "exp": String(user.exp),
+            "nemo_fruit": String(user.nemoFruit),
+            "remaining_points": String(user.remainingPoints)
+        ]
+
+        // cheer_buff_expires_at이 있는 경우에만 추가 (nil이면 키 자체를 포함하지 않음)
+        if let expiresAt = user.cheerBuffExpiresAt {
+            updateData["cheer_buff_expires_at"] = expiresAt.ISO8601Format()
+        }
+
         let updatedUser: User = try await supabase
             .from("users")
-            .update([
-                "nickname": user.nickname,
-                "level": String(user.level),
-                "exp": String(user.exp),
-                "nemo_fruit": String(user.nemoFruit),
-                "remaining_points": String(user.remainingPoints),
-                "cheer_buff": user.cheerBuff ? "true" : "false"
-            ])
+            .update(updateData)
             .eq("player_id", value: user.playerId)
             .select("*")
             .single()

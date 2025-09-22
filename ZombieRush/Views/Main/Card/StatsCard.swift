@@ -72,13 +72,8 @@ struct StatsCard: View {
                             color: .orange
                         )
                         
-                        // 빈 공간 (3x2 그리드를 맞추기 위해)
-                        StatMiniCard(
-                            icon: "sparkles",
-                            label: "네모의 응원",
-                            value: statsStateManager.currentStats?.totemCount ?? 0,
-                            color: .orange
-                        )
+                        // 네모의 응원 상태
+                        CheerBuffCard(isActive: userStateManager.isCheerBuffActive)
                     }
                 }
                 .padding()
@@ -87,3 +82,4 @@ struct StatsCard: View {
         }
     }
 }
+

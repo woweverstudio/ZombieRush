@@ -194,8 +194,18 @@ extension MyInfoView {
                         }
                     )
                 }
+                
+                SelectionInfoCard(
+                    title: "네모의 응원",
+                    iconName: "medal.fill",
+                    iconColor: Color.dsSuccess,
+                    value: "\(userStateManager.isCheerBuffActive ? "ON" : "OFF")",
+                    isSelected: false,
+                    action: {}
+                )
             }
         }
+        .scrollIndicators(.never)
     }
 
     private var spiritsGridView: some View {

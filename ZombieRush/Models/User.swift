@@ -14,7 +14,7 @@ struct User: Codable, Identifiable {
     var exp: Int          // 경험치 (레벨은 경험치로부터 계산)
     var nemoFruit: Int    // 네모 과일 (코인)
     var remainingPoints: Int  // 레벨업 시 증가하는 포인트
-    var cheerBuff: Bool   // 응원 버프
+    var cheerBuffExpiresAt: Date?   // 네모의 응원 만료 시간
     var createdAt: Date   // 생성일
     var updatedAt: Date   // 수정일
 
@@ -25,24 +25,30 @@ struct User: Codable, Identifiable {
         return Level.calculateLevel(from: exp)
     }
 
+    /// 네모의 응원 활성화 상태
+    var isCheerBuffActive: Bool {
+        guard let expiresAt = cheerBuffExpiresAt else { return false }
+        return expiresAt > Date()
+    }
+
     enum CodingKeys: String, CodingKey {
         case playerId = "player_id"
         case nickname
         case exp
         case nemoFruit = "nemo_fruit"
         case remainingPoints = "remaining_points"
-        case cheerBuff = "cheer_buff"
+        case cheerBuffExpiresAt = "cheer_buff_expires_at"
         case createdAt = "created_at"
         case updatedAt = "updated_at"
     }
 
-    init(playerId: String, nickname: String, exp: Int = 0, nemoFruit: Int = 0, remainingPoints: Int = 0, cheerBuff: Bool = false) {
+    init(playerId: String, nickname: String, exp: Int = 0, nemoFruit: Int = 0, remainingPoints: Int = 0, cheerBuffExpiresAt: Date? = nil) {
         self.playerId = playerId
         self.nickname = nickname
         self.exp = exp
         self.nemoFruit = nemoFruit
         self.remainingPoints = remainingPoints
-        self.cheerBuff = cheerBuff
+        self.cheerBuffExpiresAt = cheerBuffExpiresAt
         self.createdAt = Date()
         self.updatedAt = Date()
     }

@@ -60,8 +60,11 @@ struct StatMiniCard: View {
         VStack(spacing: 4) {
             // 아이콘
             Image(systemName: icon)
+                .resizable()
+                .scaledToFit()
+                .frame(width: 12, height: 12)
                 .foregroundColor(color)
-                .font(.system(size: 12, weight: .bold))
+                
 
             // 라벨
             Text(label)

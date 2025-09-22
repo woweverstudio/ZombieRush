@@ -3,6 +3,7 @@ import SwiftUI
 // MARK: - Market Item Type
 enum MarketItemType {
     case fruitPackage(count: Int, price: Int)
+    case cheerBuff(days: Int, price: Int)
 }
 
 // MARK: - Market Item
@@ -52,6 +53,15 @@ struct MarketView: View {
                 description: "네모열매 110개를 즉시 충전 (약 10% 보너스)",
                 iconName: "diamond.fill",
                 price: 10000,
+                currencyType: .won
+            ),
+            // 네모의 응원
+            MarketItem(
+                type: .cheerBuff(days: 3, price: 3000),
+                name: "네모의 응원",
+                description: "3일간 네모의 응원을 받습니다",
+                iconName: "star.circle.fill",
+                price: 3000,
                 currencyType: .won
             )
         ]
@@ -105,6 +115,27 @@ struct MarketView: View {
                     }
                     .padding(.horizontal, 20)
                 }
+
+                // 네모의 응원 섹션
+                VStack(alignment: .leading, spacing: 12) {
+                    Text("네모의 응원")
+                        .font(.system(size: 20, weight: .bold, design: .monospaced))
+                        .foregroundColor(.yellow)
+                        .padding(.horizontal, 20)
+
+                    LazyVGrid(columns: [
+                        GridItem(.flexible(), spacing: 12),
+                        GridItem(.flexible(), spacing: 12)
+                    ], spacing: 12) {
+                        ForEach(marketItems.filter { item in
+                            if case .cheerBuff = item.type { return true }
+                            return false
+                        }) { item in
+                            MarketItemCard(item: item)
+                        }
+                    }
+                    .padding(.horizontal, 20)
+                }
             }
             .padding(.vertical, 20)
         }
@@ -119,31 +150,12 @@ struct MarketItemCard: View {
     var body: some View {
         Card(style: .cyberpunk) {
             VStack(spacing: 12) {
-            // 아이콘
-            if item.currencyType == .fruit {
-                NemoFruitIcon(size: .large)
-                    .background(
-                        Circle()
-                            .fill(Color.dsSurface)
-                            .overlay(
-                                Circle()
-                                    .stroke(Color.yellow.opacity(0.5), lineWidth: 2)
-                            )
-                    )
-            } else {
-                Image(systemName: item.iconName)
-                    .font(.system(size: 32, weight: .bold))
-                    .foregroundColor(.yellow)
-                    .frame(width: 60, height: 60)
-                    .background(
-                        Circle()
-                            .fill(Color.dsSurface)
-                            .overlay(
-                                Circle()
-                                    .stroke(Color.neonYellow.opacity(0.5), lineWidth: 2)
-                            )
-                    )
-            }
+                switch item.type {
+                case .fruitPackage(let count, let price):
+                    NemoFruitIcon(size: .large)
+                case .cheerBuff(let days, let price):
+                    CheerBuffIcon(size: .large)
+                }
 
                 // 이름
                 Text(item.name)
@@ -196,7 +208,7 @@ struct MarketItemCard: View {
     private func canAfford() -> Bool {
         switch item.currencyType {
         case .won:
-            // 실제 현금 구매는 나중에 구현
+            // IAP 구현 전까지는 무조건 구매 가능
             return true
         case .fruit:
             return userStateManager.nemoFruits >= item.price
@@ -212,6 +224,17 @@ struct MarketItemCard: View {
                 let success = await userStateManager.addNemoFruits(count)
                 if success {
                     print("네모열매 \(count)개 지급 완료")
+                }
+            }
+            // TODO: IAP 구현 후 실제 결제 처리
+
+        case .cheerBuff(days: let days, price: _):
+            // 네모의 응원 구매
+            print("네모의 응원 \(days)일 구매 (₩\(item.price))")
+            Task {
+                let success = await userStateManager.purchaseCheerBuff()
+                if success {
+                    print("네모의 응원 \(days)일 활성화 완료")
                 }
             }
             // TODO: IAP 구현 후 실제 결제 처리
