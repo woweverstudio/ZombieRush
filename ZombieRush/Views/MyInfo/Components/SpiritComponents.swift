@@ -88,13 +88,8 @@ struct SpiritDetailPanel: View {
                 title: "정령 얻기",
                 style: canAfford() ? .cyan : .disabled,
                 trailingContent: {
-                    HStack(spacing: 4) {
-                        Image(systemName: "diamond.fill")
-                            .font(.system(size: 12))
-                        Text("\(selectedQuantity)")
-                            .font(.system(size: 12, weight: .bold, design: .monospaced))
-                    }
-                    .foregroundColor(canAfford() ? .cyan : .gray.opacity(0.5))
+                    NemoFruitCost(count: selectedQuantity)
+                        .foregroundColor(canAfford() ? .yellow : .gray.opacity(0.5))
                 },
                 action: {
                     Task {

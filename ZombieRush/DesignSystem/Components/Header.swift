@@ -11,7 +11,7 @@ enum HeaderBadgeType {
         case .statsPoints:
             StatsPointBadge()
         case .nemoFruits:
-            NemoFruitsBadge()
+            NemoFruitBadge()
         }
     }
 }
@@ -95,30 +95,6 @@ struct StatsPointBadge: View {
     }
 }
 
-struct NemoFruitsBadge: View {
-    @Environment(UserStateManager.self) var userStateManager
-
-    var body: some View {
-        HStack(spacing: 8) {
-            Image(systemName: "diamond.fill")
-                .foregroundColor(Color.cyan)
-                .font(.system(size: 20))
-            Text("\(userStateManager.nemoFruits)")
-                .font(.system(size: 16, weight: .bold, design: .monospaced))
-                .foregroundColor(Color.cyan)
-        }
-        .padding(.horizontal, 16)
-        .padding(.vertical, 8)
-        .background(
-            RoundedRectangle(cornerRadius: 20)
-                .fill(Color.dsOverlay)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 20)
-                        .stroke(Color.cyan.opacity(0.5), lineWidth: 1)
-                )
-        )
-    }
-}
 
 // MARK: - Preview
 #Preview {

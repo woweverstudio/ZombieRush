@@ -119,19 +119,32 @@ struct MarketItemCard: View {
     var body: some View {
         Card(style: .cyberpunk) {
             VStack(spacing: 12) {
-                // 아이콘
-                Image(systemName: item.iconName)
-                    .font(.system(size: 32, weight: .bold))
-                    .foregroundColor(item.currencyType == .won ? .yellow : .cyan)
+            // 아이콘
+            if item.currencyType == .fruit {
+                NemoFruitIcon(size: .large)
                     .frame(width: 60, height: 60)
                     .background(
                         Circle()
                             .fill(Color.dsSurface)
                             .overlay(
                                 Circle()
-                                    .stroke(item.currencyType == .won ? Color.neonYellow.opacity(0.5) : Color.cyan.opacity(0.5), lineWidth: 2)
+                                    .stroke(Color.yellow.opacity(0.5), lineWidth: 2)
                             )
                     )
+            } else {
+                Image(systemName: item.iconName)
+                    .font(.system(size: 32, weight: .bold))
+                    .foregroundColor(.yellow)
+                    .frame(width: 60, height: 60)
+                    .background(
+                        Circle()
+                            .fill(Color.dsSurface)
+                            .overlay(
+                                Circle()
+                                    .stroke(Color.neonYellow.opacity(0.5), lineWidth: 2)
+                            )
+                    )
+            }
 
                 // 이름
                 Text(item.name)
@@ -147,16 +160,20 @@ struct MarketItemCard: View {
                     .lineLimit(2)
                     .frame(height: 30)
 
-                // 가격
-                HStack(spacing: 4) {
-                    Image(systemName: item.currencyType == .won ? "wonsign.circle.fill" : "diamond.fill")
+            // 가격
+            HStack(spacing: 4) {
+                if item.currencyType == .fruit {
+                    NemoFruitIcon(size: .small)
+                } else {
+                    Image(systemName: "wonsign.circle.fill")
                         .font(.system(size: 12))
-                        .foregroundColor(item.currencyType == .won ? .green : .yellow)
-
-                    Text("\(item.price)")
-                        .font(.system(size: 12, weight: .bold, design: .monospaced))
-                        .foregroundColor(item.currencyType == .won ? .green : .yellow)
+                        .foregroundColor(.green)
                 }
+
+                Text("\(item.price)")
+                    .font(.system(size: 12, weight: .bold, design: .monospaced))
+                    .foregroundColor(item.currencyType == .won ? .green : .yellow)
+            }
 
                 // 구매 버튼
                 Button(action: {

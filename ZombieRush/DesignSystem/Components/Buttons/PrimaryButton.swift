@@ -248,13 +248,7 @@ struct PrimaryButton<TrailingContent: View>: View {
             })
 
             PrimaryButton(title: "정령 얻기", style: .cyan, trailingContent: {
-                HStack(spacing: 4) {
-                    Image(systemName: "diamond.fill")
-                        .font(.system(size: 12))
-                    Text("5")
-                        .font(.system(size: 12, weight: .bold, design: .monospaced))
-                }
-                .foregroundColor(.cyan)
+                NemoFruitCost(count: 5)
             }, action: {
                 print("Purchase spirit tapped")
             })
