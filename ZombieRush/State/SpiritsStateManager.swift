@@ -10,21 +10,16 @@ import SwiftUI
 
 @Observable
 class SpiritsStateManager {
-    // MARK: - Properties
+    // MARK: - Internal Properties (View에서 접근 가능)
     var currentSpirits: Spirits?
     var isLoading = false
     var error: Error?
-    
-    // Repository
+
+    // MARK: - Private Properties (내부 전용)
     private let spiritsRepository: SpiritsRepository
     
-    init(spiritsRepository: SpiritsRepository = SupabaseSpiritsRepository()) {
+    init(spiritsRepository: SpiritsRepository) {
         self.spiritsRepository = spiritsRepository
-    }
-    
-    // Legacy init for backward compatibility
-    convenience init() {
-        self.init(spiritsRepository: SupabaseSpiritsRepository())
     }
     
     // MARK: - Public Methods
@@ -62,66 +57,17 @@ class SpiritsStateManager {
         }
     }
     
-    /// 특정 정령 타입 수량 업데이트
-    func updateSpirit(type: SpiritType, count: Int) async {
-        guard let currentSpirits = currentSpirits else { return }
-        
-        do {
-            self.currentSpirits = try await spiritsRepository.addSpirit(
-                for: currentSpirits.playerId,
-                spiritType: type,
-                count: count - getCurrentCount(for: type) // 차이만큼 추가
-            )
-            print("🔥 Spirits: \(type.displayName) 수량 업데이트 완료")
-        } catch {
-            self.error = error
-            print("🔥 Spirits: \(type.displayName) 수량 업데이트 실패 - \(error.localizedDescription)")
-        }
-    }
-    
+    // MARK: - Private Helper Methods
+
+    /// 특정 정령 타입의 현재 수량 조회
     private func getCurrentCount(for spiritType: SpiritType) -> Int {
         guard let spirits = currentSpirits else { return 0 }
-        
+
         switch spiritType {
         case .fire: return spirits.fire
         case .ice: return spirits.ice
         case .lightning: return spirits.lightning
         case .dark: return spirits.dark
-        }
-    }
-    
-    /// 특정 정령 타입 수량 증가
-    func increaseSpirit(type: SpiritType, amount: Int = 1) async {
-        guard let currentSpirits = currentSpirits else { return }
-        
-        do {
-            self.currentSpirits = try await spiritsRepository.addSpirit(
-                for: currentSpirits.playerId,
-                spiritType: type,
-                count: amount
-            )
-            print("🔥 Spirits: \(type.displayName) \(amount)개 증가 완료")
-        } catch {
-            self.error = error
-            print("🔥 Spirits: \(type.displayName) 증가 실패 - \(error.localizedDescription)")
-        }
-    }
-    
-    /// 특정 정령 타입 수량 감소
-    func decreaseSpirit(type: SpiritType, amount: Int = 1) async {
-        guard let currentSpirits = currentSpirits else { return }
-        
-        do {
-            // 감소를 위해 음수 값 사용
-            self.currentSpirits = try await spiritsRepository.addSpirit(
-                for: currentSpirits.playerId,
-                spiritType: type,
-                count: -amount
-            )
-            print("🔥 Spirits: \(type.displayName) \(amount)개 감소 완료")
-        } catch {
-            self.error = error
-            print("🔥 Spirits: \(type.displayName) 감소 실패 - \(error.localizedDescription)")
         }
     }
     
@@ -177,13 +123,13 @@ class SpiritsStateManager {
         }
     }
     
-    /// 정령 추가 (구매용)
-    func addSpirit(_ spiritType: SpiritType, count: Int = 1) async {
+    /// 정령 수량 변경 (양수: 증가, 음수: 감소)
+    func addSpirit(_ spiritType: SpiritType, count: Int) async {
         guard let currentSpirits = currentSpirits else {
-            print("🔥 Spirits: 정령 추가 실패 - 데이터가 없습니다")
+            print("🔥 Spirits: 정령 변경 실패 - 데이터가 없습니다")
             return
         }
-        
+
         do {
             let updatedSpirits = try await spiritsRepository.addSpirit(
                 for: currentSpirits.playerId,
@@ -191,10 +137,13 @@ class SpiritsStateManager {
                 count: count
             )
             self.currentSpirits = updatedSpirits
-            print("🔥 Spirits: \(spiritType.displayName) \(count)마리 추가 완료")
+
+            let action = count > 0 ? "추가" : "감소"
+            print("🔥 Spirits: \(spiritType.displayName) \(abs(count))마리 \(action) 완료")
         } catch {
             self.error = error
-            print("🔥 Spirits: \(spiritType.displayName) 추가 실패 - \(error.localizedDescription)")
+            let action = count > 0 ? "추가" : "감소"
+            print("🔥 Spirits: \(spiritType.displayName) \(action) 실패 - \(error.localizedDescription)")
         }
     }
     

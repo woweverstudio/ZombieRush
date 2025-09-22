@@ -49,6 +49,7 @@ class MockSpiritsRepository: SpiritsRepository {
             throw NSError(domain: "MockSpiritsRepository", code: 404, userInfo: [NSLocalizedDescriptionKey: "Spirits not found"])
         }
 
+        // 정령 수량 변경
         switch spiritType {
         case .fire:
             currentSpirits.fire += count
@@ -60,7 +61,7 @@ class MockSpiritsRepository: SpiritsRepository {
             currentSpirits.dark += count
         }
 
-        spirits[playerID] = currentSpirits
+        self.spirits[playerID] = currentSpirits
         return currentSpirits
     }
 

@@ -8,26 +8,24 @@
 import Foundation
 import SwiftUI
 
-// MARK: - UserStateManager
-
+/// 사용자 데이터와 상태를 관리하는 StateManager
+/// View와 Repository 사이의 중간 계층으로 비즈니스 로직을 처리
 @Observable
 class UserStateManager {
-    // MARK: - Properties
+    // MARK: - Internal Properties (View에서 접근 가능)
     var currentUser: User?
     var userImage: UIImage?  // Game Center 프로필 사진 (메모리에서만 관리)
     var isLoading = false
     var error: Error?
 
-    // Repository
+    // MARK: - Private Properties (내부 전용)
     private let userRepository: UserRepository
+    private let spiritsRepository: SpiritsRepository
 
-    init(userRepository: UserRepository = SupabaseUserRepository()) {
+    init(userRepository: UserRepository,
+         spiritsRepository: SpiritsRepository) {
         self.userRepository = userRepository
-    }
-
-    // Legacy init for backward compatibility
-    convenience init() {
-        self.init(userRepository: SupabaseUserRepository())
+        self.spiritsRepository = spiritsRepository
     }
     
     var nickname: String {
@@ -267,4 +265,145 @@ class UserStateManager {
         }
     }
 
+    // MARK: - Market Related Methods (마켓 구매 기능)
+
+    /// 마켓 아이템 구매 가능 여부 확인
+    func canAffordMarketItem(_ item: MarketItem) -> Bool {
+        switch item.currencyType {
+        case .won:
+            // IAP 구현 전까지는 무조건 구매 가능 (테스트용)
+            return true
+        case .fruit:
+            return nemoFruits >= item.price
+        }
+    }
+
+    /// 마켓 아이템 구매 처리
+    func purchaseMarketItem(_ item: MarketItem) async -> Bool {
+        guard canAffordMarketItem(item) else {
+            print("📱 UserState: 마켓 아이템 구매 실패 - 재화 부족")
+            return false
+        }
+
+        switch item.type {
+        case .fruitPackage(count: let count, price: _):
+            // 네모열매 패키지 구매
+            print("📱 UserState: 네모열매 \(count)개 패키지 구매 (₩\(item.price))")
+            return await addNemoFruits(count)
+
+        case .cheerBuff(days: let days, price: _):
+            // 네모의 응원 구매
+            print("📱 UserState: 네모의 응원 \(days)일 구매 (₩\(item.price))")
+            return await purchaseCheerBuff()
+        }
+    }
+
+    /// 마켓 아이템 목록 (기본 아이템들)
+    var marketItems: [MarketItem] {
+        [
+            // 네모열매 패키지
+            MarketItem(
+                type: .fruitPackage(count: 20, price: 2000),
+                name: "네모열매 20개",
+                description: "네모열매 20개를 즉시 충전",
+                iconName: "diamond.fill",
+                price: 2000,
+                currencyType: .won
+            ),
+            MarketItem(
+                type: .fruitPackage(count: 55, price: 5000),
+                name: "네모열매 55개",
+                description: "네모열매 55개를 즉시 충전 (약 15% 보너스)",
+                iconName: "diamond.fill",
+                price: 5000,
+                currencyType: .won
+            ),
+            MarketItem(
+                type: .fruitPackage(count: 110, price: 10000),
+                name: "네모열매 110개",
+                description: "네모열매 110개를 즉시 충전 (약 10% 보너스)",
+                iconName: "diamond.fill",
+                price: 10000,
+                currencyType: .won
+            ),
+            // 네모의 응원
+            MarketItem(
+                type: .cheerBuff(days: 3, price: 3000),
+                name: "네모의 응원",
+                description: "3일간 네모의 응원을 받습니다",
+                iconName: "star.circle.fill",
+                price: 3000,
+                currencyType: .won
+            )
+        ]
+    }
+
+// MARK: - Spirit Purchase Methods (정령 구매 기능)
+
+    /// 정령 구매 가능 여부 확인
+    func canAffordSpiritPurchase(quantity: Int) -> Bool {
+        return nemoFruits >= quantity
+    }
+
+    /// 정령 구매 처리
+    func purchaseSpirits(_ spiritType: SpiritType, quantity: Int) async -> Bool {
+        guard canAffordSpiritPurchase(quantity: quantity) else {
+            print("📱 UserState: 정령 구매 실패 - 네모열매 부족")
+            return false
+        }
+
+        guard let currentUser = currentUser else {
+            print("📱 UserState: 정령 구매 실패 - 사용자 정보 없음")
+            return false
+        }
+
+        do {
+            // 네모열매 차감
+            let consumeSuccess = await consumeNemoFruits(quantity)
+            if !consumeSuccess {
+                print("📱 UserState: 정령 구매 실패 - 네모열매 차감 실패")
+                return false
+            }
+
+            // 정령 추가 (SpiritsRepository 직접 사용)
+            _ = try await spiritsRepository.addSpirit(
+                for: currentUser.playerId,
+                spiritType: spiritType,
+                count: quantity
+            )
+
+            print("🔥 UserState: \(spiritType.displayName) \(quantity)마리 구매 완료")
+            return true
+
+        } catch {
+            self.error = error
+            print("📱 UserState: 정령 구매 실패 - \(error.localizedDescription)")
+            return false
+        }
+    }
+}
+
+
+// MARK: - Market Item Types (마켓 관련 타입들)
+
+/// 마켓 아이템 타입
+enum MarketItemType {
+    case fruitPackage(count: Int, price: Int)
+    case cheerBuff(days: Int, price: Int)
+}
+
+/// 마켓 아이템
+struct MarketItem: Identifiable {
+    let id = UUID()
+    let type: MarketItemType
+    let name: String
+    let description: String
+    let iconName: String
+    let price: Int
+    let currencyType: CurrencyType
+
+    enum CurrencyType {
+        case won
+        case fruit
+    }
 }

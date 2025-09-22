@@ -75,4 +75,27 @@ class MockStatsRepository: StatsRepository {
         updateStatsCallCount = 0
         upgradeStatCallCount = 0
     }
+
+    // MARK: - SpiritsRepository Protocol Conformance (임시)
+    // UserStateManager 테스트를 위해 SpiritsRepository 프로토콜도 준수하도록 함
+    func addSpirit(for playerID: String, spiritType: SpiritType, count: Int) async throws -> Stats {
+        // 임시 구현: 실제로는 SpiritsRepository의 addSpirit를 사용해야 함
+        // 여기서는 간단하게 빈 Stats 반환
+        return Stats(playerId: playerID)
+    }
+
+    func getSpirits(by playerID: String) async throws -> Spirits? {
+        // 임시 구현
+        return nil
+    }
+
+    func createSpirits(_ spirits: Spirits) async throws -> Spirits {
+        // 임시 구현
+        return spirits
+    }
+
+    func updateSpirits(_ spirits: Spirits) async throws -> Spirits {
+        // 임시 구현
+        return spirits
+    }
 }

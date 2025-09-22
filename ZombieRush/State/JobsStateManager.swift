@@ -10,36 +10,32 @@ import SwiftUI
 
 @Observable
 class JobsStateManager {
-    // MARK: - Properties
+    // MARK: - Internal Properties (View에서 접근 가능)
     var currentJobs: Jobs = .defaultJobs(for: "")
     var isLoading = false
     var error: Error?
 
-    // Repository
-    private let jobsRepository: JobsRepository
-
-    // MARK: - UI State Properties
+    // MARK: - UI State Properties (View 전용)
     var currentTab = 0  // 현재 보고 있는 탭 인덱스
 
-    init(jobsRepository: JobsRepository = SupabaseJobsRepository()) {
+    // MARK: - Private Properties (내부 전용)
+    private let jobsRepository: JobsRepository
+
+    // MARK: - Initialization
+    init(jobsRepository: JobsRepository) {
         self.jobsRepository = jobsRepository
     }
 
-    // Legacy init for backward compatibility
-    convenience init() {
-        self.init(jobsRepository: SupabaseJobsRepository())
-    }
+    // MARK: - Computed Properties (View에서 읽기 전용)
 
-    // MARK: - Computed Properties
-
-    /// 현재 선택된 직업 (DB에서 불러온 값)
+    /// 현재 선택된 직업 ID (DB에서 불러온 값)
     var selectedJob: String {
-        return currentJobs.selectedJob
+        currentJobs.selectedJob
     }
 
     /// 현재 선택된 직업 타입 (DB에서 불러온 값)
     var selectedJobType: JobType {
-        return currentJobs.selectedJobType
+        currentJobs.selectedJobType
     }
 
     /// 현재 선택된 직업의 표시 이름
@@ -47,33 +43,32 @@ class JobsStateManager {
         selectedJobType.displayName
     }
 
-    /// 현재 보고 있는 job의 스탯 (TabView에서 현재 표시되는 job 기준)
+    /// 현재 보고 있는 job의 스텟 (TabView에서 현재 표시되는 job 기준)
     var currentJobStats: JobStats {
-        return JobStats.getStats(for: selectedJobType.rawValue)
+        JobStats.getStats(for: selectedJobType.rawValue)
     }
 
-    /// 현재 직업의 체력 (기본값: 100)
+    /// 현재 직업의 체력 스텟
     var hp: Int {
         currentJobStats.hp
     }
 
-    /// 현재 직업의 에너지 (기본값: 50)
+    /// 현재 직업의 에너지 스텟
     var energy: Int {
         currentJobStats.energy
     }
 
-    /// 현재 직업의 이동속도 (기본값: 10)
+    /// 현재 직업의 이동속도 스텟
     var move: Int {
         currentJobStats.move
     }
 
-    /// 현재 직업의 공격속도 (기본값: 10)
+    /// 현재 직업의 공격속도 스텟
     var attackSpeed: Int {
         currentJobStats.attackSpeed
     }
 
-
-    // MARK: - Public Methods
+    // MARK: - Public Methods (외부에서 호출 가능)
 
     /// 플레이어 ID로 직업 데이터 로드 또는 생성
     func loadOrCreateJobs(playerID: String) async {
@@ -130,6 +125,8 @@ class JobsStateManager {
         }
     }
 
+    // MARK: - Debug/Test Methods (개발용)
+
     /// 모든 직업 잠금 해제 (치트/테스트용)
     func unlockAllJobs() async {
         currentJobs.novice = true
@@ -142,7 +139,7 @@ class JobsStateManager {
         print("⚔️ Jobs: 모든 직업 잠금 해제됨")
     }
 
-    /// 직업 초기화
+    /// 직업 초기화 (기본 상태로 되돌림)
     func resetJobs() {
         currentJobs.novice = true
         currentJobs.fireMage = false
@@ -156,7 +153,7 @@ class JobsStateManager {
         }
     }
 
-    /// 현재 직업 정보 출력 (테스트용)
+    /// 현재 직업 정보 출력 (디버깅용)
     func printCurrentJobs() {
         let jobs = currentJobs
         print("⚔️ Jobs: === 현재 직업 정보 ===")

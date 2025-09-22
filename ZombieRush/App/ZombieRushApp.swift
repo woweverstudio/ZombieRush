@@ -10,18 +10,32 @@ import UIKit
 
 @main
 struct ZombieRushApp: App {
+    // DIContainer에서 Repository들을 가져와 StateManager 생성
+    private let container = DIContainer.shared
+
     @State private var appRouter = AppRouter()
     @State private var gameKitManager = GameKitManager()
     @State private var gameStateManager = GameStateManager()
-    @State private var userStateManager = UserStateManager()  // 사용자 상태 관리
-    @State private var statsStateManager = StatsStateManager()  // 사용자 스탯 관리
-    @State private var spiritsStateManager = SpiritsStateManager()  // 정령 관리
-    @State private var jobsStateManager = JobsStateManager()  // 직업 관리
+
+    // @Observable 호환을 위해 @State로 직접 선언
+    @State private var userStateManager: UserStateManager
+    @State private var statsStateManager: StatsStateManager
+    @State private var spiritsStateManager: SpiritsStateManager
+    @State private var jobsStateManager: JobsStateManager
+
     @State private var audioManager = AudioManager.shared  // 게임에서 사용하므로 싱글턴 유지
     @State private var hapticManager = HapticManager.shared  // 게임에서 사용하므로 싱글턴 유지
     @State private var notificationManager = NotificationManager.shared
 
     @Environment(\.scenePhase) private var scenePhase  // 앱 상태 모니터링
+
+    init() {
+        // DIContainer의 factory methods로 @Observable StateManager들 생성
+        userStateManager = container.makeUserStateManager()
+        statsStateManager = container.makeStatsStateManager()
+        spiritsStateManager = container.makeSpiritsStateManager()
+        jobsStateManager = container.makeJobsStateManager()
+    }
 
     var body: some Scene {
         WindowGroup {

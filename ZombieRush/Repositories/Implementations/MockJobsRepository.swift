@@ -50,8 +50,14 @@ class MockJobsRepository: JobsRepository {
             throw NSError(domain: "MockJobsRepository", code: 404, userInfo: [NSLocalizedDescriptionKey: "Jobs not found"])
         }
 
+        // 직업이 잠금 해제되어 있는지 확인
+        guard currentJobs.unlockedJobs.contains(jobType) else {
+            throw NSError(domain: "MockJobsRepository", code: 403, userInfo: [NSLocalizedDescriptionKey: "Job not unlocked"])
+        }
+
+        // 직업 선택
         currentJobs.selectedJob = jobType.rawValue
-        jobs[playerID] = currentJobs
+        self.jobs[playerID] = currentJobs
         return currentJobs
     }
 
@@ -63,6 +69,7 @@ class MockJobsRepository: JobsRepository {
             throw NSError(domain: "MockJobsRepository", code: 404, userInfo: [NSLocalizedDescriptionKey: "Jobs not found"])
         }
 
+        // 직업 잠금 해제
         switch jobType {
         case .novice:
             currentJobs.novice = true
@@ -76,7 +83,7 @@ class MockJobsRepository: JobsRepository {
             currentJobs.darkMage = true
         }
 
-        jobs[playerID] = currentJobs
+        self.jobs[playerID] = currentJobs
         return currentJobs
     }
 

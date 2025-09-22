@@ -9,23 +9,20 @@ import Foundation
 import Supabase
 import SwiftUI
 
+/// 스탯 데이터와 상태를 관리하는 StateManager
+/// View와 Repository 사이의 중간 계층으로 비즈니스 로직을 처리
 @Observable
 class StatsStateManager {
-    // MARK: - Properties
+    // MARK: - Internal Properties (View에서 접근 가능)
     var currentStats: Stats?
     var isLoading = false
     var error: Error?
 
-    // Repository
+    // MARK: - Private Properties (내부 전용)
     private let statsRepository: StatsRepository
 
-    init(statsRepository: StatsRepository = SupabaseStatsRepository()) {
+    init(statsRepository: StatsRepository) {
         self.statsRepository = statsRepository
-    }
-
-    // Legacy init for backward compatibility
-    convenience init() {
-        self.init(statsRepository: SupabaseStatsRepository())
     }
 
     // MARK: - Public Methods

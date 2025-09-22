@@ -117,23 +117,13 @@ struct SpiritDetailPanel: View {
     }
 
     private func canAfford() -> Bool {
-        return userStateManager.nemoFruits >= selectedQuantity
+        return userStateManager.canAffordSpiritPurchase(quantity: selectedQuantity)
     }
 
     private func purchaseSpirits() async {
-        guard canAfford() else {
-            print("💎 Spirit: 네모열매가 부족합니다")
-            return
-        }
-
-        // 네모열매 차감
-        let success = await userStateManager.consumeNemoFruits(selectedQuantity)
-        if success {
-            // 정령 추가
-            await spiritsStateManager.addSpirit(spiritType, count: selectedQuantity)
-            print("🔥 Spirit: \(spiritType.displayName) \(selectedQuantity)마리 구매 완료")
-        } else {
-            print("💎 Spirit: 네모열매 차감 실패")
+        let success = await userStateManager.purchaseSpirits(spiritType, quantity: selectedQuantity)
+        if !success {
+            print("💎 Spirit: 정령 구매 실패")
         }
     }
 }

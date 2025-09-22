@@ -228,14 +228,3 @@ struct LoadingView: View {
         }
     }
 }
-
-// MARK: - Preview
-#Preview {
-    LoadingView()
-        .environment(GameKitManager())
-        .environment(UserStateManager())
-        .environment(StatsStateManager())
-        .environment(SpiritsStateManager())
-        .environment(JobsStateManager())
-        .environment(AppRouter())
-}
