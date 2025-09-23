@@ -20,9 +20,11 @@ class StatsStateManager {
 
     // MARK: - Private Properties (내부 전용)
     private let statsRepository: StatsRepository
+    private let userRepository: UserRepository
 
-    init(statsRepository: StatsRepository) {
+    init(statsRepository: StatsRepository, userRepository: UserRepository) {
         self.statsRepository = statsRepository
+        self.userRepository = userRepository
     }
 
     // MARK: - Public Methods
@@ -96,28 +98,54 @@ class StatsStateManager {
 
     // MARK: - 스탯 업그레이드
 
-    /// 스탯 업그레이드
-    func upgradeStat(_ statType: StatType) async {
-        guard let currentStats = currentStats else {
-            print("📊 Stats: 업그레이드 실패 - 스탯 데이터가 없습니다")
-            return
-        }
-
-        do {
-            let updatedStats = try await statsRepository.upgradeStat(for: currentStats.playerId, statType: statType)
-            self.currentStats = updatedStats
-            print("📊 Stats: \(statType.displayName) 업그레이드 완료 (+1)")
-        } catch {
-            self.error = error
-            print("📊 Stats: \(statType.displayName) 업그레이드 실패 - \(error.localizedDescription)")
-        }
-    }
-
     /// 로그아웃 - 스탯 데이터 초기화
     func logout() {
         currentStats = nil
         error = nil
         print("📊 Stats: 로그아웃 완료")
+    }
+
+    // MARK: - Stats Upgrade Business Logic
+
+    /// 스텟 업그레이드 (포인트 차감 포함)
+    func upgradeStatWithPoints(_ statType: StatType) async -> Bool {
+        guard let currentStats = currentStats else {
+            print("📊 Stats: 업그레이드 실패 - 스탯 데이터가 없습니다")
+            return false
+        }
+
+        // 포인트 차감
+        let pointsConsumed = await consumePoints(1)
+        if !pointsConsumed {
+            print("❌ 포인트가 부족합니다")
+            return false
+        }
+
+        // 스텟 업그레이드
+        do {
+            let updatedStats = try await statsRepository.upgradeStat(for: currentStats.playerId, statType: statType)
+            self.currentStats = updatedStats
+            // ✅ refresh는 콜백을 통해 자동으로 수행됨
+            print("📊 Stats: \(statType.displayName) 업그레이드 완료 (+1)")
+            return true
+        } catch {
+            self.error = error
+            print("📊 Stats: \(statType.displayName) 업그레이드 실패 - \(error.localizedDescription)")
+            return false
+        }
+    }
+
+    /// 포인트 차감
+    private func consumePoints(_ points: Int) async -> Bool {
+        do {
+            let updatedUser = try await userRepository.consumePoints(of: currentStats?.playerId ?? "", points: points)
+            print("📊 Stats: 포인트 \(points)개 차감 완료 - 남은 포인트: \(updatedUser.remainingPoints)")
+            return true
+        } catch {
+            self.error = error
+            print("📊 Stats: 포인트 차감 실패 - \(error.localizedDescription)")
+            return false
+        }
     }
 
 }

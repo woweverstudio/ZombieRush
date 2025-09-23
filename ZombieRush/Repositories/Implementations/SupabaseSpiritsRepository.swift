@@ -12,6 +12,9 @@ import Supabase
 class SupabaseSpiritsRepository: SpiritsRepository {
     private let supabase: SupabaseClient
 
+    /// 데이터 변경 시 호출될 콜백
+    var onDataChanged: SpiritsDataChangeCallback?
+
     init() {
         self.supabase = SupabaseClient(
             supabaseURL: URL(string: SupabaseConfig.supabaseURL)!,
@@ -56,6 +59,9 @@ class SupabaseSpiritsRepository: SpiritsRepository {
             .single()
             .execute()
             .value
+
+        // 데이터 변경 콜백 호출
+        await onDataChanged?()
 
         return updatedSpirits
     }

@@ -12,6 +12,9 @@ import Supabase
 class SupabaseJobsRepository: JobsRepository {
     private let supabase: SupabaseClient
 
+    /// 데이터 변경 시 호출될 콜백
+    var onDataChanged: JobsDataChangeCallback?
+
     init() {
         self.supabase = SupabaseClient(
             supabaseURL: URL(string: SupabaseConfig.supabaseURL)!,
@@ -58,6 +61,9 @@ class SupabaseJobsRepository: JobsRepository {
             .single()
             .execute()
             .value
+
+        // 데이터 변경 콜백 호출
+        await onDataChanged?()
 
         return updatedJobs
     }

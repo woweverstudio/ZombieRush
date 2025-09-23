@@ -20,10 +20,14 @@ class JobsStateManager {
 
     // MARK: - Private Properties (내부 전용)
     private let jobsRepository: JobsRepository
+    private let spiritsRepository: SpiritsRepository
+    private let userRepository: UserRepository
 
     // MARK: - Initialization
-    init(jobsRepository: JobsRepository) {
+    init(jobsRepository: JobsRepository, spiritsRepository: SpiritsRepository, userRepository: UserRepository) {
         self.jobsRepository = jobsRepository
+        self.spiritsRepository = spiritsRepository
+        self.userRepository = userRepository
     }
 
     // MARK: - Computed Properties (View에서 읽기 전용)
@@ -126,16 +130,6 @@ class JobsStateManager {
         }
     }
 
-    /// 직업 잠금 해제
-    func unlockJob(_ jobType: JobType) async {
-        do {
-            currentJobs = try await jobsRepository.unlockJob(for: currentJobs.playerId, jobType: jobType)
-            print("⚔️ Jobs: \(jobType.displayName) 잠금 해제 성공")
-        } catch {
-            self.error = error
-            print("⚔️ Jobs: \(jobType.displayName) 잠금 해제 실패 - \(error.localizedDescription)")
-        }
-    }
 
     /// 직업 선택
     func selectJob(_ jobType: JobType) async {
@@ -146,6 +140,123 @@ class JobsStateManager {
             self.error = error
             print("⚔️ Jobs: 직업 선택 실패 - \(error.localizedDescription)")
         }
+    }
+
+    // MARK: - Job Unlock Business Logic
+
+    /// 직업 해금 (외부에서 호출)
+    func unlockJob(_ jobType: JobType) async {
+        let stats = JobStats.getStats(for: jobType.rawValue)
+
+        guard let requirement = stats.unlockRequirement else {
+            // 해금 조건이 없는 경우 (novice 등)
+            await unlockJobDirectly(jobType)
+            return
+        }
+
+        // 정령 개수 및 레벨 확인
+        guard await canUnlockJob(requirement) else {
+            let currentCount = await getCurrentSpiritCount(for: requirement.spiritType)
+            let currentLevel = await getCurrentUserLevel()
+
+            if currentCount < requirement.count && currentLevel < requirement.requiredLevel {
+                print("💎 직업 해금 실패: \(requirement.spiritType) 정령 \(requirement.count)개와 Lv.\(requirement.requiredLevel)이 필요합니다")
+            } else if currentCount < requirement.count {
+                print("💎 직업 해금 실패: \(requirement.spiritType) 정령이 \(requirement.count)개 필요합니다 (현재: \(currentCount)개)")
+            } else if currentLevel < requirement.requiredLevel {
+                print("💎 직업 해금 실패: Lv.\(requirement.requiredLevel)이 필요합니다 (현재: Lv.\(currentLevel))")
+            }
+            return
+        }
+
+        // 정령 개수 차감 및 해금
+        await unlockJobWithSpirits(requirement, jobType: jobType)
+        // ✅ refresh는 콜백을 통해 자동으로 수행됨
+    }
+
+    /// 해금 조건 확인
+    private func canUnlockJob(_ requirement: JobUnlockRequirement) async -> Bool {
+        // 정령 개수 확인
+        let currentCount = await getCurrentSpiritCount(for: requirement.spiritType)
+        let hasEnoughSpirits = currentCount >= requirement.count
+
+        // 레벨 확인
+        let currentLevel = await getCurrentUserLevel()
+        let hasRequiredLevel = currentLevel >= requirement.requiredLevel
+
+        return hasEnoughSpirits && hasRequiredLevel
+    }
+
+    /// 정령 소비 및 직업 해금
+    private func unlockJobWithSpirits(_ requirement: JobUnlockRequirement, jobType: JobType) async {
+        // 정령 개수 차감
+        await consumeSpirits(for: requirement.spiritType, count: requirement.count)
+        // 직업 해금
+        await unlockJobDirectly(jobType)
+        print("🔥 직업 \(jobType.displayName) 해금 완료! \(requirement.spiritType) 정령 \(requirement.count)개 소비")
+    }
+
+    /// 정령 개수 차감
+    private func consumeSpirits(for spiritType: String, count: Int) async {
+        do {
+            _ = try await spiritsRepository.addSpirit(
+                for: currentJobs.playerId,
+                spiritType: SpiritType(rawValue: spiritType) ?? .fire,
+                count: -count
+            )
+            print("🔥 정령 차감 완료: \(spiritType) \(count)개")
+        } catch {
+            self.error = error
+            print("🔥 정령 차감 실패: \(error.localizedDescription)")
+        }
+    }
+
+    /// 직업 직접 해금 (조건 없이)
+    private func unlockJobDirectly(_ jobType: JobType) async {
+        do {
+            currentJobs = try await jobsRepository.unlockJob(for: currentJobs.playerId, jobType: jobType)
+            print("🔓 직업 \(jobType.displayName) 해금됨")
+        } catch {
+            self.error = error
+            print("🔓 직업 해금 실패: \(error.localizedDescription)")
+        }
+    }
+
+    /// 현재 정령 개수 조회
+    private func getCurrentSpiritCount(for spiritType: String) async -> Int {
+        do {
+            if let spirits = try await spiritsRepository.getSpirits(by: currentJobs.playerId) {
+                return getSpiritCount(for: spiritType, from: spirits)
+            }
+        } catch {
+            self.error = error
+            print("🔥 정령 조회 실패: \(error.localizedDescription)")
+        }
+        return 0
+    }
+
+    /// 정령 개수 추출 헬퍼
+    private func getSpiritCount(for spiritType: String, from spirits: Spirits) -> Int {
+        switch spiritType {
+        case "fire": return spirits.fire
+        case "ice": return spirits.ice
+        case "lightning": return spirits.lightning
+        case "dark": return spirits.dark
+        default: return 0
+        }
+    }
+
+    /// 현재 사용자 레벨 조회
+    private func getCurrentUserLevel() async -> Int {
+        do {
+            if let user = try await userRepository.getUser(by: currentJobs.playerId) {
+                return Level(currentExp: user.exp).currentLevel
+            }
+        } catch {
+            self.error = error
+            print("👤 사용자 레벨 조회 실패: \(error.localizedDescription)")
+        }
+        return 0
     }
 
     // MARK: - Debug/Test Methods (개발용)

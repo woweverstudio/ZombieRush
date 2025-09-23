@@ -7,8 +7,13 @@
 
 import Foundation
 
+/// 데이터 변경 콜백 타입
+typealias UserDataChangeCallback = () async -> Void
+
 /// 사용자 데이터 액세스를 위한 Repository Protocol
-protocol UserRepository {
+protocol UserRepository: AnyObject {
+    /// 데이터 변경 시 호출될 콜백
+    var onDataChanged: UserDataChangeCallback? { get set }
     /// 사용자 조회
     func getUser(by playerID: String) async throws -> User?
 

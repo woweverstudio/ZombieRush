@@ -14,6 +14,9 @@ class MockSpiritsRepository: SpiritsRepository {
     var shouldThrowError = false
     var errorToThrow: Error = NSError(domain: "MockSpiritsRepository", code: -1, userInfo: nil)
 
+    /// 데이터 변경 시 호출될 콜백
+    var onDataChanged: SpiritsDataChangeCallback?
+
     // MARK: - Call Tracking (Optional)
     var getSpiritsCallCount = 0
     var createSpiritsCallCount = 0
@@ -38,6 +41,10 @@ class MockSpiritsRepository: SpiritsRepository {
         updateSpiritsCallCount += 1
         if shouldThrowError { throw errorToThrow }
         self.spirits[spirits.playerId] = spirits
+
+        // 데이터 변경 콜백 호출
+        await onDataChanged?()
+
         return spirits
     }
 

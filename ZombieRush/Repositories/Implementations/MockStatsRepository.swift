@@ -14,6 +14,9 @@ class MockStatsRepository: StatsRepository {
     var shouldThrowError = false
     var errorToThrow: Error = NSError(domain: "MockStatsRepository", code: -1, userInfo: nil)
 
+    /// 데이터 변경 시 호출될 콜백
+    var onDataChanged: StatsDataChangeCallback?
+
     // MARK: - Call Tracking (Optional)
     var getStatsCallCount = 0
     var createStatsCallCount = 0
@@ -38,6 +41,10 @@ class MockStatsRepository: StatsRepository {
         updateStatsCallCount += 1
         if shouldThrowError { throw errorToThrow }
         self.stats[stats.playerId] = stats
+
+        // 데이터 변경 콜백 호출
+        await onDataChanged?()
+
         return stats
     }
 

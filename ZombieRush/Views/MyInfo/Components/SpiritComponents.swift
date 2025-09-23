@@ -77,8 +77,8 @@ struct SpiritDetailPanel: View {
                     QuantityButton(quantity: 25, isSelected: selectedQuantity == 25) {
                         selectedQuantity = 25
                     }
-                    QuantityButton(quantity: maxPurchasableQuantity(), isSelected: selectedQuantity == maxPurchasableQuantity(), label: "최대") {
-                        selectedQuantity = maxPurchasableQuantity()
+                    QuantityButton(quantity: userStateManager.nemoFruits, isSelected: selectedQuantity == userStateManager.nemoFruits, label: "최대") {
+                        selectedQuantity = userStateManager.nemoFruits
                     }
                 }
             }
@@ -112,9 +112,6 @@ struct SpiritDetailPanel: View {
         }
     }
 
-    private func maxPurchasableQuantity() -> Int {
-        return userStateManager.nemoFruits
-    }
 
     private func canAfford() -> Bool {
         return userStateManager.canAffordSpiritPurchase(quantity: selectedQuantity)
@@ -122,10 +119,9 @@ struct SpiritDetailPanel: View {
 
     private func purchaseSpirits() async {
         let success = await userStateManager.purchaseSpirits(spiritType, quantity: selectedQuantity)
+        // ✅ refresh는 콜백을 통해 자동으로 수행됨
         if success {
-            // 정령 구매 성공 시 최신 데이터 재조회하여 UI 업데이트
-            await spiritsStateManager.refreshSpirits()
-            print("💎 Spirit: 정령 구매 및 UI 업데이트 완료")
+            print("💎 Spirit: 정령 구매 완료")
         } else {
             print("💎 Spirit: 정령 구매 실패")
         }

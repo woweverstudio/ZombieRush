@@ -12,6 +12,9 @@ import Supabase
 class SupabaseStatsRepository: StatsRepository {
     private let supabase: SupabaseClient
 
+    /// 데이터 변경 시 호출될 콜백
+    var onDataChanged: StatsDataChangeCallback?
+
     init() {
         self.supabase = SupabaseClient(
             supabaseURL: URL(string: SupabaseConfig.supabaseURL)!,
@@ -57,6 +60,9 @@ class SupabaseStatsRepository: StatsRepository {
             .single()
             .execute()
             .value
+
+        // 데이터 변경 콜백 호출
+        await onDataChanged?()
 
         return updatedStats
     }

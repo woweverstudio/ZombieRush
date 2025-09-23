@@ -72,7 +72,11 @@ struct StatDetailPanel: View {
                 },
                 action: {
                     Task {
-                        await upgradeStat()
+                        let success = await statsStateManager.upgradeStatWithPoints(statType)
+                        // ✅ refresh는 콜백을 통해 자동으로 수행됨
+                        if success {
+                            print("📊 스텟 업그레이드 완료")
+                        }
                     }
                 }
             )
@@ -80,32 +84,4 @@ struct StatDetailPanel: View {
         .padding(20)
     }
 
-    private func getCurrentStatValue() -> Int {
-        guard let stats = statsStateManager.currentStats else { return 0 }
-
-        switch statType {
-        case .hpRecovery: return stats.hpRecovery
-        case .moveSpeed: return stats.moveSpeed
-        case .energyRecovery: return stats.energyRecovery
-        case .attackSpeed: return stats.attackSpeed
-        case .totemCount: return stats.totemCount
-        }
-    }
-
-    private func upgradeStat() async {
-        // 포인트 차감 (포인트 확인 및 차감은 메소드 내부에서 처리)
-        let success = await userStateManager.consumeRemainingPoints(1)
-
-        if success {
-            // 스텟 업그레이드
-            await statsStateManager.upgradeStat(statType)
-            await statsStateManager.refreshStats()
-            // UI 업데이트 강제
-            await MainActor.run {
-                print("🔄 스텟 업그레이드 완료 - 포인트: \(userStateManager.remainingPoints)")
-            }
-        } else {
-            print("❌ 포인트가 부족합니다")
-        }
-    }
 }

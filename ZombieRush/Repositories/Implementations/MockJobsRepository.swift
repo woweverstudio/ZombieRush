@@ -14,6 +14,9 @@ class MockJobsRepository: JobsRepository {
     var shouldThrowError = false
     var errorToThrow: Error = NSError(domain: "MockJobsRepository", code: -1, userInfo: nil)
 
+    /// 데이터 변경 시 호출될 콜백
+    var onDataChanged: JobsDataChangeCallback?
+
     // MARK: - Call Tracking (Optional)
     var getJobsCallCount = 0
     var createJobsCallCount = 0
@@ -39,6 +42,10 @@ class MockJobsRepository: JobsRepository {
         updateJobsCallCount += 1
         if shouldThrowError { throw errorToThrow }
         self.jobs[jobs.playerId] = jobs
+
+        // 데이터 변경 콜백 호출
+        await onDataChanged?()
+
         return jobs
     }
 

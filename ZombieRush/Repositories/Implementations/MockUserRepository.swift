@@ -14,6 +14,9 @@ class MockUserRepository: UserRepository {
     var shouldThrowError = false
     var errorToThrow: Error = NSError(domain: "MockUserRepository", code: -1, userInfo: nil)
 
+    /// 데이터 변경 시 호출될 콜백
+    var onDataChanged: UserDataChangeCallback?
+
     // MARK: - Call Tracking (Optional)
     var getUserCallCount = 0
     var createUserCallCount = 0
@@ -41,6 +44,10 @@ class MockUserRepository: UserRepository {
         updateUserCallCount += 1
         if shouldThrowError { throw errorToThrow }
         users[user.playerId] = user
+
+        // 데이터 변경 콜백 호출
+        await onDataChanged?()
+
         return user
     }
 
