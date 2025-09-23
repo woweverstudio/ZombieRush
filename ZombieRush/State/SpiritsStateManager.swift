@@ -82,8 +82,8 @@ class SpiritsStateManager {
     
     // MARK: - Private Helper Methods
 
-    /// 특정 정령 타입의 현재 수량 조회
-    private func getCurrentCount(for spiritType: SpiritType) -> Int {
+    /// 특정 정령 타입의 현재 수량 조회 (View에서 사용 가능)
+    func getCurrentCount(for spiritType: SpiritType) -> Int {
         guard let spirits = currentSpirits else { return 0 }
 
         switch spiritType {

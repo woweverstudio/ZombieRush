@@ -188,7 +188,7 @@ extension MyInfoView {
                     StatInfoCard(
                         statType: statType,
                         isSelected: isSelected,
-                        currentValue: getCurrentStatValue(statType),
+                        currentValue: statsStateManager.getCurrentStatValue(statType),
                         onTap: {
                             selectedStat = statType
                         }
@@ -222,7 +222,7 @@ extension MyInfoView {
                     SpiritInfoCard(
                         spiritType: spiritType,
                         isSelected: isSelected,
-                        currentCount: getCurrentSpiritCount(spiritType),
+                        currentCount: spiritsStateManager.getCurrentCount(for: spiritType),
                         onTap: {
                             selectedSpirit = spiritType
                         }
@@ -232,28 +232,6 @@ extension MyInfoView {
         }
     }
 
-    private func getCurrentSpiritCount(_ spiritType: SpiritType) -> Int {
-        guard let spirits = spiritsStateManager.currentSpirits else { return 0 }
-
-        switch spiritType {
-        case .fire: return spirits.fire
-        case .ice: return spirits.ice
-        case .lightning: return spirits.lightning
-        case .dark: return spirits.dark
-        }
-    }
-
-    private func getCurrentStatValue(_ statType: StatType) -> Int {
-        guard let stats = statsStateManager.currentStats else { return 0 }
-
-        switch statType {
-        case .hpRecovery: return stats.hpRecovery
-        case .moveSpeed: return stats.moveSpeed
-        case .energyRecovery: return stats.energyRecovery
-        case .attackSpeed: return stats.attackSpeed
-        case .totemCount: return stats.totemCount
-        }
-    }
 }
 
 

@@ -7,21 +7,21 @@
     "(%lld%%)" : {
 
     },
+    "%@ 정령 %lld개, Lv.%lld 필요" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ 정령 %2$lld개, Lv.%3$lld 필요"
+          }
+        }
+      }
+    },
     "%@:" : {
 
     },
     "%lld" : {
 
-    },
-    "%lld/%lld" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$lld/%2$lld"
-          }
-        }
-      }
     },
     "%lld마리" : {
 
@@ -931,16 +931,6 @@
     },
     "Lv. %lld" : {
 
-    },
-    "Lv.%lld/%lld" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Lv.%1$lld/%2$lld"
-          }
-        }
-      }
     },
     "MAIN_START" : {
       "extractionState" : "manual",

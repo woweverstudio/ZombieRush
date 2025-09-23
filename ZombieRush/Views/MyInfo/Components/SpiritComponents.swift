@@ -43,7 +43,7 @@ struct SpiritDetailPanel: View {
                 Spacer()
 
                 // 현재 개수 표시
-                Text("\(getCurrentSpiritCount())마리")
+                Text("\(spiritsStateManager.getCurrentCount(for: spiritType))마리")
                     .font(.system(size: 18, weight: .bold, design: .monospaced))
                     .foregroundColor(spiritType.color)
             }
@@ -101,16 +101,6 @@ struct SpiritDetailPanel: View {
         .padding(20)
     }
 
-    private func getCurrentSpiritCount() -> Int {
-        guard let spirits = spiritsStateManager.currentSpirits else { return 0 }
-
-        switch spiritType {
-        case .fire: return spirits.fire
-        case .ice: return spirits.ice
-        case .lightning: return spirits.lightning
-        case .dark: return spirits.dark
-        }
-    }
 
 
     private func canAfford() -> Bool {

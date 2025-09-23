@@ -40,7 +40,7 @@ struct StatDetailPanel: View {
                 Spacer()
 
                 // 현재 값 표시
-                Text("\(getCurrentStatValue())")
+                Text("\(statsStateManager.getCurrentStatValue(statType))")
                     .font(.system(size: 18, weight: .bold, design: .monospaced))
                     .foregroundColor(statType.color)
             }

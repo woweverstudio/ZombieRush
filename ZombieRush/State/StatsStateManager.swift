@@ -105,6 +105,21 @@ class StatsStateManager {
         print("📊 Stats: 로그아웃 완료")
     }
 
+    // MARK: - Stat Value Accessors (View에서 사용 가능)
+
+    /// 특정 스탯 타입의 현재 값 조회
+    func getCurrentStatValue(_ statType: StatType) -> Int {
+        guard let stats = currentStats else { return 0 }
+
+        switch statType {
+        case .hpRecovery: return stats.hpRecovery
+        case .moveSpeed: return stats.moveSpeed
+        case .energyRecovery: return stats.energyRecovery
+        case .attackSpeed: return stats.attackSpeed
+        case .totemCount: return stats.totemCount
+        }
+    }
+
     // MARK: - Stats Upgrade Business Logic
 
     /// 스텟 업그레이드 (포인트 차감 포함)
