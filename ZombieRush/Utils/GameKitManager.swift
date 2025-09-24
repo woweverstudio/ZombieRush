@@ -15,7 +15,6 @@ class GameKitManager: NSObject {
     struct PlayerInfo {
         let playerID: String
         let nickname: String
-        let photo: UIImage?
     }
 
     // MARK: - UI Callbacks
@@ -24,6 +23,7 @@ class GameKitManager: NSObject {
 
     // MARK: - Properties
     private var localPlayer: GKLocalPlayer?
+    var playerPhoto: UIImage?
 
     // MARK: - Initialization
     override init() {
@@ -65,18 +65,18 @@ class GameKitManager: NSObject {
         let nickname = localPlayer.displayName
 
         // 프로필 사진 로드
-        var photo: UIImage? = nil
         do {
-            photo = try await localPlayer.loadPhoto(for: .small)
+            self.playerPhoto = try await localPlayer.loadPhoto(for: .small)
             print("🎮 GameKit: Player photo loaded successfully")
         } catch {
+            self.playerPhoto = nil
             print("🎮 GameKit: Failed to load player photo: \(error.localizedDescription)")
             // 사진 로드 실패해도 다른 정보들은 정상 반환
         }
 
         isLoading = false
 
-        return PlayerInfo(playerID: playerID, nickname: nickname, photo: photo)
+        return PlayerInfo(playerID: playerID, nickname: nickname)
     }
 
     // MARK: - Authentication
@@ -121,6 +121,10 @@ class GameKitManager: NSObject {
                 print("🎮 GameKit: Login failed (\(error.localizedDescription)")
                 hasCompleted = true
                 self.isAuthenticated = false
+
+                // ✅ 네트워크 인증 실패 시 네트워크 에러 표시
+                GlobalErrorManager.shared.showError(.network(.serverError(code: 401)))
+
                 completion(false)
             } else if localPlayer.isAuthenticated {
                 // 로그인 성공

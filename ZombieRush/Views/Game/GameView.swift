@@ -11,7 +11,6 @@ import SpriteKit
 struct GameView: View {
     @Environment(AppRouter.self) var router
     @Environment(GameKitManager.self) var gameKitManager
-    @Environment(GameStateManager.self) var gameStateManager
     
     @State private var gameScene: GameScene?   // SKScene 상속 객체
     
@@ -24,16 +23,17 @@ struct GameView: View {
             }
 
             // 일시정지 오버레이
-            if gameStateManager.currentState == .paused {
-                pauseOverlay
-            }
+            // TODO: GameStateManager가 제거되었으므로 게임 씬에서 직접 상태 관리
+            // if gameScene?.isPaused == true {
+            //     pauseOverlay
+            // }
         }
         .onAppear {
             if gameScene == nil {
                 let gameScene = GameScene(
                     appRouter: router,
                     gameKitManager: gameKitManager,
-                    gameStateManager: gameStateManager,
+                    gameStateManager: GameStateManager(),
                     ultimateSkill: NuclearAttackSkill()
                 )
                 
@@ -44,22 +44,6 @@ struct GameView: View {
                 self.gameScene = gameScene
             }
         }
-    }
-    
-    // MARK: - Game Scene Creation
-    private func makeGameScene(_ gameStateManager: GameStateManager) -> SKScene {
-        let scene = GameScene(
-            appRouter: router,
-            gameKitManager: gameKitManager,
-            gameStateManager: gameStateManager,
-            ultimateSkill: NuclearAttackSkill()
-        )
-
-        // 화면 크기를 한 번만 계산하여 캐시
-        let screenSize = UIScreen.main.bounds.size
-        scene.size = CGSize(width: screenSize.width, height: screenSize.height)
-        scene.scaleMode = .aspectFill
-        return scene
     }
 
     // MARK: - Pause Overlay

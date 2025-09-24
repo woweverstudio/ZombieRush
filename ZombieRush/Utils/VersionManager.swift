@@ -48,8 +48,10 @@ class VersionManager {
             hasCheckedVersion = true
 
         } catch {
-            // 네트워크 실패 등 조회 실패시 서비스 사용 가능으로 간주하고 진행
+            // ✅ 네트워크 실패 등 조회 실패시 네트워크 에러 표시
             print("⚠️ 리모트 설정 조회 실패: \(error.localizedDescription)")
+            GlobalErrorManager.shared.showError(.network(.serverError(code: 500)))
+
             isServiceAvailable = true
             hasCheckedVersion = true
         }

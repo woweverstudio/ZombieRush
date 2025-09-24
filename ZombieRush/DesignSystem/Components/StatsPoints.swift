@@ -37,12 +37,13 @@ struct StatsPointIcon: View {
 
 // MARK: - Stats Point Badge Component (잔여 스텟포인트 표시)
 struct StatsPointBadge: View {
-    @Environment(UserStateManager.self) var userStateManager
+    @EnvironmentObject var userRepository: SupabaseUserRepository
+    @EnvironmentObject var useCaseFactory: UseCaseFactory
 
     var body: some View {
         HStack(spacing: 6) {
             StatsPointIcon(size: .medium)
-            Text("\(userStateManager.remainingPoints)")
+            Text("\(userRepository.currentUser?.remainingPoints ?? 0)")
                 .font(.system(size: 18, weight: .bold, design: .monospaced))
                 .foregroundColor(Color.cyan)
         }

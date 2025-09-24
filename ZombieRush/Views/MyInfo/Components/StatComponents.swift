@@ -1,4 +1,5 @@
 import SwiftUI
+import Foundation  // StatType을 위해 추가
 
 // MARK: - Stat Info Card
 struct StatInfoCard: View {
@@ -22,8 +23,10 @@ struct StatInfoCard: View {
 // MARK: - Stat Detail Panel
 struct StatDetailPanel: View {
     let statType: StatType
-    @Environment(StatsStateManager.self) var statsStateManager
-    @Environment(UserStateManager.self) var userStateManager
+    @EnvironmentObject var userRepository: SupabaseUserRepository
+    @EnvironmentObject var statsRepository: SupabaseStatsRepository
+    @EnvironmentObject var useCaseFactory: UseCaseFactory
+    @Environment(GameKitManager.self) var gameKitManager
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
@@ -40,7 +43,7 @@ struct StatDetailPanel: View {
                 Spacer()
 
                 // 현재 값 표시
-                Text("\(statsStateManager.getCurrentStatValue(statType))")
+                Text("\(getCurrentStatValue())")
                     .font(.system(size: 18, weight: .bold, design: .monospaced))
                     .foregroundColor(statType.color)
             }
@@ -54,10 +57,10 @@ struct StatDetailPanel: View {
                     .font(.system(size: 16, weight: .bold, design: .monospaced))
                     .foregroundColor(statType.color)
 
-                Text(statType.description)
-                    .font(.system(size: 14, design: .monospaced))
-                    .foregroundColor(.white.opacity(0.8))
-                    .lineSpacing(4)
+//                Text(statType.description)
+//                    .font(.system(size: 14, design: .monospaced))
+//                    .foregroundColor(.white.opacity(0.8))
+//                    .lineSpacing(4)
             }
 
             Spacer()
@@ -65,23 +68,41 @@ struct StatDetailPanel: View {
             // 업그레이드 버튼
             PrimaryButton(
                 title: "업그레이드",
-                style: userStateManager.remainingPoints >= 1 ? .cyan : .disabled,
+                style: canAffordUpgrade() ? .cyan : .disabled,
                 trailingContent: {
                     StatsPointCost(count: 1)
-                        .foregroundColor(userStateManager.remainingPoints >= 1 ? Color.dsCoin : .gray.opacity(0.5))
+                        .foregroundColor(canAffordUpgrade() ? Color.dsCoin : .gray.opacity(0.5))
                 },
                 action: {
                     Task {
-                        let success = await statsStateManager.upgradeStatWithPoints(statType)
-                        // ✅ refresh는 콜백을 통해 자동으로 수행됨
-                        if success {
-                            print("📊 스텟 업그레이드 완료")
-                        }
+                        await upgradeStat()
                     }
                 }
             )
         }
         .padding(20)
+    }
+
+    private func canAffordUpgrade() -> Bool {
+        let remainingPoints = userRepository.currentUser?.remainingPoints ?? 0
+        return remainingPoints >= 1
+    }
+
+    private func upgradeStat() async {
+        let request = UpgradeStatRequest(statType: statType)
+        _ = try? await useCaseFactory.upgradeStat.execute(request)
+    }
+
+    private func getCurrentStatValue() -> Int {
+        guard let stats = statsRepository.currentStats else { return 0 }
+
+        switch statType {
+        case .hpRecovery: return stats.hpRecovery
+        case .moveSpeed: return stats.moveSpeed
+        case .energyRecovery: return stats.energyRecovery
+        case .attackSpeed: return stats.attackSpeed
+        case .totemCount: return stats.totemCount
+        }
     }
 
 }

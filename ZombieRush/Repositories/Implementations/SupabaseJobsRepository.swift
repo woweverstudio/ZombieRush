@@ -7,13 +7,15 @@
 
 import Foundation
 import Supabase
+import SwiftUI
 
 /// Supabase를 사용한 JobsRepository 구현체
-class SupabaseJobsRepository: JobsRepository {
+class SupabaseJobsRepository: ObservableObject, JobsRepository {
+    // Observable properties for View observation
+    @Published var currentJobs: Jobs?
+
     private let supabase: SupabaseClient
 
-    /// 데이터 변경 시 호출될 콜백
-    var onDataChanged: JobsDataChangeCallback?
 
     init() {
         self.supabase = SupabaseClient(
@@ -30,7 +32,9 @@ class SupabaseJobsRepository: JobsRepository {
             .execute()
             .value
 
-        return jobs.first
+        let job = jobs.first
+        currentJobs = job
+        return job
     }
 
     func createJobs(_ jobs: Jobs) async throws -> Jobs {
@@ -42,62 +46,35 @@ class SupabaseJobsRepository: JobsRepository {
             .execute()
             .value
 
+        currentJobs = createdJobs
         return createdJobs
     }
 
     func updateJobs(_ jobs: Jobs) async throws -> Jobs {
-        let updatedJobs: Jobs = try await supabase
-            .from("jobs")
-            .update([
-                "novice": jobs.novice ? "true" : "false",
-                "fire_mage": jobs.fireMage ? "true" : "false",
-                "ice_mage": jobs.iceMage ? "true" : "false",
-                "lightning_mage": jobs.lightningMage ? "true" : "false",
-                "dark_mage": jobs.darkMage ? "true" : "false",
-                "selected_job": jobs.selectedJob
-            ])
-            .eq("player_id", value: jobs.playerId)
-            .select("*")
-            .single()
-            .execute()
-            .value
+        do {
+            let updatedJobs: Jobs = try await supabase
+                .from("jobs")
+                .update([
+                    "novice": jobs.novice ? "true" : "false",
+                    "fire_mage": jobs.fireMage ? "true" : "false",
+                    "ice_mage": jobs.iceMage ? "true" : "false",
+                    "lightning_mage": jobs.lightningMage ? "true" : "false",
+                    "dark_mage": jobs.darkMage ? "true" : "false",
+                    "selected_job": jobs.selectedJob
+                ])
+                .eq("player_id", value: jobs.playerId)
+                .select("*")
+                .single()
+                .execute()
+                .value
 
-        // 데이터 변경 콜백 호출
-        await onDataChanged?()
-
-        return updatedJobs
+            currentJobs = updatedJobs
+            return updatedJobs
+        } catch {
+            // ✅ 네트워크/DB 실패 시 네트워크 에러 표시
+            GlobalErrorManager.shared.showError(.network(.serverError(code: 500)))
+            throw error
+        }
     }
 
-    func selectJob(for playerID: String, jobType: JobType) async throws -> Jobs {
-        guard let currentJobs = try await getJobs(by: playerID) else {
-            throw NSError(domain: "JobsRepository", code: 404, userInfo: [NSLocalizedDescriptionKey: "Jobs not found"])
-        }
-
-        var updatedJobs = currentJobs
-        updatedJobs.selectedJob = jobType.rawValue
-
-        return try await updateJobs(updatedJobs)
-    }
-
-    func unlockJob(for playerID: String, jobType: JobType) async throws -> Jobs {
-        guard let currentJobs = try await getJobs(by: playerID) else {
-            throw NSError(domain: "JobsRepository", code: 404, userInfo: [NSLocalizedDescriptionKey: "Jobs not found"])
-        }
-
-        var updatedJobs = currentJobs
-        switch jobType {
-        case .novice:
-            updatedJobs.novice = true
-        case .fireMage:
-            updatedJobs.fireMage = true
-        case .iceMage:
-            updatedJobs.iceMage = true
-        case .lightningMage:
-            updatedJobs.lightningMage = true
-        case .darkMage:
-            updatedJobs.darkMage = true
-        }
-
-        return try await updateJobs(updatedJobs)
-    }
 }

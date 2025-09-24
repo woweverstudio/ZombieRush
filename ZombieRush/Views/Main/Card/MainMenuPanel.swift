@@ -5,7 +5,6 @@ import GameKit
 struct MainMenuPanel: View {
     @Environment(AppRouter.self) var router
     @Environment(GameKitManager.self) var gameKitManager
-    @Environment(UserStateManager.self) var userStateManager
 
     private var isPhoneSize: Bool {
         return UIDevice.current.userInterfaceIdiom == .phone

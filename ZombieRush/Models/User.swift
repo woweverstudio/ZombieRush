@@ -25,6 +25,11 @@ struct User: Codable, Identifiable {
         return Level.calculateLevel(from: exp)
     }
 
+    /// 레벨 객체 (상세 정보 포함)
+    var levelInfo: Level {
+        return Level(currentExp: exp)
+    }
+
     /// 네모의 응원 활성화 상태
     var isCheerBuffActive: Bool {
         guard let expiresAt = cheerBuffExpiresAt else { return false }

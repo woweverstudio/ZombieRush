@@ -7,13 +7,14 @@
 
 import Foundation
 import Supabase
+import SwiftUI
 
 /// Supabase를 사용한 SpiritsRepository 구현체
-class SupabaseSpiritsRepository: SpiritsRepository {
-    private let supabase: SupabaseClient
+class SupabaseSpiritsRepository: ObservableObject, SpiritsRepository {
+    // Observable properties for View observation
+    @Published var currentSpirits: Spirits?
 
-    /// 데이터 변경 시 호출될 콜백
-    var onDataChanged: SpiritsDataChangeCallback?
+    private let supabase: SupabaseClient
 
     init() {
         self.supabase = SupabaseClient(
@@ -30,7 +31,9 @@ class SupabaseSpiritsRepository: SpiritsRepository {
             .execute()
             .value
 
-        return spirits.first
+        let spirit = spirits.first
+        currentSpirits = spirit
+        return spirit
     }
 
     func createSpirits(_ spirits: Spirits) async throws -> Spirits {
@@ -42,48 +45,33 @@ class SupabaseSpiritsRepository: SpiritsRepository {
             .execute()
             .value
 
+        currentSpirits = createdSpirits
         return createdSpirits
     }
 
     func updateSpirits(_ spirits: Spirits) async throws -> Spirits {
-        let updatedSpirits: Spirits = try await supabase
-            .from("spirits")
-            .update([
-                "fire": String(spirits.fire),
-                "ice": String(spirits.ice),
-                "lightning": String(spirits.lightning),
-                "dark": String(spirits.dark)
-            ])
-            .eq("player_id", value: spirits.playerId)
-            .select("*")
-            .single()
-            .execute()
-            .value
+        do {
+            let updatedSpirits: Spirits = try await supabase
+                .from("spirits")
+                .update([
+                    "fire": String(spirits.fire),
+                    "ice": String(spirits.ice),
+                    "lightning": String(spirits.lightning),
+                    "dark": String(spirits.dark)
+                ])
+                .eq("player_id", value: spirits.playerId)
+                .select("*")
+                .single()
+                .execute()
+                .value
 
-        // 데이터 변경 콜백 호출
-        await onDataChanged?()
-
-        return updatedSpirits
+            currentSpirits = updatedSpirits
+            return updatedSpirits
+        } catch {
+            // ✅ 네트워크/DB 실패 시 네트워크 에러 표시
+            GlobalErrorManager.shared.showError(.network(.serverError(code: 500)))
+            throw error
+        }
     }
 
-    func addSpirit(for playerID: String, spiritType: SpiritType, count: Int) async throws -> Spirits {
-        guard let currentSpirits = try await getSpirits(by: playerID) else {
-            throw NSError(domain: "SpiritsRepository", code: 404, userInfo: [NSLocalizedDescriptionKey: "Spirits not found"])
-        }
-
-        var updatedSpirits = currentSpirits
-
-        switch spiritType {
-        case .fire:
-            updatedSpirits.fire += count
-        case .ice:
-            updatedSpirits.ice += count
-        case .lightning:
-            updatedSpirits.lightning += count
-        case .dark:
-            updatedSpirits.dark += count
-        }
-
-        return try await updateSpirits(updatedSpirits)
-    }
 }

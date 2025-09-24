@@ -48,9 +48,11 @@ struct JobInfoCard: View {
 // MARK: - Job Detail Panel
 struct JobDetailPanel: View {
     let jobType: JobType
-    @Environment(JobsStateManager.self) var jobsStateManager
-    @Environment(UserStateManager.self) var userStateManager
-    @Environment(SpiritsStateManager.self) var spiritsStateManager
+    @EnvironmentObject var userRepository: SupabaseUserRepository
+    @EnvironmentObject var spiritsRepository: SupabaseSpiritsRepository
+    @EnvironmentObject var jobsRepository: SupabaseJobsRepository
+    @EnvironmentObject var useCaseFactory: UseCaseFactory
+    @Environment(GameKitManager.self) var gameKitManager
 
     var body: some View {
         VStack(spacing: 12) {
@@ -87,7 +89,7 @@ struct JobDetailPanel: View {
             }
 
             // 하단: 해금 정보 및 버튼
-            if !jobsStateManager.currentJobs.unlockedJobs.contains(jobType) {
+            if !(jobsRepository.currentJobs?.unlockedJobs.contains(jobType) ?? false) {
                 let stats = JobStats.getStats(for: jobType.rawValue)
 
                 if let requirement = stats.unlockRequirement {
@@ -104,7 +106,8 @@ struct JobDetailPanel: View {
                             fullWidth: true
                         ) {
                             Task {
-                                await jobsStateManager.unlockJob(jobType)
+                                let request = UnlockJobRequest(jobType: jobType)
+                                _ = try? await useCaseFactory.unlockJob.execute(request)
                             }
                         }
                     }

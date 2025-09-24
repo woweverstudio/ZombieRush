@@ -6,9 +6,6 @@ struct MainView: View {
     @Environment(AppRouter.self) var router
     @Environment(GameKitManager.self) var gameKitManager
     @Environment(GameStateManager.self) var gameStateManager
-    @Environment(JobsStateManager.self) var jobsStateManager
-    @Environment(StatsStateManager.self) var statsStateManager
-    @Environment(UserStateManager.self) var userStateManager
 
     @State private var isDataLoaded: Bool = false
     @State private var lastRefreshTime: Date? = nil

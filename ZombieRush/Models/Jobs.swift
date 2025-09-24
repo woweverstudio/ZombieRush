@@ -66,6 +66,31 @@ struct Jobs: Codable, Identifiable {
         default: return .novice
         }
     }
+
+    /// 현재 선택된 직업의 스탯
+    var currentJobStats: JobStats {
+        return JobStats.getStats(for: selectedJob)
+    }
+
+    /// 현재 직업의 체력 스탯
+    var hp: Int {
+        currentJobStats.hp
+    }
+
+    /// 현재 직업의 에너지 스탯
+    var energy: Int {
+        currentJobStats.energy
+    }
+
+    /// 현재 직업의 이동속도 스탯
+    var move: Int {
+        currentJobStats.move
+    }
+
+    /// 현재 직업의 공격속도 스탯
+    var attackSpeed: Int {
+        currentJobStats.attackSpeed
+    }
 }
 
 /// 직업 타입 열거형

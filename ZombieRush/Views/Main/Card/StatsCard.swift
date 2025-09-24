@@ -3,8 +3,9 @@ import SwiftUI
 // MARK: - Stats Card
 struct StatsCard: View {
     @Environment(AppRouter.self) var router
-    @Environment(StatsStateManager.self) var statsStateManager
-    @Environment(UserStateManager.self) var userStateManager
+    @EnvironmentObject var userRepository: SupabaseUserRepository
+    @EnvironmentObject var statsRepository: SupabaseStatsRepository
+    @EnvironmentObject var useCaseFactory: UseCaseFactory
     
     var body: some View {
         Button(action: {
@@ -23,8 +24,8 @@ struct StatsCard: View {
                         Image(systemName: "star.fill")
                             .foregroundColor(Color.dsCoin)
                             .font(.system(size: 10))
-                        
-                        Text("남은 포인트: \(userStateManager.remainingPoints)")
+
+                        Text("남은 포인트: \(userRepository.currentUser?.remainingPoints ?? 0)")
                             .font(.system(size: 10, weight: .medium, design: .monospaced))
                             .foregroundColor(.white.opacity(0.8))
                     }
@@ -39,41 +40,41 @@ struct StatsCard: View {
                         StatMiniCard(
                             icon: "heart.fill",
                             label: "HP 회복",
-                            value: statsStateManager.currentStats?.hpRecovery ?? 0,
+                            value: statsRepository.currentStats?.hpRecovery ?? 0,
                             color: .red
                         )
-                        
+
                         StatMiniCard(
                             icon: "figure.run",
                             label: "이동속도",
-                            value: statsStateManager.currentStats?.moveSpeed ?? 0,
+                            value: statsRepository.currentStats?.moveSpeed ?? 0,
                             color: .green
                         )
-                        
+
                         StatMiniCard(
                             icon: "bolt.fill",
                             label: "에너지 회복",
-                            value: statsStateManager.currentStats?.energyRecovery ?? 0,
+                            value: statsRepository.currentStats?.energyRecovery ?? 0,
                             color: .blue
                         )
-                        
+
                         // 두 번째 행 (2개)
                         StatMiniCard(
                             icon: "target",
                             label: "공격속도",
-                            value: statsStateManager.currentStats?.attackSpeed ?? 0,
+                            value: statsRepository.currentStats?.attackSpeed ?? 0,
                             color: .yellow
                         )
-                        
+
                         StatMiniCard(
                             icon: "building.columns",
                             label: "토템",
-                            value: statsStateManager.currentStats?.totemCount ?? 0,
+                            value: statsRepository.currentStats?.totemCount ?? 0,
                             color: .orange
                         )
-                        
+
                         // 네모의 응원 상태
-                        CheerBuffCard(isActive: userStateManager.isCheerBuffActive)
+                        CheerBuffCard(isActive: userRepository.currentUser?.isCheerBuffActive ?? false)
                     }
                 }
                 .padding()

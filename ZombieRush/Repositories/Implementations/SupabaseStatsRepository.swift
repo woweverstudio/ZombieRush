@@ -7,13 +7,14 @@
 
 import Foundation
 import Supabase
+import SwiftUI
 
 /// Supabase를 사용한 StatsRepository 구현체
-class SupabaseStatsRepository: StatsRepository {
-    private let supabase: SupabaseClient
+class SupabaseStatsRepository: ObservableObject, StatsRepository {
+    // Observable properties for View observation
+    @Published var currentStats: Stats?
 
-    /// 데이터 변경 시 호출될 콜백
-    var onDataChanged: StatsDataChangeCallback?
+    private let supabase: SupabaseClient
 
     init() {
         self.supabase = SupabaseClient(
@@ -46,47 +47,29 @@ class SupabaseStatsRepository: StatsRepository {
     }
 
     func updateStats(_ stats: Stats) async throws -> Stats {
-        let updatedStats: Stats = try await supabase
-            .from("stats")
-            .update([
-                "hp_recovery": String(stats.hpRecovery),
-                "move_speed": String(stats.moveSpeed),
-                "energy_recovery": String(stats.energyRecovery),
-                "attack_speed": String(stats.attackSpeed),
-                "totem_count": String(stats.totemCount)
-            ])
-            .eq("player_id", value: stats.playerId)
-            .select("*")
-            .single()
-            .execute()
-            .value
+        do {
+            let updatedStats: Stats = try await supabase
+                .from("stats")
+                .update([
+                    "hp_recovery": String(stats.hpRecovery),
+                    "move_speed": String(stats.moveSpeed),
+                    "energy_recovery": String(stats.energyRecovery),
+                    "attack_speed": String(stats.attackSpeed),
+                    "totem_count": String(stats.totemCount)
+                ])
+                .eq("player_id", value: stats.playerId)
+                .select("*")
+                .single()
+                .execute()
+                .value
 
-        // 데이터 변경 콜백 호출
-        await onDataChanged?()
 
-        return updatedStats
+            return updatedStats
+        } catch {
+            // ✅ 네트워크/DB 실패 시 네트워크 에러 표시
+            GlobalErrorManager.shared.showError(.network(.serverError(code: 500)))
+            throw error
+        }
     }
 
-    func upgradeStat(for playerID: String, statType: StatType) async throws -> Stats {
-        guard let currentStats = try await getStats(by: playerID) else {
-            throw NSError(domain: "StatsRepository", code: 404, userInfo: [NSLocalizedDescriptionKey: "Stats not found"])
-        }
-
-        var updatedStats = currentStats
-
-        switch statType {
-        case .hpRecovery:
-            updatedStats.hpRecovery += 1
-        case .moveSpeed:
-            updatedStats.moveSpeed += 1
-        case .energyRecovery:
-            updatedStats.energyRecovery += 1
-        case .attackSpeed:
-            updatedStats.attackSpeed += 1
-        case .totemCount:
-            updatedStats.totemCount += 1
-        }
-
-        return try await updateStats(updatedStats)
-    }
 }

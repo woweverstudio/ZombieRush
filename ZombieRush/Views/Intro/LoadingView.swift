@@ -31,10 +31,7 @@ enum LoadingStage: Int, CaseIterable {
 struct LoadingView: View {
     @Environment(GameKitManager.self) var gameKitManager
     @Environment(GameStateManager.self) var gameStateManager
-    @Environment(UserStateManager.self) var userStateManager
-    @Environment(StatsStateManager.self) var statsStateManager
-    @Environment(SpiritsStateManager.self) var spiritsStateManager
-    @Environment(JobsStateManager.self) var jobsStateManager
+    @EnvironmentObject var useCaseFactory: UseCaseFactory
     @Environment(AppRouter.self) var router
 
     @State private var currentStage: LoadingStage = .versionCheck
@@ -169,11 +166,12 @@ struct LoadingView: View {
             return
         }
 
+
         // 사용자 데이터, 스탯 데이터, 정령 데이터, 직업 데이터 동시에 로드
-        async let userTask: () = userStateManager.loadOrCreateUser(playerID: playerID, nickname: nickname, photo: playerInfo.photo)
-        async let statsTask: () = statsStateManager.loadOrCreateStats(playerID: playerID)
-        async let spiritsTask: () = spiritsStateManager.loadOrCreateSpirits(playerID: playerID)
-        async let jobsTask: () = jobsStateManager.loadOrCreateJobs(playerID: playerID)
+        async let userTask: () = loadUserData(playerID: playerID, nickname: nickname)
+        async let statsTask: () = loadStatsData(playerID: playerID)
+        async let spiritsTask: () = loadSpiritsData(playerID: playerID)
+        async let jobsTask: () = loadJobsData(playerID: playerID)
 
         // 네 작업 모두 완료될 때까지 대기
         await userTask
@@ -195,10 +193,6 @@ struct LoadingView: View {
                     if hasSeenStory {
                         // 이미 본 적이 있으면 메인 화면으로 이동
                         self.router.navigate(to: .main)
-                        userStateManager.printCurrentUser()
-                        statsStateManager.printCurrentStats()
-                        spiritsStateManager.printCurrentSpirits()
-                        jobsStateManager.printCurrentJobs()
                     } else {
                         // 처음이면 스토리 화면으로 이동
                         self.router.navigate(to: .story)
@@ -226,5 +220,25 @@ struct LoadingView: View {
                 rootViewController.dismiss(animated: true)
             }
         }
+    }
+
+    private func loadUserData(playerID: String, nickname: String) async {
+        let request = LoadOrCreateUserRequest(playerID: playerID, nickname: nickname)
+        _ = try? await useCaseFactory.loadOrCreateUser.execute(request)
+    }
+
+    private func loadStatsData(playerID: String) async {
+        let request = LoadOrCreateStatsRequest(playerID: playerID)
+        _ = try? await useCaseFactory.loadOrCreateStats.execute(request)
+    }
+
+    private func loadSpiritsData(playerID: String) async {
+        let request = LoadOrCreateSpiritsRequest(playerID: playerID)
+        _ = try? await useCaseFactory.loadOrCreateSpirits.execute(request)
+    }
+
+    private func loadJobsData(playerID: String) async {
+        let request = LoadOrCreateJobsRequest(playerID: playerID)
+        _ = try? await useCaseFactory.loadOrCreateJobs.execute(request)
     }
 }

@@ -22,8 +22,10 @@ struct SpiritInfoCard: View {
 // MARK: - Spirit Detail Panel
 struct SpiritDetailPanel: View {
     let spiritType: SpiritType
-    @Environment(SpiritsStateManager.self) var spiritsStateManager
-    @Environment(UserStateManager.self) var userStateManager
+    @EnvironmentObject var userRepository: SupabaseUserRepository
+    @EnvironmentObject var spiritsRepository: SupabaseSpiritsRepository
+    @EnvironmentObject var useCaseFactory: UseCaseFactory
+    @Environment(GameKitManager.self) var gameKitManager
 
     @State private var selectedQuantity: Int = 1
 
@@ -43,7 +45,7 @@ struct SpiritDetailPanel: View {
                 Spacer()
 
                 // 현재 개수 표시
-                Text("\(spiritsStateManager.getCurrentCount(for: spiritType))마리")
+                Text("\(getCurrentSpiritCount())마리")
                     .font(.system(size: 18, weight: .bold, design: .monospaced))
                     .foregroundColor(spiritType.color)
             }
@@ -77,8 +79,8 @@ struct SpiritDetailPanel: View {
                     QuantityButton(quantity: 25, isSelected: selectedQuantity == 25) {
                         selectedQuantity = 25
                     }
-                    QuantityButton(quantity: userStateManager.nemoFruits, isSelected: selectedQuantity == userStateManager.nemoFruits, label: "최대") {
-                        selectedQuantity = userStateManager.nemoFruits
+                    QuantityButton(quantity: userRepository.currentUser?.nemoFruit ?? 0, isSelected: selectedQuantity == (userRepository.currentUser?.nemoFruit ?? 0), label: "최대") {
+                        selectedQuantity = userRepository.currentUser?.nemoFruit ?? 0
                     }
                 }
             }
@@ -104,16 +106,23 @@ struct SpiritDetailPanel: View {
 
 
     private func canAfford() -> Bool {
-        return userStateManager.canAffordSpiritPurchase(quantity: selectedQuantity)
+        let currentFruits = userRepository.currentUser?.nemoFruit ?? 0
+        return currentFruits >= selectedQuantity
     }
 
     private func purchaseSpirits() async {
-        let success = await userStateManager.purchaseSpirits(spiritType, quantity: selectedQuantity)
-        // ✅ refresh는 콜백을 통해 자동으로 수행됨
-        if success {
-            print("💎 Spirit: 정령 구매 완료")
-        } else {
-            print("💎 Spirit: 정령 구매 실패")
+        let request = PurchaseSpiritRequest(spiritType: spiritType, quantity: selectedQuantity)
+        _ = try? await useCaseFactory.purchaseSpirit.execute(request)
+    }
+
+    private func getCurrentSpiritCount() -> Int {
+        guard let spirits = spiritsRepository.currentSpirits else { return 0 }
+
+        switch spiritType {
+        case .fire: return spirits.fire
+        case .ice: return spirits.ice
+        case .lightning: return spirits.lightning
+        case .dark: return spirits.dark
         }
     }
 }

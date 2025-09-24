@@ -90,17 +90,18 @@ struct CheerBuffCard: View {
 
 // MARK: - Cheer Buff Status Component (간단한 상태 표시)
 struct CheerBuffStatus: View {
-    @Environment(UserStateManager.self) var userStateManager
+    @EnvironmentObject var userRepository: SupabaseUserRepository
+    @EnvironmentObject var useCaseFactory: UseCaseFactory
 
     var body: some View {
         HStack(spacing: 6) {
             Image(systemName: "medal.fill")
                 .font(.system(size: 14))
-                .foregroundColor(userStateManager.isCheerBuffActive ? Color.dsSuccess : Color.dsTextDisabled)
+                .foregroundColor(userRepository.currentUser?.isCheerBuffActive ?? false ? Color.dsSuccess : Color.dsTextDisabled)
 
-            Text(userStateManager.isCheerBuffActive ? "네모의 응원 ON" : "네모의 응원 OFF")
+            Text(userRepository.currentUser?.isCheerBuffActive ?? false ? "네모의 응원 ON" : "네모의 응원 OFF")
                 .font(.system(size: 12, design: .monospaced))
-                .foregroundColor(userStateManager.isCheerBuffActive ? Color.dsSuccess : Color.dsTextDisabled)
+                .foregroundColor(userRepository.currentUser?.isCheerBuffActive ?? false ? Color.dsSuccess : Color.dsTextDisabled)
         }
     }
 }

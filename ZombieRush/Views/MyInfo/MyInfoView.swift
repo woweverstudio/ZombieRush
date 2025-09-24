@@ -1,12 +1,14 @@
 import SwiftUI
+import Foundation  // StatType을 위해 추가
 
 // MARK: - 내 정보 View
 struct MyInfoView: View {
     @Environment(AppRouter.self) var router
-    @Environment(JobsStateManager.self) var jobsStateManager
-    @Environment(StatsStateManager.self) var statsStateManager
-    @Environment(SpiritsStateManager.self) var spiritsStateManager
-    @Environment(UserStateManager.self) var userStateManager
+    @EnvironmentObject var userRepository: SupabaseUserRepository
+    @EnvironmentObject var statsRepository: SupabaseStatsRepository
+    @EnvironmentObject var spiritsRepository: SupabaseSpiritsRepository
+    @EnvironmentObject var jobsRepository: SupabaseJobsRepository
+    @EnvironmentObject var useCaseFactory: UseCaseFactory
 
     let initialCategory: MyInfoCategory
     @State private var selectedCategory: MyInfoCategory
@@ -159,7 +161,7 @@ extension MyInfoView {
                 GridItem(.flexible(), spacing: 8)
             ], spacing: 8) {
                 ForEach(JobType.allCases, id: \.self) { jobType in
-                    let isUnlocked = jobsStateManager.currentJobs.unlockedJobs.contains(jobType)
+                    let isUnlocked = jobsRepository.currentJobs?.unlockedJobs.contains(jobType) ?? false
                     let isSelected = selectedJob == jobType
 
                     JobInfoCard(
@@ -184,11 +186,12 @@ extension MyInfoView {
             ], spacing: 8) {
                 ForEach(StatType.allCases, id: \.self) { statType in
                     let isSelected = selectedStat == statType
+                    let currentValue = 3
 
                     StatInfoCard(
                         statType: statType,
                         isSelected: isSelected,
-                        currentValue: statsStateManager.getCurrentStatValue(statType),
+                        currentValue: currentValue,
                         onTap: {
                             selectedStat = statType
                         }
@@ -199,7 +202,7 @@ extension MyInfoView {
                     title: "네모의 응원",
                     iconName: "medal.fill",
                     iconColor: Color.dsSuccess,
-                    value: "\(userStateManager.isCheerBuffActive ? "ON" : "OFF")",
+                    value: "\(userRepository.currentUser?.isCheerBuffActive ?? false ? "ON" : "OFF")",
                     isSelected: false,
                     action: {}
                 )
@@ -218,11 +221,12 @@ extension MyInfoView {
             ], spacing: 8) {
                 ForEach(SpiritType.allCases, id: \.self) { spiritType in
                     let isSelected = selectedSpirit == spiritType
+                    let currentCount = 3
 
                     SpiritInfoCard(
                         spiritType: spiritType,
                         isSelected: isSelected,
-                        currentCount: spiritsStateManager.getCurrentCount(for: spiritType),
+                        currentCount: currentCount,
                         onTap: {
                             selectedSpirit = spiritType
                         }

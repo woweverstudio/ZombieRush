@@ -37,12 +37,13 @@ struct NemoFruitIcon: View {
 
 // MARK: - Nemo Fruit Badge Component (잔여 네모열매 표시)
 struct NemoFruitBadge: View {
-    @Environment(UserStateManager.self) var userStateManager
+    @EnvironmentObject var userRepository: SupabaseUserRepository
+    @EnvironmentObject var useCaseFactory: UseCaseFactory
 
     var body: some View {
         HStack(spacing: 6) {
             NemoFruitIcon(size: .medium)
-            Text("\(userStateManager.nemoFruits)")
+            Text("\(userRepository.currentUser?.nemoFruit ?? 0)")
                 .font(.system(size: 18, weight: .bold, design: .monospaced))
                 .foregroundColor(.yellow)
         }

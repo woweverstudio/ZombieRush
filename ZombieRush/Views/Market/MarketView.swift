@@ -3,11 +3,11 @@ import SwiftUI
 // MARK: - Market View
 struct MarketView: View {
     @Environment(AppRouter.self) var router
-    @Environment(UserStateManager.self) var userStateManager
+    @EnvironmentObject var useCaseFactory: UseCaseFactory
 
-    // 마켓 아이템 데이터 (UserStateManager에서 가져옴)
+    // 마켓 아이템 데이터
     private var marketItems: [MarketItem] {
-        userStateManager.marketItems
+        MarketItemsManager.marketItems
     }
 
     var body: some View {
@@ -88,7 +88,8 @@ struct MarketView: View {
 // MARK: - Market Item Card
 struct MarketItemCard: View {
     let item: MarketItem
-    @Environment(UserStateManager.self) var userStateManager
+    @EnvironmentObject var useCaseFactory: UseCaseFactory
+    @Environment(GameKitManager.self) var gameKitManager
 
     var body: some View {
         Card(style: .cyberpunk) {
@@ -132,7 +133,8 @@ struct MarketItemCard: View {
                 // 구매 버튼
                 Button(action: {
                     Task {
-                        await purchaseItem()
+                        let request = PurchaseMarketItemRequest(item: item)
+                        _ = try? await useCaseFactory.purchaseMarketItem.execute(request)
                     }
                 }) {
                     Text("구매")
@@ -142,20 +144,10 @@ struct MarketItemCard: View {
                         .padding(.vertical, 8)
                         .background(
                             RoundedRectangle(cornerRadius: 6)
-                                .fill(userStateManager.canAffordMarketItem(item) ? Color.cyan.opacity(0.8) : Color.gray.opacity(0.3))
+                                .fill(Color.cyan.opacity(0.8))
                         )
                 }
-                .disabled(!userStateManager.canAffordMarketItem(item))
             }
-        }
-    }
-
-    private func purchaseItem() async {
-        let success = await userStateManager.purchaseMarketItem(item)
-        if success {
-            print("마켓 아이템 구매 완료: \(item.name)")
-        } else {
-            print("마켓 아이템 구매 실패: \(item.name)")
         }
     }
 }

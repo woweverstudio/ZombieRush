@@ -3,8 +3,9 @@ import SwiftUI
 // MARK: - Player Info Card (프로필 + 스탯 통합)
 struct PlayerInfoCard: View {
     @Environment(GameKitManager.self) var gameKitManager
-    @Environment(UserStateManager.self) var userStateManager
-    @Environment(JobsStateManager.self) var jobsStateManager
+    @EnvironmentObject var userRepository: SupabaseUserRepository
+    @EnvironmentObject var jobsRepository: SupabaseJobsRepository
+    @EnvironmentObject var useCaseFactory: UseCaseFactory
 
     var body: some View {
         ZStack {
@@ -30,7 +31,7 @@ struct PlayerInfoCard: View {
     var profileInfo: some View {
         HStack(spacing: 12) {
             // GameKit 프로필 이미지
-            if let playerPhoto = userStateManager.userImage {
+            if let playerPhoto = gameKitManager.playerPhoto {
                 Image(uiImage: playerPhoto)
                     .resizable()
                     .scaledToFill()
@@ -50,7 +51,7 @@ struct PlayerInfoCard: View {
 
 
             VStack(alignment: .leading, spacing: 4) {
-                Text(userStateManager.nickname)
+                Text(userRepository.currentUser?.nickname ?? "")
                     .font(.system(size: 20, weight: .bold, design: .monospaced))
                     .foregroundColor(.white)
                     .lineLimit(1)
@@ -72,7 +73,8 @@ struct PlayerInfoCard: View {
                         .foregroundColor(Color.dsCoin)
                         .font(.system(size: 16))
 
-                    if let levelInfo = userStateManager.level {
+                    if let user = userRepository.currentUser {
+                        let levelInfo = user.levelInfo
                         Text("Lv. \(levelInfo.currentLevel)")
                             .font(.system(size: 16, weight: .bold, design: .monospaced))
                             .foregroundColor(Color.dsTextPrimary)
@@ -87,7 +89,8 @@ struct PlayerInfoCard: View {
 
                 // 경험치 바
                 VStack(alignment: .leading, spacing: 8) {
-                    if let levelInfo = userStateManager.level {
+                    if let user = userRepository.currentUser {
+                        let levelInfo = user.levelInfo
                         let currentLevelExp = levelInfo.currentExp - levelInfo.levelMinExp
                         let requiredExp = levelInfo.expToNextLevel
                         let percentage = Int(levelInfo.progress * 100)
@@ -121,11 +124,19 @@ struct PlayerInfoCard: View {
 
     var statInfo: some View {
         VStack(alignment: .leading, spacing: 10) {
-            StatRow(icon: "heart.fill", label: "체력", value: "\(jobsStateManager.hp)", color: .red)
-            StatRow(icon: "bolt.fill", label: "에너지", value: "\(jobsStateManager.energy)", color: .blue)
-            StatRow(icon: "shoeprints.fill", label: "이동속도", value: "\(jobsStateManager.move)", color: .green)
-            StatRow(icon: "bolt.horizontal.fill", label: "공격속도", value: "\(jobsStateManager.attackSpeed)", color: .yellow)
-            StatRow(icon: "flame.fill", label: "궁극기", value: "궁극기 이름 들어감", color: .orange)
+            if let jobs = jobsRepository.currentJobs {
+                StatRow(icon: "heart.fill", label: "체력", value: "\(jobs.hp)", color: .red)
+                StatRow(icon: "bolt.fill", label: "에너지", value: "\(jobs.energy)", color: .blue)
+                StatRow(icon: "shoeprints.fill", label: "이동속도", value: "\(jobs.move)", color: .green)
+                StatRow(icon: "bolt.horizontal.fill", label: "공격속도", value: "\(jobs.attackSpeed)", color: .yellow)
+                StatRow(icon: "flame.fill", label: "궁극기", value: "궁극기 이름 들어감", color: .orange)
+            } else {
+                StatRow(icon: "heart.fill", label: "체력", value: "--", color: .red)
+                StatRow(icon: "bolt.fill", label: "에너지", value: "--", color: .blue)
+                StatRow(icon: "shoeprints.fill", label: "이동속도", value: "--", color: .green)
+                StatRow(icon: "bolt.horizontal.fill", label: "공격속도", value: "--", color: .yellow)
+                StatRow(icon: "flame.fill", label: "궁극기", value: "궁극기 이름 들어감", color: .orange)
+            }
         }
     }
 }
