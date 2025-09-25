@@ -23,7 +23,7 @@ struct ConsumeStatPointsUseCase: UseCase {
 
     func execute(_ request: ConsumeStatPointsRequest) async throws -> ConsumeStatPointsResponse {
         // 현재 사용자 정보 사용 (Repository의 currentUser)
-        guard let currentUser = userRepository.currentUser else {
+        guard let currentUser = await userRepository.currentUser else {
             return ConsumeStatPointsResponse(success: false, user: nil)
         }
 

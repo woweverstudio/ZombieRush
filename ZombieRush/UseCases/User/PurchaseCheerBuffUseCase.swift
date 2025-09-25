@@ -23,7 +23,7 @@ struct PurchaseCheerBuffUseCase: UseCase {
 
     func execute(_ request: PurchaseCheerBuffRequest) async throws -> PurchaseCheerBuffResponse {
         // 현재 사용자 정보 사용 (Repository의 currentUser)
-        guard let currentUser = userRepository.currentUser else {
+        guard let currentUser = await userRepository.currentUser else {
             return PurchaseCheerBuffResponse(success: false, user: nil)
         }
 

@@ -44,14 +44,14 @@ struct UnlockJobUseCase: UseCase {
     /// 해금 조건 확인
     private func canUnlockJob(_ requirement: JobUnlockRequirement) async -> Bool {
         // 정령 개수 확인
-        guard let currentSpirits = spiritsRepository.currentSpirits else {
+        guard let currentSpirits = await spiritsRepository.currentSpirits else {
             return false
         }
         let currentSpiritCount = getSpiritCount(for: requirement.spiritType, from: currentSpirits)
         let hasEnoughSpirits = currentSpiritCount >= requirement.count
 
         // 레벨 확인
-        guard let currentUser = userRepository.currentUser else {
+        guard let currentUser = await userRepository.currentUser else {
             return false
         }
         let currentLevel = Level(currentExp: currentUser.exp).currentLevel
@@ -63,7 +63,7 @@ struct UnlockJobUseCase: UseCase {
     /// 정령 소비 및 직업 해금
     private func unlockJobWithSpirits(_ requirement: JobUnlockRequirement, jobType: JobType) async throws -> UnlockJobResponse {
         // 정령 개수 차감
-        guard let currentSpirits = spiritsRepository.currentSpirits else {
+        guard let currentSpirits = await spiritsRepository.currentSpirits else {
             return UnlockJobResponse(success: false, jobs: nil)
         }
 
@@ -94,7 +94,7 @@ struct UnlockJobUseCase: UseCase {
     /// 직업 직접 해금 (조건 없이)
     private func unlockJobDirectly(jobType: JobType) async throws -> UnlockJobResponse {
         // 현재 직업 정보 사용 (Repository의 currentJobs)
-        guard let currentJobs = jobsRepository.currentJobs else {
+        guard let currentJobs = await jobsRepository.currentJobs else {
             return UnlockJobResponse(success: false, jobs: nil)
         }
 

@@ -10,6 +10,7 @@ import Supabase
 import SwiftUI
 
 /// Supabase를 사용한 JobsRepository 구현체
+@MainActor
 class SupabaseJobsRepository: ObservableObject, JobsRepository {
     // Observable properties for View observation
     @Published var currentJobs: Jobs?

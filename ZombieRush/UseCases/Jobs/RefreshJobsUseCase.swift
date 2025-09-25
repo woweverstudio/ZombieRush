@@ -21,7 +21,7 @@ struct RefreshJobsUseCase: UseCase {
 
     func execute(_ request: RefreshJobsRequest) async throws -> RefreshJobsResponse {
         // currentJobs의 playerID를 사용해서 서버에서 다시 조회
-        guard let currentJobs = jobsRepository.currentJobs else {
+        guard let currentJobs = await jobsRepository.currentJobs else {
             throw NSError(domain: "RefreshJobsUseCase", code: 404, userInfo: [NSLocalizedDescriptionKey: "현재 직업 정보가 없습니다"])
         }
 

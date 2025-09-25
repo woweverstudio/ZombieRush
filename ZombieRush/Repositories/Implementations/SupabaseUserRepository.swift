@@ -10,6 +10,7 @@ import Supabase
 import SwiftUI
 
 /// Supabase를 사용한 UserRepository 구현체
+@MainActor
 final class SupabaseUserRepository: ObservableObject, UserRepository {
     // Observable properties for View observation
     @Published var currentUser: User?

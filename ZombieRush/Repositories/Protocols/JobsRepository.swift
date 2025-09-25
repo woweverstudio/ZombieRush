@@ -8,6 +8,7 @@
 import Foundation
 
 /// 직업 데이터 액세스를 위한 Repository Protocol
+@MainActor
 protocol JobsRepository: AnyObject {
     /// 직업 상태
     var currentJobs: Jobs? { get set }

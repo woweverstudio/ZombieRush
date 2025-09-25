@@ -10,6 +10,7 @@ import Supabase
 import SwiftUI
 
 /// Supabase를 사용한 StatsRepository 구현체
+@MainActor
 class SupabaseStatsRepository: ObservableObject, StatsRepository {
     // Observable properties for View observation
     @Published var currentStats: Stats?

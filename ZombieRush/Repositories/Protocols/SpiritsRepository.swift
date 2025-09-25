@@ -8,6 +8,7 @@
 import Foundation
 
 /// 정령 데이터 액세스를 위한 Repository Protocol
+@MainActor
 protocol SpiritsRepository: AnyObject {
     /// 정령 상태
     var currentSpirits: Spirits? { get set }

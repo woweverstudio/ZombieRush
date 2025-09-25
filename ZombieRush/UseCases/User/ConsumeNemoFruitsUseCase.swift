@@ -23,7 +23,7 @@ struct ConsumeNemoFruitsUseCase: UseCase {
 
     func execute(_ request: ConsumeNemoFruitsRequest) async throws -> ConsumeNemoFruitsResponse {
         // 현재 사용자 정보 사용 (Repository의 currentUser)
-        guard let currentUser = userRepository.currentUser else {
+        guard let currentUser = await userRepository.currentUser else {
             return ConsumeNemoFruitsResponse(success: false, user: nil)
         }
 

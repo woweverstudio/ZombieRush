@@ -21,7 +21,7 @@ struct RefreshStatsUseCase: UseCase {
 
     func execute(_ request: RefreshStatsRequest) async throws -> RefreshStatsResponse {
         // currentStats의 playerID를 사용해서 서버에서 다시 조회
-        guard let currentStats = statsRepository.currentStats else {
+        guard let currentStats = await statsRepository.currentStats else {
             throw NSError(domain: "RefreshStatsUseCase", code: 404, userInfo: [NSLocalizedDescriptionKey: "현재 스텟 정보가 없습니다"])
         }
 

@@ -39,7 +39,7 @@ struct PurchaseSpiritUseCase: UseCase {
         }
 
         // 현재 정령 정보 사용 (Repository의 currentSpirits)
-        guard let currentSpirits = spiritsRepository.currentSpirits else {
+        guard let currentSpirits = await spiritsRepository.currentSpirits else {
             print("📱 UserUseCase: 정령 구매 실패 - 정령 정보를 찾을 수 없습니다")
             return PurchaseSpiritResponse(success: false, user: currentUser)
         }

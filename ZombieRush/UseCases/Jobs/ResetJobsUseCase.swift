@@ -21,7 +21,7 @@ struct ResetJobsUseCase: UseCase {
 
     func execute(_ request: ResetJobsRequest) async throws -> ResetJobsResponse {
         // currentJobs의 playerID를 사용해서 새로 생성
-        guard let currentJobs = jobsRepository.currentJobs else {
+        guard let currentJobs = await jobsRepository.currentJobs else {
             throw NSError(domain: "ResetJobsUseCase", code: 404, userInfo: [NSLocalizedDescriptionKey: "현재 직업 정보를 찾을 수 없습니다"])
         }
 

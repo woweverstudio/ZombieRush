@@ -22,7 +22,7 @@ struct AddNemoFruitsUseCase: UseCase {
 
     func execute(_ request: AddNemoFruitsRequest) async throws -> AddNemoFruitsResponse {
         // 현재 사용자 정보 사용 (Repository의 currentUser)
-        guard let currentUser = userRepository.currentUser else {
+        guard let currentUser = await userRepository.currentUser else {
             throw NSError(domain: "AddNemoFruitsUseCase", code: 404, userInfo: [NSLocalizedDescriptionKey: "사용자를 찾을 수 없습니다"])
         }
 

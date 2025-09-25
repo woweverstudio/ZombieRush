@@ -8,6 +8,7 @@
 import Foundation
 
 /// 스탯 데이터 액세스를 위한 Repository Protocol
+@MainActor
 protocol StatsRepository: AnyObject {
     /// 스텟 상태
     var currentStats: Stats? { get set }

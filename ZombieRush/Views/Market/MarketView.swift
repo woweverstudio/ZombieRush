@@ -95,9 +95,9 @@ struct MarketItemCard: View {
         Card(style: .cyberpunk) {
             VStack(spacing: 12) {
                 switch item.type {
-                case .fruitPackage(let count, let price):
+                case .fruitPackage(let _, let _):
                     NemoFruitIcon(size: .large)
-                case .cheerBuff(let days, let price):
+                case .cheerBuff(let _, let _):
                     CheerBuffIcon(size: .large)
                 }
 

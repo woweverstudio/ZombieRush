@@ -23,7 +23,7 @@ struct AddSpiritUseCase: UseCase {
 
     func execute(_ request: AddSpiritRequest) async throws -> AddSpiritResponse {
         // 현재 정령 정보 사용 (Repository의 currentSpirits)
-        guard let currentSpirits = spiritsRepository.currentSpirits else {
+        guard let currentSpirits = await spiritsRepository.currentSpirits else {
             throw NSError(domain: "AddSpiritUseCase", code: 404, userInfo: [NSLocalizedDescriptionKey: "정령 정보를 찾을 수 없습니다"])
         }
 

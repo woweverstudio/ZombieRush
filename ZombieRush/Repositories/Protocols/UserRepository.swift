@@ -8,6 +8,7 @@
 import Foundation
 
 /// 사용자 데이터 액세스를 위한 Repository Protocol
+@MainActor
 protocol UserRepository: AnyObject {
     /// 유저 상태
     var currentUser: User? { get set }

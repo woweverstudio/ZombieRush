@@ -12,10 +12,10 @@ import Supabase
 @main
 struct ZombieRushApp: App {
     // Repository instances (SSOT) - managed as StateObjects for proper lifecycle
-    @StateObject var userRepository = SupabaseUserRepository()
-    @StateObject var statsRepository = SupabaseStatsRepository()
-    @StateObject var spiritsRepository = SupabaseSpiritsRepository()
-    @StateObject var jobsRepository = SupabaseJobsRepository()
+    @StateObject var userRepository: SupabaseUserRepository
+    @StateObject var statsRepository: SupabaseStatsRepository
+    @StateObject var spiritsRepository: SupabaseSpiritsRepository
+    @StateObject var jobsRepository: SupabaseJobsRepository
 
     // UseCaseFactory with injected repositories
     @StateObject var useCaseFactory: UseCaseFactory
@@ -31,13 +31,23 @@ struct ZombieRushApp: App {
     @Environment(\.scenePhase) private var scenePhase  // 앱 상태 모니터링
 
     init() {
+        let userRepository = SupabaseUserRepository()
+        let statsRepository = SupabaseStatsRepository()
+        let spiritsRepository = SupabaseSpiritsRepository()
+        let jobsRepository = SupabaseJobsRepository()
+        
         // Initialize UseCaseFactory with injected repositories
         let factory = UseCaseFactory(
-            userRepository: SupabaseUserRepository(),
-            statsRepository: SupabaseStatsRepository(),
-            spiritsRepository: SupabaseSpiritsRepository(),
-            jobsRepository: SupabaseJobsRepository()
+            userRepository: userRepository,
+            statsRepository: statsRepository,
+            spiritsRepository: spiritsRepository,
+            jobsRepository: jobsRepository
         )
+        
+        _userRepository = StateObject(wrappedValue: userRepository)
+        _statsRepository = StateObject(wrappedValue: statsRepository)
+        _spiritsRepository = StateObject(wrappedValue: spiritsRepository)
+        _jobsRepository = StateObject(wrappedValue: jobsRepository)
         _useCaseFactory = StateObject(wrappedValue: factory)
     }
 

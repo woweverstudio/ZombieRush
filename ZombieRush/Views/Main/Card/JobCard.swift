@@ -16,11 +16,6 @@ struct JobCard: View {
                 let prevIndex = currentIndex > 0 ? currentIndex - 1 : unlockedJobs.count - 1
                 let newJobType = unlockedJobs[prevIndex]
                 selectedJob = newJobType.rawValue
-                // UseCase 호출로 실제 DB 업데이트
-                Task {
-                    let request = SelectJobRequest(jobType: newJobType)
-                    _ = try? await useCaseFactory.selectJob.execute(request)
-                }
             }
         }
     }
@@ -33,11 +28,6 @@ struct JobCard: View {
                 let nextIndex = currentIndex < unlockedJobs.count - 1 ? currentIndex + 1 : 0
                 let newJobType = unlockedJobs[nextIndex]
                 selectedJob = newJobType.rawValue
-                // UseCase 호출로 실제 DB 업데이트
-                Task {
-                    let request = SelectJobRequest(jobType: newJobType)
-                    _ = try? await useCaseFactory.selectJob.execute(request)
-                }
             }
         }
     }
@@ -105,11 +95,6 @@ struct JobCard: View {
             // 초기 선택된 job 설정
             if let jobs = jobsRepository.currentJobs {
                 selectedJob = jobs.selectedJob
-            }
-        }
-        .onChange(of: jobsRepository.currentJobs?.selectedJob) { _, newValue in
-            if let newValue = newValue {
-                selectedJob = newValue
             }
         }
     }

@@ -152,10 +152,10 @@ struct LoadingView: View {
 
         // 단계 3: Supabase 데이터 로딩 (사용자 + 스탯)
         await updateStage(to: .dataLoading)
-        await loadUserDataAndStats(with: playerInfo)
+        await loadUserDataFromDB(with: playerInfo)
     }
 
-    private func loadUserDataAndStats(with playerInfo: GameKitManager.PlayerInfo) async {
+    private func loadUserDataFromDB(with playerInfo: GameKitManager.PlayerInfo) async {
         // GameKit에서 얻은 플레이어 정보로 데이터 로드/생성
         let playerID = playerInfo.playerID
         let nickname = playerInfo.nickname

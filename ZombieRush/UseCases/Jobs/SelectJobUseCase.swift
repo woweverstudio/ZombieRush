@@ -22,7 +22,7 @@ struct SelectJobUseCase: UseCase {
 
     func execute(_ request: SelectJobRequest) async throws -> SelectJobResponse {
         // 현재 직업 정보 사용 (Repository의 currentJobs)
-        guard let currentJobs = jobsRepository.currentJobs else {
+        guard let currentJobs = await jobsRepository.currentJobs else {
             throw NSError(domain: "SelectJobUseCase", code: 404, userInfo: [NSLocalizedDescriptionKey: "직업 정보를 찾을 수 없습니다"])
         }
 

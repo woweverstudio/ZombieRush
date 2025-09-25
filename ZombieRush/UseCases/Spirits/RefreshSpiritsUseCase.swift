@@ -21,7 +21,7 @@ struct RefreshSpiritsUseCase: UseCase {
 
     func execute(_ request: RefreshSpiritsRequest) async throws -> RefreshSpiritsResponse {
         // currentSpirits의 playerID를 사용해서 서버에서 다시 조회
-        guard let currentSpirits = spiritsRepository.currentSpirits else {
+        guard let currentSpirits = await spiritsRepository.currentSpirits else {
             throw NSError(domain: "RefreshSpiritsUseCase", code: 404, userInfo: [NSLocalizedDescriptionKey: "현재 정령 정보가 없습니다"])
         }
 

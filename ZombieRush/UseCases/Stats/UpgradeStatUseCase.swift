@@ -24,7 +24,7 @@ struct UpgradeStatUseCase: UseCase {
 
     func execute(_ request: UpgradeStatRequest) async throws -> UpgradeStatResponse {
         // 현재 스텟 정보 사용 (Repository의 currentStats)
-        guard let currentStats = statsRepository.currentStats else {
+        guard let currentStats = await statsRepository.currentStats else {
             print("📊 StatsUseCase: 업그레이드 실패 - 스텟 데이터가 없습니다")
             return UpgradeStatResponse(success: false, stats: nil)
         }
