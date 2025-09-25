@@ -57,10 +57,10 @@ struct StatDetailPanel: View {
                     .font(.system(size: 16, weight: .bold, design: .monospaced))
                     .foregroundColor(statType.color)
 
-//                Text(statType.description)
-//                    .font(.system(size: 14, design: .monospaced))
-//                    .foregroundColor(.white.opacity(0.8))
-//                    .lineSpacing(4)
+                Text(statType.description)
+                    .font(.system(size: 14, design: .monospaced))
+                    .foregroundColor(.white.opacity(0.8))
+                    .lineSpacing(4)
             }
 
             Spacer()

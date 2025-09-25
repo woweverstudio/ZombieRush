@@ -186,7 +186,7 @@ extension MyInfoView {
             ], spacing: 8) {
                 ForEach(StatType.allCases, id: \.self) { statType in
                     let isSelected = selectedStat == statType
-                    let currentValue = 3
+                    let currentValue = getCurrentStatValue(by: statType)
 
                     StatInfoCard(
                         statType: statType,
@@ -221,7 +221,7 @@ extension MyInfoView {
             ], spacing: 8) {
                 ForEach(SpiritType.allCases, id: \.self) { spiritType in
                     let isSelected = selectedSpirit == spiritType
-                    let currentCount = 3
+                    let currentCount = getCurrentSpiritCount(by: spiritType)
 
                     SpiritInfoCard(
                         spiritType: spiritType,
@@ -233,6 +233,29 @@ extension MyInfoView {
                     )
                 }
             }
+        }
+    }
+    
+    private func getCurrentStatValue(by statType: StatType) -> Int {
+        guard let stats = statsRepository.currentStats else { return 0 }
+
+        switch statType {
+        case .hpRecovery: return stats.hpRecovery
+        case .moveSpeed: return stats.moveSpeed
+        case .energyRecovery: return stats.energyRecovery
+        case .attackSpeed: return stats.attackSpeed
+        case .totemCount: return stats.totemCount
+        }
+    }
+    
+    private func getCurrentSpiritCount(by spiritType: SpiritType) -> Int {
+        guard let spirits = spiritsRepository.currentSpirits else { return 0 }
+        
+        switch spiritType {
+        case .fire: return spirits.fire
+        case .ice: return spirits.ice
+        case .lightning: return spirits.lightning
+        case .dark: return spirits.dark
         }
     }
 

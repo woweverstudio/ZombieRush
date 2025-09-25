@@ -31,7 +31,8 @@ class SupabaseStatsRepository: ObservableObject, StatsRepository {
             .eq("player_id", value: playerID)
             .execute()
             .value
-
+        
+        currentStats = stats.first
         return stats.first
     }
 
@@ -43,7 +44,8 @@ class SupabaseStatsRepository: ObservableObject, StatsRepository {
             .single()
             .execute()
             .value
-
+        
+        currentStats = createdStats
         return createdStats
     }
 
@@ -64,7 +66,7 @@ class SupabaseStatsRepository: ObservableObject, StatsRepository {
                 .execute()
                 .value
 
-
+            currentStats = updatedStats
             return updatedStats
         } catch {
             // ✅ 네트워크/DB 실패 시 네트워크 에러 표시

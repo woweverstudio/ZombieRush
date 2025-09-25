@@ -5,6 +5,7 @@ import GameKit
 struct MainMenuPanel: View {
     @Environment(AppRouter.self) var router
     @Environment(GameKitManager.self) var gameKitManager
+    @EnvironmentObject var useCaseFactory: UseCaseFactory
 
     private var isPhoneSize: Bool {
         return UIDevice.current.userInterfaceIdiom == .phone
@@ -73,7 +74,10 @@ struct MainMenuPanel: View {
 
             // 게임 시작 버튼
             PrimaryButton(title: TextConstants.Main.startButton, style: .cyan, fullWidth: true) {
-                router.navigate(to: .game)
+                Task {
+                    let request = AddExperienceRequest(expToAdd: 10)
+                    let _ = try? await useCaseFactory.addExperience.execute(request)
+                }
             }
         }
         .frame(maxWidth: isPhoneSize ? 240 : 300)

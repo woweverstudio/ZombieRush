@@ -21,13 +21,13 @@ enum StatType: String, CaseIterable, Codable {
     var displayName: String {
         switch self {
         case .hpRecovery:
-            return "HP 회복"
+            return "HP 회복 증가"
         case .moveSpeed:
-            return "이동 속도"
+            return "이동 속도 증가"
         case .energyRecovery:
-            return "에너지 회복"
+            return "에너지 회복 증가"
         case .attackSpeed:
-            return "공격 속도"
+            return "공격 속도 증가"
         case .totemCount:
             return "토템 개수"
         }
@@ -62,6 +62,22 @@ enum StatType: String, CaseIterable, Codable {
             return .orange
         case .totemCount:
             return .purple
+        }
+    }
+
+    /// 설명
+    var description: String {
+        switch self {
+        case .hpRecovery:
+            return "시간이 지남에 따라 HP를 회복합니다."
+        case .moveSpeed:
+            return "캐릭터의 이동 속도를 증가시킵니다."
+        case .energyRecovery:
+            return "시간이 지남에 따라 에너지를 회복합니다."
+        case .attackSpeed:
+            return "공격 속도를 높여 더 빠르게 공격할 수 있습니다."
+        case .totemCount:
+            return "필드에 배치할 수 있는 토템의 최대 개수를 늘립니다."
         }
     }
 }
