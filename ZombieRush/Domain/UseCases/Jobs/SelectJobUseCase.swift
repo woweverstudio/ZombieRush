@@ -12,7 +12,7 @@ struct SelectJobRequest {
 }
 
 struct SelectJobResponse {
-    let jobs: Jobs
+    let jobs: Jobs?
 }
 
 /// 직업 선택 UseCase
@@ -20,19 +20,24 @@ struct SelectJobResponse {
 struct SelectJobUseCase: UseCase {
     let jobsRepository: JobsRepository
 
-    func execute(_ request: SelectJobRequest) async throws -> SelectJobResponse {
+    func execute(_ request: SelectJobRequest) async -> SelectJobResponse {
         // 현재 직업 정보 사용 (Repository의 currentJobs)
         guard let currentJobs = await jobsRepository.currentJobs else {
-            throw NSError(domain: "SelectJobUseCase", code: 404, userInfo: [NSLocalizedDescriptionKey: "직업 정보를 찾을 수 없습니다"])
+            ErrorManager.shared.report(.dataNotFound)
+            return SelectJobResponse(jobs: nil)
         }
 
         // 직업 선택
         var updatedJobs = currentJobs
         updatedJobs.selectedJob = request.jobType.rawValue
-
-        let savedJobs = try await jobsRepository.updateJobs(updatedJobs)
-        print("⚔️ JobsUseCase: 직업 선택 완료 - \(request.jobType.displayName)")
-
-        return SelectJobResponse(jobs: savedJobs)
+        
+        do {
+            let savedJobs = try await jobsRepository.updateJobs(updatedJobs)
+            return SelectJobResponse(jobs: savedJobs)
+        } catch {            
+            ToastManager.shared.show(.selectJobFailed)
+            return SelectJobResponse(jobs: nil)
+        }
+        
     }
 }

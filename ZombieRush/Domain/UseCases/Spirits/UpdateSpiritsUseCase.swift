@@ -12,7 +12,7 @@ struct UpdateSpiritsRequest {
 }
 
 struct UpdateSpiritsResponse {
-    let spirits: Spirits
+    let spirits: Spirits?
 }
 
 /// 정령 업데이트 UseCase
@@ -20,9 +20,13 @@ struct UpdateSpiritsResponse {
 struct UpdateSpiritsUseCase: UseCase {
     let spiritsRepository: SpiritsRepository
 
-    func execute(_ request: UpdateSpiritsRequest) async throws -> UpdateSpiritsResponse {
-        let updatedSpirits = try await spiritsRepository.updateSpirits(request.spirits)
-        print("🔥 SpiritsUseCase: 정령 업데이트 성공")
-        return UpdateSpiritsResponse(spirits: updatedSpirits)
+    func execute(_ request: UpdateSpiritsRequest) async -> UpdateSpiritsResponse {
+        do {
+            let updatedSpirits = try await spiritsRepository.updateSpirits(request.spirits)
+            return UpdateSpiritsResponse(spirits: updatedSpirits)
+        } catch {
+            ErrorManager.shared.report(.dataNotFound)
+            return UpdateSpiritsResponse(spirits: nil)
+        }
     }
 }

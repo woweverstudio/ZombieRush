@@ -23,28 +23,28 @@ struct UnlockJobUseCase: UseCase {
     let spiritsRepository: SpiritsRepository
     let userRepository: UserRepository
 
-    func execute(_ request: UnlockJobRequest) async throws -> UnlockJobResponse {
+    func execute(_ request: UnlockJobRequest) async -> UnlockJobResponse {
         let stats = JobStats.getStats(for: request.jobType.rawValue)
 
         guard let requirement = stats.unlockRequirement else {
             // 해금 조건이 없는 경우 (novice 등)
-            return try await unlockJobDirectly(jobType: request.jobType)
+            return await unlockJobDirectly(jobType: request.jobType)
         }
 
         // 정령 개수 및 레벨 확인
         guard await canUnlockJob(requirement) else {
-            print("🔥 정령 부족 또는 레벨 부족으로 \(request.jobType.displayName) 해금 실패")
             return UnlockJobResponse(success: false, jobs: nil)
         }
 
         // 정령 소비 및 직업 해금
-        return try await unlockJobWithSpirits(requirement, jobType: request.jobType)
+        return await unlockJobWithSpirits(requirement, jobType: request.jobType)
     }
 
     /// 해금 조건 확인
     private func canUnlockJob(_ requirement: JobUnlockRequirement) async -> Bool {
         // 정령 개수 확인
         guard let currentSpirits = await spiritsRepository.currentSpirits else {
+            ErrorManager.shared.report(.dataNotFound)
             return false
         }
         let currentSpiritCount = getSpiritCount(for: requirement.spiritType, from: currentSpirits)
@@ -57,18 +57,28 @@ struct UnlockJobUseCase: UseCase {
         let currentLevel = Level(currentExp: currentUser.exp).currentLevel
         let hasRequiredLevel = currentLevel >= requirement.requiredLevel
 
-        return hasEnoughSpirits && hasRequiredLevel
+        if hasEnoughSpirits && hasRequiredLevel {
+            return true
+        } else {
+            ToastManager.shared.show(.unlockJobFailed(requirement.spiritType, currentSpiritCount, currentLevel))
+            return false
+        }
     }
 
     /// 정령 소비 및 직업 해금
-    private func unlockJobWithSpirits(_ requirement: JobUnlockRequirement, jobType: JobType) async throws -> UnlockJobResponse {
+    private func unlockJobWithSpirits(_ requirement: JobUnlockRequirement, jobType: JobType) async -> UnlockJobResponse {
         // 정령 개수 차감
         guard let currentSpirits = await spiritsRepository.currentSpirits else {
+            ErrorManager.shared.report(.dataNotFound)
             return UnlockJobResponse(success: false, jobs: nil)
         }
-
+        
+        guard let spiritTypeEnum = SpiritType(rawValue: requirement.spiritType) else {
+            ErrorManager.shared.report(.dataNotFound)
+            return UnlockJobResponse(success: false, jobs: nil)
+        }
+        
         var updatedSpirits = currentSpirits
-        let spiritTypeEnum = SpiritType(rawValue: requirement.spiritType) ?? .fire
 
         switch spiritTypeEnum {
         case .fire:
@@ -82,19 +92,23 @@ struct UnlockJobUseCase: UseCase {
         }
 
         // DB 업데이트
-        _ = try await spiritsRepository.updateSpirits(updatedSpirits)
-
-        // 직업 해금
-        let unlockResponse = try await unlockJobDirectly(jobType: jobType)
-        print("🔥 직업 \(jobType.displayName) 해금 완료! \(requirement.spiritType) 정령 \(requirement.count)개 소비")
-
-        return unlockResponse
+        do {
+            _ = try await spiritsRepository.updateSpirits(updatedSpirits)
+            let unlockResponse = await unlockJobDirectly(jobType: jobType)
+            
+            return unlockResponse
+        } catch {
+            ErrorManager.shared.report(.databaseRequestFailed)
+            return UnlockJobResponse(success: false, jobs: nil)
+        }
+        
     }
 
     /// 직업 직접 해금 (조건 없이)
-    private func unlockJobDirectly(jobType: JobType) async throws -> UnlockJobResponse {
+    private func unlockJobDirectly(jobType: JobType) async -> UnlockJobResponse {
         // 현재 직업 정보 사용 (Repository의 currentJobs)
         guard let currentJobs = await jobsRepository.currentJobs else {
+            ErrorManager.shared.report(.dataNotFound)
             return UnlockJobResponse(success: false, jobs: nil)
         }
 
@@ -112,11 +126,17 @@ struct UnlockJobUseCase: UseCase {
         case .darkMage:
             updatedJobs.darkMage = true
         }
+        
+        do {
+            let savedJobs = try await jobsRepository.updateJobs(updatedJobs)
+            ToastManager.shared.show(.unlockJobSuccess(jobType.displayName))
 
-        let savedJobs = try await jobsRepository.updateJobs(updatedJobs)
-        print("🔓 직업 \(jobType.displayName) 해금됨")
-
-        return UnlockJobResponse(success: true, jobs: savedJobs)
+            return UnlockJobResponse(success: true, jobs: savedJobs)
+        } catch {
+            ToastManager.shared.show(.selectJobFailed)
+            return UnlockJobResponse(success: false, jobs: nil)
+        }
+        
     }
 
     /// 정령 개수 추출 헬퍼

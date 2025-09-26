@@ -33,7 +33,7 @@ struct LoadOrCreateStatsUseCase: UseCase {
             }
         } catch {
             ErrorManager.shared.report(.databaseRequestFailed)
-            return LoadOrCreateStatsResponse(stats: Stats(playerId: "guest"))
+            return LoadOrCreateStatsResponse(stats: Stats(playerId: ""))
         }
     }
 }

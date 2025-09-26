@@ -111,8 +111,15 @@ struct SpiritDetailPanel: View {
     }
 
     private func purchaseSpirits() async {
-        let request = PurchaseSpiritRequest(spiritType: spiritType, quantity: selectedQuantity)
-        _ = try? await useCaseFactory.purchaseSpirit.execute(request)
+        let request = ConsumeNemoFruitsRequest(fruitsToConsume: selectedQuantity)
+        let response = await useCaseFactory.consumeNemoFruits.execute(request)
+        
+        if response.success {
+            let request = AddSpiritRequest(spiritType: spiritType, count: selectedQuantity)
+            let _ = await useCaseFactory.addSpirit.execute(request)            
+        } else {
+            
+        }
     }
 
     private func getCurrentSpiritCount() -> Int {

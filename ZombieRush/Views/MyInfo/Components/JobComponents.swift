@@ -107,11 +107,11 @@ struct JobDetailPanel: View {
                         ) {
                             Task {
                                 let request = UnlockJobRequest(jobType: jobType)
-                                let response = try? await useCaseFactory.unlockJob.execute(request)
+                                let response = await useCaseFactory.unlockJob.execute(request)
                                 
-                                if let response = response, response.success {
+                                if response.success {
                                     let request = SelectJobRequest(jobType: jobType)
-                                    let _ = try? await useCaseFactory.selectJob.execute(request)
+                                    let _ = await useCaseFactory.selectJob.execute(request)
                                 }
                             }
                         }

@@ -15,7 +15,7 @@ final class GameKitManager: NSObject {
         let playerID: String
         let nickname: String
         
-        static let defaultPlayerInfo: PlayerInfo = PlayerInfo(playerID: "guest", nickname: "guest")
+        static let defaultPlayerInfo: PlayerInfo = PlayerInfo(playerID: "", nickname: "")
     }
 
     // MARK: - UI Callbacks

@@ -67,10 +67,6 @@ final class UseCaseFactory: ObservableObject {
         ConsumeRemainingPointsUseCase(userRepository: userRepository)
     }
 
-    var purchaseSpirit: PurchaseSpiritUseCase {
-        PurchaseSpiritUseCase(userRepository: userRepository, spiritsRepository: spiritsRepository)
-    }
-
     // MARK: - Stats UseCases
     var loadOrCreateStats: LoadOrCreateStatsUseCase {
         LoadOrCreateStatsUseCase(statsRepository: statsRepository)
@@ -105,10 +101,6 @@ final class UseCaseFactory: ObservableObject {
         AddSpiritUseCase(spiritsRepository: spiritsRepository)
     }
 
-    var resetSpirits: ResetSpiritsUseCase {
-        ResetSpiritsUseCase(spiritsRepository: spiritsRepository)
-    }
-
     // MARK: - Jobs UseCases
     var loadOrCreateJobs: LoadOrCreateJobsUseCase {
         LoadOrCreateJobsUseCase(jobsRepository: jobsRepository)
@@ -128,13 +120,5 @@ final class UseCaseFactory: ObservableObject {
 
     var unlockJob: UnlockJobUseCase {
         UnlockJobUseCase(jobsRepository: jobsRepository, spiritsRepository: spiritsRepository, userRepository: userRepository)
-    }
-
-    var unlockAllJobs: UnlockAllJobsUseCase {
-        UnlockAllJobsUseCase(jobsRepository: jobsRepository)
-    }
-
-    var resetJobs: ResetJobsUseCase {
-        ResetJobsUseCase(jobsRepository: jobsRepository)
     }
 }

@@ -12,7 +12,7 @@ struct UpdateJobsRequest {
 }
 
 struct UpdateJobsResponse {
-    let jobs: Jobs
+    let jobs: Jobs?
 }
 
 /// 직업 업데이트 UseCase
@@ -21,8 +21,13 @@ struct UpdateJobsUseCase: UseCase {
     let jobsRepository: JobsRepository
 
     func execute(_ request: UpdateJobsRequest) async throws -> UpdateJobsResponse {
-        let updatedJobs = try await jobsRepository.updateJobs(request.jobs)
-        print("⚔️ JobsUseCase: 직업 업데이트 성공")
-        return UpdateJobsResponse(jobs: updatedJobs)
+        do {
+            let updatedJobs = try await jobsRepository.updateJobs(request.jobs)
+            return UpdateJobsResponse(jobs: updatedJobs)
+        } catch {
+            ErrorManager.shared.report(.databaseRequestFailed)
+            return UpdateJobsResponse(jobs: nil)
+        }
+        
     }
 }

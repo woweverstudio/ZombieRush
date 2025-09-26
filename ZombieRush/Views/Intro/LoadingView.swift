@@ -224,11 +224,11 @@ struct LoadingView: View {
 
     private func loadSpiritsData(playerID: String) async {
         let request = LoadOrCreateSpiritsRequest(playerID: playerID)
-        _ = try? await useCaseFactory.loadOrCreateSpirits.execute(request)
+        _ = await useCaseFactory.loadOrCreateSpirits.execute(request)
     }
 
     private func loadJobsData(playerID: String) async {
         let request = LoadOrCreateJobsRequest(playerID: playerID)
-        _ = try? await useCaseFactory.loadOrCreateJobs.execute(request)
+        _ = await useCaseFactory.loadOrCreateJobs.execute(request)
     }
 }
