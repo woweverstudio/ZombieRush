@@ -76,7 +76,7 @@ struct MainMenuPanel: View {
             PrimaryButton(title: TextConstants.Main.startButton, style: .cyan, fullWidth: true) {
                 Task {
                     let request = AddExperienceRequest(expToAdd: 10)
-                    let _ = try? await useCaseFactory.addExperience.execute(request)
+                    let _ = await useCaseFactory.addExperience.execute(request)
                 }
             }
         }

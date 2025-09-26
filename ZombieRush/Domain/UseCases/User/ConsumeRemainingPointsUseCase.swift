@@ -21,15 +21,15 @@ struct ConsumeRemainingPointsResponse {
 struct ConsumeRemainingPointsUseCase: UseCase {
     let userRepository: UserRepository
 
-    func execute(_ request: ConsumeRemainingPointsRequest) async throws -> ConsumeRemainingPointsResponse {
+    func execute(_ request: ConsumeRemainingPointsRequest) async -> ConsumeRemainingPointsResponse {
         // 현재 사용자 정보 사용 (Repository의 currentUser)
         guard let currentUser = await userRepository.currentUser else {
+            ErrorManager.shared.report(.userNotFound)
             return ConsumeRemainingPointsResponse(success: false, user: nil)
         }
 
         // 포인트 검증
         guard currentUser.remainingPoints >= request.pointsToConsume else {
-            print("📱 UserUseCase: 포인트 부족 - needed: \(request.pointsToConsume), current: \(currentUser.remainingPoints)")
             return ConsumeRemainingPointsResponse(success: false, user: currentUser)
         }
 
@@ -38,9 +38,13 @@ struct ConsumeRemainingPointsUseCase: UseCase {
         updatedUser.remainingPoints -= request.pointsToConsume
 
         // DB 업데이트
-        let savedUser = try await userRepository.updateUser(updatedUser)
-        print("📱 UserUseCase: 포인트 \(request.pointsToConsume)개 차감 완료 - 남은 포인트: \(savedUser.remainingPoints)")
-
-        return ConsumeRemainingPointsResponse(success: true, user: savedUser)
+        do {
+            let savedUser = try await userRepository.updateUser(updatedUser)
+            return ConsumeRemainingPointsResponse(success: true, user: savedUser)
+        } catch {
+            ErrorManager.shared.report(.databaseRequestFailed)
+            return ConsumeRemainingPointsResponse(success: false, user: currentUser)
+        }
+        
     }
 }

@@ -4,7 +4,7 @@ import SwiftUI
 import UIKit
 
 @Observable
-class GameKitManager: NSObject {
+final class GameKitManager: NSObject {
 
     // MARK: - Authentication State
     var isAuthenticated = false
@@ -121,9 +121,6 @@ class GameKitManager: NSObject {
                 print("🎮 GameKit: Login failed (\(error.localizedDescription)")
                 hasCompleted = true
                 self.isAuthenticated = false
-
-                // ✅ 네트워크 인증 실패 시 네트워크 에러 표시
-                GlobalErrorManager.shared.showError(.network(.serverError(code: 401)))
 
                 completion(false)
             } else if localPlayer.isAuthenticated {

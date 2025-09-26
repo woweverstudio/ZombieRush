@@ -21,26 +21,29 @@ struct ConsumeNemoFruitsResponse {
 struct ConsumeNemoFruitsUseCase: UseCase {
     let userRepository: UserRepository
 
-    func execute(_ request: ConsumeNemoFruitsRequest) async throws -> ConsumeNemoFruitsResponse {
+    func execute(_ request: ConsumeNemoFruitsRequest) async -> ConsumeNemoFruitsResponse {
         // 현재 사용자 정보 사용 (Repository의 currentUser)
         guard let currentUser = await userRepository.currentUser else {
+            ErrorManager.shared.report(.userNotFound)
             return ConsumeNemoFruitsResponse(success: false, user: nil)
         }
 
         // 네모열매 검증
         guard currentUser.nemoFruit >= request.fruitsToConsume else {
-            print("📱 UserUseCase: 네모열매 부족 - needed: \(request.fruitsToConsume), current: \(currentUser.nemoFruit)")
             return ConsumeNemoFruitsResponse(success: false, user: currentUser)
         }
 
         // 네모열매 차감
         var updatedUser = currentUser
         updatedUser.nemoFruit -= request.fruitsToConsume
-
-        // DB 업데이트
-        let savedUser = try await userRepository.updateUser(updatedUser)
-        print("📱 UserUseCase: 네모열매 소비 완료 - 남은 네모열매: \(savedUser.nemoFruit)")
-
-        return ConsumeNemoFruitsResponse(success: true, user: savedUser)
+        
+        do {
+            let savedUser = try await userRepository.updateUser(updatedUser)
+            return ConsumeNemoFruitsResponse(success: true, user: savedUser)
+        } catch {
+            ErrorManager.shared.report(.databaseRequestFailed)
+            return ConsumeNemoFruitsResponse(success: false, user: currentUser)
+        }
+        
     }
 }

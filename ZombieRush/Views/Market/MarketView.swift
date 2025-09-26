@@ -95,9 +95,9 @@ struct MarketItemCard: View {
         Card(style: .cyberpunk) {
             VStack(spacing: 12) {
                 switch item.type {
-                case .fruitPackage(let _, let _):
+                case .fruitPackage(_, _):
                     NemoFruitIcon(size: .large)
-                case .cheerBuff(let _, let _):
+                case .cheerBuff(_, _):
                     CheerBuffIcon(size: .large)
                 }
 
@@ -133,8 +133,16 @@ struct MarketItemCard: View {
                 // 구매 버튼
                 Button(action: {
                     Task {
-                        let request = PurchaseMarketItemRequest(item: item)
-                        _ = try? await useCaseFactory.purchaseMarketItem.execute(request)
+                        switch item.type {
+                        case .fruitPackage(let count, _):
+                            // TODO: IAP
+                            let request = AddNemoFruitsRequest(fruitsToAdd: count)
+                            _ = await useCaseFactory.addNemoFruits.execute(request)
+                        case .cheerBuff(let days, _):
+                            let duration = TimeInterval(days * 24 * 60 * 60)
+                            let request = PurchaseCheerBuffRequest(duration: duration)
+                            _ = await useCaseFactory.purchaseCheerBuff.execute(request)
+                        }
                     }
                 }) {
                     Text("구매")

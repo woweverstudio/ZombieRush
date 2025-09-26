@@ -67,10 +67,6 @@ final class UseCaseFactory: ObservableObject {
         ConsumeRemainingPointsUseCase(userRepository: userRepository)
     }
 
-    var purchaseMarketItem: PurchaseMarketItemUseCase {
-        PurchaseMarketItemUseCase(userRepository: userRepository)
-    }
-
     var purchaseSpirit: PurchaseSpiritUseCase {
         PurchaseSpiritUseCase(userRepository: userRepository, spiritsRepository: spiritsRepository)
     }

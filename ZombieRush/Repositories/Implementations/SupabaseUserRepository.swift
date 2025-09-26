@@ -65,23 +65,17 @@ final class SupabaseUserRepository: ObservableObject, UserRepository {
             updateData["cheer_buff_expires_at"] = expiresAt.ISO8601Format()
         }
 
-        do {
-            let updatedUser: User = try await supabase
-                .from("users")
-                .update(updateData)
-                .eq("player_id", value: user.playerId)
-                .select("*")
-                .single()
-                .execute()
-                .value
+        let updatedUser: User = try await supabase
+            .from("users")
+            .update(updateData)
+            .eq("player_id", value: user.playerId)
+            .select("*")
+            .single()
+            .execute()
+            .value
 
-            currentUser = updatedUser
-            return updatedUser
-        } catch {
-            // ✅ 네트워크/DB 실패 시 네트워크 에러 표시
-            GlobalErrorManager.shared.showError(.network(.serverError(code: 500)))
-            throw error
-        }
+        currentUser = updatedUser
+        return updatedUser
     }
 
 }

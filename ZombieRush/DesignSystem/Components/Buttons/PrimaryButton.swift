@@ -167,17 +167,21 @@ struct PrimaryButton<TrailingContent: View>: View {
 
             action()
         }) {
-            HStack(spacing: 8) {
-                Text(title)
-                    .font(.system(size: size.fontSize, weight: .bold, design: .monospaced))
-                    .foregroundColor(style.textColor)
-
+            Group {
                 if let trailingContent = trailingContent {
-                    trailingContent
-                }
+                    HStack(spacing: 8) {
+                        Text(title)
+                            .font(.system(size: size.fontSize, weight: .bold, design: .monospaced))
+                            .foregroundColor(style.textColor)
 
-                if trailingContent == nil {
-                    Spacer()
+                        Spacer()
+                        trailingContent
+                    }
+                } else {
+                    Text(title)
+                        .font(.system(size: size.fontSize, weight: .bold, design: .monospaced))
+                        .foregroundColor(style.textColor)
+                        .frame(maxWidth: .infinity, alignment: .center)
                 }
             }
             .frame(width: width, height: height)

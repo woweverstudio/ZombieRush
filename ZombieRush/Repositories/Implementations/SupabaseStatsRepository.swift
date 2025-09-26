@@ -50,29 +50,23 @@ class SupabaseStatsRepository: ObservableObject, StatsRepository {
     }
 
     func updateStats(_ stats: Stats) async throws -> Stats {
-        do {
-            let updatedStats: Stats = try await supabase
-                .from("stats")
-                .update([
-                    "hp_recovery": String(stats.hpRecovery),
-                    "move_speed": String(stats.moveSpeed),
-                    "energy_recovery": String(stats.energyRecovery),
-                    "attack_speed": String(stats.attackSpeed),
-                    "totem_count": String(stats.totemCount)
-                ])
-                .eq("player_id", value: stats.playerId)
-                .select("*")
-                .single()
-                .execute()
-                .value
+        let updatedStats: Stats = try await supabase
+            .from("stats")
+            .update([
+                "hp_recovery": String(stats.hpRecovery),
+                "move_speed": String(stats.moveSpeed),
+                "energy_recovery": String(stats.energyRecovery),
+                "attack_speed": String(stats.attackSpeed),
+                "totem_count": String(stats.totemCount)
+            ])
+            .eq("player_id", value: stats.playerId)
+            .select("*")
+            .single()
+            .execute()
+            .value
 
-            currentStats = updatedStats
-            return updatedStats
-        } catch {
-            // ✅ 네트워크/DB 실패 시 네트워크 에러 표시
-            GlobalErrorManager.shared.showError(.network(.serverError(code: 500)))
-            throw error
-        }
+        currentStats = updatedStats
+        return updatedStats
     }
 
 }

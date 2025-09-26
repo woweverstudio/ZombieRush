@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		1F3038E72E76E01300949D80 /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = 1F3038E62E76E01300949D80 /* Supabase */; };
+		1F4651422E86E70500DA8CD3 /* AlertToast in Frameworks */ = {isa = PBXBuildFile; productRef = 1F4651412E86E70500DA8CD3 /* AlertToast */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -64,6 +65,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1F3038E72E76E01300949D80 /* Supabase in Frameworks */,
+				1F4651422E86E70500DA8CD3 /* AlertToast in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -140,6 +142,7 @@
 			name = ZombieRush;
 			packageProductDependencies = (
 				1F3038E62E76E01300949D80 /* Supabase */,
+				1F4651412E86E70500DA8CD3 /* AlertToast */,
 			);
 			productName = ZombieRush;
 			productReference = 1F70BB842E506D1C0089462F /* ZombieRush.app */;
@@ -176,6 +179,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				1F3038E42E76DF7800949D80 /* XCRemoteSwiftPackageReference "supabase-swift" */,
+				1F4651402E86E6FA00DA8CD3 /* XCRemoteSwiftPackageReference "AlertToast" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 1F70BB852E506D1C0089462F /* Products */;
@@ -400,7 +404,7 @@
 				CODE_SIGN_ENTITLEMENTS = ZombieRush/ZombieRush.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 6;
-				DEVELOPMENT_ASSET_PATHS = "\"ZombieRush/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"ZombieRush/Resources/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ZombieRush/Info.plist;
@@ -434,7 +438,7 @@
 				CODE_SIGN_ENTITLEMENTS = ZombieRush/ZombieRush.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 6;
-				DEVELOPMENT_ASSET_PATHS = "\"ZombieRush/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"ZombieRush/Resources/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ZombieRush/Info.plist;
@@ -501,6 +505,14 @@
 				minimumVersion = 2.5.1;
 			};
 		};
+		1F4651402E86E6FA00DA8CD3 /* XCRemoteSwiftPackageReference "AlertToast" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/elai950/AlertToast.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -508,6 +520,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 1F3038E42E76DF7800949D80 /* XCRemoteSwiftPackageReference "supabase-swift" */;
 			productName = Supabase;
+		};
+		1F4651412E86E70500DA8CD3 /* AlertToast */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1F4651402E86E6FA00DA8CD3 /* XCRemoteSwiftPackageReference "AlertToast" */;
+			productName = AlertToast;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

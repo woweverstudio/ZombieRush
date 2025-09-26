@@ -22,10 +22,11 @@ struct AddExperienceResponse {
 struct AddExperienceUseCase: UseCase {
     let userRepository: UserRepository
 
-    func execute(_ request: AddExperienceRequest) async throws -> AddExperienceResponse {
+    func execute(_ request: AddExperienceRequest) async -> AddExperienceResponse? {
         // 현재 사용자 정보 사용 (Repository의 currentUser)
         guard let currentUser = await userRepository.currentUser else {
-            throw NSError(domain: "AddExperienceUseCase", code: 404, userInfo: [NSLocalizedDescriptionKey: "사용자를 찾을 수 없습니다"])
+            ErrorManager.shared.report(.userNotFound)
+            return nil
         }
 
         // 경험치 추가 및 레벨 계산
@@ -44,13 +45,17 @@ struct AddExperienceUseCase: UseCase {
         }
 
         // DB 업데이트
-        let savedUser = try await userRepository.updateUser(updatedUser)
-        print("📱 UserUseCase: 경험치 \(request.expToAdd) 추가 - 레벨: \(newLevel.currentLevel), EXP: \(newLevel.currentExp)")
+        do {
+            let savedUser = try await userRepository.updateUser(updatedUser)
 
-        return AddExperienceResponse(
-            user: savedUser,
-            leveledUp: leveledUp,
-            levelsGained: levelsGained
-        )
+            return AddExperienceResponse(
+                user: savedUser,
+                leveledUp: leveledUp,
+                levelsGained: levelsGained
+            )
+        } catch {
+            ErrorManager.shared.report(.databaseRequestFailed)
+            return nil
+        }
     }
 }

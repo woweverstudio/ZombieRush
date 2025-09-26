@@ -57,4 +57,6 @@ struct User: Codable, Identifiable {
         self.createdAt = Date()
         self.updatedAt = Date()
     }
+    
+    static let guestUser = User(playerId: "guest", nickname: "guest")
 }

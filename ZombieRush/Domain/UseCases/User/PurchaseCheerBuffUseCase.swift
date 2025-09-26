@@ -21,16 +21,11 @@ struct PurchaseCheerBuffResponse {
 struct PurchaseCheerBuffUseCase: UseCase {
     let userRepository: UserRepository
 
-    func execute(_ request: PurchaseCheerBuffRequest) async throws -> PurchaseCheerBuffResponse {
+    func execute(_ request: PurchaseCheerBuffRequest) async -> PurchaseCheerBuffResponse {
         // 현재 사용자 정보 사용 (Repository의 currentUser)
         guard let currentUser = await userRepository.currentUser else {
+            ErrorManager.shared.report(.userNotFound)
             return PurchaseCheerBuffResponse(success: false, user: nil)
-        }
-
-        // 이미 활성화된 응원이 있는지 확인
-        if currentUser.isCheerBuffActive {
-            print("📱 UserUseCase: 응원 버프 이미 활성화됨")
-            return PurchaseCheerBuffResponse(success: false, user: currentUser)
         }
 
         let expirationDate = Date().addingTimeInterval(request.duration)
@@ -38,9 +33,13 @@ struct PurchaseCheerBuffUseCase: UseCase {
         var updatedUser = currentUser
         updatedUser.cheerBuffExpiresAt = expirationDate
 
-        let savedUser = try await userRepository.updateUser(updatedUser)
-        print("📱 UserUseCase: 응원 버프 구매 완료 - 만료시간: \(expirationDate)")
-
-        return PurchaseCheerBuffResponse(success: true, user: savedUser)
+        do {
+            let savedUser = try await userRepository.updateUser(updatedUser)
+            return PurchaseCheerBuffResponse(success: true, user: savedUser)
+        } catch {
+            ErrorManager.shared.report(.databaseRequestFailed)
+            return PurchaseCheerBuffResponse(success: false, user: nil)
+        }
+        
     }
 }

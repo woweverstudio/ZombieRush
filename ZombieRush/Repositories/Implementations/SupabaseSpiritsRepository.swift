@@ -51,28 +51,22 @@ class SupabaseSpiritsRepository: ObservableObject, SpiritsRepository {
     }
 
     func updateSpirits(_ spirits: Spirits) async throws -> Spirits {
-        do {
-            let updatedSpirits: Spirits = try await supabase
-                .from("spirits")
-                .update([
-                    "fire": String(spirits.fire),
-                    "ice": String(spirits.ice),
-                    "lightning": String(spirits.lightning),
-                    "dark": String(spirits.dark)
-                ])
-                .eq("player_id", value: spirits.playerId)
-                .select("*")
-                .single()
-                .execute()
-                .value
+        let updatedSpirits: Spirits = try await supabase
+            .from("spirits")
+            .update([
+                "fire": String(spirits.fire),
+                "ice": String(spirits.ice),
+                "lightning": String(spirits.lightning),
+                "dark": String(spirits.dark)
+            ])
+            .eq("player_id", value: spirits.playerId)
+            .select("*")
+            .single()
+            .execute()
+            .value
 
-            currentSpirits = updatedSpirits
-            return updatedSpirits
-        } catch {
-            // ✅ 네트워크/DB 실패 시 네트워크 에러 표시
-            GlobalErrorManager.shared.showError(.network(.serverError(code: 500)))
-            throw error
-        }
+        currentSpirits = updatedSpirits
+        return updatedSpirits
     }
 
 }

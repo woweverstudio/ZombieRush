@@ -52,30 +52,24 @@ class SupabaseJobsRepository: ObservableObject, JobsRepository {
     }
 
     func updateJobs(_ jobs: Jobs) async throws -> Jobs {
-        do {
-            let updatedJobs: Jobs = try await supabase
-                .from("jobs")
-                .update([
-                    "novice": jobs.novice ? "true" : "false",
-                    "fire_mage": jobs.fireMage ? "true" : "false",
-                    "ice_mage": jobs.iceMage ? "true" : "false",
-                    "lightning_mage": jobs.lightningMage ? "true" : "false",
-                    "dark_mage": jobs.darkMage ? "true" : "false",
-                    "selected_job": jobs.selectedJob
-                ])
-                .eq("player_id", value: jobs.playerId)
-                .select("*")
-                .single()
-                .execute()
-                .value
+        let updatedJobs: Jobs = try await supabase
+            .from("jobs")
+            .update([
+                "novice": jobs.novice ? "true" : "false",
+                "fire_mage": jobs.fireMage ? "true" : "false",
+                "ice_mage": jobs.iceMage ? "true" : "false",
+                "lightning_mage": jobs.lightningMage ? "true" : "false",
+                "dark_mage": jobs.darkMage ? "true" : "false",
+                "selected_job": jobs.selectedJob
+            ])
+            .eq("player_id", value: jobs.playerId)
+            .select("*")
+            .single()
+            .execute()
+            .value
 
-            currentJobs = updatedJobs
-            return updatedJobs
-        } catch {
-            // ✅ 네트워크/DB 실패 시 네트워크 에러 표시
-            GlobalErrorManager.shared.showError(.network(.serverError(code: 500)))
-            throw error
-        }
+        currentJobs = updatedJobs
+        return updatedJobs
     }
 
 }
