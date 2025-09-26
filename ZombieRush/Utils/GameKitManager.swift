@@ -8,13 +8,14 @@ final class GameKitManager: NSObject {
 
     // MARK: - Authentication State
     var isAuthenticated = false
-    var isLoading = false
 
     // MARK: - Player Data Structure
     /// Game Center 플레이어 정보 구조체
     struct PlayerInfo {
         let playerID: String
         let nickname: String
+        
+        static let defaultPlayerInfo: PlayerInfo = PlayerInfo(playerID: "guest", nickname: "guest")
     }
 
     // MARK: - UI Callbacks
@@ -34,9 +35,7 @@ final class GameKitManager: NSObject {
     // MARK: - Player Info Loading
 
     /// Async 버전: 플레이어 정보를 가져옵니다.
-    func getPlayerInfoAsync() async -> PlayerInfo? {
-        isLoading = true
-
+    func getPlayerInfoAsync() async -> PlayerInfo {
         if isAuthenticated {
             // 이미 인증된 경우 바로 데이터 로드
             return await loadPlayerInfoAsync()
@@ -47,17 +46,15 @@ final class GameKitManager: NSObject {
                 return await loadPlayerInfoAsync()
             } else {
                 // 인증 실패
-                isLoading = false
-                return nil
+                return PlayerInfo.defaultPlayerInfo
             }
         }
     }
     
     /// 플레이어 정보를 로드하여 반환
-    private func loadPlayerInfoAsync() async -> PlayerInfo? {
+    private func loadPlayerInfoAsync() async -> PlayerInfo {
         guard isAuthenticated, let localPlayer = localPlayer else {
-            isLoading = false
-            return nil
+            return PlayerInfo.defaultPlayerInfo
         }
 
         // 플레이어 기본 정보 가져오기
@@ -65,16 +62,7 @@ final class GameKitManager: NSObject {
         let nickname = localPlayer.displayName
 
         // 프로필 사진 로드
-        do {
-            self.playerPhoto = try await localPlayer.loadPhoto(for: .small)
-            print("🎮 GameKit: Player photo loaded successfully")
-        } catch {
-            self.playerPhoto = nil
-            print("🎮 GameKit: Failed to load player photo: \(error.localizedDescription)")
-            // 사진 로드 실패해도 다른 정보들은 정상 반환
-        }
-
-        isLoading = false
+        self.playerPhoto = try? await localPlayer.loadPhoto(for: .small)
 
         return PlayerInfo(playerID: playerID, nickname: nickname)
     }

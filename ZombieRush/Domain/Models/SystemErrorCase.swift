@@ -7,6 +7,7 @@
 
 enum SystemErrorCase {
     case userNotFound
+    case dataNotFound
     case databaseRequestFailed
 
     
@@ -14,6 +15,8 @@ enum SystemErrorCase {
         switch self {
         case .userNotFound:
             return SystemError(source: .database, severity: .fatal, message: .cannotFoundUser)
+        case .dataNotFound:
+            return SystemError(source: .database, severity: .fatal, message: .cannotFoundData)
         case .databaseRequestFailed:
             return SystemError(source: .database, severity: .retry, message: .databaseReadFailed)
 

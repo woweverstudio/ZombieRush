@@ -80,7 +80,8 @@ struct ZombieRushApp: App {
                 duration: toastManager.currentToast?.duration ?? 2,
                 tapToDismiss: true
             ) { toast in
-                AlertToast(displayMode: .banner(.pop), type: .regular, title: toast?.title, subTitle: toast?.description)
+                let type = toast?.type ?? .complete
+                return AlertToast(displayMode: .banner(.pop), type: .systemImage(type.imageName, type.color) , title: toast?.title, subTitle: toast?.description)
             }
             .task {
                 // 앱 시작 시 Notification 설정

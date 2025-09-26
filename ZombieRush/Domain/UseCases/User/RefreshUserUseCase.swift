@@ -26,17 +26,11 @@ struct RefreshUserUseCase: UseCase {
             return RefreshUserResponse(user: nil)
         }
         
-        do {
-            guard let user = try await userRepository.getUser(by: currentUser.playerId) else {
-                ErrorManager.shared.report(.databaseRequestFailed)
-                return RefreshUserResponse(user: nil)
-            }
-            
-            return RefreshUserResponse(user: user)
-        } catch {
+        guard let user = try? await userRepository.getUser(by: currentUser.playerId) else {
             ErrorManager.shared.report(.databaseRequestFailed)
             return RefreshUserResponse(user: nil)
         }
         
+        return RefreshUserResponse(user: user)
     }
 }

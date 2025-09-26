@@ -13,7 +13,8 @@ struct AddSpiritRequest {
 }
 
 struct AddSpiritResponse {
-    let spirits: Spirits
+    let success: Bool
+    let spirits: Spirits?
 }
 
 /// 정령 추가 UseCase
@@ -21,10 +22,11 @@ struct AddSpiritResponse {
 struct AddSpiritUseCase: UseCase {
     let spiritsRepository: SpiritsRepository
 
-    func execute(_ request: AddSpiritRequest) async throws -> AddSpiritResponse {
+    func execute(_ request: AddSpiritRequest) async -> AddSpiritResponse {
         // 현재 정령 정보 사용 (Repository의 currentSpirits)
         guard let currentSpirits = await spiritsRepository.currentSpirits else {
-            throw NSError(domain: "AddSpiritUseCase", code: 404, userInfo: [NSLocalizedDescriptionKey: "정령 정보를 찾을 수 없습니다"])
+            ErrorManager.shared.report(.dataNotFound)
+            return AddSpiritResponse(success: false, spirits: nil)
         }
 
         // 정령 수량 변경
@@ -40,17 +42,13 @@ struct AddSpiritUseCase: UseCase {
             updatedSpirits.dark += request.count
         }
 
-        let savedSpirits = try await spiritsRepository.updateSpirits(updatedSpirits)
-
-        // 추가된 후의 총 수량 계산
-        let newCount = switch request.spiritType {
-        case .fire: savedSpirits.fire
-        case .ice: savedSpirits.ice
-        case .lightning: savedSpirits.lightning
-        case .dark: savedSpirits.dark
+        do {
+            let savedSpirits = try await spiritsRepository.updateSpirits(updatedSpirits)
+            return AddSpiritResponse(success: true, spirits: savedSpirits)
+        } catch {
+            ErrorManager.shared.report(.databaseRequestFailed)
+            return AddSpiritResponse(success: false, spirits: nil)
         }
-        print("🔥 SpiritsUseCase: \(request.spiritType.displayName) 정령 \(request.count)개 추가 - 총 \(newCount)개")
-
-        return AddSpiritResponse(spirits: savedSpirits)
+        
     }
 }

@@ -22,7 +22,8 @@ enum SystemErrorSource {
 
 enum SystemErrorDescription: String {
     case cannotFoundUser = "Cannot found user"
-    case databaseReadFailed = "Database update failed"    
+    case cannotFoundData = "Cannot found data"
+    case databaseReadFailed = "Database update failed"
 }
 
 struct SystemError: Identifiable {

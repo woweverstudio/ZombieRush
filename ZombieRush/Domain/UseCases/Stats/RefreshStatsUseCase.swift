@@ -11,7 +11,7 @@ struct RefreshStatsRequest {
 }
 
 struct RefreshStatsResponse {
-    let stats: Stats
+    let stats: Stats?
 }
 
 /// 스텟 데이터 새로고침 UseCase
@@ -19,16 +19,19 @@ struct RefreshStatsResponse {
 struct RefreshStatsUseCase: UseCase {
     let statsRepository: StatsRepository
 
-    func execute(_ request: RefreshStatsRequest) async throws -> RefreshStatsResponse {
+    func execute(_ request: RefreshStatsRequest) async -> RefreshStatsResponse {
         // currentStats의 playerID를 사용해서 서버에서 다시 조회
         guard let currentStats = await statsRepository.currentStats else {
-            throw NSError(domain: "RefreshStatsUseCase", code: 404, userInfo: [NSLocalizedDescriptionKey: "현재 스텟 정보가 없습니다"])
+            ErrorManager.shared.report(.userNotFound)
+            return RefreshStatsResponse(stats: nil)
         }
-
-        guard let stats = try await statsRepository.getStats(by: currentStats.playerId) else {
-            throw NSError(domain: "RefreshStatsUseCase", code: 404, userInfo: [NSLocalizedDescriptionKey: "스텟 정보를 찾을 수 없습니다"])
+        
+        
+        guard let stats = try? await statsRepository.getStats(by: currentStats.playerId) else {
+            ErrorManager.shared.report(.databaseRequestFailed)
+            return RefreshStatsResponse(stats: nil)
         }
-        print("📊 StatsUseCase: 스텟 새로고침 성공")
+        
         return RefreshStatsResponse(stats: stats)
     }
 }

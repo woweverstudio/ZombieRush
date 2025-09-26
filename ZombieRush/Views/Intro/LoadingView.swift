@@ -144,11 +144,7 @@ struct LoadingView: View {
         setupGameKitCallbacks()
 
         // GameKit에서 플레이어 정보 가져오기
-        guard let playerInfo = await gameKitManager.getPlayerInfoAsync() else {
-            print("⚠️ 로딩: Game Center 인증 실패")
-            isLoading = false
-            return
-        }
+        let playerInfo = await gameKitManager.getPlayerInfoAsync()
 
         // 단계 3: Supabase 데이터 로딩 (사용자 + 스탯)
         await updateStage(to: .dataLoading)
@@ -159,12 +155,6 @@ struct LoadingView: View {
         // GameKit에서 얻은 플레이어 정보로 데이터 로드/생성
         let playerID = playerInfo.playerID
         let nickname = playerInfo.nickname
-
-        guard !playerID.isEmpty else {
-            print("⚠️ 로딩: playerID가 비어있음")
-            isLoading = false
-            return
-        }
 
 
         // 사용자 데이터, 스탯 데이터, 정령 데이터, 직업 데이터 동시에 로드
@@ -224,12 +214,12 @@ struct LoadingView: View {
 
     private func loadUserData(playerID: String, nickname: String) async {
         let request = LoadOrCreateUserRequest(playerID: playerID, nickname: nickname)
-        _ = try? await useCaseFactory.loadOrCreateUser.execute(request)
+        _ = await useCaseFactory.loadOrCreateUser.execute(request)
     }
 
     private func loadStatsData(playerID: String) async {
         let request = LoadOrCreateStatsRequest(playerID: playerID)
-        _ = try? await useCaseFactory.loadOrCreateStats.execute(request)
+        _ = await useCaseFactory.loadOrCreateStats.execute(request)
     }
 
     private func loadSpiritsData(playerID: String) async {

@@ -81,7 +81,7 @@ final class UseCaseFactory: ObservableObject {
     }
 
     var upgradeStat: UpgradeStatUseCase {
-        UpgradeStatUseCase(statsRepository: statsRepository, consumePointsUseCase: consumeStatPoints)
+        UpgradeStatUseCase(statsRepository: statsRepository)
     }
 
     var consumeStatPoints: ConsumeStatPointsUseCase {
@@ -103,10 +103,6 @@ final class UseCaseFactory: ObservableObject {
 
     var addSpirit: AddSpiritUseCase {
         AddSpiritUseCase(spiritsRepository: spiritsRepository)
-    }
-
-    var increaseAllSpirits: IncreaseAllSpiritsUseCase {
-        IncreaseAllSpiritsUseCase(spiritsRepository: spiritsRepository)
     }
 
     var resetSpirits: ResetSpiritsUseCase {

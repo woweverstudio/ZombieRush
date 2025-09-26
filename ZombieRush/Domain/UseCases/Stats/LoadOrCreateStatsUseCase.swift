@@ -20,17 +20,20 @@ struct LoadOrCreateStatsResponse {
 struct LoadOrCreateStatsUseCase: UseCase {
     let statsRepository: StatsRepository
 
-    func execute(_ request: LoadOrCreateStatsRequest) async throws -> LoadOrCreateStatsResponse {
+    func execute(_ request: LoadOrCreateStatsRequest) async -> LoadOrCreateStatsResponse {
         // 1. 스텟 조회 시도
-        if let existingStats = try await statsRepository.getStats(by: request.playerID) {
-            print("📊 StatsUseCase: 기존 스텟 로드 성공 - HP: \(existingStats.hpRecovery), Speed: \(existingStats.moveSpeed)")
-            return LoadOrCreateStatsResponse(stats: existingStats)
-        } else {
-            // 2. 스텟이 없으면 새로 생성
-            let newStats = Stats.defaultStats(for: request.playerID)
-            let stats = try await statsRepository.createStats(newStats)
-            print("📊 StatsUseCase: 새 스텟 생성 성공 - 기본값으로 초기화")
-            return LoadOrCreateStatsResponse(stats: stats)
+        do {
+            if let existingStats = try await statsRepository.getStats(by: request.playerID) {
+                return LoadOrCreateStatsResponse(stats: existingStats)
+            } else {
+                // 2. 스텟이 없으면 새로 생성
+                let newStats = Stats.defaultStats(for: request.playerID)
+                let stats = try await statsRepository.createStats(newStats)
+                return LoadOrCreateStatsResponse(stats: stats)
+            }
+        } catch {
+            ErrorManager.shared.report(.databaseRequestFailed)
+            return LoadOrCreateStatsResponse(stats: Stats(playerId: "guest"))
         }
     }
 }
