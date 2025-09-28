@@ -1,5 +1,20 @@
 import SwiftUI
 
+extension PlayerInfoCard {
+    static let playerTitle = NSLocalizedString("player_title", tableName: "Main", comment: "Player title")
+    static let ultimateSkillLabel = NSLocalizedString("ultimate_skill_label", tableName: "Main", comment: "Ultimate skill label")
+    static let ultimateSkillPlaceholder = NSLocalizedString("ultimate_skill_placeholder", tableName: "Main", comment: "Ultimate skill placeholder")
+    static let dashPlaceholder = NSLocalizedString("dash_placeholder", tableName: "Main", comment: "Dash placeholder")
+    static let nemoRescueProgressFormat = NSLocalizedString("nemo_rescue_progress", tableName: "Main", comment: "Nemo rescue progress format")
+    static let percentageFormat = NSLocalizedString("percentage_format", tableName: "Main", comment: "Percentage format")
+
+    // Shared keys used in PlayerInfoCard
+    static let healthLabel = NSLocalizedString("health_label", tableName: "MyInfo", comment: "Health label")
+    static let energyLabel = NSLocalizedString("energy_label", tableName: "MyInfo", comment: "Energy label")
+    static let moveSpeedLabel = NSLocalizedString("move_speed_label", tableName: "MyInfo", comment: "Move speed label")
+    static let attackSpeedLabel = NSLocalizedString("attack_speed_label", tableName: "MyInfo", comment: "Attack speed label")
+}
+
 // MARK: - Player Info Card (프로필 + 스탯 통합)
 struct PlayerInfoCard: View {
     @Environment(GameKitManager.self) var gameKitManager
@@ -56,7 +71,7 @@ struct PlayerInfoCard: View {
                     .foregroundColor(.white)
                     .lineLimit(1)
 
-                Text("네모나라의 수호자")
+                Text(verbatim: PlayerInfoCard.playerTitle)
                     .font(.system(size: 12, design: .monospaced))
                     .foregroundColor(.white.opacity(0.7))
             }
@@ -79,7 +94,7 @@ struct PlayerInfoCard: View {
                             .font(.system(size: 16, weight: .bold, design: .monospaced))
                             .foregroundColor(Color.dsTextPrimary)
                     } else {
-                        Text("Lv. --")
+                        Text("Lv. \(PlayerInfoCard.dashPlaceholder)")
                             .font(.system(size: 16, weight: .bold, design: .monospaced))
                             .foregroundColor(.white.opacity(0.5))
                     }
@@ -95,7 +110,7 @@ struct PlayerInfoCard: View {
                         let requiredExp = levelInfo.expToNextLevel
                         let percentage = Int(levelInfo.progress * 100)
 
-                        Text("네모 구출 \(currentLevelExp)/\(requiredExp)")
+                        Text(verbatim: String(format: PlayerInfoCard.nemoRescueProgressFormat, currentLevelExp, requiredExp))
                             .font(.system(size: 14, weight: .medium, design: .monospaced))
                             .foregroundColor(.white.opacity(0.8))
 
@@ -111,7 +126,7 @@ struct PlayerInfoCard: View {
                             }
                             .frame(width: 150)
 
-                            Text("(\(percentage)%)")
+                            Text(verbatim: String(format: PlayerInfoCard.percentageFormat, percentage))
                                 .font(.system(size: 12, weight: .bold, design: .monospaced))
                                 .foregroundColor(.green)
                         }
@@ -125,17 +140,17 @@ struct PlayerInfoCard: View {
     var statInfo: some View {
         VStack(alignment: .leading, spacing: 10) {
             if let jobs = jobsRepository.currentJobs {
-                StatRow(icon: "heart.fill", label: "체력", value: "\(jobs.hp)", color: .red)
-                StatRow(icon: "bolt.fill", label: "에너지", value: "\(jobs.energy)", color: .blue)
-                StatRow(icon: "shoeprints.fill", label: "이동속도", value: "\(jobs.move)", color: .green)
-                StatRow(icon: "bolt.horizontal.fill", label: "공격속도", value: "\(jobs.attackSpeed)", color: .yellow)
-                StatRow(icon: "flame.fill", label: "궁극기", value: "궁극기 이름 들어감", color: .orange)
+                StatRow(icon: "heart.fill", label: PlayerInfoCard.healthLabel, value: "\(jobs.hp)", color: .red)
+                StatRow(icon: "bolt.fill", label: PlayerInfoCard.energyLabel, value: "\(jobs.energy)", color: .blue)
+                StatRow(icon: "shoeprints.fill", label: PlayerInfoCard.moveSpeedLabel, value: "\(jobs.move)", color: .green)
+                StatRow(icon: "bolt.horizontal.fill", label: PlayerInfoCard.attackSpeedLabel, value: "\(jobs.attackSpeed)", color: .yellow)
+                StatRow(icon: "flame.fill", label: PlayerInfoCard.ultimateSkillLabel, value: PlayerInfoCard.ultimateSkillPlaceholder, color: .orange)
             } else {
-                StatRow(icon: "heart.fill", label: "체력", value: "--", color: .red)
-                StatRow(icon: "bolt.fill", label: "에너지", value: "--", color: .blue)
-                StatRow(icon: "shoeprints.fill", label: "이동속도", value: "--", color: .green)
-                StatRow(icon: "bolt.horizontal.fill", label: "공격속도", value: "--", color: .yellow)
-                StatRow(icon: "flame.fill", label: "궁극기", value: "궁극기 이름 들어감", color: .orange)
+                StatRow(icon: "heart.fill", label: PlayerInfoCard.healthLabel, value: PlayerInfoCard.dashPlaceholder, color: .red)
+                StatRow(icon: "bolt.fill", label: PlayerInfoCard.energyLabel, value: PlayerInfoCard.dashPlaceholder, color: .blue)
+                StatRow(icon: "shoeprints.fill", label: PlayerInfoCard.moveSpeedLabel, value: PlayerInfoCard.dashPlaceholder, color: .green)
+                StatRow(icon: "bolt.horizontal.fill", label: PlayerInfoCard.attackSpeedLabel, value: PlayerInfoCard.dashPlaceholder, color: .yellow)
+                StatRow(icon: "flame.fill", label: PlayerInfoCard.ultimateSkillLabel, value: PlayerInfoCard.ultimateSkillPlaceholder, color: .orange)
             }
         }
     }

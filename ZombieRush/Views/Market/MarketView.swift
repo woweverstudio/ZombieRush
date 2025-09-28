@@ -1,5 +1,12 @@
 import SwiftUI
 
+extension MarketView {
+    static let marketTitle = NSLocalizedString("market_title", tableName: "Market", comment: "Market title")
+    static let nemoFruitPackageSection = NSLocalizedString("nemo_fruit_package_section", tableName: "Market", comment: "Nemo fruit package section")
+    static let cheerBuffSection = NSLocalizedString("cheer_buff_section", tableName: "Market", comment: "Cheer buff section")
+    static let purchaseButton = NSLocalizedString("purchase_button", tableName: "Market", comment: "Purchase button")
+}
+
 // MARK: - Market View
 struct MarketView: View {
     @Environment(AppRouter.self) var router
@@ -25,7 +32,7 @@ struct MarketView: View {
     // MARK: - Sub Views
     private var headerView: some View {
         Header(
-            title: "MARKET",
+            title: MarketView.marketTitle,
             badges: [.nemoFruits],
             onBack: {
                 router.quitToMain()
@@ -38,7 +45,7 @@ struct MarketView: View {
             VStack(spacing: 20) {
                 // 네모열매 섹션
                 VStack(alignment: .leading, spacing: 12) {
-                    Text("네모열매 패키지")
+                    Text(verbatim: MarketView.nemoFruitPackageSection)
                         .font(.system(size: 20, weight: .bold, design: .monospaced))
                         .foregroundColor(.cyan)
                         .padding(.horizontal, 20)
@@ -61,7 +68,7 @@ struct MarketView: View {
 
                 // 네모의 응원 섹션
                 VStack(alignment: .leading, spacing: 12) {
-                    Text("네모의 응원")
+                    Text(verbatim: MarketView.cheerBuffSection)
                         .font(.system(size: 20, weight: .bold, design: .monospaced))
                         .foregroundColor(.yellow)
                         .padding(.horizontal, 20)
@@ -145,7 +152,7 @@ struct MarketItemCard: View {
                         }
                     }
                 }) {
-                    Text("구매")
+                    Text(verbatim: MarketView.purchaseButton)
                         .font(.system(size: 12, weight: .bold, design: .monospaced))
                         .foregroundColor(Color.dsTextPrimary)
                         .frame(maxWidth: .infinity)

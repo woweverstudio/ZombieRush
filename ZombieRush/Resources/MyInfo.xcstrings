@@ -1,0 +1,324 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "attack_speed_label" : {
+      "comment" : "Attack speed label",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Attack Speed"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "공격속도"
+          }
+        }
+      }
+    },
+    "cheer_buff_off" : {
+      "comment" : "Cheer buff off",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "꺼짐"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OFF"
+          }
+        }
+      }
+    },
+    "cheer_buff_on" : {
+      "comment" : "Cheer buff on",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ON"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "켜짐"
+          }
+        }
+      }
+    },
+    "cheer_buff_title" : {
+      "comment" : "Cheer buff title",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nemo's Cheer"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "네모의 응원"
+          }
+        }
+      }
+    },
+    "energy_label" : {
+      "comment" : "Energy label"
+    },
+    "health_label" : {
+      "comment" : "Health label",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Health"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "체력"
+          }
+        }
+      }
+    },
+    "move_speed_label" : {
+      "comment" : "Move speed label"
+    },
+    "my_info_title" : {
+      "comment" : "My info title",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "My Info"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "내 정보"
+          }
+        }
+      }
+    },
+    "select_item_instruction" : {
+      "comment" : "Select item instruction",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Click an item on the left\nto view detailed information"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "좌측에서 항목을 클릭하면\n상세 정보를 확인할 수 있습니다"
+          }
+        }
+      }
+    },
+    "select_item_prompt" : {
+      "comment" : "Select item prompt",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Please select an item"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "항목을 선택해주세요"
+          }
+        }
+      }
+    },
+    "공격속도" : {
+      "comment" : "Attack speed label"
+    },
+    "구매 수량" : {
+      "comment" : "Purchase quantity label",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Purchase Quantity"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "구매 수량"
+          }
+        }
+      }
+    },
+    "기본 직업" : {
+      "comment" : "Basic job label",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Basic Job"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "기본 직업"
+          }
+        }
+      }
+    },
+    "마리" : {
+      "comment" : "Spirit count unit",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "count"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "마리"
+          }
+        }
+      }
+    },
+    "설명" : {
+      "comment" : "Description label",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Description"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "설명"
+          }
+        }
+      }
+    },
+    "업그레이드" : {
+      "comment" : "Upgrade button",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Upgrade"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "업그레이드"
+          }
+        }
+      }
+    },
+    "에너지" : {
+      "comment" : "Energy label",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Energy"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "에너지"
+          }
+        }
+      }
+    },
+    "이동속도" : {
+      "comment" : "Move speed label",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Move Speed"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이동속도"
+          }
+        }
+      }
+    },
+    "정령 얻기" : {
+      "comment" : "Acquire spirits button",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Acquire Spirits"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "정령 얻기"
+          }
+        }
+      }
+    },
+    "체력" : {
+      "comment" : "Health label"
+    },
+    "최대" : {
+      "comment" : "Maximum quantity label",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Max"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "최대"
+          }
+        }
+      }
+    },
+    "해금하기" : {
+      "comment" : "Unlock button",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unlock"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "해금하기"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

@@ -1,5 +1,14 @@
 import SwiftUI
 
+extension LoadingView {
+    static let checkingVersionMessage = NSLocalizedString("checking_version_message", tableName: "Intro", comment: "Checking version message")
+    static let loadingDataMessage = NSLocalizedString("loading_data_message", tableName: "Intro", comment: "Loading data message")
+    static let syncingUserDataMessage = NSLocalizedString("syncing_user_data_message", tableName: "Intro", comment: "Syncing user data message")
+    static let readyToPlayMessage = NSLocalizedString("ready_to_play_message", tableName: "Intro", comment: "Ready to play message")
+    static let gameTitleLine1 = NSLocalizedString("game_title_line_1", tableName: "Intro", comment: "Game title line 1")
+    static let gameTitleLine2 = NSLocalizedString("game_title_line_2", tableName: "Intro", comment: "Game title line 2")
+}
+
 // MARK: - Loading View
 
 /// 로딩 단계 정의
@@ -20,10 +29,10 @@ enum LoadingStage: Int, CaseIterable {
 
     var message: String {
         switch self {
-        case .versionCheck: return TextConstants.Loading.checkingVersion
-        case .gameCenterAuth: return TextConstants.Loading.loadingData
-        case .dataLoading: return TextConstants.Loading.syncingUserData
-        case .completed: return TextConstants.Loading.readyToPlay
+        case .versionCheck: return LoadingView.checkingVersionMessage
+        case .gameCenterAuth: return LoadingView.loadingDataMessage
+        case .dataLoading: return LoadingView.syncingUserDataMessage
+        case .completed: return LoadingView.readyToPlayMessage
         }
     }
 }
@@ -49,13 +58,13 @@ struct LoadingView: View {
 
                 // 게임 타이틀 (로딩 화면용으로 크게)
                 VStack(spacing: max(40 * 0.2, 8)) {
-                    Text(TextConstants.GameStart.titleLine1)
+                    Text(verbatim: LoadingView.gameTitleLine1)
                         .font(.system(size: 40, weight: .heavy, design: .monospaced))
                         .foregroundColor(Color(red: 1.0, green: 0.0, blue: 1.0))
                         .shadow(color: Color(red: 1.0, green: 0.0, blue: 1.0), radius: 15, x: 0, y: 0)
                         .shadow(color: Color(red: 1.0, green: 0.0, blue: 1.0).opacity(0.5), radius: 30, x: 0, y: 0)
 
-                    Text(TextConstants.GameStart.titleLine2)
+                    Text(verbatim: LoadingView.gameTitleLine2)
                         .font(.system(size: 60, weight: .heavy, design: .monospaced))
                         .foregroundColor(Color(red: 0.0, green: 0.8, blue: 1.0))
                         .shadow(color: Color(red: 0.0, green: 0.8, blue: 1.0), radius: 20, x: 0, y: 0)

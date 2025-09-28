@@ -7,6 +7,14 @@
 
 import SwiftUI
 
+extension ErrorView {
+    static let errorTitle = NSLocalizedString("error_title", tableName: "Common", comment: "Error title")
+    static let retryButton = NSLocalizedString("retry_button", tableName: "Common", comment: "Retry button")
+    static let cancelButton = NSLocalizedString("cancel_button", tableName: "Common", comment: "Cancel button")
+    static let confirmButton = NSLocalizedString("confirm_button", tableName: "Common", comment: "Confirm button")
+    static let exitAppButton = NSLocalizedString("exit_app_button", tableName: "Common", comment: "Exit app button")
+}
+
 struct ErrorView: View {
     @Environment(ErrorManager.self) var errorManager
 
@@ -25,7 +33,7 @@ struct ErrorView: View {
                             .foregroundColor(errorColor(for: error.severity))
 
                         // 제목
-                        Text("오류 발생")
+                        Text(verbatim: ErrorView.errorTitle)
                             .font(.system(size: 20, weight: .bold, design: .monospaced))
                             .foregroundColor(.dsTextPrimary)
 
@@ -44,7 +52,7 @@ struct ErrorView: View {
                         case .retry:
                             HStack(spacing: 16) {
                                 PrimaryButton(
-                                    title: "재시도",
+                                    title: ErrorView.retryButton,
                                     style: .cyan,
                                     width: 100,
                                     height: 40
@@ -53,7 +61,7 @@ struct ErrorView: View {
                                 }
 
                                 PrimaryButton(
-                                    title: "취소",
+                                    title: ErrorView.cancelButton,
                                     style: .white,
                                     width: 100,
                                     height: 40
@@ -64,7 +72,7 @@ struct ErrorView: View {
 
                         case .acknowledge:
                             PrimaryButton(
-                                title: "확인",
+                                title: ErrorView.confirmButton,
                                 style: .cyan,
                                 width: 120,
                                 height: 44
@@ -74,7 +82,7 @@ struct ErrorView: View {
 
                         case .fatal:
                             PrimaryButton(
-                                title: "앱 종료",
+                                title: ErrorView.exitAppButton,
                                 style: .red,
                                 width: 120,
                                 height: 44

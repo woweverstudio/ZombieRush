@@ -1,5 +1,12 @@
 import SwiftUI
 
+extension SpiritInfoCard {
+    static let spiritCountUnit = NSLocalizedString("마리", tableName: "MyInfo", comment: "Spirit count unit")
+    static let purchaseQuantityLabel = NSLocalizedString("구매 수량", tableName: "MyInfo", comment: "Purchase quantity label")
+    static let maxQuantityLabel = NSLocalizedString("최대", tableName: "MyInfo", comment: "Maximum quantity label")
+    static let acquireSpiritsButton = NSLocalizedString("정령 얻기", tableName: "MyInfo", comment: "Acquire spirits button")
+}
+
 // MARK: - Spirit Info Card
 struct SpiritInfoCard: View {
     let spiritType: SpiritType
@@ -45,7 +52,7 @@ struct SpiritDetailPanel: View {
                 Spacer()
 
                 // 현재 개수 표시
-                Text("\(getCurrentSpiritCount())마리")
+                Text("\(getCurrentSpiritCount())\(SpiritInfoCard.spiritCountUnit)")
                     .font(.system(size: 18, weight: .bold, design: .monospaced))
                     .foregroundColor(spiritType.color)
             }
@@ -62,7 +69,7 @@ struct SpiritDetailPanel: View {
 
             // 수량 선택
             VStack(alignment: .leading, spacing: 12) {
-                Text("구매 수량")
+                Text(verbatim: SpiritInfoCard.purchaseQuantityLabel)
                     .font(.system(size: 14, weight: .bold, design: .monospaced))
                     .foregroundColor(Color.cyan)
 
@@ -79,7 +86,7 @@ struct SpiritDetailPanel: View {
                     QuantityButton(quantity: 25, isSelected: selectedQuantity == 25) {
                         selectedQuantity = 25
                     }
-                    QuantityButton(quantity: userRepository.currentUser?.nemoFruit ?? 0, isSelected: selectedQuantity == (userRepository.currentUser?.nemoFruit ?? 0), label: "최대") {
+                    QuantityButton(quantity: userRepository.currentUser?.nemoFruit ?? 0, isSelected: selectedQuantity == (userRepository.currentUser?.nemoFruit ?? 0), label: SpiritInfoCard.maxQuantityLabel) {
                         selectedQuantity = userRepository.currentUser?.nemoFruit ?? 0
                     }
                 }
@@ -87,7 +94,7 @@ struct SpiritDetailPanel: View {
 
             // 구매 버튼
             PrimaryButton(
-                title: "정령 얻기",
+                title: SpiritInfoCard.acquireSpiritsButton,
                 style: canAfford() ? .cyan : .disabled,
                 trailingContent: {
                     NemoFruitCost(count: selectedQuantity)

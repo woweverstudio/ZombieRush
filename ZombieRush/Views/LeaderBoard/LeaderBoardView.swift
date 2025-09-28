@@ -1,6 +1,10 @@
 import SwiftUI
 import GameKit
 
+extension LeaderBoardView {
+    static let leaderboardTitle = NSLocalizedString("LEADERBOARD_TITLE", comment: "Leaderboard screen title")
+}
+
 // MARK: - LeaderBoard View
 struct LeaderBoardView: View {
     @Environment(AppRouter.self) var router
@@ -31,7 +35,7 @@ struct LeaderBoardView: View {
                     .foregroundColor(Color.cyan)
                     .shadow(color: .cyan.opacity(0.5), radius: 2, x: 0, y: 0)
                 
-                Text(TextConstants.Leaderboard.title)
+                Text(verbatim: LeaderBoardView.leaderboardTitle)
                     .font(.system(size: 24, weight: .bold, design: .monospaced))
                     .foregroundColor(Color.cyan)
                     .shadow(color: .cyan.opacity(0.5), radius: 2, x: 0, y: 0)

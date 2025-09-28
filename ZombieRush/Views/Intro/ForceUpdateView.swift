@@ -8,6 +8,11 @@
 import SwiftUI
 import UIKit
 
+extension ForceUpdateView {
+    static let newVersionMessage = NSLocalizedString("new_version_available_message", tableName: "Intro", comment: "New version available message")
+    static let goToAppStoreButton = NSLocalizedString("go_to_app_store_button", tableName: "Intro", comment: "Go to App Store button")
+}
+
 struct ForceUpdateView: View {
     @Environment(\.dismiss) private var dismiss
     @State private var versionManager = VersionManager.shared
@@ -21,13 +26,13 @@ struct ForceUpdateView: View {
                 Spacer()
 
                 // 타이틀
-                Text(TextConstants.ForceUpdate.newVersionAvailable)
+                Text(verbatim: ForceUpdateView.newVersionMessage)
                     .font(.system(size: 24, weight: .bold, design: .monospaced))
                     .foregroundColor(Color.dsTextPrimary)
                     .multilineTextAlignment(.center)
 
                 // 앱스토어 이동 버튼
-                PrimaryButton(title: TextConstants.ForceUpdate.goToAppStore, style: .cyan, fullWidth: true) {
+                PrimaryButton(title: ForceUpdateView.goToAppStoreButton, style: .cyan, fullWidth: true) {
                     openAppStore()
                 }
 

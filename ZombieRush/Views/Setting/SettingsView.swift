@@ -7,6 +7,13 @@
 
 import SwiftUI
 
+extension SettingsView {
+    static let settingsTitle = NSLocalizedString("설정", tableName: "Settings", comment: "Settings title")
+    static let soundEffectsLabel = NSLocalizedString("효과음", tableName: "Settings", comment: "Sound effects label")
+    static let backgroundMusicLabel = NSLocalizedString("배경음악", tableName: "Settings", comment: "Background music label")
+    static let vibrationLabel = NSLocalizedString("진동", tableName: "Settings", comment: "Vibration label")
+}
+
 struct SettingsView: View {
     @Environment(AppRouter.self) var router
     
@@ -18,7 +25,7 @@ struct SettingsView: View {
             VStack {
                 // 상단 영역 - 제목과 뒤로가기 버튼
                 Header(
-                    title: TextConstants.Settings.title,
+                    title: SettingsView.settingsTitle,
                     onBack: {
                         router.quitToMain()
                     }
@@ -27,16 +34,16 @@ struct SettingsView: View {
                 // 설정 옵션들 (스크롤 가능)
                 ScrollView {
                     SettingRow(
-                        title: TextConstants.Settings.backgroundMusic,
+                        title: SettingsView.backgroundMusicLabel,
                         icon: "music.note",
                         initialValue: AudioManager.shared.isBackgroundMusicEnabled
                     ) { newValue in
                         AudioManager.shared.isBackgroundMusicEnabled = newValue
                     }
                     .padding(.bottom, 10)
-                    
+
                     SettingRow(
-                        title: TextConstants.Settings.soundEffects,
+                        title: SettingsView.soundEffectsLabel,
                         icon: "speaker.wave.2.fill",
                         initialValue: AudioManager.shared.isSoundEffectsEnabled
                     )
@@ -46,7 +53,7 @@ struct SettingsView: View {
                     .padding(.bottom, 10)
 
                     SettingRow(
-                        title: TextConstants.Settings.vibration,
+                        title: SettingsView.vibrationLabel,
                         icon: "iphone.radiowaves.left.and.right",
                         initialValue: HapticManager.shared.isHapticEnabled
                     )

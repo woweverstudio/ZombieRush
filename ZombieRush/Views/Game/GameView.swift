@@ -8,6 +8,12 @@
 import SwiftUI
 import SpriteKit
 
+extension GameView {
+    static let pauseTitle = NSLocalizedString("PAUSE_TITLE", comment: "Pause overlay - Paused title")
+    static let pauseQuitButton = NSLocalizedString("PAUSE_QUIT_BUTTON", comment: "Pause overlay - Quit button text")
+    static let pauseResumeButton = NSLocalizedString("PAUSE_RESUME_BUTTON", comment: "Pause overlay - Resume button text")
+}
+
 struct GameView: View {
     @Environment(AppRouter.self) var router
     @Environment(GameKitManager.self) var gameKitManager
@@ -56,7 +62,7 @@ struct GameView: View {
             // 일시정지 메뉴
             VStack(spacing: 30) {
                 // 제목
-                Text(TextConstants.Pause.title)
+                Text(verbatim: GameView.pauseTitle)
                     .font(.system(size: 36, weight: .bold, design: .monospaced))
                     .foregroundColor(Color.cyan)
                     .shadow(color: .cyan.opacity(0.5), radius: 5, x: 0, y: 0)
@@ -65,7 +71,7 @@ struct GameView: View {
                 HStack(spacing: 20) {
                     // 나가기 버튼
                     PrimaryButton(
-                        title: TextConstants.Pause.quitButton,
+                        title: GameView.pauseQuitButton,
                         style: .red,
                         width: 200,
                         height: 50,
@@ -77,7 +83,7 @@ struct GameView: View {
 
                     // 계속하기 버튼
                     PrimaryButton(
-                        title: TextConstants.Pause.resumeButton,
+                        title: GameView.pauseResumeButton,
                         style: .cyan,
                         width: 200,
                         height: 50,

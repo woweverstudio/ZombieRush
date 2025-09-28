@@ -1,5 +1,9 @@
 import SwiftUI
 
+extension JobCard {
+    static let jobsUnlockedFormat = NSLocalizedString("jobs_unlocked_format", tableName: "Main", comment: "Jobs unlocked format")
+}
+
 // MARK: - Job Card (TabView로 해금된 job만 표시)
 struct JobCard: View {
     @EnvironmentObject var jobsRepository: SupabaseJobsRepository
@@ -44,11 +48,11 @@ struct JobCard: View {
                         .font(.system(size: 10))
 
                     if let jobs = jobsRepository.currentJobs {
-                        Text("직업 \(jobs.unlockedJobs.count)/\(JobType.allCases.count) 해금됨")
+                        Text(verbatim: String(format: JobCard.jobsUnlockedFormat, jobs.unlockedJobs.count, JobType.allCases.count))
                             .font(.system(size: 10, weight: .medium, design: .monospaced))
                             .foregroundColor(.white.opacity(0.8))
                     } else {
-                        Text("직업 0/\(JobType.allCases.count) 해금됨")
+                        Text(verbatim: String(format: JobCard.jobsUnlockedFormat, 0, JobType.allCases.count))
                             .font(.system(size: 10, weight: .medium, design: .monospaced))
                             .foregroundColor(.white.opacity(0.8))
                     }

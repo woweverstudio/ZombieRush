@@ -1,5 +1,14 @@
 import SwiftUI
 
+extension JobInfoCard {
+    static let healthLabel = NSLocalizedString("체력", tableName: "MyInfo", comment: "Health label")
+    static let energyLabel = NSLocalizedString("에너지", tableName: "MyInfo", comment: "Energy label")
+    static let moveSpeedLabel = NSLocalizedString("이동속도", tableName: "MyInfo", comment: "Move speed label")
+    static let attackSpeedLabel = NSLocalizedString("공격속도", tableName: "MyInfo", comment: "Attack speed label")
+    static let unlockButton = NSLocalizedString("해금하기", tableName: "MyInfo", comment: "Unlock button")
+    static let basicJobLabel = NSLocalizedString("기본 직업", tableName: "MyInfo", comment: "Basic job label")
+}
+
 // MARK: - Job Info Card
 struct JobInfoCard: View {
     let jobType: JobType
@@ -77,14 +86,14 @@ struct JobDetailPanel: View {
 
                 // 좌측 그룹: 체력, 에너지
                 VStack(alignment: .leading, spacing: 4) {
-                    StatRow(icon: "heart.fill", label: "체력", value: "\(stats.hp)", color: .red)
-                    StatRow(icon: "bolt.fill", label: "에너지", value: "\(stats.energy)", color: .blue)
+                    StatRow(icon: "heart.fill", label: JobInfoCard.healthLabel, value: "\(stats.hp)", color: .red)
+                    StatRow(icon: "bolt.fill", label: JobInfoCard.energyLabel, value: "\(stats.energy)", color: .blue)
                 }
 
                 // 우측 그룹: 이동속도, 공격속도
                 VStack(alignment: .leading, spacing: 4) {
-                    StatRow(icon: "shoeprints.fill", label: "이동속도", value: "\(stats.move)", color: .green)
-                    StatRow(icon: "bolt.horizontal.fill", label: "공격속도", value: "\(stats.attackSpeed)", color: .yellow)
+                    StatRow(icon: "shoeprints.fill", label: JobInfoCard.moveSpeedLabel, value: "\(stats.move)", color: .green)
+                    StatRow(icon: "bolt.horizontal.fill", label: JobInfoCard.attackSpeedLabel, value: "\(stats.attackSpeed)", color: .yellow)
                 }
             }
 
@@ -101,7 +110,7 @@ struct JobDetailPanel: View {
                             .frame(maxWidth: .infinity, alignment: .center)
 
                         PrimaryButton(
-                            title: "해금하기",
+                            title: JobInfoCard.unlockButton,
                             style: .cyan,
                             fullWidth: true
                         ) {
@@ -118,7 +127,7 @@ struct JobDetailPanel: View {
                     }
                 } else {
                     // 해금 조건 없는 경우 (novice 등)
-                    Text("기본 직업")
+                    Text(verbatim: JobInfoCard.basicJobLabel)
                         .font(.system(size: 12, design: .monospaced))
                         .foregroundColor(.cyan)
                         .frame(maxWidth: .infinity, alignment: .center)

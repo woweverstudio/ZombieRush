@@ -1,0 +1,74 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "market_title" : {
+      "comment" : "Market title",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "MARKET"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "마켓"
+          }
+        }
+      }
+    },
+    "purchase_button" : {
+      "comment" : "Purchase button",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Purchase"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "구매"
+          }
+        }
+      }
+    },
+    "nemo_fruit_package_section" : {
+      "comment" : "Nemo fruit package section",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nemo Fruit Package"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "네모열매 패키지"
+          }
+        }
+      }
+    },
+    "cheer_buff_section" : {
+      "comment" : "Cheer buff section",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nemo's Cheer"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "네모의 응원"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

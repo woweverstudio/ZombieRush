@@ -1,6 +1,11 @@
 import SwiftUI
 import Foundation  // StatType을 위해 추가
 
+extension StatInfoCard {
+    static let descriptionLabel = NSLocalizedString("설명", tableName: "MyInfo", comment: "Description label")
+    static let upgradeButton = NSLocalizedString("업그레이드", tableName: "MyInfo", comment: "Upgrade button")
+}
+
 // MARK: - Stat Info Card
 struct StatInfoCard: View {
     let statType: StatType
@@ -53,7 +58,7 @@ struct StatDetailPanel: View {
 
             // 설명
             VStack(alignment: .leading, spacing: 12) {
-                Text("설명")
+                Text(verbatim: StatInfoCard.descriptionLabel)
                     .font(.system(size: 16, weight: .bold, design: .monospaced))
                     .foregroundColor(statType.color)
 
@@ -67,7 +72,7 @@ struct StatDetailPanel: View {
 
             // 업그레이드 버튼
             PrimaryButton(
-                title: "업그레이드",
+                title: StatInfoCard.upgradeButton,
                 style: canAffordUpgrade() ? .cyan : .disabled,
                 trailingContent: {
                     StatsPointCost(count: 1)

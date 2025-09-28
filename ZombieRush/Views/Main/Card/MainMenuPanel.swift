@@ -1,6 +1,13 @@
 import SwiftUI
 import GameKit
 
+extension MainMenuPanel {
+    static let gameStartTooltipNotLoggedIn = NSLocalizedString("GAME_START_TOOLTIP_NOT_LOGGED_IN", comment: "Game start tooltip when not logged in")
+    static let gameStartTooltipTop3 = NSLocalizedString("GAME_START_TOOLTIP_TOP3", comment: "Game start tooltip when in top 3")
+    static let gameStartTooltipLoggedIn = NSLocalizedString("GAME_START_TOOLTIP_LOGGED_IN", comment: "Game start tooltip when logged in")
+    static let startButton = NSLocalizedString("MAIN_START", comment: "Start button")
+}
+
 // MARK: - Main Menu Panel Component
 struct MainMenuPanel: View {
     @Environment(AppRouter.self) var router
@@ -15,13 +22,13 @@ struct MainMenuPanel: View {
     private var gameStartTooltip: String {
         if !gameKitManager.isAuthenticated {
             // 로그인 안됨
-            return TextConstants.GameCenter.GameStartTooltips.notLoggedIn
+            return MainMenuPanel.gameStartTooltipNotLoggedIn
         } else if true {
             // 3등 안에 들었음
-            return TextConstants.GameCenter.GameStartTooltips.top3
+            return MainMenuPanel.gameStartTooltipTop3
         } else {
             // 로그인 됨 (일반)
-            return TextConstants.GameCenter.GameStartTooltips.loggedIn
+            return MainMenuPanel.gameStartTooltipLoggedIn
         }
     }
 
@@ -73,7 +80,7 @@ struct MainMenuPanel: View {
             }
 
             // 게임 시작 버튼
-            PrimaryButton(title: TextConstants.Main.startButton, style: .cyan, fullWidth: true) {
+            PrimaryButton(title: MainMenuPanel.startButton, style: .cyan, fullWidth: true) {
                 Task {
                     let request = AddExperienceRequest(expToAdd: 10)
                     let _ = await useCaseFactory.addExperience.execute(request)

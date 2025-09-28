@@ -1,0 +1,227 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "dash_placeholder" : {
+      "comment" : "Dash placeholder",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "--"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "없음"
+          }
+        }
+      }
+    },
+    "ultimate_skill_label" : {
+      "comment" : "Ultimate skill label",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ultimate Skill"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "궁극기"
+          }
+        }
+      }
+    },
+    "ultimate_skill_placeholder" : {
+      "comment" : "Ultimate skill placeholder",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ultimate Skill Name"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "궁극기 이름 들어감"
+          }
+        }
+      }
+    },
+    "player_title" : {
+      "comment" : "Player title",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Guardian of Nemo Kingdom"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "네모나라의 수호자"
+          }
+        }
+      }
+    },
+    "nemo_rescue_progress" : {
+      "comment" : "Nemo rescue progress format",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nemo Rescue %d/%d"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "네모 구출 %d/%d"
+          }
+        }
+      }
+    },
+    "percentage_format" : {
+      "comment" : "Percentage format",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "(%d%%)"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "(%d%%)"
+          }
+        }
+      }
+    },
+    "remaining_points" : {
+      "comment" : "Remaining points format",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remaining Points: %d"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "남은 포인트: %d"
+          }
+        }
+      }
+    },
+    "hp_recovery_label" : {
+      "comment" : "HP recovery stat label",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "HP Recovery"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "HP 회복"
+          }
+        }
+      }
+    },
+    "move_speed_label" : {
+      "comment" : "Move speed stat label",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Move Speed"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이동속도"
+          }
+        }
+      }
+    },
+    "energy_recovery_label" : {
+      "comment" : "Energy recovery stat label",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Energy Recovery"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "에너지 회복"
+          }
+        }
+      }
+    },
+    "attack_speed_label" : {
+      "comment" : "Attack speed stat label",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Attack Speed"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "공격속도"
+          }
+        }
+      }
+    },
+    "totem_label" : {
+      "comment" : "Totem stat label",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Totem"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "토템"
+          }
+        }
+      }
+    },
+    "jobs_unlocked_format" : {
+      "comment" : "Jobs unlocked format",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jobs %d/%d Unlocked"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "직업 %d/%d 해금됨"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

@@ -1,6 +1,15 @@
 import SwiftUI
 import Foundation  // StatType을 위해 추가
 
+extension MyInfoView {
+    static let myInfoTitle = NSLocalizedString("my_info_title", tableName: "MyInfo", comment: "My info title")
+    static let selectItemPrompt = NSLocalizedString("select_item_prompt", tableName: "MyInfo", comment: "Select item prompt")
+    static let selectItemInstruction = NSLocalizedString("select_item_instruction", tableName: "MyInfo", comment: "Select item instruction")
+    static let cheerBuffTitle = NSLocalizedString("cheer_buff_title", tableName: "MyInfo", comment: "Cheer buff title")
+    static let cheerBuffOn = NSLocalizedString("cheer_buff_on", tableName: "MyInfo", comment: "Cheer buff on")
+    static let cheerBuffOff = NSLocalizedString("cheer_buff_off", tableName: "MyInfo", comment: "Cheer buff off")
+}
+
 // MARK: - 내 정보 View
 struct MyInfoView: View {
     @Environment(AppRouter.self) var router
@@ -44,7 +53,7 @@ struct MyInfoView: View {
 extension MyInfoView {
     private var headerView: some View {
         Header(
-            title: "내 정보",
+            title: MyInfoView.myInfoTitle,
             badges: currentBadges,
             onBack: {
                 router.quitToMain()
@@ -94,11 +103,11 @@ extension MyInfoView {
                         .font(.system(size: 60))
                         .foregroundColor(.gray.opacity(0.5))
 
-                    Text("항목을 선택해주세요")
+                    Text(verbatim: MyInfoView.selectItemPrompt)
                         .font(.system(size: 18, weight: .bold, design: .monospaced))
                         .foregroundColor(.gray)
 
-                    Text("좌측에서 항목을 클릭하면\n상세 정보를 확인할 수 있습니다")
+                    Text(verbatim: MyInfoView.selectItemInstruction)
                         .font(.system(size: 14, weight: .medium, design: .monospaced))
                         .foregroundColor(.gray.opacity(0.7))
                         .multilineTextAlignment(.center)
@@ -199,10 +208,10 @@ extension MyInfoView {
                 }
                 
                 SelectionInfoCard(
-                    title: "네모의 응원",
+                    title: MyInfoView.cheerBuffTitle,
                     iconName: "medal.fill",
                     iconColor: Color.dsSuccess,
-                    value: "\(userRepository.currentUser?.isCheerBuffActive ?? false ? "ON" : "OFF")",
+                    value: "\(userRepository.currentUser?.isCheerBuffActive ?? false ? MyInfoView.cheerBuffOn : MyInfoView.cheerBuffOff)",
                     isSelected: false,
                     action: {}
                 )
