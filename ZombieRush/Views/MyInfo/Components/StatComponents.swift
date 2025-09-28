@@ -2,8 +2,8 @@ import SwiftUI
 import Foundation  // StatType을 위해 추가
 
 extension StatInfoCard {
-    static let descriptionLabel = NSLocalizedString("설명", tableName: "MyInfo", comment: "Description label")
-    static let upgradeButton = NSLocalizedString("업그레이드", tableName: "MyInfo", comment: "Upgrade button")
+    static let descriptionLabel = NSLocalizedString("description_label", tableName: "MyInfo", comment: "Description label")
+    static let upgradeButton = NSLocalizedString("upgrade_button", tableName: "MyInfo", comment: "Upgrade button")
 }
 
 // MARK: - Stat Info Card
@@ -15,7 +15,7 @@ struct StatInfoCard: View {
 
     var body: some View {
         SelectionInfoCard(
-            title: statType.displayName,
+            title: statType.localizedDisplayName,
             iconName: statType.iconName,
             iconColor: statType.color,
             value: "\(currentValue)",
@@ -41,7 +41,7 @@ struct StatDetailPanel: View {
                     .font(.system(size: 24))
                     .foregroundColor(statType.color)
 
-                Text(statType.displayName)
+                Text(verbatim: statType.localizedDisplayName)
                     .font(.system(size: 20, weight: .bold, design: .monospaced))
                     .foregroundColor(Color.dsTextPrimary)
 
@@ -62,7 +62,7 @@ struct StatDetailPanel: View {
                     .font(.system(size: 16, weight: .bold, design: .monospaced))
                     .foregroundColor(statType.color)
 
-                Text(statType.description)
+                Text(verbatim: statType.localizedDescription)
                     .font(.system(size: 14, design: .monospaced))
                     .foregroundColor(.white.opacity(0.8))
                     .lineSpacing(4)

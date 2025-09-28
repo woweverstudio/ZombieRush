@@ -7,12 +7,12 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Attack Speed"
+            "value" : "Atk Spd"
           }
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "공격속도"
           }
         }
@@ -70,7 +70,21 @@
       }
     },
     "energy_label" : {
-      "comment" : "Energy label"
+      "comment" : "Energy label",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Energy"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "에너지"
+          }
+        }
+      }
     },
     "health_label" : {
       "comment" : "Health label",
@@ -90,7 +104,21 @@
       }
     },
     "move_speed_label" : {
-      "comment" : "Move speed label"
+      "comment" : "Move speed label",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Speed"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이동속도"
+          }
+        }
+      }
     },
     "my_info_title" : {
       "comment" : "My info title",
@@ -143,10 +171,7 @@
         }
       }
     },
-    "공격속도" : {
-      "comment" : "Attack speed label"
-    },
-    "구매 수량" : {
+    "purchase_quantity_label" : {
       "comment" : "Purchase quantity label",
       "localizations" : {
         "en" : {
@@ -163,7 +188,7 @@
         }
       }
     },
-    "기본 직업" : {
+    "basic_job_label" : {
       "comment" : "Basic job label",
       "localizations" : {
         "en" : {
@@ -180,7 +205,7 @@
         }
       }
     },
-    "마리" : {
+    "spirit_count_unit" : {
       "comment" : "Spirit count unit",
       "localizations" : {
         "en" : {
@@ -197,7 +222,7 @@
         }
       }
     },
-    "설명" : {
+    "description_label" : {
       "comment" : "Description label",
       "localizations" : {
         "en" : {
@@ -214,7 +239,7 @@
         }
       }
     },
-    "업그레이드" : {
+    "upgrade_button" : {
       "comment" : "Upgrade button",
       "localizations" : {
         "en" : {
@@ -231,41 +256,7 @@
         }
       }
     },
-    "에너지" : {
-      "comment" : "Energy label",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Energy"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "에너지"
-          }
-        }
-      }
-    },
-    "이동속도" : {
-      "comment" : "Move speed label",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Move Speed"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "이동속도"
-          }
-        }
-      }
-    },
-    "정령 얻기" : {
+    "acquire_spirits_button" : {
       "comment" : "Acquire spirits button",
       "localizations" : {
         "en" : {
@@ -282,10 +273,7 @@
         }
       }
     },
-    "체력" : {
-      "comment" : "Health label"
-    },
-    "최대" : {
+    "max_quantity_label" : {
       "comment" : "Maximum quantity label",
       "localizations" : {
         "en" : {
@@ -302,7 +290,7 @@
         }
       }
     },
-    "해금하기" : {
+    "unlock_button" : {
       "comment" : "Unlock button",
       "localizations" : {
         "en" : {

@@ -21,9 +21,23 @@ enum SystemErrorSource {
 }
 
 enum SystemErrorDescription: String {
-    case cannotFoundUser = "Cannot found user"
-    case cannotFoundData = "Cannot found data"
-    case databaseReadFailed = "Database update failed"
+    case cannotFoundUser
+    case cannotFoundData
+    case databaseReadFailed
+}
+
+// MARK: - Localized Extensions
+extension SystemErrorDescription {
+    var localizedMessage: String {
+        switch self {
+        case .cannotFoundUser:
+            return NSLocalizedString("error_user_not_found", tableName: "Models", comment: "User not found error message")
+        case .cannotFoundData:
+            return NSLocalizedString("error_data_not_found", tableName: "Models", comment: "Data not found error message")
+        case .databaseReadFailed:
+            return NSLocalizedString("error_database_failed", tableName: "Models", comment: "Database operation failed error message")
+        }
+    }
 }
 
 struct SystemError: Identifiable {

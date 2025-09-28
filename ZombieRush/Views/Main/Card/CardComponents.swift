@@ -39,7 +39,8 @@ struct StatRow: View {
             Text("\(label):")
                 .font(.system(size: 12, design: .monospaced))
                 .foregroundColor(.white.opacity(0.8))
-                .frame(width: 50, alignment: .leading)
+                .frame(width: 60, alignment: .leading)
+                .minimumScaleFactor(0.7)
 
             Text(value)
                 .font(.system(size: 12, weight: .bold, design: .monospaced))

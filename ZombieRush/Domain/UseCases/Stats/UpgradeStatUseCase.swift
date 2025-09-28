@@ -45,7 +45,7 @@ struct UpgradeStatUseCase: UseCase {
         
         do {
             let savedStats = try await statsRepository.updateStats(updatedStats)
-            ToastManager.shared.show(.statPointsIncreased(request.statType.displayName, 1))
+            ToastManager.shared.show(.statPointsIncreased(request.statType.localizedDisplayName, 1))
             return UpgradeStatResponse(success: true, stats: savedStats)
         } catch {
             ErrorManager.shared.report(.databaseRequestFailed)

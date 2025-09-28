@@ -117,7 +117,7 @@ struct JobDetailView: View {
 
 
             // Job 이름 (간단하게 표시)
-            Text(jobType.displayName)
+            Text(verbatim: jobType.localizedDisplayName)
                 .font(.system(size: 12, weight: .medium, design: .monospaced))
                 .foregroundColor(Color.dsTextPrimary)
                 .multilineTextAlignment(.center)

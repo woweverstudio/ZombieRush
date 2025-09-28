@@ -101,15 +101,6 @@ enum JobType: String, CaseIterable {
     case lightningMage = "lightning_mage"
     case darkMage = "dark_mage"
 
-    var displayName: String {
-        switch self {
-        case .novice: return "초보자"
-        case .fireMage: return "불 마법사"
-        case .iceMage: return "얼음 마법사"
-        case .lightningMage: return "번개 마법사"
-        case .darkMage: return "어둠 마법사"
-        }
-    }
 
     var iconName: String {
         switch self {
@@ -118,6 +109,24 @@ enum JobType: String, CaseIterable {
         case .iceMage: return "snowflake"
         case .lightningMage: return "bolt.fill"
         case .darkMage: return "moon.fill"
+        }
+    }
+}
+
+// MARK: - Localized Extensions
+extension JobType {
+    var localizedDisplayName: String {
+        switch self {
+        case .novice:
+            return NSLocalizedString("job_novice_name", tableName: "Models", comment: "Novice job display name")
+        case .fireMage:
+            return NSLocalizedString("job_fire_mage_name", tableName: "Models", comment: "Fire mage job display name")
+        case .iceMage:
+            return NSLocalizedString("job_ice_mage_name", tableName: "Models", comment: "Ice mage job display name")
+        case .lightningMage:
+            return NSLocalizedString("job_lightning_mage_name", tableName: "Models", comment: "Lightning mage job display name")
+        case .darkMage:
+            return NSLocalizedString("job_dark_mage_name", tableName: "Models", comment: "Dark mage job display name")
         }
     }
 }

@@ -1,10 +1,10 @@
 import SwiftUI
 
 extension SpiritInfoCard {
-    static let spiritCountUnit = NSLocalizedString("마리", tableName: "MyInfo", comment: "Spirit count unit")
-    static let purchaseQuantityLabel = NSLocalizedString("구매 수량", tableName: "MyInfo", comment: "Purchase quantity label")
-    static let maxQuantityLabel = NSLocalizedString("최대", tableName: "MyInfo", comment: "Maximum quantity label")
-    static let acquireSpiritsButton = NSLocalizedString("정령 얻기", tableName: "MyInfo", comment: "Acquire spirits button")
+    static let spiritCountUnit = NSLocalizedString("spirit_count_unit", tableName: "MyInfo", comment: "Spirit count unit")
+    static let purchaseQuantityLabel = NSLocalizedString("purchase_quantity_label", tableName: "MyInfo", comment: "Purchase quantity label")
+    static let maxQuantityLabel = NSLocalizedString("max_quantity_label", tableName: "MyInfo", comment: "Maximum quantity label")
+    static let acquireSpiritsButton = NSLocalizedString("acquire_spirits_button", tableName: "MyInfo", comment: "Acquire spirits button")
 }
 
 // MARK: - Spirit Info Card
@@ -16,7 +16,7 @@ struct SpiritInfoCard: View {
 
     var body: some View {
         SelectionInfoCard(
-            title: spiritType.displayName,
+            title: spiritType.localizedDisplayName,
             iconName: spiritType.iconName,
             iconColor: spiritType.color,
             value: "\(currentCount)",
@@ -45,7 +45,7 @@ struct SpiritDetailPanel: View {
                     .foregroundColor(spiritType.color)
                     .frame(width: 32, height: 32)
 
-                Text(spiritType.displayName)
+                Text(verbatim: spiritType.localizedDisplayName)
                     .font(.system(size: 20, weight: .bold, design: .monospaced))
                     .foregroundColor(Color.dsTextPrimary)
 
@@ -60,7 +60,7 @@ struct SpiritDetailPanel: View {
             Divider()
                 .background(Color.dsTextSecondary.opacity(0.3))
 
-            Text(spiritType.description)
+            Text(spiritType.localizedDescription)
                 .font(.system(size: 14, design: .monospaced))
                 .foregroundColor(.white.opacity(0.8))
                 .lineSpacing(4)

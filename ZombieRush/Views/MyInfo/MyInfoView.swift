@@ -142,7 +142,7 @@ extension MyInfoView {
                     selectedStat = nil
                     selectedSpirit = nil
                 }) {
-                    Text(category.rawValue)
+                    Text(verbatim: category.localizedDisplayName)
                         .font(.system(size: 14, weight: .bold, design: .monospaced))
                         .foregroundColor(selectedCategory == category ? .white : .gray)
                         .frame(maxWidth: .infinity)

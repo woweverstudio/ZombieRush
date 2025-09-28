@@ -129,7 +129,7 @@ struct UnlockJobUseCase: UseCase {
         
         do {
             let savedJobs = try await jobsRepository.updateJobs(updatedJobs)
-            ToastManager.shared.show(.unlockJobSuccess(jobType.displayName))
+            ToastManager.shared.show(.unlockJobSuccess(jobType.localizedDisplayName))
 
             return UnlockJobResponse(success: true, jobs: savedJobs)
         } catch {

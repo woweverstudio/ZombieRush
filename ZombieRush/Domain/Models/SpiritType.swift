@@ -17,15 +17,6 @@ enum SpiritType: String, CaseIterable {
 
 // MARK: - SpiritType Extensions
 extension SpiritType {
-    var displayName: String {
-        switch self {
-        case .fire: return "불"
-        case .ice: return "얼음"
-        case .lightning: return "번개"
-        case .dark: return "어둠"
-        }
-    }
-
     var iconName: String {
         switch self {
         case .fire: return "flame.fill"
@@ -44,12 +35,30 @@ extension SpiritType {
         }
     }
 
-    var description: String {
+    // MARK: - Localized Properties
+    var localizedDisplayName: String {
         switch self {
-        case .fire: return "화염 속성 공격에 특화된 정령"
-        case .ice: return "빙결 효과를 가진 냉기 정령"
-        case .lightning: return "빠른 전격 공격을 하는 번개 정령"
-        case .dark: return "어둠의 힘을 사용하는 신비한 정령"
+        case .fire:
+            return NSLocalizedString("spirit_fire_name", tableName: "Models", comment: "Fire spirit display name")
+        case .ice:
+            return NSLocalizedString("spirit_ice_name", tableName: "Models", comment: "Ice spirit display name")
+        case .lightning:
+            return NSLocalizedString("spirit_lightning_name", tableName: "Models", comment: "Lightning spirit display name")
+        case .dark:
+            return NSLocalizedString("spirit_dark_name", tableName: "Models", comment: "Dark spirit display name")
+        }
+    }
+
+    var localizedDescription: String {
+        switch self {
+        case .fire:
+            return NSLocalizedString("spirit_fire_description", tableName: "Models", comment: "Fire spirit description")
+        case .ice:
+            return NSLocalizedString("spirit_ice_description", tableName: "Models", comment: "Ice spirit description")
+        case .lightning:
+            return NSLocalizedString("spirit_lightning_description", tableName: "Models", comment: "Lightning spirit description")
+        case .dark:
+            return NSLocalizedString("spirit_dark_description", tableName: "Models", comment: "Dark spirit description")
         }
     }
 }

@@ -44,7 +44,7 @@ struct AddSpiritUseCase: UseCase {
 
         do {
             let savedSpirits = try await spiritsRepository.updateSpirits(updatedSpirits)
-            ToastManager.shared.show(.spiritPurchased(request.spiritType.displayName))
+            ToastManager.shared.show(.spiritPurchased(request.spiritType.localizedDisplayName))
             return AddSpiritResponse(success: true, spirits: savedSpirits)
         } catch {
             ErrorManager.shared.report(.databaseRequestFailed)

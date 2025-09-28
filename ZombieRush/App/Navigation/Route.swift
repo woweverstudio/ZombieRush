@@ -2,9 +2,23 @@ import Foundation
 
 // MARK: - 내 정보 카테고리
 enum MyInfoCategory: String, CaseIterable {
-    case jobs = "직업"
-    case stats = "스텟"
-    case spirits = "정령"
+    case jobs
+    case stats
+    case spirits
+}
+
+// MARK: - Localized Extensions
+extension MyInfoCategory {
+    var localizedDisplayName: String {
+        switch self {
+        case .jobs:
+            return NSLocalizedString("myinfo_category_jobs", tableName: "Models", comment: "MyInfo jobs category display name")
+        case .stats:
+            return NSLocalizedString("myinfo_category_stats", tableName: "Models", comment: "MyInfo stats category display name")
+        case .spirits:
+            return NSLocalizedString("myinfo_category_spirits", tableName: "Models", comment: "MyInfo spirits category display name")
+        }
+    }
 }
 
 // MARK: - Route Enum (Associated Values 추가)

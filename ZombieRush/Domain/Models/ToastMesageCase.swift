@@ -17,64 +17,63 @@ enum ToastMessageCase {
     case spiritPurchased(String)    // 특정 정령 구입 (이름 포함)
     case lackOfRemaingStatPoints
     case selectJobFailed
-    
+
+    // MARK: - Localized Toast
     var toast: ToastMessage {
         switch self {
         case .levelUp(let level):
             return ToastMessage(
-                title: "레벨업",
-                description: "LEVEL \(level) UP!",
+                title: NSLocalizedString("toast_level_up_title", tableName: "Models", comment: "Level up toast title"),
+                description: String(format: NSLocalizedString("toast_level_up_description", tableName: "Models", comment: "Level up toast description"), level),
                 type: .celebrate
             )
         case .unlockJobSuccess(let name):
             return ToastMessage(
-                title: "직업 해금 성공",
-                description: "\(name)가 되었습니다.",
+                title: NSLocalizedString("toast_job_unlock_success_title", tableName: "Models", comment: "Job unlock success toast title"),
+                description: String(format: NSLocalizedString("toast_job_unlock_success_description", tableName: "Models", comment: "Job unlock success toast description"), name),
                 type: .celebrate
             )
         case .unlockJobFailed(let spiritName, let spiritCount, let level):
             return ToastMessage(
-                title: "직업 해금 실패",
-                description: "현재 \(spiritName) 정령 수: \(spiritCount)개, 현재 레벨: \(level)Lv",
+                title: NSLocalizedString("toast_job_unlock_failed_title", tableName: "Models", comment: "Job unlock failed toast title"),
+                description: String(format: NSLocalizedString("toast_job_unlock_failed_description", tableName: "Models", comment: "Job unlock failed toast description"), spiritName, spiritCount, level),
                 type: .error
             )
         case .statPointsIncreased(let name, let points):
             return ToastMessage(
-                title: "스텟 강화 성공",
-                description: "\(name) 스탯 포인트 +\(points)",
+                title: NSLocalizedString("toast_stat_increased_title", tableName: "Models", comment: "Stat increased toast title"),
+                description: String(format: NSLocalizedString("toast_stat_increased_description", tableName: "Models", comment: "Stat increased toast description"), name, points),
                 type: .celebrate
             )
         case .loginSuccess(let nickname):
             return ToastMessage(
-                title: "환영합니다, \(nickname)님!",
-                description: "로그인이 완료되었습니다.",
+                title: String(format: NSLocalizedString("toast_login_success_title", tableName: "Models", comment: "Login success toast title"), nickname),
+                description: NSLocalizedString("toast_login_success_description", tableName: "Models", comment: "Login success toast description"),
                 type: .complete
-                
             )
         case .cheerBuffPurchased:
             return ToastMessage(
-                title: "네모의 응원 활성화",
-                description: "일정 시간 동안 네모구출, 정령 발견 능력이 향상됩니다.",
+                title: NSLocalizedString("toast_cheer_buff_purchased_title", tableName: "Models", comment: "Cheer buff purchased toast title"),
+                description: NSLocalizedString("toast_cheer_buff_purchased_description", tableName: "Models", comment: "Cheer buff purchased toast description"),
                 duration: 3.0,
                 type: .celebrate
             )
         case .spiritPurchased(let spiritName):
             return ToastMessage(
-                title: "\(spiritName) 정령 획득",
-                description: "새로운 정령을 획득했습니다.",
+                title: String(format: NSLocalizedString("toast_spirit_purchased_title", tableName: "Models", comment: "Spirit purchased toast title"), spiritName),
+                description: NSLocalizedString("toast_spirit_purchased_description", tableName: "Models", comment: "Spirit purchased toast description"),
                 type: .celebrate
             )
         case .lackOfRemaingStatPoints:
             return ToastMessage(
-                title: "스탯 포인트 부족",
-                description: "스탯 포인트가 부족합니다.",
+                title: NSLocalizedString("toast_lack_of_stat_points_title", tableName: "Models", comment: "Lack of stat points toast title"),
+                description: NSLocalizedString("toast_lack_of_stat_points_description", tableName: "Models", comment: "Lack of stat points toast description"),
                 type: .error
             )
-            
         case .selectJobFailed:
             return ToastMessage(
-                title: "직업 불러오기 실패",
-                description: "네트워크 문제로 직업 로드에 실패했습니다.",
+                title: NSLocalizedString("toast_select_job_failed_title", tableName: "Models", comment: "Select job failed toast title"),
+                description: NSLocalizedString("toast_select_job_failed_description", tableName: "Models", comment: "Select job failed toast description"),
                 type: .error
             )
         }

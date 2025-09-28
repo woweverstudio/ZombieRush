@@ -17,21 +17,6 @@ enum StatType: String, CaseIterable, Codable {
     case attackSpeed = "attack_speed"
     case totemCount = "totem_count"
 
-    /// 표시 이름
-    var displayName: String {
-        switch self {
-        case .hpRecovery:
-            return "HP 회복 증가"
-        case .moveSpeed:
-            return "이동 속도 증가"
-        case .energyRecovery:
-            return "에너지 회복 증가"
-        case .attackSpeed:
-            return "공격 속도 증가"
-        case .totemCount:
-            return "토템 개수"
-        }
-    }
 
     /// 아이콘 이름
     var iconName: String {
@@ -65,19 +50,35 @@ enum StatType: String, CaseIterable, Codable {
         }
     }
 
-    /// 설명
-    var description: String {
+
+    // MARK: - Localized Properties
+    var localizedDisplayName: String {
         switch self {
         case .hpRecovery:
-            return "시간이 지남에 따라 HP를 회복합니다."
+            return NSLocalizedString("stat_hp_recovery_name", tableName: "Models", comment: "HP recovery stat display name")
         case .moveSpeed:
-            return "캐릭터의 이동 속도를 증가시킵니다."
+            return NSLocalizedString("stat_move_speed_name", tableName: "Models", comment: "Move speed stat display name")
         case .energyRecovery:
-            return "시간이 지남에 따라 에너지를 회복합니다."
+            return NSLocalizedString("stat_energy_recovery_name", tableName: "Models", comment: "Energy recovery stat display name")
         case .attackSpeed:
-            return "공격 속도를 높여 더 빠르게 공격할 수 있습니다."
+            return NSLocalizedString("stat_attack_speed_name", tableName: "Models", comment: "Attack speed stat display name")
         case .totemCount:
-            return "필드에 배치할 수 있는 토템의 최대 개수를 늘립니다."
+            return NSLocalizedString("stat_totem_count_name", tableName: "Models", comment: "Totem count stat display name")
+        }
+    }
+
+    var localizedDescription: String {
+        switch self {
+        case .hpRecovery:
+            return NSLocalizedString("stat_hp_recovery_description", tableName: "Models", comment: "HP recovery stat description")
+        case .moveSpeed:
+            return NSLocalizedString("stat_move_speed_description", tableName: "Models", comment: "Move speed stat description")
+        case .energyRecovery:
+            return NSLocalizedString("stat_energy_recovery_description", tableName: "Models", comment: "Energy recovery stat description")
+        case .attackSpeed:
+            return NSLocalizedString("stat_attack_speed_description", tableName: "Models", comment: "Attack speed stat description")
+        case .totemCount:
+            return NSLocalizedString("stat_totem_count_description", tableName: "Models", comment: "Totem count stat description")
         }
     }
 }

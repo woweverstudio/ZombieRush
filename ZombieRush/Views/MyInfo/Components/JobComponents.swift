@@ -1,12 +1,12 @@
 import SwiftUI
 
 extension JobInfoCard {
-    static let healthLabel = NSLocalizedString("체력", tableName: "MyInfo", comment: "Health label")
-    static let energyLabel = NSLocalizedString("에너지", tableName: "MyInfo", comment: "Energy label")
-    static let moveSpeedLabel = NSLocalizedString("이동속도", tableName: "MyInfo", comment: "Move speed label")
-    static let attackSpeedLabel = NSLocalizedString("공격속도", tableName: "MyInfo", comment: "Attack speed label")
-    static let unlockButton = NSLocalizedString("해금하기", tableName: "MyInfo", comment: "Unlock button")
-    static let basicJobLabel = NSLocalizedString("기본 직업", tableName: "MyInfo", comment: "Basic job label")
+    static let healthLabel = NSLocalizedString("health_label", tableName: "MyInfo", comment: "Health label")
+    static let energyLabel = NSLocalizedString("energy_label", tableName: "MyInfo", comment: "Energy label")
+    static let moveSpeedLabel = NSLocalizedString("move_speed_label", tableName: "MyInfo", comment: "Move speed label")
+    static let attackSpeedLabel = NSLocalizedString("attack_speed_label", tableName: "MyInfo", comment: "Attack speed label")
+    static let unlockButton = NSLocalizedString("unlock_button", tableName: "MyInfo", comment: "Unlock button")
+    static let basicJobLabel = NSLocalizedString("basic_job_label", tableName: "MyInfo", comment: "Basic job label")
 }
 
 // MARK: - Job Info Card
@@ -41,7 +41,7 @@ struct JobInfoCard: View {
                     }
 
                     // 직업 이름
-                    Text(jobType.displayName)
+                    Text(verbatim: jobType.localizedDisplayName)
                         .font(.system(size: 12, weight: .medium, design: .monospaced))
                         .foregroundColor(isUnlocked ? .white : .gray.opacity(0.5))
                         .multilineTextAlignment(.center)
@@ -73,7 +73,7 @@ struct JobDetailPanel: View {
                     .foregroundColor(Color.cyan)
                     .frame(width: 24, height: 24)
 
-                Text(jobType.displayName)
+                Text(jobType.localizedDisplayName)
                     .font(.system(size: 18, weight: .bold, design: .monospaced))
                     .foregroundColor(Color.dsTextPrimary)
 
