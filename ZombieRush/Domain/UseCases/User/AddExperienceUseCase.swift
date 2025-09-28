@@ -42,6 +42,7 @@ struct AddExperienceUseCase: UseCase {
         // 레벨업 시 remaining_points 증가
         if leveledUp {
             updatedUser.remainingPoints += levelsGained * 3
+            ToastManager.shared.show(.levelUp(newLevel.currentLevel))
         }
 
         // DB 업데이트

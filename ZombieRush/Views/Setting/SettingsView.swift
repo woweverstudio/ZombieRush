@@ -9,14 +9,8 @@ import SwiftUI
 
 struct SettingsView: View {
     @Environment(AppRouter.self) var router
-    @Environment(AudioManager.self) var audioManager
-    @Environment(HapticManager.self) var hapticManager
     
     var body: some View {
-        // @Bindable을 body 내부에서 생성
-        @Bindable var bindableAudioManager = audioManager
-        @Bindable var bindableHapticManager = hapticManager
-        
         ZStack {
             // 사이버펑크 배경
             Background()
@@ -32,28 +26,33 @@ struct SettingsView: View {
                 
                 // 설정 옵션들 (스크롤 가능)
                 ScrollView {
-                    
-                    // 사운드 설정
-                    SettingRow(
-                        title: TextConstants.Settings.soundEffects,
-                        icon: "speaker.wave.2.fill",
-                        isOn: $bindableAudioManager.isSoundEffectsEnabled
-                    )
-                    .padding(.bottom, 10)
-
                     SettingRow(
                         title: TextConstants.Settings.backgroundMusic,
                         icon: "music.note",
-                        isOn: $bindableAudioManager.isBackgroundMusicEnabled
+                        initialValue: AudioManager.shared.isBackgroundMusicEnabled
+                    ) { newValue in
+                        AudioManager.shared.isBackgroundMusicEnabled = newValue
+                    }
+                    .padding(.bottom, 10)
+                    
+                    SettingRow(
+                        title: TextConstants.Settings.soundEffects,
+                        icon: "speaker.wave.2.fill",
+                        initialValue: AudioManager.shared.isSoundEffectsEnabled
                     )
+                    { newValue in
+                        AudioManager.shared.isSoundEffectsEnabled = newValue
+                    }
                     .padding(.bottom, 10)
 
                     SettingRow(
                         title: TextConstants.Settings.vibration,
                         icon: "iphone.radiowaves.left.and.right",
-                        isOn: $bindableHapticManager.isHapticEnabled
+                        initialValue: HapticManager.shared.isHapticEnabled
                     )
-                    
+                    { newValue in
+                        HapticManager.shared.isHapticEnabled = newValue
+                    }
                 }
             }
         }
@@ -63,8 +62,16 @@ struct SettingsView: View {
 struct SettingRow: View {
     let title: String
     let icon: String
-    @Binding var isOn: Bool
-    
+    @State private var isOn: Bool
+    let onToggle: (Bool) -> Void
+
+    init(title: String, icon: String, initialValue: Bool, onToggle: @escaping (Bool) -> Void) {
+        self.title = title
+        self.icon = icon
+        _isOn = State(initialValue: initialValue)
+        self.onToggle = onToggle
+    }
+
     var body: some View {
         HStack {
             Image(systemName: icon)
@@ -80,6 +87,9 @@ struct SettingRow: View {
             
             Toggle("", isOn: $isOn)
                 .toggleStyle(SwitchToggleStyle(tint: Color.cyan))
+                .onChange(of: isOn) { oldValue, newValue in
+                    onToggle(newValue)
+                }
         }
         .padding(.horizontal, 20)
         .padding(.vertical, 15)
@@ -94,10 +104,9 @@ struct SettingRow: View {
     }
 }
 
+
 #Preview {
     SettingsView()
         .environment(AppRouter())
-        .environment(AudioManager.shared)
-        .environment(HapticManager.shared)
         .preferredColorScheme(.dark)
 }

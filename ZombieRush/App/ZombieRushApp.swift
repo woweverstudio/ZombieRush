@@ -6,8 +6,6 @@
 //
 
 import SwiftUI
-import UIKit
-import Supabase
 import AlertToast
 
 @main
@@ -24,12 +22,9 @@ struct ZombieRushApp: App {
     @State private var appRouter = AppRouter()
     @State private var gameKitManager = GameKitManager()
     @State private var gameStateManager = GameStateManager()
-
-    @State private var audioManager = AudioManager.shared  // 게임에서 사용하므로 싱글턴 유지
-    @State private var hapticManager = HapticManager.shared  // 게임에서 사용하므로 싱글턴 유지
-    @State private var notificationManager = NotificationManager.shared
+    
     @State private var errorManager = ErrorManager.shared
-    @Bindable private var toastManager = ToastManager.shared
+    @State private var toastManager = ToastManager.shared
 
     @Environment(\.scenePhase) private var scenePhase  // 앱 상태 모니터링
 
@@ -71,10 +66,7 @@ struct ZombieRushApp: App {
             .environment(appRouter)
             .environment(gameKitManager)
             .environment(gameStateManager)
-            .environment(audioManager)
-            .environment(hapticManager)
             .environment(errorManager)
-            .environment(toastManager)
             .toast(
                 item: $toastManager.currentToast,
                 duration: toastManager.currentToast?.duration ?? 2,
@@ -83,18 +75,12 @@ struct ZombieRushApp: App {
                 let type = toast?.type ?? .complete
                 return AlertToast(displayMode: .banner(.pop), type: .systemImage(type.imageName, type.color) , title: toast?.title, subTitle: toast?.description)
             }
-            .task {
-                // 앱 시작 시 Notification 설정
-                notificationManager.setupNotifications()
-            }
         }
         .onChange(of: scenePhase) { oldPhase, newPhase in
             // 앱 상태 변화 감지 및 GameStateManager에 전달
             switch newPhase {
             case .active:
                 gameStateManager.setAppActive(true)
-                // 배지 제거
-                notificationManager.clearBadge()
 
             case .inactive, .background:
                 gameStateManager.setAppActive(false)

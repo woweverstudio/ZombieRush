@@ -7,7 +7,6 @@
 
 import UIKit
 
-@Observable
 final class HapticManager {
     // 게임 로직에서 사용하므로 싱글턴 유지
     static let shared = HapticManager()

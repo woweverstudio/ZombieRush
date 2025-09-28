@@ -8,6 +8,7 @@
 import Foundation
 
 enum ToastMessageCase {
+    case levelUp(Int)
     case unlockJobSuccess(String)
     case unlockJobFailed(String, Int, Int)
     case statPointsIncreased(String, Int)   // 스탯 포인트 증가
@@ -19,6 +20,12 @@ enum ToastMessageCase {
     
     var toast: ToastMessage {
         switch self {
+        case .levelUp(let level):
+            return ToastMessage(
+                title: "레벨업",
+                description: "LEVEL \(level) UP!",
+                type: .celebrate
+            )
         case .unlockJobSuccess(let name):
             return ToastMessage(
                 title: "직업 해금 성공",

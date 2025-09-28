@@ -8,7 +8,6 @@
 import Foundation
 import AVFoundation
 
-@Observable
 final class AudioManager: NSObject {
     // 싱글턴
     static let shared = AudioManager()
