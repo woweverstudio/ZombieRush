@@ -30,7 +30,7 @@
 		1FC42C232E578C7E00054B2C /* Exceptions for "ZombieRush" folder in "ZombieRush" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				Info.plist,
+				Resources/Info.plist,
 			);
 			target = 1F70BB832E506D1C0089462F /* ZombieRush */;
 		};
@@ -407,7 +407,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"ZombieRush/Resources/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = ZombieRush/Info.plist;
+				INFOPLIST_FILE = ZombieRush/Resources/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "네모네모빔";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.arcade-games";
@@ -441,7 +441,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"ZombieRush/Resources/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = ZombieRush/Info.plist;
+				INFOPLIST_FILE = ZombieRush/Resources/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "네모네모빔";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.arcade-games";
