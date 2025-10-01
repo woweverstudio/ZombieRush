@@ -15,8 +15,8 @@ struct UpdateSpiritsResponse {
     let spirits: Spirits?
 }
 
-/// 정령 업데이트 UseCase
-/// 정령 정보를 업데이트
+/// 원소 업데이트 UseCase
+/// 원소 정보를 업데이트
 struct UpdateSpiritsUseCase: UseCase {
     let spiritsRepository: SpiritsRepository
 

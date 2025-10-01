@@ -166,7 +166,7 @@ struct LoadingView: View {
         let nickname = playerInfo.nickname
 
 
-        // 사용자 데이터, 스탯 데이터, 정령 데이터, 직업 데이터 동시에 로드
+        // 사용자 데이터, 스탯 데이터, 원소 데이터, 직업 데이터 동시에 로드
         async let userTask: () = loadUserData(playerID: playerID, nickname: nickname)
         async let statsTask: () = loadStatsData(playerID: playerID)
         async let spiritsTask: () = loadSpiritsData(playerID: playerID)

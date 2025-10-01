@@ -50,6 +50,80 @@ struct StatRow: View {
     }
 }
 
+// MARK: - Stat Table Row Component (테이블용)
+struct StatTableRow: View {
+    let icon: String
+    let label: String
+    let baseValue: Int
+    let upgradeValue: Int
+    let color: Color
+    let canUpgrade: Bool
+    let action: () async -> Void
+
+    private var finalValue: Int { baseValue + upgradeValue }
+
+    var body: some View {
+        HStack(spacing: 0) {
+            // 스탯 이름 (아이콘 + 라벨)
+            HStack(spacing: 8) {
+                Image(systemName: icon)
+                    .foregroundColor(color)
+                    .font(.system(size: 14))
+
+                Text(label)
+                    .font(.system(size: 14, weight: .medium, design: .monospaced))
+                    .foregroundColor(.white.opacity(0.9))
+                    .minimumScaleFactor(0.8)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.horizontal, 6)
+
+            // 기본 스텟
+            Text("\(baseValue)")
+                .font(.system(size: 14, design: .monospaced))
+                .foregroundColor(.white.opacity(0.7))
+                .frame(width: 80, alignment: .center)
+
+            // 증가량
+            Text(upgradeValue > 0 ? "+\(upgradeValue)" : "-")
+                .font(.system(size: 14, design: .monospaced))
+                .foregroundColor(upgradeValue > 0 ? color.opacity(0.9) : .white.opacity(0.4))
+                .frame(width: 80, alignment: .center)
+
+            // 최종 스텟
+            Text("\(finalValue)")
+                .font(.system(size: 14, weight: .bold, design: .monospaced))
+                .foregroundColor(Color.dsTextPrimary)
+                .frame(width: 80, alignment: .center)
+
+            // 업그레이드 버튼
+            Button(action: {
+                Task { await action() }
+            }) {
+                Image(systemName: "arrow.up")
+                    .foregroundColor(canUpgrade ? color.opacity(0.6) : Color.gray.opacity(0.3))
+                    .font(.system(size: 14, weight: .bold))
+                    .frame(width: 60, height: 24)
+                    .background(
+                        RoundedRectangle(cornerRadius: 4)
+                            .fill(canUpgrade ? color.opacity(0.1) : Color.gray.opacity(0.1))
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 4)
+                                    .stroke(canUpgrade ? color.opacity(0.3) : Color.gray.opacity(0.2), lineWidth: 0.5)
+                            )
+                    )
+            }
+            .frame(width: 80)
+            .disabled(!canUpgrade)
+        }
+        .padding(8)
+        .background(
+            Rectangle()
+                .fill(Color.white.opacity(0.02))
+        )
+    }
+}
+
 // MARK: - Mini Stat Card Component
 struct StatMiniCard: View {
     let icon: String
@@ -65,7 +139,7 @@ struct StatMiniCard: View {
                 .scaledToFit()
                 .frame(width: 12, height: 12)
                 .foregroundColor(color)
-                
+
 
             // 라벨
             Text(label)

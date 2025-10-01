@@ -14,8 +14,8 @@ struct RefreshSpiritsResponse {
     let spirits: Spirits?
 }
 
-/// 정령 데이터 새로고침 UseCase
-/// 최신 정령 정보를 가져옴
+/// 원소 데이터 새로고침 UseCase
+/// 최신 원소 정보를 가져옴
 struct RefreshSpiritsUseCase: UseCase {
     let spiritsRepository: SpiritsRepository
 

@@ -166,7 +166,7 @@
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "정령"
+            "value" : "원소"
           }
         }
       }
@@ -200,7 +200,7 @@
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "어둠의 힘을 사용하는 신비한 정령"
+            "value" : "어둠의 힘을 사용하는 신비한 원소"
           }
         }
       }
@@ -234,7 +234,7 @@
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "화염 속성 공격에 특화된 정령"
+            "value" : "화염 속성 공격에 특화된 원소"
           }
         }
       }
@@ -268,7 +268,7 @@
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "빙결 효과를 가진 냉기 정령"
+            "value" : "빙결 효과를 가진 냉기 원소"
           }
         }
       }
@@ -302,7 +302,7 @@
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "빠른 전격 공격을 하는 번개 정령"
+            "value" : "빠른 전격 공격을 하는 번개 원소"
           }
         }
       }
@@ -330,7 +330,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Increases attack speed for faster attacks"
+            "value" : "Attack Speed"
           }
         },
         "ko" : {
@@ -353,18 +353,18 @@
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "공격 속도 증가"
+            "value" : "공격속도"
           }
         }
       }
     },
-    "stat_energy_recovery_description" : {
-      "comment" : "Energy recovery stat description",
+    "stat_energy_description" : {
+      "comment" : "Energy stat description",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Recovers energy over time"
+            "value" : "Energy"
           }
         },
         "ko" : {
@@ -375,30 +375,30 @@
         }
       }
     },
-    "stat_energy_recovery_name" : {
-      "comment" : "Energy recovery stat display name",
+    "stat_energy_name" : {
+      "comment" : "Energy stat display name",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Energy Recovery"
+            "value" : "Energy"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "에너지 회복 증가"
+            "value" : "에너지"
           }
         }
       }
     },
-    "stat_hp_recovery_description" : {
-      "comment" : "HP recovery stat description",
+    "stat_hp_description" : {
+      "comment" : "HP stat description",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Recovers HP over time"
+            "value" : "HP"
           }
         },
         "ko" : {
@@ -409,19 +409,19 @@
         }
       }
     },
-    "stat_hp_recovery_name" : {
-      "comment" : "HP recovery stat display name",
+    "stat_hp_name" : {
+      "comment" : "HP stat display name",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "HP Recovery"
+            "value" : "HP"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "HP 회복 증가"
+            "value" : "체력"
           }
         }
       }
@@ -432,7 +432,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Increases character movement speed"
+            "value" : "Move Speed"
           }
         },
         "ko" : {
@@ -455,41 +455,7 @@
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "이동 속도 증가"
-          }
-        }
-      }
-    },
-    "stat_totem_count_description" : {
-      "comment" : "Totem count stat description",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Increases the maximum number of totems that can be placed on the field"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "필드에 배치할 수 있는 토템의 최대 개수를 늘립니다"
-          }
-        }
-      }
-    },
-    "stat_totem_count_name" : {
-      "comment" : "Totem count stat display name",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Totem Count"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "토템 개수"
+            "value" : "이동속도"
           }
         }
       }
@@ -506,7 +472,7 @@
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "일정 시간 동안 네모구출, 정령 발견 능력이 향상됩니다"
+            "value" : "일정 시간 동안 네모구출, 원소 발견 능력이 향상됩니다"
           }
         }
       }
@@ -540,7 +506,7 @@
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "현재 %@ 정령 수: %d개, 현재 레벨: %dLv"
+            "value" : "현재 %@ 원소 수: %d개, 현재 레벨: %dLv"
           }
         }
       }
@@ -744,7 +710,7 @@
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "새로운 정령을 획득했습니다"
+            "value" : "새로운 원소를 획득했습니다"
           }
         }
       }
@@ -761,7 +727,7 @@
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ 정령 획득"
+            "value" : "%@ 원소 획득"
           }
         }
       }

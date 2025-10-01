@@ -4,12 +4,15 @@
     "" : {
 
     },
-    "%@ 정령 %lld개, Lv.%lld 필요" : {
+    "-" : {
+
+    },
+    "%@ 원소 %lld개, Lv.%lld 필요" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "%1$@ 정령 %2$lld개, Lv.%3$lld 필요"
+            "value" : "%1$@ 원소 %2$lld개, Lv.%3$lld 필요"
           }
         }
       }
@@ -29,6 +32,9 @@
           }
         }
       }
+    },
+    "+%lld" : {
+
     },
     "APP_TITLE" : {
       "comment" : "App display name for notifications",

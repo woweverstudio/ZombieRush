@@ -9,7 +9,7 @@ import Foundation
 
 /// Supabase jobs 테이블의 직업 모델
 struct Jobs: Codable, Identifiable {
-    let playerId: String   // Game Center playerID (foreign key to users)
+    let playerId: String   // Game Center gamePlayerID (계정별 고유 식별자, foreign key to users)
     var novice: Bool      // 초보자
     var fireMage: Bool    // 불 마법사
     var iceMage: Bool     // 얼음 마법사
@@ -69,7 +69,7 @@ struct Jobs: Codable, Identifiable {
 
     /// 현재 선택된 직업의 스탯
     var currentJobStats: JobStats {
-        return JobStats.getStats(for: selectedJob)
+        return JobStats.getStats(for: selectedJob.rawValue)
     }
 
     /// 현재 직업의 체력 스탯
@@ -84,17 +84,31 @@ struct Jobs: Codable, Identifiable {
 
     /// 현재 직업의 이동속도 스탯
     var move: Int {
-        currentJobStats.move
+        currentJobStats.moveSpeed
     }
 
     /// 현재 직업의 공격속도 스탯
     var attackSpeed: Int {
         currentJobStats.attackSpeed
     }
+
+    /// 특정 StatType의 기본값을 반환
+    func baseValue(for statType: StatType) -> Int {
+        switch statType {
+        case .hp:
+            return hp
+        case .moveSpeed:
+            return move
+        case .energy:
+            return energy
+        case .attackSpeed:
+            return attackSpeed
+        }
+    }
 }
 
 /// 직업 타입 열거형
-enum JobType: String, CaseIterable {
+enum JobType: String, CaseIterable, Hashable {
     case novice = "novice"
     case fireMage = "fire_mage"
     case iceMage = "ice_mage"
@@ -102,13 +116,13 @@ enum JobType: String, CaseIterable {
     case darkMage = "dark_mage"
 
 
-    var iconName: String {
+    var imageName: String {
         switch self {
-        case .novice: return "person.fill"
-        case .fireMage: return "flame.fill"
-        case .iceMage: return "snowflake"
-        case .lightningMage: return "bolt.fill"
-        case .darkMage: return "moon.fill"
+        case .novice: return "fire_mage"
+        case .fireMage: return "fire_mage"
+        case .iceMage: return "lightning_mage"
+        case .lightningMage: return "lightning_mage"
+        case .darkMage: return "lightning_mage"
         }
     }
 }

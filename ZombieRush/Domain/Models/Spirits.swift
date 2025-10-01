@@ -7,13 +7,13 @@
 
 import Foundation
 
-/// Supabase spirits 테이블의 정령 모델
+/// Supabase spirits 테이블의 원소 모델
 struct Spirits: Codable, Identifiable {
-    let playerId: String   // Game Center playerID (foreign key to users)
-    var fire: Int         // 불 속성 정령
-    var ice: Int          // 얼음 속성 정령
-    var lightning: Int    // 번개 속성 정령
-    var dark: Int         // 어둠 속성 정령
+    let playerId: String   // Game Center gamePlayerID (계정별 고유 식별자, foreign key to users)
+    var fire: Int         // 불 속성 원소
+    var ice: Int          // 얼음 속성 원소
+    var lightning: Int    // 번개 속성 원소
+    var dark: Int         // 어둠 속성 원소
 
     var id: String { playerId } // Identifiable 프로토콜 준수
 
@@ -33,12 +33,12 @@ struct Spirits: Codable, Identifiable {
         self.dark = dark
     }
 
-    /// 기본 정령 생성
+    /// 기본 원소 생성
     static func defaultSpirits(for playerId: String) -> Spirits {
         return Spirits(playerId: playerId)
     }
 
-    /// 총 정령 개수 계산
+    /// 총 원소 개수 계산
     var totalCount: Int {
         return fire + ice + lightning + dark
     }

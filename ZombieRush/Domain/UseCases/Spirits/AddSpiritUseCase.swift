@@ -17,19 +17,19 @@ struct AddSpiritResponse {
     let spirits: Spirits?
 }
 
-/// 정령 추가 UseCase
-/// 특정 정령을 추가
+/// 원소 추가 UseCase
+/// 특정 원소를 추가
 struct AddSpiritUseCase: UseCase {
     let spiritsRepository: SpiritsRepository
 
     func execute(_ request: AddSpiritRequest) async -> AddSpiritResponse {
-        // 현재 정령 정보 사용 (Repository의 currentSpirits)
+        // 현재 원소 정보 사용 (Repository의 currentSpirits)
         guard let currentSpirits = await spiritsRepository.currentSpirits else {
             ErrorManager.shared.report(.dataNotFound)
             return AddSpiritResponse(success: false, spirits: nil)
         }
 
-        // 정령 수량 변경
+        // 원소 수량 변경
         var updatedSpirits = currentSpirits
         switch request.spiritType {
         case .fire:

@@ -11,9 +11,10 @@ import SwiftUI
 
 /// Supabase를 사용한 JobsRepository 구현체
 @MainActor
-class SupabaseJobsRepository: ObservableObject, JobsRepository {
+final class SupabaseJobsRepository: ObservableObject, JobsRepository {
     // Observable properties for View observation
     @Published var currentJobs: Jobs?
+    @Published var selectedJob: JobType = .novice
 
     private let supabase: SupabaseClient
 
@@ -35,6 +36,7 @@ class SupabaseJobsRepository: ObservableObject, JobsRepository {
 
         let job = jobs.first
         currentJobs = job
+        selectedJob = job?.selectedJobType ?? .novice
         return job
     }
 

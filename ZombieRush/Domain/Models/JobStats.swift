@@ -19,19 +19,19 @@ struct JobStats {
     let jobKey: String    // 직업 키
     let hp: Int          // 체력
     let energy: Int      // 에너지
-    let move: Int        // 이동 속도
+    let moveSpeed: Int        // 이동 속도
     let attackSpeed: Int // 공격 속도
     let unlockRequirement: JobUnlockRequirement? // 해금 조건
 
-    private static let defaults = JobStats(jobKey: "novice", hp: 100, energy: 100, move: 10, attackSpeed: 10, unlockRequirement: nil)
+    private static let defaults = JobStats(jobKey: "novice", hp: 100, energy: 100, moveSpeed: 10, attackSpeed: 10, unlockRequirement: nil)
     
     // 정적 데이터 딕셔너리
     private static let statsData: [String: JobStats] = [
-        "novice": JobStats(jobKey: "novice", hp: 100, energy: 100, move: 10, attackSpeed: 10, unlockRequirement: nil),
-        "fire_mage": JobStats(jobKey: "fire_mage", hp: 120, energy: 110, move: 10, attackSpeed: 10, unlockRequirement: JobUnlockRequirement(spiritType: "fire", count: 15, requiredLevel: 10)),
-        "ice_mage": JobStats(jobKey: "ice_mage", hp: 90, energy: 80, move: 10, attackSpeed: 10, unlockRequirement: JobUnlockRequirement(spiritType: "ice", count: 15, requiredLevel: 10)),
-        "lightning_mage": JobStats(jobKey: "lightning_mage", hp: 100, energy: 110, move: 14, attackSpeed: 10, unlockRequirement: JobUnlockRequirement(spiritType: "lightning", count: 20, requiredLevel: 10)),
-        "dark_mage": JobStats(jobKey: "dark_mage", hp: 85, energy: 115, move: 10, attackSpeed: 14, unlockRequirement: JobUnlockRequirement(spiritType: "dark", count: 25, requiredLevel: 20))
+        "novice": JobStats(jobKey: "novice", hp: 100, energy: 100, moveSpeed: 10, attackSpeed: 10, unlockRequirement: nil),
+        "fire_mage": JobStats(jobKey: "fire_mage", hp: 120, energy: 110, moveSpeed: 10, attackSpeed: 10, unlockRequirement: JobUnlockRequirement(spiritType: "fire", count: 15, requiredLevel: 10)),
+        "ice_mage": JobStats(jobKey: "ice_mage", hp: 90, energy: 80, moveSpeed: 10, attackSpeed: 10, unlockRequirement: JobUnlockRequirement(spiritType: "ice", count: 15, requiredLevel: 10)),
+        "lightning_mage": JobStats(jobKey: "lightning_mage", hp: 100, energy: 110, moveSpeed: 14, attackSpeed: 10, unlockRequirement: JobUnlockRequirement(spiritType: "lightning", count: 20, requiredLevel: 10)),
+        "dark_mage": JobStats(jobKey: "dark_mage", hp: 85, energy: 115, moveSpeed: 10, attackSpeed: 14, unlockRequirement: JobUnlockRequirement(spiritType: "dark", count: 25, requiredLevel: 20))
     ]
 
     /// 모든 스탯 데이터 (배열 형태로 반환)
@@ -39,8 +39,27 @@ struct JobStats {
         return Array(statsData.values)
     }
     
-    /// 특정 jobKey의 스탯을 가져옴
     static func getStats(for jobKey: String) -> JobStats {
-        return statsData[jobKey, default: defaults]
+        return statsData[jobKey, default: .defaults]
+    }
+    
+    /// 특정 jobKey의 스탯을 가져옴
+    static func getStat(job: JobType, stat: StatType) -> Int {
+        return statsData[job.rawValue, default: .defaults][stat]
+    }
+}
+
+// MARK: - StatType Subscript Extension
+extension JobStats {
+    /// StatType으로 스탯 값에 접근하기 위한 subscript
+    subscript(statType: StatType) -> Int {
+        get {
+            switch statType {
+            case .hp: return hp
+            case .energy: return energy
+            case .moveSpeed: return moveSpeed
+            case .attackSpeed: return attackSpeed
+            }
+        }
     }
 }

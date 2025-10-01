@@ -22,10 +22,11 @@ struct JobInfoCard: View {
                 VStack(spacing: 8) {
                     ZStack {
                         // 직업 아이콘
-                        Image(systemName: jobType.iconName)
-                            .font(.system(size: 24, weight: .bold))
-                            .foregroundColor(isUnlocked ? .white : .gray.opacity(0.5))
-                            .frame(width: 50, height: 50)
+                        Image(jobType.imageName)
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 60)
+                            
 
                         // 잠금 오버레이
                         if !isUnlocked {
@@ -67,7 +68,7 @@ struct JobDetailPanel: View {
         VStack(spacing: 12) {
             // 상단: 직업 이름 + 아이콘
             HStack(spacing: 12) {
-                Image(systemName: jobType.iconName)
+                Image(jobType.imageName)
                     .resizable()
                     .scaledToFit()
                     .foregroundColor(Color.cyan)
@@ -92,7 +93,7 @@ struct JobDetailPanel: View {
 
                 // 우측 그룹: 이동속도, 공격속도
                 VStack(alignment: .leading, spacing: 4) {
-                    StatRow(icon: "shoeprints.fill", label: JobInfoCard.moveSpeedLabel, value: "\(stats.move)", color: .green)
+                    StatRow(icon: "shoeprints.fill", label: JobInfoCard.moveSpeedLabel, value: "\(stats.moveSpeed)", color: .green)
                     StatRow(icon: "bolt.horizontal.fill", label: JobInfoCard.attackSpeedLabel, value: "\(stats.attackSpeed)", color: .yellow)
                 }
             }
@@ -104,7 +105,7 @@ struct JobDetailPanel: View {
                 if let requirement = stats.unlockRequirement {
                     // 해금 조건 표시 (간단하게 표시)
                     VStack(spacing: 6) {
-                        Text("\(requirement.spiritType) 정령 \(requirement.count)개, Lv.\(requirement.requiredLevel) 필요")
+                        Text("\(requirement.spiritType) 원소 \(requirement.count)개, Lv.\(requirement.requiredLevel) 필요")
                             .font(.system(size: 12, design: .monospaced))
                             .foregroundColor(.white.opacity(0.8))
                             .frame(maxWidth: .infinity, alignment: .center)

@@ -8,30 +8,36 @@ extension JobCard {
 struct JobCard: View {
     @EnvironmentObject var jobsRepository: SupabaseJobsRepository
     @EnvironmentObject var useCaseFactory: UseCaseFactory
-
-    @State private var selectedJob: String = "novice"
+    
+    @State private var selectedJob: JobType = .novice
 
     // 이전/다음 탭으로 이동 (해금된 직업만)
     private func previousTab() {
         guard let jobs = jobsRepository.currentJobs else { return }
+        
+        let unlockedJobs = jobs.unlockedJobs
+
         withAnimation {
-            let unlockedJobs = jobs.unlockedJobs
-            if let currentIndex = unlockedJobs.firstIndex(where: { $0.rawValue == selectedJob }) {
+            if let currentIndex = unlockedJobs.firstIndex(where: { $0 == selectedJob }) {
                 let prevIndex = currentIndex > 0 ? currentIndex - 1 : unlockedJobs.count - 1
                 let newJobType = unlockedJobs[prevIndex]
-                selectedJob = newJobType.rawValue
+                
+                selectedJob = newJobType
             }
         }
     }
 
     private func nextTab() {
         guard let jobs = jobsRepository.currentJobs else { return }
+        
+        let unlockedJobs = jobs.unlockedJobs
+        
         withAnimation {
-            let unlockedJobs = jobs.unlockedJobs
-            if let currentIndex = unlockedJobs.firstIndex(where: { $0.rawValue == selectedJob }) {
+            if let currentIndex = unlockedJobs.firstIndex(where: { $0 == selectedJob }) {
                 let nextIndex = currentIndex < unlockedJobs.count - 1 ? currentIndex + 1 : 0
                 let newJobType = unlockedJobs[nextIndex]
-                selectedJob = newJobType.rawValue
+                
+                selectedJob = newJobType
             }
         }
     }
@@ -40,35 +46,15 @@ struct JobCard: View {
         ZStack {
             CardBackground()
 
-            VStack {
-                // 진척 인디케이터
-                HStack(spacing: 4) {
-                    Image(systemName: "star.fill")
-                        .foregroundColor(Color.dsCoin)
-                        .font(.system(size: 10))
-
-                    if let jobs = jobsRepository.currentJobs {
-                        Text(verbatim: String(format: JobCard.jobsUnlockedFormat, jobs.unlockedJobs.count, JobType.allCases.count))
-                            .font(.system(size: 10, weight: .medium, design: .monospaced))
-                            .foregroundColor(.white.opacity(0.8))
-                    } else {
-                        Text(verbatim: String(format: JobCard.jobsUnlockedFormat, 0, JobType.allCases.count))
-                            .font(.system(size: 10, weight: .medium, design: .monospaced))
-                            .foregroundColor(.white.opacity(0.8))
+            // TabView로 해금된 job 표시 (indicator 제거)
+            if let jobs = jobsRepository.currentJobs {
+                TabView(selection: $selectedJob) {
+                    ForEach(jobs.unlockedJobs, id: \.rawValue) { jobType in
+                        JobDetailView(jobType: jobType)
+                            .tag(jobType)
                     }
                 }
-                .padding(.top)
-
-                // TabView로 해금된 job 표시 (indicator 제거)
-                if let jobs = jobsRepository.currentJobs {
-                    TabView(selection: $selectedJob) {
-                        ForEach(jobs.unlockedJobs, id: \.self) { jobType in
-                            JobDetailView(jobType: jobType)
-                                .tag(jobType.rawValue)
-                        }
-                    }
-                    .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
-                }
+                .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
             }
 
             // 네비게이션 버튼들 (해금된 직업이 2개 이상일 때만 표시)
@@ -95,11 +81,11 @@ struct JobCard: View {
                 }
             }
         }
+        .onChange(of: selectedJob){ oldValue, newValue in
+            jobsRepository.selectedJob = newValue
+        }
         .onAppear {
-            // 초기 선택된 job 설정
-            if let jobs = jobsRepository.currentJobs {
-                selectedJob = jobs.selectedJob
-            }
+            selectedJob = jobsRepository.selectedJob
         }
     }
 }
@@ -109,19 +95,24 @@ struct JobDetailView: View {
     let jobType: JobType
 
     var body: some View {
-        VStack(spacing: 8) {
-            Image("sample")
+        ZStack(alignment: .topLeading) {
+            Image(jobType.imageName)
                 .resizable()
                 .aspectRatio(contentMode: .fit)
-                .frame(maxWidth: .infinity)
+                .frame(maxWidth: 500)
 
 
             // Job 이름 (간단하게 표시)
             Text(verbatim: jobType.localizedDisplayName)
                 .font(.system(size: 12, weight: .medium, design: .monospaced))
                 .foregroundColor(Color.dsTextPrimary)
+                .padding(8)
+                .background(
+                    RoundedRectangle(cornerRadius: 8)
+                        .fill(Color.dsCard)
+                )
                 .multilineTextAlignment(.center)
         }
-        .padding(.vertical, 8)
+        .padding(8)
     }
 }

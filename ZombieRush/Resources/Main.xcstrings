@@ -1,6 +1,23 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "attack_speed_label" : {
+      "comment" : "Attack speed stat label",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Attack Speed"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "공격속도"
+          }
+        }
+      }
+    },
     "dash_placeholder" : {
       "comment" : "Dash placeholder",
       "localizations" : {
@@ -18,53 +35,70 @@
         }
       }
     },
-    "ultimate_skill_label" : {
-      "comment" : "Ultimate skill label",
+    "energy_stat_label" : {
+      "comment" : "Energy stat label",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ultimate Skill"
+            "value" : "Energy"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "궁극기"
+            "value" : "에너지 회복"
           }
         }
       }
     },
-    "ultimate_skill_placeholder" : {
-      "comment" : "Ultimate skill placeholder",
+    "hp_label" : {
+      "comment" : "HP stat label",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ultimate Skill Name"
+            "value" : "HP"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "궁극기 이름 들어감"
+            "value" : "HP 회복"
           }
         }
       }
     },
-    "player_title" : {
-      "comment" : "Player title",
+    "jobs_unlocked_format" : {
+      "comment" : "Jobs unlocked format",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Guardian of Nemo Kingdom"
+            "value" : "Jobs %d/%d Unlocked"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "네모나라의 수호자"
+            "value" : "직업 %d/%d 해금됨"
+          }
+        }
+      }
+    },
+    "move_speed_label" : {
+      "comment" : "Move speed stat label",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Move Speed"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이동속도"
           }
         }
       }
@@ -103,6 +137,23 @@
         }
       }
     },
+    "player_title" : {
+      "comment" : "Player title",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Guardian of Nemo Kingdom"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "네모나라의 수호자"
+          }
+        }
+      }
+    },
     "remaining_points" : {
       "comment" : "Remaining points format",
       "localizations" : {
@@ -120,104 +171,123 @@
         }
       }
     },
-    "hp_recovery_label" : {
-      "comment" : "HP recovery stat label",
+    "ultimate_skill_label" : {
+      "comment" : "Ultimate skill label",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "HP Recovery"
+            "value" : "Ultimate Skill"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "HP 회복"
+            "value" : "궁극기"
           }
         }
       }
     },
-    "move_speed_label" : {
-      "comment" : "Move speed stat label",
+    "ultimate_skill_placeholder" : {
+      "comment" : "Ultimate skill placeholder",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Move Speed"
+            "value" : "Ultimate Skill Name"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "이동속도"
+            "value" : "궁극기 이름 들어감"
           }
         }
       }
     },
-    "energy_recovery_label" : {
-      "comment" : "Energy recovery stat label",
+    "ability_header" : {
+      "comment" : "Ability header",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Energy Recovery"
+            "value" : "Ability"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "에너지 회복"
+            "value" : "능력"
           }
         }
       }
     },
-    "attack_speed_label" : {
-      "comment" : "Attack speed stat label",
+    "base_amount_header" : {
+      "comment" : "Base amount header",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Attack Speed"
+            "value" : "Base"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "공격속도"
+            "value" : "기본량"
           }
         }
       }
     },
-    "totem_label" : {
-      "comment" : "Totem stat label",
+    "increase_amount_header" : {
+      "comment" : "Increase amount header",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Totem"
+            "value" : "Increase"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "토템"
+            "value" : "증가량"
           }
         }
       }
     },
-    "jobs_unlocked_format" : {
-      "comment" : "Jobs unlocked format",
+    "final_header" : {
+      "comment" : "Final header",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Jobs %d/%d Unlocked"
+            "value" : "Final"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "직업 %d/%d 해금됨"
+            "value" : "최종"
+          }
+        }
+      }
+    },
+    "upgrade_header" : {
+      "comment" : "Upgrade header",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Upgrade"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "업그레이드"
           }
         }
       }

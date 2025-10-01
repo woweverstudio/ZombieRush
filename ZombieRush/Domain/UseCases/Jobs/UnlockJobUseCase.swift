@@ -17,7 +17,7 @@ struct UnlockJobResponse {
 }
 
 /// 직업 해금 UseCase
-/// 정령을 소비하여 직업을 해금
+/// 원소를 소비하여 직업을 해금
 struct UnlockJobUseCase: UseCase {
     let jobsRepository: JobsRepository
     let spiritsRepository: SpiritsRepository
@@ -31,18 +31,18 @@ struct UnlockJobUseCase: UseCase {
             return await unlockJobDirectly(jobType: request.jobType)
         }
 
-        // 정령 개수 및 레벨 확인
+        // 원소 개수 및 레벨 확인
         guard await canUnlockJob(requirement) else {
             return UnlockJobResponse(success: false, jobs: nil)
         }
 
-        // 정령 소비 및 직업 해금
+        // 원소 소비 및 직업 해금
         return await unlockJobWithSpirits(requirement, jobType: request.jobType)
     }
 
     /// 해금 조건 확인
     private func canUnlockJob(_ requirement: JobUnlockRequirement) async -> Bool {
-        // 정령 개수 확인
+        // 원소 개수 확인
         guard let currentSpirits = await spiritsRepository.currentSpirits else {
             ErrorManager.shared.report(.dataNotFound)
             return false
@@ -65,9 +65,9 @@ struct UnlockJobUseCase: UseCase {
         }
     }
 
-    /// 정령 소비 및 직업 해금
+    /// 원소 소비 및 직업 해금
     private func unlockJobWithSpirits(_ requirement: JobUnlockRequirement, jobType: JobType) async -> UnlockJobResponse {
-        // 정령 개수 차감
+        // 원소 개수 차감
         guard let currentSpirits = await spiritsRepository.currentSpirits else {
             ErrorManager.shared.report(.dataNotFound)
             return UnlockJobResponse(success: false, jobs: nil)
@@ -139,7 +139,7 @@ struct UnlockJobUseCase: UseCase {
         
     }
 
-    /// 정령 개수 추출 헬퍼
+    /// 원소 개수 추출 헬퍼
     private func getSpiritCount(for spiritType: String, from spirits: Spirits) -> Int {
         switch spiritType {
         case "fire": return spirits.fire

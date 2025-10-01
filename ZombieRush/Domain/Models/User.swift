@@ -9,7 +9,7 @@ import Foundation
 
 /// Supabase users 테이블의 사용자 모델
 struct User: Codable, Identifiable {
-    let playerId: String   // Game Center playerID (primary key)
+    let playerId: String   // Game Center gamePlayerID (계정별 고유 식별자, primary key)
     var nickname: String   // Game Center displayName
     var exp: Int          // 경험치 (레벨은 경험치로부터 계산)
     var nemoFruit: Int    // 네모 과일 (코인)

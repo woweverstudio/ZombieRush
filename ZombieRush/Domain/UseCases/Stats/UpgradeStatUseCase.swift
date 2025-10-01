@@ -30,18 +30,7 @@ struct UpgradeStatUseCase: UseCase {
 
         // 스텟 업그레이드
         var updatedStats = currentStats
-        switch request.statType {
-        case .hpRecovery:
-            updatedStats.hpRecovery += 1
-        case .moveSpeed:
-            updatedStats.moveSpeed += 1
-        case .energyRecovery:
-            updatedStats.energyRecovery += 1
-        case .attackSpeed:
-            updatedStats.attackSpeed += 1
-        case .totemCount:
-            updatedStats.totemCount += 1
-        }
+        updatedStats[request.statType] += 1
         
         do {
             let savedStats = try await statsRepository.updateStats(updatedStats)

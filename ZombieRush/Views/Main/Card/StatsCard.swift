@@ -2,11 +2,14 @@ import SwiftUI
 
 extension StatsCard {
     static let remainingPointsFormat = NSLocalizedString("remaining_points", tableName: "Main", comment: "Remaining points format")
-    static let hpRecoveryLabel = NSLocalizedString("hp_recovery_label", tableName: "Main", comment: "HP recovery stat label")
+    static let hpLabel = NSLocalizedString("hp_label", tableName: "Main", comment: "HP stat label")
     static let moveSpeedLabel = NSLocalizedString("move_speed_label", tableName: "Main", comment: "Move speed stat label")
-    static let energyRecoveryLabel = NSLocalizedString("energy_recovery_label", tableName: "Main", comment: "Energy recovery stat label")
+    static let energyStatLabel = NSLocalizedString("energy_stat_label", tableName: "Main", comment: "Energy stat label")
     static let attackSpeedLabel = NSLocalizedString("attack_speed_label", tableName: "Main", comment: "Attack speed stat label")
-    static let totemLabel = NSLocalizedString("totem_label", tableName: "Main", comment: "Totem stat label")
+    
+    // Shared keys used in PlayerInfoCard
+    static let healthLabel = NSLocalizedString("health_label", tableName: "MyInfo", comment: "Health label")
+    static let energyInfoLabel = NSLocalizedString("energy_label", tableName: "MyInfo", comment: "Energy label")
 }
 
 // MARK: - Stats Card
@@ -14,82 +17,91 @@ struct StatsCard: View {
     @Environment(AppRouter.self) var router
     @EnvironmentObject var userRepository: SupabaseUserRepository
     @EnvironmentObject var statsRepository: SupabaseStatsRepository
+    @EnvironmentObject var jobsRepository: SupabaseJobsRepository
     @EnvironmentObject var useCaseFactory: UseCaseFactory
+
+    @State private var isUpgrading = false
+
+    /// 스탯 업그레이드
+    private func upgradeStat(_ statType: StatType) async {
+        guard !isUpgrading else { return }
+        guard let user = userRepository.currentUser, user.remainingPoints > 0 else {
+            ToastManager.shared.show(.lackOfRemaingStatPoints)
+            return
+        }
+
+        isUpgrading = true
+        AudioManager.shared.playButtonSound()
+        HapticManager.shared.playButtonHaptic()
+
+        let request = UpgradeStatRequest(statType: statType)
+        let response = await useCaseFactory.upgradeStat.execute(request)
+
+        if response.success {
+            // 포인트 차감 반영
+        }
+
+        isUpgrading = false
+    }
     
+    /// 스텟 테이블
     var body: some View {
-        Button(action: {
-            AudioManager.shared.playButtonSound()
-            HapticManager.shared.playButtonHaptic()
-            
-            router.navigate(to: .myInfo(category: .stats))
-        }) {
-            ZStack {
-                CardBackground()
-                
-                VStack(spacing: 8) {
-                    // 타이틀
-                    // 남은 포인트 표시
-                    HStack(spacing: 4) {
-                        Image(systemName: "star.fill")
-                            .foregroundColor(Color.dsCoin)
-                            .font(.system(size: 10))
+        VStack(spacing: 0) {
+            // 테이블 헤더
+            HStack(spacing: 0) {
+                Text(NSLocalizedString("ability_header", tableName: "Main", comment: "Ability header"))
+                    .font(.system(size: 14, weight: .bold, design: .monospaced))
+                    .foregroundColor(.white.opacity(0.8))
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.horizontal, 6)
 
-                        Text(verbatim: String(format: StatsCard.remainingPointsFormat, userRepository.currentUser?.remainingPoints ?? 0))
-                            .font(.system(size: 10, weight: .medium, design: .monospaced))
-                            .foregroundColor(.white.opacity(0.8))
-                    }
-                    
-                    // 스텟 그리드 (3x2)
-                    LazyVGrid(columns: [
-                        GridItem(.flexible(), spacing: 8),
-                        GridItem(.flexible(), spacing: 8),
-                        GridItem(.flexible(), spacing: 8)
-                    ], spacing: 8) {
-                        // 첫 번째 행 (3개)
-                        StatMiniCard(
-                            icon: "heart.fill",
-                            label: StatsCard.hpRecoveryLabel,
-                            value: statsRepository.currentStats?.hpRecovery ?? 0,
-                            color: .red
-                        )
+                Text(NSLocalizedString("base_amount_header", tableName: "Main", comment: "Base amount header"))
+                    .font(.system(size: 14, weight: .bold, design: .monospaced))
+                    .foregroundColor(.white.opacity(0.8))
+                    .frame(width: 80, alignment: .center)
 
-                        StatMiniCard(
-                            icon: "figure.run",
-                            label: StatsCard.moveSpeedLabel,
-                            value: statsRepository.currentStats?.moveSpeed ?? 0,
-                            color: .green
-                        )
+                Text(NSLocalizedString("increase_amount_header", tableName: "Main", comment: "Increase amount header"))
+                    .font(.system(size: 14, weight: .bold, design: .monospaced))
+                    .foregroundColor(.white.opacity(0.8))
+                    .frame(width: 80, alignment: .center)
 
-                        StatMiniCard(
-                            icon: "bolt.fill",
-                            label: StatsCard.energyRecoveryLabel,
-                            value: statsRepository.currentStats?.energyRecovery ?? 0,
-                            color: .blue
-                        )
+                Text(NSLocalizedString("final_header", tableName: "Main", comment: "Final header"))
+                    .font(.system(size: 14, weight: .bold, design: .monospaced))
+                    .foregroundColor(.white.opacity(0.8))
+                    .frame(width: 80, alignment: .center)
 
-                        // 두 번째 행 (2개)
-                        StatMiniCard(
-                            icon: "target",
-                            label: StatsCard.attackSpeedLabel,
-                            value: statsRepository.currentStats?.attackSpeed ?? 0,
-                            color: .yellow
-                        )
+                Text(NSLocalizedString("upgrade_header", tableName: "Main", comment: "Upgrade header"))
+                    .font(.system(size: 14, weight: .bold, design: .monospaced))
+                    .foregroundColor(.white.opacity(0.8))
+                    .frame(width: 80, alignment: .center)
+            }
+            .padding(8)
 
-                        StatMiniCard(
-                            icon: "building.columns",
-                            label: StatsCard.totemLabel,
-                            value: statsRepository.currentStats?.totemCount ?? 0,
-                            color: .orange
-                        )
-
-                        // 네모의 응원 상태
-                        CheerBuffCard(isActive: userRepository.currentUser?.isCheerBuffActive ?? false)
+            ForEach(StatType.allCases, id: \.self) { statType in
+                let selectedJob = jobsRepository.selectedJob
+                if let currentStats = statsRepository.currentStats {
+                    StatTableRow(
+                        icon: statType.iconName,
+                        label: statType.localizedDisplayName,
+                        baseValue: JobStats.getStat(job: selectedJob, stat: statType),
+                        upgradeValue: currentStats[statType],
+                        color: statType.color,
+                        canUpgrade: (userRepository.currentUser?.remainingPoints ?? 0) > 0 && !isUpgrading
+                    ) {
+                        await upgradeStat(statType)
                     }
                 }
-                .padding()
             }
-            .buttonStyle(.plain) // 버튼 스타일 제거
+            
         }
+        .background(
+            ZStack{
+                CardBackground()
+                RoundedRectangle(cornerRadius: 8)
+                    .fill(Color.black.opacity(0.2))
+                    .padding(1)
+            }
+        )
     }
 }
 

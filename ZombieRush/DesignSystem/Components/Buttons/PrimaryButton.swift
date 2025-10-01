@@ -245,7 +245,7 @@ struct PrimaryButton<TrailingContent: View>: View {
                 print("Upgrade tapped")
             })
 
-            PrimaryButton(title: "정령 얻기", style: .cyan, trailingContent: {
+            PrimaryButton(title: "원소 얻기", style: .cyan, trailingContent: {
                 NemoFruitCost(count: 5)
             }, action: {
                 print("Purchase spirit tapped")

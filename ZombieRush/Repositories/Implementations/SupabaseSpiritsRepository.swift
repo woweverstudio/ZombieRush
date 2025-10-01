@@ -11,7 +11,7 @@ import SwiftUI
 
 /// Supabase를 사용한 SpiritsRepository 구현체
 @MainActor
-class SupabaseSpiritsRepository: ObservableObject, SpiritsRepository {
+final class SupabaseSpiritsRepository: ObservableObject, SpiritsRepository {
     // Observable properties for View observation
     @Published var currentSpirits: Spirits?
 

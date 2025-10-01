@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-/// 정령 타입 열거형
+/// 원소 타입 열거형
 enum SpiritType: String, CaseIterable {
     case fire
     case ice

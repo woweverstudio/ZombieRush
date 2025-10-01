@@ -106,13 +106,7 @@ struct StatDetailPanel: View {
     private func getCurrentStatValue() -> Int {
         guard let stats = statsRepository.currentStats else { return 0 }
 
-        switch statType {
-        case .hpRecovery: return stats.hpRecovery
-        case .moveSpeed: return stats.moveSpeed
-        case .energyRecovery: return stats.energyRecovery
-        case .attackSpeed: return stats.attackSpeed
-        case .totemCount: return stats.totemCount
-        }
+        return stats[statType]
     }
 
 }

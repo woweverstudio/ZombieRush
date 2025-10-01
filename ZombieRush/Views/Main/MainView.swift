@@ -19,20 +19,14 @@ struct MainView: View {
         ZStack {
             // 사이버펑크 배경
             Background()
-
             HStack(spacing: 12) {
-                // 좌측: 플레이어 정보 통합 카드 (JobsStateManager의 스탯 사용)
-                PlayerInfoCard()
-
-                // 우측: 현재 클래스 & 무기 정보 + 메뉴 버튼들
                 VStack(spacing: 12) {
-                    // 현재 직업 정보 (JobsStateManager의 탭 상태 사용)
-                    JobCard()
-
-                    // 스탯 관리 카드
+                    HStack(spacing: 12) {
+                        PlayerInfoCard()
+                        JobCard()
+                    }
                     StatsCard()
                 }
-
                 // 메뉴 패널
                 MainMenuPanel()
             }

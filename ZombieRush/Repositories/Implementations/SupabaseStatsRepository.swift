@@ -11,7 +11,7 @@ import SwiftUI
 
 /// Supabase를 사용한 StatsRepository 구현체
 @MainActor
-class SupabaseStatsRepository: ObservableObject, StatsRepository {
+final class SupabaseStatsRepository: ObservableObject, StatsRepository {
     // Observable properties for View observation
     @Published var currentStats: Stats?
 
@@ -53,11 +53,10 @@ class SupabaseStatsRepository: ObservableObject, StatsRepository {
         let updatedStats: Stats = try await supabase
             .from("stats")
             .update([
-                "hp_recovery": String(stats.hpRecovery),
+                "hp": String(stats.hp),
                 "move_speed": String(stats.moveSpeed),
-                "energy_recovery": String(stats.energyRecovery),
-                "attack_speed": String(stats.attackSpeed),
-                "totem_count": String(stats.totemCount)
+                "energy": String(stats.energy),
+                "attack_speed": String(stats.attackSpeed)
             ])
             .eq("player_id", value: stats.playerId)
             .select("*")

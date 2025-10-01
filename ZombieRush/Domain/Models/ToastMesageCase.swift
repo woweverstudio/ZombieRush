@@ -14,7 +14,7 @@ enum ToastMessageCase {
     case statPointsIncreased(String, Int)   // 스탯 포인트 증가
     case loginSuccess(String)       // 로그인 성공 (닉네임 포함)
     case cheerBuffPurchased         // 네모의 응원 구입
-    case spiritPurchased(String)    // 특정 정령 구입 (이름 포함)
+    case spiritPurchased(String)    // 특정 원소 구입 (이름 포함)
     case lackOfRemaingStatPoints
     case selectJobFailed
 

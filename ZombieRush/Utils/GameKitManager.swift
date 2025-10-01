@@ -12,6 +12,7 @@ final class GameKitManager: NSObject {
     // MARK: - Player Data Structure
     /// Game Center 플레이어 정보 구조체
     struct PlayerInfo {
+        /// Game Center gamePlayerID (계정별로 고유한 ID)
         let playerID: String
         let nickname: String
         
@@ -58,6 +59,7 @@ final class GameKitManager: NSObject {
         }
 
         // 플레이어 기본 정보 가져오기
+        // gamePlayerID는 Game Center 계정별로 고유한 ID (기기 변경 시에도 동일)
         let playerID = localPlayer.gamePlayerID
         let nickname = localPlayer.displayName
 
