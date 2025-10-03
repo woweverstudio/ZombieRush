@@ -12,7 +12,6 @@ import Foundation
 /// 마켓 아이템 타입
 enum MarketItemType {
     case fruitPackage(count: Int, price: Int)
-    case cheerBuff(days: Int, price: Int)
 }
 
 /// 마켓 아이템
@@ -41,35 +40,26 @@ struct MarketItemsManager {
             // 네모열매 패키지
             MarketItem(
                 type: .fruitPackage(count: 20, price: 2000),
-                name: "네모열매 20개",
-                description: "네모열매 20개를 즉시 충전",
+                name: NSLocalizedString("nemo_fruit_20_name", tableName: "Market", comment: "Nemo fruit 20 pack name"),
+                description: NSLocalizedString("nemo_fruit_20_description", tableName: "Market", comment: "Nemo fruit 20 pack description"),
                 iconName: "diamond.fill",
                 price: 2000,
                 currencyType: .won
             ),
             MarketItem(
                 type: .fruitPackage(count: 55, price: 5000),
-                name: "네모열매 55개",
-                description: "네모열매 55개를 즉시 충전 (약 15% 보너스)",
+                name: NSLocalizedString("nemo_fruit_55_name", tableName: "Market", comment: "Nemo fruit 55 pack name"),
+                description: NSLocalizedString("nemo_fruit_55_description", tableName: "Market", comment: "Nemo fruit 55 pack description"),
                 iconName: "diamond.fill",
                 price: 5000,
                 currencyType: .won
             ),
             MarketItem(
                 type: .fruitPackage(count: 110, price: 10000),
-                name: "네모열매 110개",
-                description: "네모열매 110개를 즉시 충전 (약 10% 보너스)",
+                name: NSLocalizedString("nemo_fruit_110_name", tableName: "Market", comment: "Nemo fruit 110 pack name"),
+                description: NSLocalizedString("nemo_fruit_110_description", tableName: "Market", comment: "Nemo fruit 110 pack description"),
                 iconName: "diamond.fill",
                 price: 10000,
-                currencyType: .won
-            ),
-            // 네모의 응원
-            MarketItem(
-                type: .cheerBuff(days: 3, price: 3000),
-                name: "네모의 응원",
-                description: "3일간 네모의 응원을 받습니다",
-                iconName: "star.circle.fill",
-                price: 3000,
                 currencyType: .won
             )
         ]
@@ -81,8 +71,6 @@ struct MarketItemsManager {
         switch item.type {
         case .fruitPackage(count: let count, price: _):
             return .fruitPackage(count: count)
-        case .cheerBuff(days: let days, price: _):
-            return .cheerBuff(days: days)
         }
     }
 }
@@ -90,5 +78,4 @@ struct MarketItemsManager {
 /// 마켓 구매 결과
 enum MarketPurchaseResult {
     case fruitPackage(count: Int)
-    case cheerBuff(days: Int)
 }

@@ -92,12 +92,12 @@ struct SettingRow: View {
     var body: some View {
         HStack {
             Image(systemName: icon)
-                .font(.system(size: 20))
+                .font(.system(size: 16))
                 .foregroundColor(Color.dsTextPrimary)
-                .frame(width: 30)
+                .frame(width: 24)
             
             Text(title)
-                .font(.system(size: 18, weight: .medium))
+                .font(.system(size: 16, weight: .medium))
                 .foregroundColor(Color.dsTextPrimary)
             
             Spacer()

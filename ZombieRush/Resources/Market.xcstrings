@@ -1,6 +1,24 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "cheer_buff_section" : {
+      "comment" : "Cheer buff section",
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nemo's Cheer"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "네모의 응원"
+          }
+        }
+      }
+    },
     "market_title" : {
       "comment" : "Market title",
       "localizations" : {
@@ -18,25 +36,9 @@
         }
       }
     },
-    "purchase_button" : {
-      "comment" : "Purchase button",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Purchase"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "구매"
-          }
-        }
-      }
-    },
     "nemo_fruit_package_section" : {
       "comment" : "Nemo fruit package section",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -52,19 +54,122 @@
         }
       }
     },
-    "cheer_buff_section" : {
-      "comment" : "Cheer buff section",
+    "purchase_button" : {
+      "comment" : "Purchase button",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Nemo's Cheer"
+            "value" : "Purchase"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "네모의 응원"
+            "value" : "구매"
+          }
+        }
+      }
+    },
+    "nemo_fruit_20_name" : {
+      "comment" : "Nemo fruit 20 pack name",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nemo Fruit 20"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "네모열매 20개"
+          }
+        }
+      }
+    },
+    "nemo_fruit_20_description" : {
+      "comment" : "Nemo fruit 20 pack description",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Instantly charge 20 Nemo Fruits"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "네모열매 20개를 즉시 충전"
+          }
+        }
+      }
+    },
+    "nemo_fruit_55_name" : {
+      "comment" : "Nemo fruit 55 pack name",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nemo Fruit 55"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "네모열매 55개"
+          }
+        }
+      }
+    },
+    "nemo_fruit_55_description" : {
+      "comment" : "Nemo fruit 55 pack description",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Instantly charge 55 Nemo Fruits (5 extra)"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "네모열매 55개를 즉시 충전 (5개 추가)"
+          }
+        }
+      }
+    },
+    "nemo_fruit_110_name" : {
+      "comment" : "Nemo fruit 110 pack name",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nemo Fruit 110"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "네모열매 110개"
+          }
+        }
+      }
+    },
+    "nemo_fruit_110_description" : {
+      "comment" : "Nemo fruit 110 pack description",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Instantly charge 110 Nemo Fruits (10 extra)"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "네모열매 110개를 즉시 충전 (10개 추가)"
           }
         }
       }

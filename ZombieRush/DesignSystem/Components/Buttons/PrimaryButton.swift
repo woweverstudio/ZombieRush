@@ -245,12 +245,6 @@ struct PrimaryButton<TrailingContent: View>: View {
                 print("Upgrade tapped")
             })
 
-            PrimaryButton(title: "원소 얻기", style: .cyan, trailingContent: {
-                NemoFruitCost(count: 5)
-            }, action: {
-                print("Purchase spirit tapped")
-            })
-
             PrimaryButton(title: "구매하기", style: .yellow, trailingContent: {
                 HStack(spacing: 4) {
                     Image(systemName: "wonsign.circle.fill")
