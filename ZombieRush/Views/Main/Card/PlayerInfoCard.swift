@@ -32,9 +32,10 @@ struct PlayerInfoCard: View {
     
     var nameInfo: some View {
         Text(userRepository.currentUser?.nickname ?? "")
-            .font(.system(size: 22, weight: .medium, design: .monospaced))
-            .foregroundColor(.white)
+            .font(.system(size: 22, weight: .bold, design: .monospaced))
+            .foregroundColor(.dsTextSecondary)
             .lineLimit(1)
+            .minimumScaleFactor(0.5)
     }
 
 

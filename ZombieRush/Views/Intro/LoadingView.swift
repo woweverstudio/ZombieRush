@@ -5,8 +5,6 @@ extension LoadingView {
     static let loadingDataMessage = NSLocalizedString("loading_data_message", tableName: "Intro", comment: "Loading data message")
     static let syncingUserDataMessage = NSLocalizedString("syncing_user_data_message", tableName: "Intro", comment: "Syncing user data message")
     static let readyToPlayMessage = NSLocalizedString("ready_to_play_message", tableName: "Intro", comment: "Ready to play message")
-    static let gameTitleLine1 = NSLocalizedString("game_title_line_1", tableName: "Intro", comment: "Game title line 1")
-    static let gameTitleLine2 = NSLocalizedString("game_title_line_2", tableName: "Intro", comment: "Game title line 2")
 }
 
 // MARK: - Loading View
@@ -51,26 +49,10 @@ struct LoadingView: View {
     var body: some View {
         ZStack {
             // 사이버펑크 배경
-            Background()
+            Background(style: .image("background"))
 
             VStack(spacing: 30) {
                 Spacer()
-
-                // 게임 타이틀 (로딩 화면용으로 크게)
-                VStack(spacing: max(40 * 0.2, 8)) {
-                    Text(verbatim: LoadingView.gameTitleLine1)
-                        .font(.system(size: 40, weight: .heavy, design: .monospaced))
-                        .foregroundColor(Color(red: 1.0, green: 0.0, blue: 1.0))
-                        .shadow(color: Color(red: 1.0, green: 0.0, blue: 1.0), radius: 15, x: 0, y: 0)
-                        .shadow(color: Color(red: 1.0, green: 0.0, blue: 1.0).opacity(0.5), radius: 30, x: 0, y: 0)
-
-                    Text(verbatim: LoadingView.gameTitleLine2)
-                        .font(.system(size: 60, weight: .heavy, design: .monospaced))
-                        .foregroundColor(Color(red: 0.0, green: 0.8, blue: 1.0))
-                        .shadow(color: Color(red: 0.0, green: 0.8, blue: 1.0), radius: 20, x: 0, y: 0)
-                        .shadow(color: Color(red: 0.0, green: 0.8, blue: 1.0).opacity(0.5), radius: 40, x: 0, y: 0)
-                }
-
 
                 // 로딩 프로그레스 바
                 VStack(spacing: 20) {
@@ -95,6 +77,7 @@ struct LoadingView: View {
                         .tracking(2)
                 }
 
+                Spacer()
                 Spacer()
             }
             .padding(.horizontal, 40)

@@ -22,7 +22,7 @@ struct SettingsView: View {
             // 사이버펑크 배경
             Background()
             
-            VStack {
+            VStack(spacing: 20) {
                 // 상단 영역 - 제목과 뒤로가기 버튼
                 Header(
                     title: SettingsView.settingsTitle,

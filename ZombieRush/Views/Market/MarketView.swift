@@ -21,10 +21,11 @@ struct MarketView: View {
             // 사이버펑크 배경
             Background()
 
-            VStack(spacing: 0) {
+            VStack(spacing: 20) {
                 headerView
                 itemsGridView
             }
+            .padding()
         }
     }
 
@@ -49,9 +50,8 @@ struct MarketView: View {
                     MarketItemCard(item: item)
                 }
             }
-            .padding(.horizontal, 20)
-            .padding(.vertical, 20)
         }
+        .scrollIndicators(.hidden)
     }
 }
 

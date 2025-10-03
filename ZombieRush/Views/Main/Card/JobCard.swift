@@ -54,6 +54,7 @@ struct JobCard: View {
                     }
                 }
                 .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+                .frame(height: 180)
             }
         
             // 네비게이션 버튼들 (해금된 직업이 2개 이상일 때만 표시)

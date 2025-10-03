@@ -36,58 +36,27 @@ struct MainMenuPanel: View {
         }
     }
 
-    var body: some View {
-        VStack(spacing: 24) {
-            HStack(spacing: 24) {
-                // 스토리 버튼 (book.fill)
-                IconRectButton(iconName: "book.fill", description: MainMenuPanel.storyButton, style: .white) {
-                    router.navigate(to: .story)
-                }
-                // 설정 버튼 (gearshape.fill)
-                IconRectButton(iconName: "gearshape.fill", description: MainMenuPanel.settingsButton, style: .magenta) {
-                    router.navigate(to: .settings)
-                }
-
-                IconRectButton(iconName: "person.fill", description: MainMenuPanel.myInfoButton, style: .yellow) {
-                    router.navigate(to: .myInfo)
-                }
-
-                // 상점 버튼 (storefront.fill)
-                IconRectButton(iconName: "storefront.fill", description: MainMenuPanel.marketButton, style: .orange) {
-                    router.navigate(to: .market)
-                }
+    var body: some View {        
+        HStack {
+            // 스토리 버튼 (book.fill)
+            IconRectButton(iconName: "book.fill", description: MainMenuPanel.storyButton, style: .white) {
+                router.navigate(to: .story)
             }
-            .frame(maxWidth: .infinity, alignment: .center)
-            Spacer()
+            // 설정 버튼 (gearshape.fill)
+            IconRectButton(iconName: "gearshape.fill", description: MainMenuPanel.settingsButton, style: .magenta) {
+                router.navigate(to: .settings)
+            }
 
-//            // 메시지 박스
-//            VStack(spacing: 0) {
-//                Text(gameStartTooltip)
-//                    .font(.system(size: 12, weight: .medium, design: .monospaced))
-//                    .foregroundColor(Color.dsTextPrimary)
-//                    .lineLimit(2)
-//                    .padding(.vertical, 12)
-//                    .frame(minHeight: 60)
-//                    .frame(maxWidth: .infinity)
-//                    .multilineTextAlignment(.leading)
-//                    .background(
-//                        SpeechBubble()
-//                            .fill(Color.dsSurface)
-//                            .overlay(
-//                                SpeechBubble()
-//                                    .stroke(Color.dsTextSecondary.opacity(0.3), lineWidth: 1)
-//                            )
-//                    )
-//            }
+            IconRectButton(iconName: "person.fill", description: MainMenuPanel.myInfoButton, style: .yellow) {
+                router.navigate(to: .myInfo)
+            }
 
-            // 게임 시작 버튼
-            PrimaryButton(title: MainMenuPanel.startButton, style: .cyan, fullWidth: true) {
-                Task {
-                    let request = AddExperienceRequest(expToAdd: 10)
-                    let _ = await useCaseFactory.addExperience.execute(request)
-                }
+            // 상점 버튼 (storefront.fill)
+            IconRectButton(iconName: "storefront.fill", description: MainMenuPanel.marketButton, style: .orange) {
+                router.navigate(to: .market)
             }
         }
-        .frame(maxWidth: .infinity)
+        .frame(height: 80)
+        .frame(maxWidth: .infinity, alignment: .center)
     }
 }

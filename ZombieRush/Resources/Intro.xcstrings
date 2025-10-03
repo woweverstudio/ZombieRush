@@ -1,8 +1,44 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "checking_version_message" : {
+      "comment" : "Checking version message",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CHECKING VERSION..."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "버전 체크중..."
+          }
+        }
+      }
+    },
+    "game_title_line_1" : {
+      "comment" : "Game title line 1",
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "BLOCK"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "NEMO NEMO"
+          }
+        }
+      }
+    },
     "game_title_line_2" : {
       "comment" : "Game title line 2",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -18,19 +54,53 @@
         }
       }
     },
-    "game_title_line_1" : {
-      "comment" : "Game title line 1",
+    "go_to_app_store_button" : {
+      "comment" : "Go to App Store button",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "BLOCK"
+            "value" : "Go to App Store"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "NEMO NEMO"
+            "value" : "앱스토어로 이동"
+          }
+        }
+      }
+    },
+    "loading_data_message" : {
+      "comment" : "Loading data message",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LOADING DATA..."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "데이터 로딩 중..."
+          }
+        }
+      }
+    },
+    "new_version_available_message" : {
+      "comment" : "New version available message",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "New version available."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "새로운 버전이 나왔습니다."
           }
         }
       }
@@ -86,40 +156,6 @@
         }
       }
     },
-    "loading_data_message" : {
-      "comment" : "Loading data message",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "LOADING DATA..."
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "데이터 로딩 중..."
-          }
-        }
-      }
-    },
-    "story2" : {
-      "comment" : "Story 2 text",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "The Circle Tribe invaded. Every square began to crumble, turning into a curve."
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "동그라미 종족이 침공했습니다. 모든 네모가 곡선으로 변하며 무너지기 시작했습니다."
-          }
-        }
-      }
-    },
     "story1" : {
       "comment" : "Story 1 text",
       "localizations" : {
@@ -137,87 +173,19 @@
         }
       }
     },
-    "checking_version_message" : {
-      "comment" : "Checking version message",
+    "story2" : {
+      "comment" : "Story 2 text",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "CHECKING VERSION..."
+            "value" : "The Circle Tribe invaded. Every square began to crumble, turning into a curve."
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "버전 체크중..."
-          }
-        }
-      }
-    },
-    "syncing_user_data_message" : {
-      "comment" : "Syncing user data message",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "SYNCING USER DATA..."
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "사용자 데이터 동기화 중..."
-          }
-        }
-      }
-    },
-    "new_version_available_message" : {
-      "comment" : "New version available message",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "New version available."
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "새로운 버전이 나왔습니다."
-          }
-        }
-      }
-    },
-    "go_to_app_store_button" : {
-      "comment" : "Go to App Store button",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Go to App Store"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "앱스토어로 이동"
-          }
-        }
-      }
-    },
-    "story5" : {
-      "comment" : "Story 5 text",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Now, your journey to save the Square Kingdom begins."
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "이제, 네모나라를 구하기 위한 당신의 여정이 시작됩니다."
+            "value" : "동그라미 종족이 침공했습니다. 모든 네모가 곡선으로 변하며 무너지기 시작했습니다."
           }
         }
       }
@@ -252,6 +220,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "정육면체의 힘이 당신에게 흘러들어와, 네모 마법사로 각성했습니다."
+          }
+        }
+      }
+    },
+    "story5" : {
+      "comment" : "Story 5 text",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Now, your journey to save the Square Kingdom begins."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이제, 네모나라를 구하기 위한 당신의 여정이 시작됩니다."
+          }
+        }
+      }
+    },
+    "syncing_user_data_message" : {
+      "comment" : "Syncing user data message",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "SYNCING USER DATA..."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "사용자 데이터 동기화 중..."
           }
         }
       }

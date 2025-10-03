@@ -114,7 +114,7 @@ struct IconRectButton: View {
                     .minimumScaleFactor(0.8)
             }
             .padding(size * 0.4)
-            .frame(maxWidth: .infinity)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(
                 RoundedRectangle(cornerRadius: 8)
                     .fill(Color.black.opacity(0.2))

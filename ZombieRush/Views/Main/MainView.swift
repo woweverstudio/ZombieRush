@@ -19,16 +19,26 @@ struct MainView: View {
         ZStack {
             // 사이버펑크 배경
             Background()
-            VStack(spacing: 12) {
-                PlayerInfoCard()
-                JobCard()
-                StatsCard()
+            VStack {
+                ScrollView {
+                    VStack(spacing: 16) {
+                        PlayerInfoCard()
+                        JobCard()
+                        StatsCard()
+                        MainMenuPanel()
+                    }
+                    .padding(.horizontal, 18)
+                }
+                .scrollIndicators(.hidden)
+                .scrollBounceBehavior(.basedOnSize)
                 
-                // 메뉴 패널
-                MainMenuPanel()
+                Spacer()
+                // 게임 시작 버튼
+                PrimaryButton(title: MainMenuPanel.startButton, style: .cyan, fullWidth: true) {
+                    
+                }
+                .padding(18)
             }
-            .padding(.vertical, 24)
-            .padding(.horizontal, isPhoneSize ? 16 : 24)
         }
     }
 }

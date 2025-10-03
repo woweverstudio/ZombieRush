@@ -321,6 +321,40 @@
           }
         }
       }
+    },
+    "elements_section" : {
+      "comment" : "Elements section title",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Owned Elements"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "보유 원소"
+          }
+        }
+      }
+    },
+    "jobs_section" : {
+      "comment" : "Jobs section title",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jobs"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "직업"
+          }
+        }
+      }
     }
   },
   "version" : "1.0"
