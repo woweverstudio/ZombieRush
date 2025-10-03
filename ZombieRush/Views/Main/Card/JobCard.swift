@@ -81,11 +81,9 @@ struct JobCard: View {
                 }
             }
         }
-        .onChange(of: selectedJob){ oldValue, newValue in
-            jobsRepository.selectedJob = newValue
-        }
         .onAppear {
-            selectedJob = jobsRepository.selectedJob
+            guard let jobs = jobsRepository.currentJobs else { return }
+            selectedJob = jobs.selectedJobType
         }
     }
 }

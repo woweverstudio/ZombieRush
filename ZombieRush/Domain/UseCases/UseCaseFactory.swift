@@ -77,11 +77,7 @@ final class UseCaseFactory: ObservableObject {
     }
 
     var upgradeStat: UpgradeStatUseCase {
-        UpgradeStatUseCase(statsRepository: statsRepository)
-    }
-
-    var consumeStatPoints: ConsumeStatPointsUseCase {
-        ConsumeStatPointsUseCase(userRepository: userRepository)
+        UpgradeStatUseCase(statsRepository: statsRepository, userRepository: userRepository)
     }
 
     // MARK: - Spirits UseCases
@@ -120,5 +116,9 @@ final class UseCaseFactory: ObservableObject {
 
     var unlockJob: UnlockJobUseCase {
         UnlockJobUseCase(jobsRepository: jobsRepository, spiritsRepository: spiritsRepository, userRepository: userRepository)
+    }
+
+    var loadJobRequirements: LoadJobRequirementsUseCase {
+        LoadJobRequirementsUseCase()
     }
 }

@@ -100,12 +100,10 @@ struct JobDetailPanel: View {
 
             // 하단: 해금 정보 및 버튼
             if !(jobsRepository.currentJobs?.unlockedJobs.contains(jobType) ?? false) {
-                let stats = JobStats.getStats(for: jobType.rawValue)
-
-                if let requirement = stats.unlockRequirement {
+                if let requirement = JobUnlockRequirement.requirement(for: jobType.rawValue) {
                     // 해금 조건 표시 (간단하게 표시)
                     VStack(spacing: 6) {
-                        Text("\(requirement.spiritType) 원소 \(requirement.count)개, Lv.\(requirement.requiredLevel) 필요")
+                        Text("\(requirement.requiredSpirit) 원소 \(requirement.requiredCount)개, Lv.\(requirement.requiredLevel) 필요")
                             .font(.system(size: 12, design: .monospaced))
                             .foregroundColor(.white.opacity(0.8))
                             .frame(maxWidth: .infinity, alignment: .center)

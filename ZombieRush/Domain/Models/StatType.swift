@@ -23,7 +23,7 @@ enum StatType: String, CaseIterable, Codable {
         case .hp:
             return "heart.fill"
         case .energy:
-            return "flame.fill"
+            return "cross.vial.fill"
         case .moveSpeed:
             return "shoeprints.fill"
         case .attackSpeed:

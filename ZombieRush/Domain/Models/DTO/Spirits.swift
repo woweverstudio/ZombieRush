@@ -12,7 +12,7 @@ struct Spirits: Codable, Identifiable {
     let playerId: String   // Game Center gamePlayerID (계정별 고유 식별자, foreign key to users)
     var fire: Int         // 불 속성 원소
     var ice: Int          // 얼음 속성 원소
-    var lightning: Int    // 번개 속성 원소
+    var thunder: Int    // 번개 속성 원소
     var dark: Int         // 어둠 속성 원소
 
     var id: String { playerId } // Identifiable 프로토콜 준수
@@ -21,15 +21,15 @@ struct Spirits: Codable, Identifiable {
         case playerId = "player_id"
         case fire
         case ice
-        case lightning
+        case thunder
         case dark
     }
 
-    init(playerId: String, fire: Int = 0, ice: Int = 0, lightning: Int = 0, dark: Int = 0) {
+    init(playerId: String, fire: Int = 0, ice: Int = 0, thunder: Int = 0, dark: Int = 0) {
         self.playerId = playerId
         self.fire = fire
         self.ice = ice
-        self.lightning = lightning
+        self.thunder = thunder
         self.dark = dark
     }
 
@@ -40,6 +40,6 @@ struct Spirits: Codable, Identifiable {
 
     /// 총 원소 개수 계산
     var totalCount: Int {
-        return fire + ice + lightning + dark
+        return fire + ice + thunder + dark
     }
 }

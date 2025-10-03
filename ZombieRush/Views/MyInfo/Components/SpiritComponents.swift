@@ -135,7 +135,7 @@ struct SpiritDetailPanel: View {
         switch spiritType {
         case .fire: return spirits.fire
         case .ice: return spirits.ice
-        case .lightning: return spirits.lightning
+        case .thunder: return spirits.thunder
         case .dark: return spirits.dark
         }
     }

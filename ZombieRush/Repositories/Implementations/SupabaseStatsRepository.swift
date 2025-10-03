@@ -68,4 +68,26 @@ final class SupabaseStatsRepository: ObservableObject, StatsRepository {
         return updatedStats
     }
 
+    func upgradeStatWithTransaction(playerID: String, statType: StatType) async throws -> (user: User, stats: Stats) {
+        // 전체 응답을 Data로 받고 파싱
+        let data = try await supabase
+            .rpc("upgrade_stat_with_transaction", params: [
+                "p_player_id": playerID,
+                "p_stat_type": statType.rawValue
+            ])
+            .execute()
+            .data
+
+        // JSON 파싱 (RPC custom date format 지원)
+        let response = try RPCDecoder.decode(TransactionResponse.self, from: data)
+
+        return (user: response.user, stats: response.stats)
+    }
+
+    // 트랜잭션 응답 구조체
+    private struct TransactionResponse: Codable {
+        let user: User
+        let stats: Stats
+    }
+
 }

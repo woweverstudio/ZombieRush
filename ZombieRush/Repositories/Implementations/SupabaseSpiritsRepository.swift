@@ -56,7 +56,7 @@ final class SupabaseSpiritsRepository: ObservableObject, SpiritsRepository {
             .update([
                 "fire": String(spirits.fire),
                 "ice": String(spirits.ice),
-                "lightning": String(spirits.lightning),
+                "thunder": String(spirits.thunder),
                 "dark": String(spirits.dark)
             ])
             .eq("player_id", value: spirits.playerId)

@@ -103,13 +103,13 @@
         }
       }
     },
-    "job_lightning_mage_name" : {
-      "comment" : "Lightning mage job display name",
+    "job_thunder_mage_name" : {
+      "comment" : "Thunder mage job display name",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Lightning Mage"
+            "value" : "Thunder Mage"
           }
         },
         "ko" : {
@@ -290,13 +290,13 @@
         }
       }
     },
-    "spirit_lightning_description" : {
-      "comment" : "Lightning spirit description",
+    "spirit_thunder_description" : {
+      "comment" : "Thunder spirit description",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Lightning spirit with fast electric attacks"
+            "value" : "Thunder spirit with fast electric attacks"
           }
         },
         "ko" : {
@@ -307,13 +307,13 @@
         }
       }
     },
-    "spirit_lightning_name" : {
-      "comment" : "Lightning spirit display name",
+    "spirit_thunder_name" : {
+      "comment" : "Thunder spirit display name",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Lightning"
+            "value" : "Thunder"
           }
         },
         "ko" : {

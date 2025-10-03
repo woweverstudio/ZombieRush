@@ -36,8 +36,8 @@ struct AddSpiritUseCase: UseCase {
             updatedSpirits.fire += request.count
         case .ice:
             updatedSpirits.ice += request.count
-        case .lightning:
-            updatedSpirits.lightning += request.count
+        case .thunder:
+            updatedSpirits.thunder += request.count
         case .dark:
             updatedSpirits.dark += request.count
         }

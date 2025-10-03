@@ -14,10 +14,8 @@ import SwiftUI
 final class SupabaseJobsRepository: ObservableObject, JobsRepository {
     // Observable properties for View observation
     @Published var currentJobs: Jobs?
-    @Published var selectedJob: JobType = .novice
 
     private let supabase: SupabaseClient
-
 
     init() {
         self.supabase = SupabaseClient(
@@ -36,7 +34,6 @@ final class SupabaseJobsRepository: ObservableObject, JobsRepository {
 
         let job = jobs.first
         currentJobs = job
-        selectedJob = job?.selectedJobType ?? .novice
         return job
     }
 
@@ -58,11 +55,11 @@ final class SupabaseJobsRepository: ObservableObject, JobsRepository {
             .from("jobs")
             .update([
                 "novice": jobs.novice ? "true" : "false",
-                "fire_mage": jobs.fireMage ? "true" : "false",
-                "ice_mage": jobs.iceMage ? "true" : "false",
-                "lightning_mage": jobs.lightningMage ? "true" : "false",
-                "dark_mage": jobs.darkMage ? "true" : "false",
-                "selected_job": jobs.selectedJob
+                "fire": jobs.fireMage ? "true" : "false",
+                "ice": jobs.iceMage ? "true" : "false",
+                "thunder": jobs.thunderMage ? "true" : "false",
+                "dark": jobs.darkMage ? "true" : "false",
+                "selected": jobs.selectedJob
             ])
             .eq("player_id", value: jobs.playerId)
             .select("*")
@@ -72,6 +69,35 @@ final class SupabaseJobsRepository: ObservableObject, JobsRepository {
 
         currentJobs = updatedJobs
         return updatedJobs
+    }
+
+    func unlockJobWithTransaction(playerID: String, jobKey: String) async throws -> (jobs: Jobs, spirits: Spirits) {
+        // RPC 호출
+        let data = try await supabase
+            .rpc("unlock_job_with_transaction", params: [
+                "p_player_id": playerID,
+                "p_job_key": jobKey
+            ])
+            .execute()
+            .data
+
+        // JSON 파싱 (RPC custom date format 지원)
+        let response = try RPCDecoder.decode(TransactionUnlockResponse.self, from: data)
+
+        // 성공 여부 확인
+        guard response.success else {
+            throw NSError(domain: "UnlockJobError", code: 0, userInfo: [NSLocalizedDescriptionKey: response.error ?? "Unknown error"])
+        }
+
+        return (jobs: response.jobs, spirits: response.spirits)
+    }
+
+    // 트랜잭션 응답 구조체
+    private struct TransactionUnlockResponse: Codable {
+        let success: Bool
+        let jobs: Jobs
+        let spirits: Spirits
+        let error: String?
     }
 
 }

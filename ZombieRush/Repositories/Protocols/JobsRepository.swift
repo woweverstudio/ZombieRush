@@ -22,4 +22,7 @@ protocol JobsRepository: AnyObject {
     /// 직업 데이터 업데이트
     func updateJobs(_ jobs: Jobs) async throws -> Jobs
 
+    /// 직업 해금 (정령 차감 포함 트랜잭션)
+    func unlockJobWithTransaction(playerID: String, jobKey: String) async throws -> (jobs: Jobs, spirits: Spirits)
+
 }

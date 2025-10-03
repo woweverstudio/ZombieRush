@@ -166,17 +166,19 @@ struct LoadingView: View {
         let nickname = playerInfo.nickname
 
 
-        // 사용자 데이터, 스탯 데이터, 원소 데이터, 직업 데이터 동시에 로드
+        // 사용자 데이터, 스탯 데이터, 원소 데이터, 직업 데이터, 직업 요구사항 동시에 로드
         async let userTask: () = loadUserData(playerID: playerID, nickname: nickname)
         async let statsTask: () = loadStatsData(playerID: playerID)
         async let spiritsTask: () = loadSpiritsData(playerID: playerID)
         async let jobsTask: () = loadJobsData(playerID: playerID)
+        async let requirementsTask: () = loadJobRequirements()
 
-        // 네 작업 모두 완료될 때까지 대기
+        // 다섯 작업 모두 완료될 때까지 대기
         await userTask
         await statsTask
         await spiritsTask
         await jobsTask
+        await requirementsTask
 
         // 단계 4: 완료
         await updateStage(to: .completed)
@@ -239,5 +241,10 @@ struct LoadingView: View {
     private func loadJobsData(playerID: String) async {
         let request = LoadOrCreateJobsRequest(playerID: playerID)
         _ = await useCaseFactory.loadOrCreateJobs.execute(request)
+    }
+
+    private func loadJobRequirements() async {
+        let request = LoadJobRequirementsRequest()
+        _ = await useCaseFactory.loadJobRequirements.execute(request)
     }
 }

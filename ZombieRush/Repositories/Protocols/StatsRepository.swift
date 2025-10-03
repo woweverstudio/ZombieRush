@@ -21,4 +21,7 @@ protocol StatsRepository: AnyObject {
 
     /// 스탯 업데이트
     func updateStats(_ stats: Stats) async throws -> Stats
+
+    /// 스텟 업그레이드 (포인트 차감 포함 트랜잭션)
+    func upgradeStatWithTransaction(playerID: String, statType: StatType) async throws -> (user: User, stats: Stats)
 }

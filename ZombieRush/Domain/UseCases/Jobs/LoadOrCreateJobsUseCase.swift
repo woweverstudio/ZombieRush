@@ -27,7 +27,7 @@ struct LoadOrCreateJobsUseCase: UseCase {
                 return LoadOrCreateJobsResponse(jobs: existingJobs)
             } else {
                 // 2. 직업이 없으면 새로 생성
-                let newJobs = Jobs.defaultJobs(for: request.playerID)
+                let newJobs = Jobs(playerId: request.playerID)
                 let jobs = try await jobsRepository.createJobs(newJobs)
                 return LoadOrCreateJobsResponse(jobs: jobs)
             }

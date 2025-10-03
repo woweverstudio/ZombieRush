@@ -94,13 +94,13 @@ struct StatDetailPanel: View {
     }
 
     private func upgradeStat() async {
-        let request = ConsumeStatPointsRequest(pointsToConsume: 1)
-        let response = await useCaseFactory.consumeStatPoints.execute(request)
-        
-        if response.success {
-            let request = UpgradeStatRequest(statType: statType)
-            _ = await useCaseFactory.upgradeStat.execute(request)
-        }
+//        let request = ConsumeStatPointsRequest(pointsToConsume: 1)
+//        let response = await useCaseFactory.consumeStatPoints.execute(request)
+//        
+//        if response.success {
+//            let request = UpgradeStatRequest(statType: statType)
+//            _ = await useCaseFactory.upgradeStat.execute(request)
+//        }
     }
 
     private func getCurrentStatValue() -> Int {
