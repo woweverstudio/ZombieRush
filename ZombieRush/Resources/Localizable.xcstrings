@@ -16,6 +16,9 @@
     "+%lld" : {
 
     },
+    "➔" : {
+
+    },
     "APP_TITLE" : {
       "comment" : "App display name for notifications",
       "extractionState" : "manual",

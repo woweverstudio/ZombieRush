@@ -12,7 +12,7 @@ import Foundation
 protocol SpiritsRepository: AnyObject {
     /// 원소 상태
     var currentSpirits: Spirits? { get set }
-    
+
     /// 원소 데이터 조회
     func getSpirits(by playerID: String) async throws -> Spirits?
 
@@ -21,4 +21,7 @@ protocol SpiritsRepository: AnyObject {
 
     /// 원소 데이터 업데이트
     func updateSpirits(_ spirits: Spirits) async throws -> Spirits
+
+    /// 네모열매를 소비하여 원소 교환 (트랜잭션)
+    func exchangeFruitForSpirit(playerID: String, spiritType: String, amount: Int) async throws -> (Spirits, User)
 }

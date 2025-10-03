@@ -94,7 +94,7 @@ final class UseCaseFactory: ObservableObject {
     }
 
     var addSpirit: AddSpiritUseCase {
-        AddSpiritUseCase(spiritsRepository: spiritsRepository)
+        AddSpiritUseCase(spiritsRepository: spiritsRepository, userRepository: userRepository)
     }
 
     // MARK: - Jobs UseCases

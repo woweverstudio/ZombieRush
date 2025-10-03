@@ -30,3 +30,35 @@ struct NemoFruitBadge: View {
         )
     }
 }
+
+struct CommonBadge: View {
+    let image: Image
+    let value: Int
+    let size: CGFloat
+    let color: Color
+    
+    var body: some View {
+        HStack(spacing: size * 0.2) {
+            image                
+                .resizable()
+                .scaledToFit()
+                .foregroundStyle(color)
+                .frame(width: size * 0.6, height: size * 0.6)
+            
+            Text("\(value)")
+                .font(.system(size: size * 0.7, weight: .medium, design: .monospaced))
+                .foregroundColor(color)
+        }
+        .padding(.horizontal, size * 0.6)
+        .padding(.vertical, size * 0.4)
+        .frame(maxWidth: .infinity)
+        .background(
+            RoundedRectangle(cornerRadius: 8)
+                .fill(Color.black.opacity(0.6))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 8)
+                        .stroke(color.opacity(0.3), lineWidth: 1)
+                )
+        )
+    }
+}

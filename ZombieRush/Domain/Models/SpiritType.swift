@@ -8,7 +8,7 @@
 import SwiftUI
 
 /// 원소 타입 열거형
-enum SpiritType: String, CaseIterable {
+enum SpiritType: String, CaseIterable, Identifiable {
     case fire
     case ice
     case thunder
@@ -17,6 +17,10 @@ enum SpiritType: String, CaseIterable {
 
 // MARK: - SpiritType Extensions
 extension SpiritType {
+    var id: String {
+        return self.rawValue
+    }
+    
     var iconName: String {
         switch self {
         case .fire: return "flame.fill"

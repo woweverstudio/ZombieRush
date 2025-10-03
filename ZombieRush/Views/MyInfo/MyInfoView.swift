@@ -13,6 +13,10 @@ struct MyInfoView: View {
     @EnvironmentObject var jobsRepository: SupabaseJobsRepository
     @EnvironmentObject var useCaseFactory: UseCaseFactory
 
+    // 팝업 상태 관리
+    @State private var selectedSpiritType: SpiritType?
+    @State private var purchaseCount = 1
+
     var body: some View {
         ZStack {
             // 사이버펑크 배경
@@ -30,6 +34,79 @@ struct MyInfoView: View {
             }
             .padding()
         }
+        .sheet(item: $selectedSpiritType) { spiritType in
+            spiritPurchaseSheet(for: spiritType)
+        }
+    }
+
+    // MARK: - Spirit Purchase Sheet
+    private func spiritPurchaseSheet(for spiritType: SpiritType) -> some View {
+        ZStack {
+            Color.black.opacity(0.3)
+            VStack(spacing: 20) {
+                Header(title: "원소 구입", showBackButton: false)
+                
+                // 원소 정보
+                HStack(spacing: 12) {
+                    Image(systemName: spiritType.iconName)
+                        .font(.system(size: 44))
+                        .foregroundColor(spiritType.color)
+
+                    VStack(alignment:.leading, spacing: 8) {
+                        Text(spiritType.localizedDisplayName)
+                            .font(.system(size: 18, weight: .bold, design: .monospaced))
+                            .foregroundColor(.white)
+
+                        Text(spiritType.localizedDescription)
+                            .font(.system(size: 14, design: .monospaced))
+                            .foregroundColor(.white.opacity(0.8))
+                            .lineLimit(2)
+                    }
+                    Spacer()
+                }
+                Divider()
+                
+                Spacer()
+                HStack(spacing: 16) {
+                    SecondaryButton(title: "-", style: .default, fontSize: 24, size: .init(width: 60, height: 45)) {
+                        if purchaseCount > 1 {
+                            purchaseCount -= 1
+                        }
+                    }
+                    
+                    HStack {
+                        CommonBadge(image: Image("nemo_single"), value: purchaseCount, size: 28, color: .cyan)
+                        Text("➔")
+                        CommonBadge(image: Image(systemName: spiritType.iconName), value: purchaseCount, size: 28, color: spiritType.color)
+                    }
+                    
+                    SecondaryButton(title: "+", style: .default, fontSize: 24, size: .init(width: 60, height: 45)) {
+                        if purchaseCount < 99 {
+                            purchaseCount += 1
+                        }
+                    }
+                    
+                }
+                .frame(maxWidth: .infinity)
+                Divider()
+                
+                PrimaryButton(title: "원소 얻기", style: .cyan, fullWidth: true){
+                    Task {
+                        let request = AddSpiritRequest(spiritType: spiritType, count: purchaseCount)
+                        let _ = await useCaseFactory.addSpirit.execute(request)
+                        
+                        purchaseCount = 1
+                        selectedSpiritType = nil
+                    }
+                    
+                }
+            }
+            .frame(maxWidth: .infinity)
+            .padding(24)
+            .padding(.bottom, 32)
+        }
+        .ignoresSafeArea()
+        .presentationDetents([.medium])
     }
 }
 
@@ -82,6 +159,7 @@ extension MyInfoView {
     }
 
     private func elementCard(for spiritType: SpiritType) -> some View {
+
         Card(style: .cyberpunk) {
             HStack {
                 VStack(spacing: 6){
@@ -89,13 +167,13 @@ extension MyInfoView {
                         .font(.system(size: 24))
                         .foregroundColor(spiritType.color)
                         .frame(width: 32)
-                    
+
                     Text(spiritType.localizedDisplayName)
                         .font(.system(size: 12, weight: .medium, design: .monospaced))
                         .foregroundColor(Color.dsTextSecondary)
                 }
                 .frame(width: 60)
-                
+
                 Text("\(getSpiritCount(for: spiritType))")
                     .font(.system(size: 24, weight: .bold, design: .monospaced))
                     .foregroundColor(.white)
@@ -103,6 +181,15 @@ extension MyInfoView {
             }
             .padding(8)
         }
+        .contentShape(Rectangle())
+        .onTapGesture {
+            AudioManager.shared.playButtonSound()
+            HapticManager.shared.playButtonHaptic()
+            
+            selectedSpiritType = spiritType
+            purchaseCount = 1
+        }
+        
     }
 
     private func jobCard(for jobType: JobType, isUnlocked: Bool = true) -> some View {
@@ -140,5 +227,18 @@ extension MyInfoView {
 
 // MARK: - Preview
 #Preview {
+    @Previewable @StateObject var userRepository: SupabaseUserRepository = SupabaseUserRepository()
+    @Previewable @StateObject var statsRepository: SupabaseStatsRepository = SupabaseStatsRepository()
+    @Previewable @StateObject var spiritsRepository: SupabaseSpiritsRepository = SupabaseSpiritsRepository()
+    @Previewable @StateObject var jobsRepository: SupabaseJobsRepository = SupabaseJobsRepository()
+    
     MyInfoView()
+        .environment(AppRouter())
+        .environmentObject(
+            UseCaseFactory(userRepository: userRepository, statsRepository: statsRepository, spiritsRepository: spiritsRepository, jobsRepository: jobsRepository)
+        )
+        .environmentObject(spiritsRepository)
+        .environmentObject(jobsRepository)
+        .environmentObject(userRepository)
+        
 }
