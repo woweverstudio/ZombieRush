@@ -60,8 +60,18 @@ struct SettingsView: View {
                     { newValue in
                         HapticManager.shared.isHapticEnabled = newValue
                     }
+
+                    
                 }
+                
+                // 현재 버전 표시
+                Text("Version: \(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "2.0.0")")
+                    .font(.system(size: 14))
+                    .foregroundColor(Color.dsTextSecondary)
+                    .padding(.top, 20)
+                    .padding(.horizontal, 20)
             }
+            .padding()
         }
     }
 }

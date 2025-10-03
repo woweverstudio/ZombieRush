@@ -7,11 +7,10 @@ struct CardBackground: View {
             .fill(Color.dsCard)
             .background(
                 RoundedRectangle(cornerRadius: 8)
-                    .stroke(Color.cyan.opacity(0.3), lineWidth: 1)
+                    .stroke(Color.cyan.opacity(0.5), lineWidth: 1)
                     .blur(radius: 0.5)
                     .frame(maxHeight: .infinity)
             )
-            .shadow(color: Color.cyan.opacity(0.2), radius: 10, x: 0, y: 0)
     }
 }
 

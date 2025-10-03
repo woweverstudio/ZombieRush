@@ -6,6 +6,10 @@ extension MainMenuPanel {
     static let gameStartTooltipTop3 = NSLocalizedString("GAME_START_TOOLTIP_TOP3", comment: "Game start tooltip when in top 3")
     static let gameStartTooltipLoggedIn = NSLocalizedString("GAME_START_TOOLTIP_LOGGED_IN", comment: "Game start tooltip when logged in")
     static let startButton = NSLocalizedString("MAIN_START", comment: "Start button")
+    static let storyButton = NSLocalizedString("story_button", tableName: "Main", comment: "Story button label")
+    static let settingsButton = NSLocalizedString("settings_button", tableName: "Main", comment: "Settings button label")
+    static let myInfoButton = NSLocalizedString("my_info_button", tableName: "Main", comment: "My Info button label")
+    static let marketButton = NSLocalizedString("market_button", tableName: "Main", comment: "Market button label")
 }
 
 // MARK: - Main Menu Panel Component
@@ -33,26 +37,27 @@ struct MainMenuPanel: View {
     }
 
     var body: some View {
-        VStack(alignment: .trailing, spacing: 24) {
+        VStack(spacing: 24) {
             HStack(spacing: 24) {
                 // 스토리 버튼 (book.fill)
-                IconButton(iconName: "book.fill", style: .white) {
+                IconRectButton(iconName: "book.fill", description: MainMenuPanel.storyButton, style: .white) {
                     router.navigate(to: .story)
                 }
                 // 설정 버튼 (gearshape.fill)
-                IconButton(iconName: "gearshape.fill", style: .magenta) {
+                IconRectButton(iconName: "gearshape.fill", description: MainMenuPanel.settingsButton, style: .magenta) {
                     router.navigate(to: .settings)
                 }
-                
-                IconButton(iconName: "person.fill", style: .yellow) {
+
+                IconRectButton(iconName: "person.fill", description: MainMenuPanel.myInfoButton, style: .yellow) {
                     router.navigate(to: .myInfo)
                 }
 
                 // 상점 버튼 (storefront.fill)
-                IconButton(iconName: "storefront.fill", style: .orange) {
+                IconRectButton(iconName: "storefront.fill", description: MainMenuPanel.marketButton, style: .orange) {
                     router.navigate(to: .market)
                 }
             }
+            .frame(maxWidth: .infinity, alignment: .center)
             Spacer()
 
 //            // 메시지 박스

@@ -1665,6 +1665,9 @@
         }
       }
     },
+    "Version: %@" : {
+
+    },
     "WAVE_ANNOUNCEMENT_FORMAT" : {
       "comment" : "Wave System",
       "extractionState" : "manual",
