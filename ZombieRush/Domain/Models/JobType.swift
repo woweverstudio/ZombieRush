@@ -7,7 +7,7 @@
 import Foundation
 
 /// 직업 타입 열거형
-enum JobType: String, CaseIterable, Hashable {
+enum JobType: String, CaseIterable, Hashable, Identifiable {
     case novice = "novice"
     case fireMage = "fire"
     case iceMage = "ice"
@@ -15,6 +15,16 @@ enum JobType: String, CaseIterable, Hashable {
     case darkMage = "dark"
 
 
+    
+}
+
+// MARK: - Localized Extensions
+extension JobType {
+    
+    var id: String {
+        return self.rawValue
+    }
+    
     var imageName: String {
         switch self {
         case .novice: return "novice"
@@ -24,10 +34,7 @@ enum JobType: String, CaseIterable, Hashable {
         case .darkMage: return "dark_mage"
         }
     }
-}
-
-// MARK: - Localized Extensions
-extension JobType {
+    
     var localizedDisplayName: String {
         switch self {
         case .novice:
