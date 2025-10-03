@@ -19,14 +19,11 @@ struct MainView: View {
         ZStack {
             // 사이버펑크 배경
             Background()
-            HStack(spacing: 12) {
-                VStack(spacing: 12) {
-                    HStack(spacing: 12) {
-                        PlayerInfoCard()
-                        JobCard()
-                    }
-                    StatsCard()
-                }
+            VStack(spacing: 12) {
+                PlayerInfoCard()
+                JobCard()
+                StatsCard()
+                
                 // 메뉴 패널
                 MainMenuPanel()
             }

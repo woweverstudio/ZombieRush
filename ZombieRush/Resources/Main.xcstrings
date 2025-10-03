@@ -1,6 +1,23 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "ability_header" : {
+      "comment" : "Ability header",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ability"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "능력"
+          }
+        }
+      }
+    },
     "attack_speed_label" : {
       "comment" : "Attack speed stat label",
       "localizations" : {
@@ -14,6 +31,24 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "공격속도"
+          }
+        }
+      }
+    },
+    "base_amount_header" : {
+      "comment" : "Base amount header",
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Base"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "기본량"
           }
         }
       }
@@ -52,6 +87,23 @@
         }
       }
     },
+    "final_header" : {
+      "comment" : "Final header",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Final"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "최종"
+          }
+        }
+      }
+    },
     "hp_label" : {
       "comment" : "HP stat label",
       "localizations" : {
@@ -65,6 +117,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "HP 회복"
+          }
+        }
+      }
+    },
+    "increase_amount_header" : {
+      "comment" : "Increase amount header",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Increase"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "증가량"
           }
         }
       }
@@ -109,12 +178,12 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Nemo Rescue %d/%d"
+            "value" : "Block Rescue %d/%d"
           }
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "네모 구출 %d/%d"
           }
         }
@@ -137,23 +206,6 @@
         }
       }
     },
-    "player_title" : {
-      "comment" : "Player title",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Guardian of Nemo Kingdom"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "네모나라의 수호자"
-          }
-        }
-      }
-    },
     "remaining_points" : {
       "comment" : "Remaining points format",
       "localizations" : {
@@ -167,110 +219,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "남은 포인트: %d"
-          }
-        }
-      }
-    },
-    "ultimate_skill_label" : {
-      "comment" : "Ultimate skill label",
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ultimate Skill"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "궁극기"
-          }
-        }
-      }
-    },
-    "ultimate_skill_placeholder" : {
-      "comment" : "Ultimate skill placeholder",
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ultimate Skill Name"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "궁극기 이름 들어감"
-          }
-        }
-      }
-    },
-    "ability_header" : {
-      "comment" : "Ability header",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ability"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "능력"
-          }
-        }
-      }
-    },
-    "base_amount_header" : {
-      "comment" : "Base amount header",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Base"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "기본량"
-          }
-        }
-      }
-    },
-    "increase_amount_header" : {
-      "comment" : "Increase amount header",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Increase"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "증가량"
-          }
-        }
-      }
-    },
-    "final_header" : {
-      "comment" : "Final header",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Final"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "최종"
           }
         }
       }

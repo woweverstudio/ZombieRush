@@ -2,6 +2,7 @@ import SwiftUI
 
 extension JobCard {
     static let jobsUnlockedFormat = NSLocalizedString("jobs_unlocked_format", tableName: "Main", comment: "Jobs unlocked format")
+    static let dashPlaceholder = NSLocalizedString("dash_placeholder", tableName: "Main", comment: "Dash placeholder")
 }
 
 // MARK: - Job Card (TabView로 해금된 job만 표시)
@@ -44,8 +45,6 @@ struct JobCard: View {
 
     var body: some View {
         ZStack {
-            CardBackground()
-
             // TabView로 해금된 job 표시 (indicator 제거)
             if let jobs = jobsRepository.currentJobs {
                 TabView(selection: $selectedJob) {
@@ -56,7 +55,7 @@ struct JobCard: View {
                 }
                 .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
             }
-
+        
             // 네비게이션 버튼들 (해금된 직업이 2개 이상일 때만 표시)
             if let jobs = jobsRepository.currentJobs, jobs.unlockedJobs.count > 1 {
                 HStack {
@@ -67,9 +66,9 @@ struct JobCard: View {
                             .padding(20)
                             .clipShape(Rectangle())
                     }
-
+                    
                     Spacer()
-
+                    
                     // 우측 chevron 버튼
                     Button(action: nextTab) {
                         Image(systemName: "chevron.right")
@@ -81,35 +80,54 @@ struct JobCard: View {
                 }
             }
         }
+        .background (
+            CardBackground()
+        )
         .onAppear {
             guard let jobs = jobsRepository.currentJobs else { return }
             selectedJob = jobs.selectedJobType
         }
     }
-}
-
-// MARK: - 개별 Job 상세 정보 View
-struct JobDetailView: View {
-    let jobType: JobType
-
-    var body: some View {
-        ZStack(alignment: .topLeading) {
+    
+    func JobDetailView(jobType: JobType) -> some View {
+        HStack {
+            Spacer()
             Image(jobType.imageName)
                 .resizable()
                 .aspectRatio(contentMode: .fit)
-                .frame(maxWidth: 500)
+                .frame(height: 150)
 
+            VStack(alignment: .leading) {
+                // Job 이름 (간단하게 표시)
+                Text(verbatim: jobType.localizedDisplayName)
+                    .font(.system(size: 14, weight: .bold, design: .monospaced))
+                    .foregroundColor(Color.dsTextPrimary)
+                    .padding(8)
+                    .multilineTextAlignment(.center)
+                
+                ForEach(StatType.allCases, id: \.self) { statType in
+                    HStack {
+                        Image(systemName: statType.iconName)
+                            .foregroundColor(statType.color)
+                            .font(.system(size: 10))
+                            .frame(width: 20)
+                        
+                        Text(statType.localizedDisplayName)
+                            .font(.system(size: 10, weight: .medium, design: .monospaced))
+                            .foregroundColor(.white.opacity(0.9))
+                            .minimumScaleFactor(0.8)
+                            .frame(width: 80, alignment: .leading)
 
-            // Job 이름 (간단하게 표시)
-            Text(verbatim: jobType.localizedDisplayName)
-                .font(.system(size: 12, weight: .medium, design: .monospaced))
-                .foregroundColor(Color.dsTextPrimary)
-                .padding(8)
-                .background(
-                    RoundedRectangle(cornerRadius: 8)
-                        .fill(Color.dsCard)
-                )
-                .multilineTextAlignment(.center)
+                        Text("\(JobStats.getStat(job: self.selectedJob, stat: statType))")
+                            .font(.system(size: 10, weight: .bold, design: .monospaced))
+                            .foregroundColor(.white.opacity(0.9))
+                            .minimumScaleFactor(0.8)
+                        
+                        Spacer()
+                    }
+                    .padding(.vertical, 3)
+                }
+            }
         }
         .padding(8)
     }

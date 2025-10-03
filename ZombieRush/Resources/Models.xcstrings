@@ -103,23 +103,6 @@
         }
       }
     },
-    "job_thunder_mage_name" : {
-      "comment" : "Thunder mage job display name",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Thunder Mage"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "번개 마법사"
-          }
-        }
-      }
-    },
     "job_novice_name" : {
       "comment" : "Novice job display name",
       "localizations" : {
@@ -137,8 +120,26 @@
         }
       }
     },
+    "job_thunder_mage_name" : {
+      "comment" : "Thunder mage job display name",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Thunder Mage"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "번개 마법사"
+          }
+        }
+      }
+    },
     "myinfo_category_jobs" : {
       "comment" : "MyInfo jobs category display name",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -156,6 +157,7 @@
     },
     "myinfo_category_spirits" : {
       "comment" : "MyInfo spirits category display name",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -173,6 +175,7 @@
     },
     "myinfo_category_stats" : {
       "comment" : "MyInfo stats category display name",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {

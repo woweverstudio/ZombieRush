@@ -7,31 +7,11 @@
     "-" : {
 
     },
-    "%@ 원소 %lld개, Lv.%lld 필요" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$@ 원소 %2$lld개, Lv.%3$lld 필요"
-          }
-        }
-      }
-    },
     "%@:" : {
 
     },
     "%lld" : {
 
-    },
-    "%lld%@" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$lld%2$@"
-          }
-        }
-      }
     },
     "+%lld" : {
 

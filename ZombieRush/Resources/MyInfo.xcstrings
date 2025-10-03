@@ -1,8 +1,27 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "acquire_spirits_button" : {
+      "comment" : "Acquire spirits button",
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Acquire Spirits"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "원소 얻기"
+          }
+        }
+      }
+    },
     "attack_speed_label" : {
       "comment" : "Attack speed label",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -18,8 +37,27 @@
         }
       }
     },
+    "basic_job_label" : {
+      "comment" : "Basic job label",
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Basic Job"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "기본 직업"
+          }
+        }
+      }
+    },
     "cheer_buff_off" : {
       "comment" : "Cheer buff off",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -37,6 +75,7 @@
     },
     "cheer_buff_on" : {
       "comment" : "Cheer buff on",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -54,6 +93,7 @@
     },
     "cheer_buff_title" : {
       "comment" : "Cheer buff title",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -65,6 +105,24 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "네모의 응원"
+          }
+        }
+      }
+    },
+    "description_label" : {
+      "comment" : "Description label",
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Description"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "설명"
           }
         }
       }
@@ -103,8 +161,27 @@
         }
       }
     },
+    "max_quantity_label" : {
+      "comment" : "Maximum quantity label",
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Max"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "최대"
+          }
+        }
+      }
+    },
     "move_speed_label" : {
       "comment" : "Move speed label",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -137,8 +214,27 @@
         }
       }
     },
+    "purchase_quantity_label" : {
+      "comment" : "Purchase quantity label",
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Purchase Quantity"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "구매 수량"
+          }
+        }
+      }
+    },
     "select_item_instruction" : {
       "comment" : "Select item instruction",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -156,6 +252,7 @@
     },
     "select_item_prompt" : {
       "comment" : "Select item prompt",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -171,42 +268,9 @@
         }
       }
     },
-    "purchase_quantity_label" : {
-      "comment" : "Purchase quantity label",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Purchase Quantity"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "구매 수량"
-          }
-        }
-      }
-    },
-    "basic_job_label" : {
-      "comment" : "Basic job label",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Basic Job"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "기본 직업"
-          }
-        }
-      }
-    },
     "spirit_count_unit" : {
       "comment" : "Spirit count unit",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -222,76 +286,9 @@
         }
       }
     },
-    "description_label" : {
-      "comment" : "Description label",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Description"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "설명"
-          }
-        }
-      }
-    },
-    "upgrade_button" : {
-      "comment" : "Upgrade button",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Upgrade"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "업그레이드"
-          }
-        }
-      }
-    },
-    "acquire_spirits_button" : {
-      "comment" : "Acquire spirits button",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Acquire Spirits"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "원소 얻기"
-          }
-        }
-      }
-    },
-    "max_quantity_label" : {
-      "comment" : "Maximum quantity label",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Max"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "최대"
-          }
-        }
-      }
-    },
     "unlock_button" : {
       "comment" : "Unlock button",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -303,6 +300,24 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "해금하기"
+          }
+        }
+      }
+    },
+    "upgrade_button" : {
+      "comment" : "Upgrade button",
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Upgrade"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "업그레이드"
           }
         }
       }

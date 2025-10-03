@@ -43,8 +43,8 @@ struct RouterView: View {
         case .market:
             MarketView()
                 .navigationBarBackButtonHidden(true)
-        case .myInfo(let category):
-            MyInfoView(initialCategory: category)
+        case .myInfo:
+            MyInfoView()
                 .navigationBarBackButtonHidden(true)
         case .gameOver(let playTime, let score, let success):
             GameOverView(

@@ -68,31 +68,25 @@ struct StatTableRow: View {
             HStack(spacing: 8) {
                 Image(systemName: icon)
                     .foregroundColor(color)
-                    .font(.system(size: 14))
+                    .font(.system(size: 12))
 
                 Text(label)
-                    .font(.system(size: 14, weight: .medium, design: .monospaced))
+                    .font(.system(size: 12, weight: .medium, design: .monospaced))
                     .foregroundColor(.white.opacity(0.9))
                     .minimumScaleFactor(0.8)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.horizontal, 6)
 
-            // 기본 스텟
-            Text("\(baseValue)")
-                .font(.system(size: 14, design: .monospaced))
-                .foregroundColor(.white.opacity(0.7))
-                .frame(width: 80, alignment: .center)
-
             // 증가량
             Text(upgradeValue > 0 ? "+\(upgradeValue)" : "-")
-                .font(.system(size: 14, design: .monospaced))
+                .font(.system(size: 12, weight: .bold, design: .monospaced))
                 .foregroundColor(upgradeValue > 0 ? color.opacity(0.9) : .white.opacity(0.4))
-                .frame(width: 80, alignment: .center)
+                .frame(width: 60, alignment: .center)
 
             // 최종 스텟
             Text("\(finalValue)")
-                .font(.system(size: 14, weight: .bold, design: .monospaced))
+                .font(.system(size: 12, weight: .bold, design: .monospaced))
                 .foregroundColor(Color.dsTextPrimary)
                 .frame(width: 80, alignment: .center)
 
@@ -103,7 +97,7 @@ struct StatTableRow: View {
                 Image(systemName: "arrow.up")
                     .foregroundColor(canUpgrade ? color.opacity(0.6) : Color.gray.opacity(0.3))
                     .font(.system(size: 14, weight: .bold))
-                    .frame(width: 60, height: 24)
+                    .frame(width: 80, height: 30)
                     .background(
                         RoundedRectangle(cornerRadius: 4)
                             .fill(canUpgrade ? color.opacity(0.1) : Color.gray.opacity(0.1))

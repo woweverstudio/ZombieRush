@@ -25,7 +25,6 @@ final class GameKitManager: NSObject {
 
     // MARK: - Properties
     private var localPlayer: GKLocalPlayer?
-    var playerPhoto: UIImage?
 
     // MARK: - Initialization
     override init() {
@@ -62,9 +61,6 @@ final class GameKitManager: NSObject {
         // gamePlayerID는 Game Center 계정별로 고유한 ID (기기 변경 시에도 동일)
         let playerID = localPlayer.gamePlayerID
         let nickname = localPlayer.displayName
-
-        // 프로필 사진 로드
-        self.playerPhoto = try? await localPlayer.loadPhoto(for: .small)
 
         return PlayerInfo(playerID: playerID, nickname: nickname)
     }

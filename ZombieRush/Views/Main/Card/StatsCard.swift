@@ -47,28 +47,23 @@ struct StatsCard: View {
                 // 테이블 헤더
                 HStack(spacing: 0) {
                     Text(NSLocalizedString("ability_header", tableName: "Main", comment: "Ability header"))
-                        .font(.system(size: 14, weight: .bold, design: .monospaced))
+                        .font(.system(size: 12, weight: .medium, design: .monospaced))
                         .foregroundColor(.white.opacity(0.8))
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.horizontal, 6)
 
-                    Text(NSLocalizedString("base_amount_header", tableName: "Main", comment: "Base amount header"))
-                        .font(.system(size: 14, weight: .bold, design: .monospaced))
-                        .foregroundColor(.white.opacity(0.8))
-                        .frame(width: 80, alignment: .center)
-
                     Text(NSLocalizedString("increase_amount_header", tableName: "Main", comment: "Increase amount header"))
-                        .font(.system(size: 14, weight: .bold, design: .monospaced))
+                        .font(.system(size: 12, weight: .medium, design: .monospaced))
                         .foregroundColor(.white.opacity(0.8))
-                        .frame(width: 80, alignment: .center)
+                        .frame(width: 60, alignment: .center)
 
                     Text(NSLocalizedString("final_header", tableName: "Main", comment: "Final header"))
-                        .font(.system(size: 14, weight: .bold, design: .monospaced))
+                        .font(.system(size: 12, weight: .medium, design: .monospaced))
                         .foregroundColor(.white.opacity(0.8))
                         .frame(width: 80, alignment: .center)
 
                     Text(NSLocalizedString("upgrade_header", tableName: "Main", comment: "Upgrade header"))
-                        .font(.system(size: 14, weight: .bold, design: .monospaced))
+                        .font(.system(size: 12, weight: .medium, design: .monospaced))
                         .foregroundColor(.white.opacity(0.8))
                         .frame(width: 80, alignment: .center)
                 }
