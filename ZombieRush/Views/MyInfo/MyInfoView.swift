@@ -1,9 +1,17 @@
 import SwiftUI
 
+// MARK: - Job Filter
+enum JobFilter: CaseIterable {
+    case unlock
+    case lock
+}
+
 extension MyInfoView {
     static let myInfoTitle = NSLocalizedString("screen_title_my_info", tableName: "View", comment: "My info screen title")
     static let elementsSection = NSLocalizedString("my_info_elements_section", tableName: "View", comment: "My info elements section title")
     static let jobsSection = NSLocalizedString("my_info_jobs_section", tableName: "View", comment: "My info jobs section title")
+    static let jobFilterUnlock = NSLocalizedString("job_filter_unlock", tableName: "View", comment: "Job filter for unlocked jobs")
+    static let jobFilterLock = NSLocalizedString("job_filter_lock", tableName: "View", comment: "Job filter for locked jobs")
 }
 
 // MARK: - Helper Functions
@@ -71,6 +79,9 @@ struct MyInfoView: View {
     @State private var selectedJobType: JobType?
     @State private var purchaseCount = 1
 
+    // 직업 필터 상태
+    @State private var selectedJobFilter: JobFilter = .unlock
+
     var body: some View {
         ZStack {
             // 사이버펑크 배경
@@ -83,10 +94,12 @@ struct MyInfoView: View {
                         elementsSection
                         jobsSection
                     }
+                    .padding(.vertical, 32)
                 }
                 .scrollIndicators(.hidden)
             }
             .padding()
+            .ignoresSafeArea(edges: .bottom)
         }
         .sheet(item: $selectedElementType) { elementType in
             ElementPurchaseSheet(
@@ -180,20 +193,33 @@ extension MyInfoView {
     }
 
     private var jobsSection: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: 16) {
             Text(MyInfoView.jobsSection)
                 .font(.system(size: 18, weight: .bold, design: .monospaced))
                 .foregroundColor(.cyan)
+
+            // Segmented Picker
+            Picker("", selection: $selectedJobFilter) {
+                Text(MyInfoView.jobFilterUnlock)
+                    .tag(JobFilter.unlock)
+                Text(MyInfoView.jobFilterLock)
+                    .tag(JobFilter.lock)
+            }
+            .pickerStyle(.segmented)
+            .padding(.bottom, 8)
 
             if let jobs = jobsRepository.currentJobs {
                 LazyVGrid(columns: [
                     GridItem(.flexible(), spacing: 12),
                     GridItem(.flexible(), spacing: 12)
-                ], spacing: 12) {
-                    ForEach(JobType.allCases, id: \.self) { jobType in
+                ], spacing: 8) {
+                    ForEach(filteredJobTypes(jobs: jobs), id: \.self) { jobType in
+                        let isUnlocked = jobs.unlockedJobs.contains(jobType)
+
                         MyInfoJobCard(
                             jobType: jobType,
-                            isUnlocked: jobs.unlockedJobs.contains(jobType),
+                            isUnlocked: isUnlocked,
+                            style: selectedJobFilter == .unlock ? .default : .locked,
                             onTap: {
                                 selectedJobType = jobType
                             }
@@ -201,6 +227,13 @@ extension MyInfoView {
                     }
                 }
             }
+        }
+    }
+
+    private func filteredJobTypes(jobs: Jobs) -> [JobType] {
+        JobType.allCases.filter { jobType in
+            let isUnlocked = jobs.unlockedJobs.contains(jobType)
+            return selectedJobFilter == .unlock ? isUnlocked : !isUnlocked
         }
     }
 

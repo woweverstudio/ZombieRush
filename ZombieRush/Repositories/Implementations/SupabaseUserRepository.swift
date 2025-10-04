@@ -78,4 +78,16 @@ final class SupabaseUserRepository: ObservableObject, UserRepository {
         return updatedUser
     }
 
+    func loadGameData(playerID: String, nickname: String) async throws -> GameData {
+        let data = try await supabase
+            .rpc("load_or_create_game_data", params: [
+                "p_player_id": playerID,
+                "p_nickname": nickname
+            ])
+            .execute()
+            .data
+
+        return try RPCDecoder.decode(GameData.self, from: data)
+    }
+
 }

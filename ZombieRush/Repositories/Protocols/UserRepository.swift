@@ -21,4 +21,7 @@ protocol UserRepository: AnyObject {
 
     /// 사용자 업데이트
     func updateUser(_ user: User) async throws -> User
+
+    /// 게임 데이터 전체 로드 (RPC)
+    func loadGameData(playerID: String, nickname: String) async throws -> GameData
 }

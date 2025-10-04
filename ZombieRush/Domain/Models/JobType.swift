@@ -13,9 +13,6 @@ enum JobType: String, CaseIterable, Hashable, Identifiable {
     case iceMage = "ice"
     case thunderMage = "thunder"
     case darkMage = "dark"
-
-
-    
 }
 
 // MARK: - Localized Extensions

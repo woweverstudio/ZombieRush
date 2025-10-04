@@ -122,22 +122,10 @@ struct LoadingView: View {
         // GameKit에서 얻은 플레이어 정보로 데이터 로드/생성
         let playerID = playerInfo.playerID
         let nickname = playerInfo.nickname
-
-
-        // 사용자 데이터, 스탯 데이터, 원소 데이터, 직업 데이터, 직업 요구사항 동시에 로드
-        async let userTask: () = loadUserData(playerID: playerID, nickname: nickname)
-        async let statsTask: () = loadStatsData(playerID: playerID)
-        async let elementsTask: () = loadElementsData(playerID: playerID)
-        async let jobsTask: () = loadJobsData(playerID: playerID)
-        async let requirementsTask: () = loadJobRequirements()
-
-        // 다섯 작업 모두 완료될 때까지 대기
-        await userTask
-        await statsTask
-        await elementsTask
-        await jobsTask
-        await requirementsTask
-
+        
+        let request = LoadGameDataRequest(playerID: playerID, nickname: nickname)
+        let _ = await useCaseFactory.loadGameData.execute(request)
+        
         // 단계 4: 완료
         await updateStage(to: .completed)
         isLoading = false
@@ -179,30 +167,5 @@ struct LoadingView: View {
                 rootViewController.dismiss(animated: true)
             }
         }
-    }
-
-    private func loadUserData(playerID: String, nickname: String) async {
-        let request = LoadOrCreateUserRequest(playerID: playerID, nickname: nickname)
-        _ = await useCaseFactory.loadOrCreateUser.execute(request)
-    }
-
-    private func loadStatsData(playerID: String) async {
-        let request = LoadOrCreateStatsRequest(playerID: playerID)
-        _ = await useCaseFactory.loadOrCreateStats.execute(request)
-    }
-
-    private func loadElementsData(playerID: String) async {
-        let request = LoadOrCreateElementsRequest(playerID: playerID)
-        _ = await useCaseFactory.loadOrCreateElements.execute(request)
-    }
-
-    private func loadJobsData(playerID: String) async {
-        let request = LoadOrCreateJobsRequest(playerID: playerID)
-        _ = await useCaseFactory.loadOrCreateJobs.execute(request)
-    }
-
-    private func loadJobRequirements() async {
-        let request = LoadJobRequirementsRequest()
-        _ = await useCaseFactory.loadJobRequirements.execute(request)
     }
 }

@@ -137,6 +137,40 @@
         }
       }
     },
+    "job_filter_lock" : {
+      "comment" : "Job filter for locked jobs",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Locked"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "잠김"
+          }
+        }
+      }
+    },
+    "job_filter_unlock" : {
+      "comment" : "Job filter for unlocked jobs",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Owned"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "보유"
+          }
+        }
+      }
+    },
     "level_prefix" : {
       "comment" : "Level prefix",
       "localizations" : {
@@ -155,7 +189,7 @@
       }
     },
     "level_unit" : {
-      "comment" : "Level unit",
+      "comment" : "레벨",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -205,7 +239,6 @@
         }
       }
     },
-
     "market_item_description_55" : {
       "comment" : "Market item description for 55 Block Gems",
       "localizations" : {
@@ -223,7 +256,6 @@
         }
       }
     },
-
     "market_item_description_120" : {
       "comment" : "Market item description for 120 Block Gems",
       "localizations" : {
@@ -241,7 +273,6 @@
         }
       }
     },
-
     "market_promotion_description" : {
       "comment" : "Market promotion description",
       "localizations" : {
@@ -378,19 +409,55 @@
         }
       }
     },
-    "my_info_current_value" : {
-      "comment" : "Current value label",
+    "my_info_condition_pass" : {
+      "comment" : "조건 충족",
+      "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Current"
+            "value" : "Met"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "현재"
+            "value" : "조건 충족"
+          }
+        }
+      }
+    },
+    "my_info_condition_unpass" : {
+      "comment" : "조건 미충족",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No met"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "조건 미충족"
+          }
+        }
+      }
+    },
+    "my_info_current_value" : {
+      "comment" : "현재 %@",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Current %@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : " 현재 %@"
           }
         }
       }
@@ -406,7 +473,7 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "네모잼 %d개로 %@ 원소 %d개를 얻습니다."
           }
         }
@@ -446,40 +513,6 @@
         }
       }
     },
-    "my_info_element_requirement" : {
-      "comment" : "Element requirement title with placeholder",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Required %@ Elements"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "필요한 %@ 원소"
-          }
-        }
-      }
-    },
-    "my_info_element_unit" : {
-      "comment" : "Element unit with placeholder",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ Elements"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ 원소"
-          }
-        }
-      }
-    },
     "my_info_elements_section" : {
       "comment" : "My info elements section title",
       "localizations" : {
@@ -493,23 +526,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "원소"
-          }
-        }
-      }
-    },
-    "my_info_fulfilled" : {
-      "comment" : "Fulfilled status",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "✓"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "✓"
           }
         }
       }
@@ -548,23 +564,6 @@
         }
       }
     },
-    "my_info_job_unlock_conditions" : {
-      "comment" : "Job unlock conditions",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Unlock Conditions"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "해금 조건"
-          }
-        }
-      }
-    },
     "my_info_jobs_section" : {
       "comment" : "My info jobs section title",
       "localizations" : {
@@ -582,36 +581,36 @@
         }
       }
     },
-    "my_info_level_requirement" : {
-      "comment" : "Level requirement title",
+    "my_info_require_value" : {
+      "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Required Level"
+            "value" : "Required %@"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "필요 레벨"
+            "value" : "필요한 %@"
           }
         }
       }
     },
     "my_info_required_value" : {
-      "comment" : "Required value label",
+      "comment" : "필요한 %@",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Required"
+            "value" : "Required %@"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "필요"
+            "value" : "필요한 %@"
           }
         }
       }

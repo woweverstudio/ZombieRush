@@ -33,18 +33,17 @@ final class UseCaseFactory: ObservableObject {
     var repositories: (user: UserRepository, stats: StatsRepository, elements: ElementsRepository, jobs: JobsRepository) {
         (userRepository, statsRepository, elementsRepository, jobsRepository)
     }
-
-    // MARK: - User UseCases
-    var loadOrCreateUser: LoadOrCreateUserUseCase {
-        LoadOrCreateUserUseCase(userRepository: userRepository)
+    
+    @MainActor
+    var loadGameData: LoadGameDataUseCase {
+        LoadGameDataUseCase(userRepository: userRepository,
+                            statsRepository: statsRepository,
+                            elementsRepository: elementsRepository,
+                            jobsRepository: jobsRepository)
     }
 
     var updateUser: UpdateUserUseCase {
         UpdateUserUseCase(userRepository: userRepository)
-    }
-
-    var refreshUser: RefreshUserUseCase {
-        RefreshUserUseCase(userRepository: userRepository)
     }
 
     var addExperience: AddExperienceUseCase {
@@ -67,26 +66,8 @@ final class UseCaseFactory: ObservableObject {
         ConsumeRemainingPointsUseCase(userRepository: userRepository)
     }
 
-    // MARK: - Stats UseCases
-    var loadOrCreateStats: LoadOrCreateStatsUseCase {
-        LoadOrCreateStatsUseCase(statsRepository: statsRepository)
-    }
-
-    var refreshStats: RefreshStatsUseCase {
-        RefreshStatsUseCase(statsRepository: statsRepository)
-    }
-
     var upgradeStat: UpgradeStatUseCase {
         UpgradeStatUseCase(statsRepository: statsRepository, userRepository: userRepository)
-    }
-
-    // MARK: - Elements UseCases
-    var loadOrCreateElements: LoadOrCreateElementsUseCase {
-        LoadOrCreateElementsUseCase(elementsRepository: elementsRepository)
-    }
-
-    var refreshElements: RefreshElementsUseCase {
-        RefreshElementsUseCase(elementsRepository: elementsRepository)
     }
 
     var updateElements: UpdateElementsUseCase {
@@ -96,16 +77,6 @@ final class UseCaseFactory: ObservableObject {
     var addElement: AddElementUseCase {
         AddElementUseCase(elementsRepository: elementsRepository, userRepository: userRepository)
     }
-
-    // MARK: - Jobs UseCases
-    var loadOrCreateJobs: LoadOrCreateJobsUseCase {
-        LoadOrCreateJobsUseCase(jobsRepository: jobsRepository)
-    }
-
-    var refreshJobs: RefreshJobsUseCase {
-        RefreshJobsUseCase(jobsRepository: jobsRepository)
-    }
-
     var updateJobs: UpdateJobsUseCase {
         UpdateJobsUseCase(jobsRepository: jobsRepository)
     }
@@ -116,9 +87,5 @@ final class UseCaseFactory: ObservableObject {
 
     var unlockJob: UnlockJobUseCase {
         UnlockJobUseCase(jobsRepository: jobsRepository, elementsRepository: elementsRepository, userRepository: userRepository)
-    }
-
-    var loadJobRequirements: LoadJobRequirementsUseCase {
-        LoadJobRequirementsUseCase()
     }
 }

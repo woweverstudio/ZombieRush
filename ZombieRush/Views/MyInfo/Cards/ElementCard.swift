@@ -4,10 +4,23 @@ import SwiftUI
 struct ElementCard: View {
     let elementType: ElementType
     let count: Int
+    let style: CardStyle
     let onTap: () -> Void
 
+    init(
+        elementType: ElementType,
+        count: Int,
+        style: CardStyle = .cyberpunk,
+        onTap: @escaping () -> Void
+    ) {
+        self.elementType = elementType
+        self.count = count
+        self.style = style
+        self.onTap = onTap
+    }
+
     var body: some View {
-        Card(style: .cyberpunk) {
+        Card(style: style) {
             HStack {
                 VStack(spacing: 6){
                     Image(systemName: elementType.iconName)

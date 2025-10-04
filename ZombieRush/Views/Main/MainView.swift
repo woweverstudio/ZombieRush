@@ -31,8 +31,6 @@ struct MainView: View {
                 }
                 .scrollIndicators(.hidden)
                 .scrollBounceBehavior(.basedOnSize)
-                
-                Spacer()
                 // 게임 시작 버튼
                 PrimaryButton(title: MainMenuPanel.startButton, style: .cyan, fullWidth: true) {
                     
