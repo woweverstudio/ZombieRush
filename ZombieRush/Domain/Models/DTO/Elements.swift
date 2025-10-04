@@ -1,14 +1,14 @@
 //
-//  Spirits.swift
+//  Elements.swift
 //  ZombieRush
 //
-//  Created by Spirits Domain Model for Supabase Integration
+//  Created by Elements Domain Model for Supabase Integration
 //
 
 import Foundation
 
-/// Supabase spirits 테이블의 원소 모델
-struct Spirits: Codable, Identifiable {
+/// Supabase elements 테이블의 원소 모델
+struct Elements: Codable, Identifiable {
     let playerId: String   // Game Center gamePlayerID (계정별 고유 식별자, foreign key to users)
     var fire: Int         // 불 속성 원소
     var ice: Int          // 얼음 속성 원소
@@ -34,8 +34,8 @@ struct Spirits: Codable, Identifiable {
     }
 
     /// 기본 원소 생성
-    static func defaultSpirits(for playerId: String) -> Spirits {
-        return Spirits(playerId: playerId)
+    static func defaultElements(for playerId: String) -> Elements {
+        return Elements(playerId: playerId)
     }
 
     /// 총 원소 개수 계산

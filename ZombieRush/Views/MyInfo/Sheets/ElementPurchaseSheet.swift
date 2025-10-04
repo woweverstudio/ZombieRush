@@ -1,8 +1,16 @@
 import SwiftUI
 
-// MARK: - Spirit Purchase Sheet
-struct SpiritPurchaseSheet: View {
-    let spiritType: SpiritType
+extension ElementPurchaseSheet {
+    static let purchaseTitle = NSLocalizedString("my_info_element_purchase_title", tableName: "View", comment: "Element purchase sheet title")
+    static let exchangeDescription = NSLocalizedString("my_info_element_exchange_description", tableName: "View", comment: "Element exchange description")
+    static let purchaseButton = NSLocalizedString("my_info_element_purchase_button", tableName: "View", comment: "Element purchase button")
+    static let insufficientNemoFruits = NSLocalizedString("my_info_insufficient_nemo_fruits", tableName: "View", comment: "Insufficient nemo fruits message")
+    static let exchangeArrow = NSLocalizedString("exchange_arrow", tableName: "View", comment: "Exchange arrow symbol")
+}
+
+// MARK: - Element Purchase Sheet
+struct ElementPurchaseSheet: View {
+    let elementType: ElementType
     @Binding var purchaseCount: Int
     let availableNemoFruits: Int
     let onPurchase: () -> Void
@@ -15,20 +23,20 @@ struct SpiritPurchaseSheet: View {
         ZStack {
             Color.black.opacity(0.3)
             VStack(spacing: 20) {
-                Header(title: "원소 구입", showBackButton: false)
+                Header(title: ElementPurchaseSheet.purchaseTitle, showBackButton: false)
 
                 // 원소 정보
                 HStack(spacing: 12) {
-                    Image(systemName: spiritType.iconName)
+                    Image(systemName: elementType.iconName)
                         .font(.system(size: 44))
-                        .foregroundColor(spiritType.color)
+                        .foregroundColor(elementType.color)
 
                     VStack(alignment:.leading, spacing: 8) {
-                        Text(spiritType.localizedDisplayName)
+                        Text(elementType.localizedDisplayName)
                             .font(.system(size: 18, weight: .bold, design: .monospaced))
                             .foregroundColor(.white)
 
-                        Text(spiritType.localizedDescription)
+                        Text(elementType.localizedDescription)
                             .font(.system(size: 14, design: .monospaced))
                             .foregroundColor(.white.opacity(0.8))
                             .lineLimit(2)
@@ -39,7 +47,7 @@ struct SpiritPurchaseSheet: View {
                 Spacer()
                 
                 // 교환 문구
-                Text(String(format: "네모잼 %d개로 %@ 원소 %d 개를 교환합니다.", purchaseCount, spiritType.localizedDisplayName, purchaseCount))
+                Text(String(format: ElementPurchaseSheet.exchangeDescription, purchaseCount, elementType.localizedDisplayName, purchaseCount))
                     .font(.system(size: 14, design: .monospaced))
                     .foregroundColor(.white.opacity(0.8))
                     .multilineTextAlignment(.center)
@@ -54,8 +62,8 @@ struct SpiritPurchaseSheet: View {
 
                     HStack {
                         CommonBadge(image: Image("nemo_single"), value: purchaseCount, size: 28, color: .cyan)
-                        Text("➔")
-                        CommonBadge(image: Image(systemName: spiritType.iconName), value: purchaseCount, size: 28, color: spiritType.color)
+                        Text(ElementPurchaseSheet.exchangeArrow)
+                        CommonBadge(image: Image(systemName: elementType.iconName), value: purchaseCount, size: 28, color: elementType.color)
                     }
 
                     SecondaryButton(title: "+", style: .default, fontSize: 24, size: .init(width: 60, height: 45)) {
@@ -69,7 +77,7 @@ struct SpiritPurchaseSheet: View {
                 Divider()
 
                 PrimaryButton(
-                    title: hasEnoughNemoFruits ? "원소 얻기" : "네모잼 부족",
+                    title: hasEnoughNemoFruits ? ElementPurchaseSheet.purchaseButton : ElementPurchaseSheet.insufficientNemoFruits,
                     style: hasEnoughNemoFruits ? .cyan : .disabled,
                     fullWidth: true
                 ) {

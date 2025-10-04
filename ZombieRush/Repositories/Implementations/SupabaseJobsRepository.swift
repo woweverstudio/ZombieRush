@@ -71,7 +71,7 @@ final class SupabaseJobsRepository: ObservableObject, JobsRepository {
         return updatedJobs
     }
 
-    func unlockJobWithTransaction(playerID: String, jobKey: String) async throws -> (jobs: Jobs, spirits: Spirits) {
+    func unlockJobWithTransaction(playerID: String, jobKey: String) async throws -> (jobs: Jobs, elements: Elements) {
         // RPC 호출
         let data = try await supabase
             .rpc("unlock_job_with_transaction", params: [
@@ -89,14 +89,14 @@ final class SupabaseJobsRepository: ObservableObject, JobsRepository {
             throw NSError(domain: "UnlockJobError", code: 0, userInfo: [NSLocalizedDescriptionKey: response.error ?? "Unknown error"])
         }
 
-        return (jobs: response.jobs, spirits: response.spirits)
+        return (jobs: response.jobs, elements: response.elements)
     }
 
     // 트랜잭션 응답 구조체
     private struct TransactionUnlockResponse: Codable {
         let success: Bool
         let jobs: Jobs
-        let spirits: Spirits
+        let elements: Elements
         let error: String?
     }
 

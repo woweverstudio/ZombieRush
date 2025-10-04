@@ -40,24 +40,24 @@ struct MarketItemsManager {
             // 네모열매 패키지
             MarketItem(
                 type: .fruitPackage(count: 20, price: 2000),
-                name: NSLocalizedString("nemo_fruit_20_name", tableName: "Market", comment: "Nemo fruit 20 pack name"),
-                description: NSLocalizedString("nemo_fruit_20_description", tableName: "Market", comment: "Nemo fruit 20 pack description"),
+                name: "TODO: StoreKit에서 로드",
+                description: "TODO: StoreKit에서 로드",
                 iconName: "diamond.fill",
                 price: 2000,
                 currencyType: .won
             ),
             MarketItem(
                 type: .fruitPackage(count: 55, price: 5000),
-                name: NSLocalizedString("nemo_fruit_55_name", tableName: "Market", comment: "Nemo fruit 55 pack name"),
-                description: NSLocalizedString("nemo_fruit_55_description", tableName: "Market", comment: "Nemo fruit 55 pack description"),
+                name: "TODO: StoreKit에서 로드",
+                description: "TODO: StoreKit에서 로드",
                 iconName: "diamond.fill",
                 price: 5000,
                 currencyType: .won
             ),
             MarketItem(
                 type: .fruitPackage(count: 110, price: 10000),
-                name: NSLocalizedString("nemo_fruit_110_name", tableName: "Market", comment: "Nemo fruit 110 pack name"),
-                description: NSLocalizedString("nemo_fruit_110_description", tableName: "Market", comment: "Nemo fruit 110 pack description"),
+                name: "TODO: StoreKit에서 로드",
+                description: "TODO: StoreKit에서 로드",
                 iconName: "diamond.fill",
                 price: 10000,
                 currencyType: .won

@@ -9,8 +9,8 @@ import SwiftUI
 import UIKit
 
 extension ForceUpdateView {
-    static let newVersionMessage = NSLocalizedString("new_version_available_message", tableName: "Intro", comment: "New version available message")
-    static let goToAppStoreButton = NSLocalizedString("go_to_app_store_button", tableName: "Intro", comment: "Go to App Store button")
+    static let newVersionMessage = NSLocalizedString("intro_new_version_available_message", tableName: "View", comment: "New version available message")
+    static let goToAppStoreButton = NSLocalizedString("intro_go_to_app_store_button", tableName: "View", comment: "Go to App Store button")
 }
 
 struct ForceUpdateView: View {

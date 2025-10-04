@@ -1,15 +1,12 @@
 import SwiftUI
 
 extension StatsCard {
-    static let remainingPointsFormat = NSLocalizedString("remaining_points", tableName: "Main", comment: "Remaining points format")
-    static let hpLabel = NSLocalizedString("hp_label", tableName: "Main", comment: "HP stat label")
-    static let moveSpeedLabel = NSLocalizedString("move_speed_label", tableName: "Main", comment: "Move speed stat label")
-    static let energyStatLabel = NSLocalizedString("energy_stat_label", tableName: "Main", comment: "Energy stat label")
-    static let attackSpeedLabel = NSLocalizedString("attack_speed_label", tableName: "Main", comment: "Attack speed stat label")
-    
-    // Shared keys used in PlayerInfoCard
-    static let healthLabel = NSLocalizedString("health_label", tableName: "MyInfo", comment: "Health label")
-    static let energyInfoLabel = NSLocalizedString("energy_label", tableName: "MyInfo", comment: "Energy label")
+    static let remainingPointsFormat = NSLocalizedString("remaining_points", tableName: "View", comment: "Remaining points format")
+    // Table headers
+    static let abilityHeader = NSLocalizedString("ability_header", tableName: "View", comment: "Ability header")
+    static let increaseAmountHeader = NSLocalizedString("increase_amount_header", tableName: "View", comment: "Increase amount header")
+    static let finalHeader = NSLocalizedString("final_header", tableName: "View", comment: "Final header")
+    static let upgradeHeader = NSLocalizedString("upgrade_header", tableName: "View", comment: "Upgrade header")
 }
 
 // MARK: - Stats Card
@@ -46,23 +43,23 @@ struct StatsCard: View {
             VStack(spacing: 0) {
                 // 테이블 헤더
                 HStack(spacing: 0) {
-                    Text(NSLocalizedString("ability_header", tableName: "Main", comment: "Ability header"))
+                    Text(StatsCard.abilityHeader)
                         .font(.system(size: 12, weight: .medium, design: .monospaced))
                         .foregroundColor(.white.opacity(0.8))
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.horizontal, 6)
 
-                    Text(NSLocalizedString("increase_amount_header", tableName: "Main", comment: "Increase amount header"))
+                    Text(StatsCard.increaseAmountHeader)
                         .font(.system(size: 12, weight: .medium, design: .monospaced))
                         .foregroundColor(.white.opacity(0.8))
                         .frame(width: 60, alignment: .center)
 
-                    Text(NSLocalizedString("final_header", tableName: "Main", comment: "Final header"))
+                    Text(StatsCard.finalHeader)
                         .font(.system(size: 12, weight: .medium, design: .monospaced))
                         .foregroundColor(.white.opacity(0.8))
                         .frame(width: 80, alignment: .center)
 
-                    Text(NSLocalizedString("upgrade_header", tableName: "Main", comment: "Upgrade header"))
+                    Text(StatsCard.upgradeHeader)
                         .font(.system(size: 12, weight: .medium, design: .monospaced))
                         .foregroundColor(.white.opacity(0.8))
                         .frame(width: 80, alignment: .center)

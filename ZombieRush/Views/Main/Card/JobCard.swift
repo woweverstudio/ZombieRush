@@ -1,10 +1,5 @@
 import SwiftUI
 
-extension JobCard {
-    static let jobsUnlockedFormat = NSLocalizedString("jobs_unlocked_format", tableName: "Main", comment: "Jobs unlocked format")
-    static let dashPlaceholder = NSLocalizedString("dash_placeholder", tableName: "Main", comment: "Dash placeholder")
-}
-
 // MARK: - Job Card (TabView로 해금된 job만 표시)
 struct JobCard: View {
     @EnvironmentObject var jobsRepository: SupabaseJobsRepository

@@ -1,42 +1,34 @@
 import SwiftUI
 
+extension JobOwnedSheet {
+    static let basicStatsTitle = NSLocalizedString("my_info_basic_stats", tableName: "View", comment: "Basic stats title")
+    
+    static let hp = NSLocalizedString("models_stat_hp_name", tableName: "Common", comment: "HP stat name")
+    static let energy = NSLocalizedString("models_stat_energy_name", tableName: "Common", comment: "Energy stat name")
+    static let moveSpeed = NSLocalizedString("models_stat_move_speed_name", tableName: "Common", comment: "Move speed stat name")
+    static let attackSpeed = NSLocalizedString("models_stat_attack_speed_name", tableName: "Common", comment: "Attack speed stat name")
+}
+
 // MARK: - Job Owned Sheet
 struct JobOwnedSheet: View {
     let jobType: JobType
-
-    // 임시 직업 설명
-    private func getJobDescription(for jobType: JobType) -> String {
-        switch jobType {
-        case .novice:
-            return "기본 직업입니다"
-        case .fireMage:
-            return "불 속성 마법을 사용합니다"
-        case .iceMage:
-            return "얼음 속성 마법을 사용합니다"
-        case .thunderMage:
-            return "번개 속성 마법을 사용합니다"
-        case .darkMage:
-            return "어둠 속성 마법을 사용합니다"
-        }
-    }
-
 
     // 직업 스탯 정보 뷰
     private func jobStatsView() -> some View {
         let stats = JobStats.getStats(for: jobType.rawValue)
 
         return VStack(spacing: 4) {
-            Text("기본 스탯")
+            Text(JobOwnedSheet.basicStatsTitle)
                 .font(.system(size: 12, weight: .medium, design: .monospaced))
                 .foregroundColor(.white.opacity(0.9))
 
             VStack(spacing: 0) {
                 // 헤더 행
                 HStack(spacing: 0) {
-                    statHeaderCell(label: "HP")
-                    statHeaderCell(label: "Energy")
-                    statHeaderCell(label: "Move")
-                    statHeaderCell(label: "Attack")
+                    statHeaderCell(label: JobOwnedSheet.hp)
+                    statHeaderCell(label: JobOwnedSheet.energy)
+                    statHeaderCell(label: JobOwnedSheet.moveSpeed)
+                    statHeaderCell(label: JobOwnedSheet.attackSpeed)
                 }
                 .background(Color.cyan.opacity(0.15))
 
@@ -93,7 +85,7 @@ struct JobOwnedSheet: View {
 
                     VStack(spacing: 8) {
                         // 직업 설명
-                        Text(getJobDescription(for: jobType))
+                        Text(jobType.localizedDescription)
                             .font(.system(size: 14, design: .monospaced))
                             .foregroundColor(.white.opacity(0.8))
                             .multilineTextAlignment(.center)

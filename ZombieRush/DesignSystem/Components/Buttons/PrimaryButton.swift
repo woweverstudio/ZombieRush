@@ -237,7 +237,7 @@ struct PrimaryButton<TrailingContent: View>: View {
             }
         }
 
-        // Buttons with trailing content (like stat upgrade and spirit purchase)
+        // Buttons with trailing content (like stat upgrade and element purchase)
         VStack(spacing: 12) {
             PrimaryButton(title: "업그레이드", style: .cyan, trailingContent: {
                 StatsPointCost(count: 1)

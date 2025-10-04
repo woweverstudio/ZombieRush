@@ -13,25 +13,25 @@ final class UseCaseFactory: ObservableObject {
     // MARK: - Repositories (SSOT - Single Source of Truth)
     private let userRepository: UserRepository
     private let statsRepository: StatsRepository
-    private let spiritsRepository: SpiritsRepository
+    private let elementsRepository: ElementsRepository
     private let jobsRepository: JobsRepository
 
     // MARK: - Initialization
     init(userRepository: UserRepository,
          statsRepository: StatsRepository,
-         spiritsRepository: SpiritsRepository,
+         elementsRepository: ElementsRepository,
          jobsRepository: JobsRepository) {
         self.userRepository = userRepository
         self.statsRepository = statsRepository
-        self.spiritsRepository = spiritsRepository
+        self.elementsRepository = elementsRepository
         self.jobsRepository = jobsRepository
 
         print("🔧 UseCaseFactory: 외부에서 주입받은 Repository들로 초기화 완료")
     }
 
     // MARK: - Repository Access (for Views to observe state)
-    var repositories: (user: UserRepository, stats: StatsRepository, spirits: SpiritsRepository, jobs: JobsRepository) {
-        (userRepository, statsRepository, spiritsRepository, jobsRepository)
+    var repositories: (user: UserRepository, stats: StatsRepository, elements: ElementsRepository, jobs: JobsRepository) {
+        (userRepository, statsRepository, elementsRepository, jobsRepository)
     }
 
     // MARK: - User UseCases
@@ -80,21 +80,21 @@ final class UseCaseFactory: ObservableObject {
         UpgradeStatUseCase(statsRepository: statsRepository, userRepository: userRepository)
     }
 
-    // MARK: - Spirits UseCases
-    var loadOrCreateSpirits: LoadOrCreateSpiritsUseCase {
-        LoadOrCreateSpiritsUseCase(spiritsRepository: spiritsRepository)
+    // MARK: - Elements UseCases
+    var loadOrCreateElements: LoadOrCreateElementsUseCase {
+        LoadOrCreateElementsUseCase(elementsRepository: elementsRepository)
     }
 
-    var refreshSpirits: RefreshSpiritsUseCase {
-        RefreshSpiritsUseCase(spiritsRepository: spiritsRepository)
+    var refreshElements: RefreshElementsUseCase {
+        RefreshElementsUseCase(elementsRepository: elementsRepository)
     }
 
-    var updateSpirits: UpdateSpiritsUseCase {
-        UpdateSpiritsUseCase(spiritsRepository: spiritsRepository)
+    var updateElements: UpdateElementsUseCase {
+        UpdateElementsUseCase(elementsRepository: elementsRepository)
     }
 
-    var addSpirit: AddSpiritUseCase {
-        AddSpiritUseCase(spiritsRepository: spiritsRepository, userRepository: userRepository)
+    var addElement: AddElementUseCase {
+        AddElementUseCase(elementsRepository: elementsRepository, userRepository: userRepository)
     }
 
     // MARK: - Jobs UseCases
@@ -115,7 +115,7 @@ final class UseCaseFactory: ObservableObject {
     }
 
     var unlockJob: UnlockJobUseCase {
-        UnlockJobUseCase(jobsRepository: jobsRepository, spiritsRepository: spiritsRepository, userRepository: userRepository)
+        UnlockJobUseCase(jobsRepository: jobsRepository, elementsRepository: elementsRepository, userRepository: userRepository)
     }
 
     var loadJobRequirements: LoadJobRequirementsUseCase {

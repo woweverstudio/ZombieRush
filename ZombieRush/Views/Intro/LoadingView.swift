@@ -1,11 +1,5 @@
 import SwiftUI
 
-extension LoadingView {
-    static let checkingVersionMessage = NSLocalizedString("checking_version_message", tableName: "Intro", comment: "Checking version message")
-    static let loadingDataMessage = NSLocalizedString("loading_data_message", tableName: "Intro", comment: "Loading data message")
-    static let syncingUserDataMessage = NSLocalizedString("syncing_user_data_message", tableName: "Intro", comment: "Syncing user data message")
-    static let readyToPlayMessage = NSLocalizedString("ready_to_play_message", tableName: "Intro", comment: "Ready to play message")
-}
 
 // MARK: - Loading View
 
@@ -22,15 +16,6 @@ enum LoadingStage: Int, CaseIterable {
         case .gameCenterAuth: return 0.33
         case .dataLoading: return 0.66
         case .completed: return 1.0
-        }
-    }
-
-    var message: String {
-        switch self {
-        case .versionCheck: return LoadingView.checkingVersionMessage
-        case .gameCenterAuth: return LoadingView.loadingDataMessage
-        case .dataLoading: return LoadingView.syncingUserDataMessage
-        case .completed: return LoadingView.readyToPlayMessage
         }
     }
 }
@@ -69,12 +54,6 @@ struct LoadingView: View {
                             .frame(width: progress * 300, height: 8)
                     }
                     .frame(width: 300)
-
-                    // 로딩 텍스트
-                    Text(getLoadingText())
-                        .font(.system(size: 16, weight: .bold, design: .monospaced))
-                        .foregroundColor(.white.opacity(0.8))
-                        .tracking(2)
                 }
 
                 Spacer()
@@ -102,10 +81,6 @@ struct LoadingView: View {
                 progress = newStage.progress
             }
         }
-    }
-    
-    private func getLoadingText() -> String {
-        return currentStage.message
     }
 
     private func startLoadingProcess() {
@@ -152,14 +127,14 @@ struct LoadingView: View {
         // 사용자 데이터, 스탯 데이터, 원소 데이터, 직업 데이터, 직업 요구사항 동시에 로드
         async let userTask: () = loadUserData(playerID: playerID, nickname: nickname)
         async let statsTask: () = loadStatsData(playerID: playerID)
-        async let spiritsTask: () = loadSpiritsData(playerID: playerID)
+        async let elementsTask: () = loadElementsData(playerID: playerID)
         async let jobsTask: () = loadJobsData(playerID: playerID)
         async let requirementsTask: () = loadJobRequirements()
 
         // 다섯 작업 모두 완료될 때까지 대기
         await userTask
         await statsTask
-        await spiritsTask
+        await elementsTask
         await jobsTask
         await requirementsTask
 
@@ -216,9 +191,9 @@ struct LoadingView: View {
         _ = await useCaseFactory.loadOrCreateStats.execute(request)
     }
 
-    private func loadSpiritsData(playerID: String) async {
-        let request = LoadOrCreateSpiritsRequest(playerID: playerID)
-        _ = await useCaseFactory.loadOrCreateSpirits.execute(request)
+    private func loadElementsData(playerID: String) async {
+        let request = LoadOrCreateElementsRequest(playerID: playerID)
+        _ = await useCaseFactory.loadOrCreateElements.execute(request)
     }
 
     private func loadJobsData(playerID: String) async {

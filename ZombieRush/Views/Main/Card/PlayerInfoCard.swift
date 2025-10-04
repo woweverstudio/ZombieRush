@@ -1,9 +1,8 @@
 import SwiftUI
 
 extension PlayerInfoCard {
-    static let dashPlaceholder = NSLocalizedString("dash_placeholder", tableName: "Main", comment: "Dash placeholder")
-    static let nemoRescueProgressFormat = NSLocalizedString("nemo_rescue_progress", tableName: "Main", comment: "Nemo rescue progress format")
-    static let percentageFormat = NSLocalizedString("percentage_format", tableName: "Main", comment: "Percentage format")
+    static let nemoRescueProgressFormat = NSLocalizedString("nemo_rescue_progress", tableName: "View", comment: "Nemo rescue progress format")
+    static let levelPrefix = NSLocalizedString("level_prefix", tableName: "View", comment: "Level prefix")
 }
 
 // MARK: - Player Info Card (프로필 + 스탯 통합)
@@ -11,7 +10,7 @@ struct PlayerInfoCard: View {
     @Environment(AppRouter.self) var router
     @EnvironmentObject var userRepository: SupabaseUserRepository
     @EnvironmentObject var jobsRepository: SupabaseJobsRepository
-    @EnvironmentObject var spiritsRepository: SupabaseSpiritsRepository
+    @EnvironmentObject var elementsRepository: SupabaseElementsRepository
     @EnvironmentObject var useCaseFactory: UseCaseFactory
 
     var body: some View {
@@ -50,11 +49,11 @@ struct PlayerInfoCard: View {
         Group {
             if let user = userRepository.currentUser {
                 let levelInfo = user.levelInfo
-                Text("Lv. \(levelInfo.currentLevel)")
+                Text("\(PlayerInfoCard.levelPrefix)\(levelInfo.currentLevel)")
                     .font(.system(size: 18, weight: .bold, design: .monospaced))
                     .foregroundColor(Color.dsTextPrimary)
             } else {
-                Text("Lv. \(PlayerInfoCard.dashPlaceholder)")
+                Text("-")
                     .font(.system(size: 18, weight: .bold, design: .monospaced))
                     .foregroundColor(.white.opacity(0.5))
             }
@@ -83,7 +82,7 @@ struct PlayerInfoCard: View {
                             .frame(width: 100 * levelInfo.progress, height: 8)
                     }
                     
-                    Text(verbatim: String(format: PlayerInfoCard.percentageFormat, percentage))
+                    Text("(\(percentage)%)")
                         .font(.system(size: 10, weight: .bold, design: .monospaced))
                         .foregroundColor(Color.dsSuccess)
                 }
@@ -96,20 +95,20 @@ struct PlayerInfoCard: View {
             GridItem(.flexible()),
             GridItem(.flexible())
         ]) {
-            ForEach(SpiritType.allCases, id: \.self) { spiritType in
-                elementCard(for: spiritType)
+            ForEach(ElementType.allCases, id: \.self) { elementType in
+                elementCard(for: elementType)
             }
         }
     }
     
-    private func elementCard(for spiritType: SpiritType) -> some View {
+    private func elementCard(for elementType: ElementType) -> some View {
         Card(style: .default) {
             HStack(spacing: 8) {
-                Image(systemName: spiritType.iconName)
-                    .foregroundColor(spiritType.color)
+                Image(systemName: elementType.iconName)
+                    .foregroundColor(elementType.color)
                     .frame(width: 12)
 
-                Text("\(getSpiritCount(for: spiritType))")
+                Text("\(getElementCount(for: elementType))")
                     .font(.system(size: 12, weight: .bold, design: .monospaced))
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -117,14 +116,14 @@ struct PlayerInfoCard: View {
         }
     }
 
-    private func getSpiritCount(for spiritType: SpiritType) -> Int {
-        guard let spirits = spiritsRepository.currentSpirits else { return 0 }
+    private func getElementCount(for elementType: ElementType) -> Int {
+        guard let elements = elementsRepository.currentElements else { return 0 }
 
-        switch spiritType {
-        case .fire: return spirits.fire
-        case .ice: return spirits.ice
-        case .thunder: return spirits.thunder
-        case .dark: return spirits.dark
+        switch elementType {
+        case .fire: return elements.fire
+        case .ice: return elements.ice
+        case .thunder: return elements.thunder
+        case .dark: return elements.dark
         }
     }
 }

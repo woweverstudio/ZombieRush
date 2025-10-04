@@ -1,7 +1,8 @@
 import SwiftUI
 
 extension MarketView {
-    static let marketTitle = NSLocalizedString("market_title", tableName: "Market", comment: "Market title")
+    static let marketTitle = NSLocalizedString("screen_title_market", tableName: "View", comment: "Market screen title")
+    static let purchaseButton = NSLocalizedString("market_purchase_button", tableName: "View", comment: "Market purchase button")
 }
 
 // MARK: - Market View
@@ -98,7 +99,7 @@ struct MarketItemCard: View {
                 Button(action: {
                     // TODO: 구매 로직 구현
                 }) {
-                    Text("구매")
+                    Text(MarketView.purchaseButton)
                         .font(.system(size: 14, weight: .bold, design: .monospaced))
                         .foregroundColor(Color.dsTextPrimary)
                         .frame(maxWidth: .infinity)

@@ -2,7 +2,7 @@ import SwiftUI
 
 // MARK: - Element Card Component
 struct ElementCard: View {
-    let spiritType: SpiritType
+    let elementType: ElementType
     let count: Int
     let onTap: () -> Void
 
@@ -10,12 +10,12 @@ struct ElementCard: View {
         Card(style: .cyberpunk) {
             HStack {
                 VStack(spacing: 6){
-                    Image(systemName: spiritType.iconName)
+                    Image(systemName: elementType.iconName)
                         .font(.system(size: 24))
-                        .foregroundColor(spiritType.color)
+                        .foregroundColor(elementType.color)
                         .frame(width: 32, height: 32)
 
-                    Text(spiritType.localizedDisplayName)
+                    Text(elementType.localizedDisplayName)
                         .font(.system(size: 12, weight: .medium, design: .monospaced))
                         .foregroundColor(Color.dsTextSecondary)
                 }

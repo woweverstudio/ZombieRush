@@ -1,11 +1,7 @@
 import SwiftUI
 
 extension StoryView {
-    static let story1 = NSLocalizedString("story1", tableName: "Intro", comment: "Story 1 text")
-    static let story2 = NSLocalizedString("story2", tableName: "Intro", comment: "Story 2 text")
-    static let story3 = NSLocalizedString("story3", tableName: "Intro", comment: "Story 3 text")
-    static let story4 = NSLocalizedString("story4", tableName: "Intro", comment: "Story 4 text")
-    static let story5 = NSLocalizedString("story5", tableName: "Intro", comment: "Story 5 text")
+
 }
 
 // MARK: - Story View
@@ -57,14 +53,7 @@ struct StoryView: View {
     }
 
     private func getStoryText(for index: Int) -> String {
-        switch index {
-        case 1: return StoryView.story1
-        case 2: return StoryView.story2
-        case 3: return StoryView.story3
-        case 4: return StoryView.story4
-        case 5: return StoryView.story5
-        default: return ""
-        }
+        "TODO: 스토리 재구성 필요"
     }
 
     private func getCurrentStoryImage() -> Image {

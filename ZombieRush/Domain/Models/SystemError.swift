@@ -31,11 +31,11 @@ extension SystemErrorDescription {
     var localizedMessage: String {
         switch self {
         case .cannotFoundUser:
-            return NSLocalizedString("error_user_not_found", tableName: "Models", comment: "User not found error message")
+            return NSLocalizedString("models_error_user_not_found", tableName: "Alert", comment: "User not found error message")
         case .cannotFoundData:
-            return NSLocalizedString("error_data_not_found", tableName: "Models", comment: "Data not found error message")
+            return NSLocalizedString("models_error_data_not_found", tableName: "Alert", comment: "Data not found error message")
         case .databaseReadFailed:
-            return NSLocalizedString("error_database_failed", tableName: "Models", comment: "Database operation failed error message")
+            return NSLocalizedString("models_error_database_failed", tableName: "Alert", comment: "Database operation failed error message")
         }
     }
 }

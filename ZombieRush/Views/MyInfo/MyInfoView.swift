@@ -1,9 +1,9 @@
 import SwiftUI
 
 extension MyInfoView {
-    static let myInfoTitle = NSLocalizedString("my_info_title", tableName: "MyInfo", comment: "My info title")
-    static let elementsSection = NSLocalizedString("elements_section", tableName: "MyInfo", comment: "Elements section title")
-    static let jobsSection = NSLocalizedString("jobs_section", tableName: "MyInfo", comment: "Jobs section title")
+    static let myInfoTitle = NSLocalizedString("screen_title_my_info", tableName: "View", comment: "My info screen title")
+    static let elementsSection = NSLocalizedString("my_info_elements_section", tableName: "View", comment: "My info elements section title")
+    static let jobsSection = NSLocalizedString("my_info_jobs_section", tableName: "View", comment: "My info jobs section title")
 }
 
 // MARK: - Helper Functions
@@ -22,31 +22,31 @@ extension MyInfoView {
 
         let levelMet = getCurrentLevel() >= requirement.requiredLevel
 
-        if let spiritType = SpiritType(rawValue: requirement.requiredSpirit) {
-            let spiritMet = getSpiritCount(for: spiritType) >= requirement.requiredCount
-            return levelMet && spiritMet
+        if let elementType = ElementType(rawValue: requirement.requiredElement) {
+            let elementMet = getElementCount(for: elementType) >= requirement.requiredCount
+            return levelMet && elementMet
         }
 
         return levelMet
     }
 
     // 원소 개수 가져오기
-    private func getSpiritCount(for spiritType: SpiritType) -> Int {
-        guard let spirits = spiritsRepository.currentSpirits else { return 0 }
+    private func getElementCount(for elementType: ElementType) -> Int {
+        guard let elements = elementsRepository.currentElements else { return 0 }
 
-        switch spiritType {
-        case .fire: return spirits.fire
-        case .ice: return spirits.ice
-        case .thunder: return spirits.thunder
-        case .dark: return spirits.dark
+        switch elementType {
+        case .fire: return elements.fire
+        case .ice: return elements.ice
+        case .thunder: return elements.thunder
+        case .dark: return elements.dark
         }
     }
 
     // 모든 원소 개수를 딕셔너리로 반환
-    private func createSpiritCounts() -> [SpiritType: Int] {
-        var counts: [SpiritType: Int] = [:]
-        for spiritType in SpiritType.allCases {
-            counts[spiritType] = getSpiritCount(for: spiritType)
+    private func createElementCounts() -> [ElementType: Int] {
+        var counts: [ElementType: Int] = [:]
+        for elementType in ElementType.allCases {
+            counts[elementType] = getElementCount(for: elementType)
         }
         return counts
     }
@@ -62,12 +62,12 @@ extension MyInfoView {
 struct MyInfoView: View {
     @Environment(AppRouter.self) var router
     @EnvironmentObject var userRepository: SupabaseUserRepository
-    @EnvironmentObject var spiritsRepository: SupabaseSpiritsRepository
+    @EnvironmentObject var elementsRepository: SupabaseElementsRepository
     @EnvironmentObject var jobsRepository: SupabaseJobsRepository
     @EnvironmentObject var useCaseFactory: UseCaseFactory
 
     // 팝업 상태 관리
-    @State private var selectedSpiritType: SpiritType?
+    @State private var selectedElementType: ElementType?
     @State private var selectedJobType: JobType?
     @State private var purchaseCount = 1
 
@@ -88,25 +88,25 @@ struct MyInfoView: View {
             }
             .padding()
         }
-        .sheet(item: $selectedSpiritType) { spiritType in
-            SpiritPurchaseSheet(
-                spiritType: spiritType,
+        .sheet(item: $selectedElementType) { elementType in
+            ElementPurchaseSheet(
+                elementType: elementType,
                 purchaseCount: $purchaseCount,
                 availableNemoFruits: getNemoFruitCount(),
                 onPurchase: {
                     Task {
-                        let request = AddSpiritRequest(spiritType: spiritType, count: purchaseCount)
-                        let _ = await useCaseFactory.addSpirit.execute(request)
+                        let request = AddElementRequest(elementType: elementType, count: purchaseCount)
+                        let _ = await useCaseFactory.addElement.execute(request)
 
                         purchaseCount = 1
-                        selectedSpiritType = nil
+                        selectedElementType = nil
                     }
                 }
             )
         }
         .sheet(item: $selectedJobType) { jobType in
             let isUnlocked = jobsRepository.currentJobs?.unlockedJobs.contains(jobType) ?? false
-            let spiritCounts = createSpiritCounts()
+            let elementCounts = createElementCounts()
 
             if isUnlocked {
                 JobOwnedSheet(jobType: jobType)
@@ -114,7 +114,7 @@ struct MyInfoView: View {
                 JobUnlockSheet(
                     jobType: jobType,
                     currentLevel: getCurrentLevel(),
-                    spiritCounts: spiritCounts,
+                    elementCounts: elementCounts,
                     onUnlock: {
                         Task {
                             let request = UnlockJobRequest(jobType: jobType)
@@ -165,12 +165,12 @@ extension MyInfoView {
                 GridItem(.flexible(), spacing: 12),
                 GridItem(.flexible(), spacing: 12)
             ], spacing: 12) {
-                ForEach(SpiritType.allCases, id: \.self) { spiritType in
+                ForEach(ElementType.allCases, id: \.self) { elementType in
                     ElementCard(
-                        spiritType: spiritType,
-                        count: getSpiritCount(for: spiritType),
+                        elementType: elementType,
+                        count: getElementCount(for: elementType),
                         onTap: {
-                            selectedSpiritType = spiritType
+                            selectedElementType = elementType
                             purchaseCount = 1
                         }
                     )
@@ -214,16 +214,16 @@ extension MyInfoView {
 #Preview {
     @Previewable @StateObject var userRepository: SupabaseUserRepository = SupabaseUserRepository()
     @Previewable @StateObject var statsRepository: SupabaseStatsRepository = SupabaseStatsRepository()
-    @Previewable @StateObject var spiritsRepository: SupabaseSpiritsRepository = SupabaseSpiritsRepository()
+    @Previewable @StateObject var elementsRepository: SupabaseElementsRepository = SupabaseElementsRepository()
     @Previewable @StateObject var jobsRepository: SupabaseJobsRepository = SupabaseJobsRepository()
 
     MyInfoView()
         .environment(AppRouter())
         .environmentObject(
-            UseCaseFactory(userRepository: userRepository, statsRepository: statsRepository, spiritsRepository: spiritsRepository, jobsRepository: jobsRepository)
+            UseCaseFactory(userRepository: userRepository, statsRepository: statsRepository, elementsRepository: elementsRepository, jobsRepository: jobsRepository)
         )
         .environmentObject(userRepository)
-        .environmentObject(spiritsRepository)
+        .environmentObject(elementsRepository)
         .environmentObject(jobsRepository)
 
 }

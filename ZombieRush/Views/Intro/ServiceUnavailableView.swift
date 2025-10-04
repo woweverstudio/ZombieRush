@@ -8,8 +8,8 @@
 import SwiftUI
 
 extension ServiceUnavailableView {
-    static let serviceUnavailableTitle = NSLocalizedString("service_unavailable_title", tableName: "Intro", comment: "Service unavailable title")
-    static let serviceUnavailableMessage = NSLocalizedString("service_unavailable_message", tableName: "Intro", comment: "Service unavailable message")
+    static let serviceUnavailableTitle = NSLocalizedString("intro_service_unavailable_title", tableName: "View", comment: "Service unavailable title")
+    static let serviceUnavailableMessage = NSLocalizedString("intro_service_unavailable_message", tableName: "View", comment: "Service unavailable message")
 }
 
 struct ServiceUnavailableView: View {

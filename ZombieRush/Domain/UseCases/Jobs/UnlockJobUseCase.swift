@@ -21,7 +21,7 @@ struct UnlockJobResponse {
 @MainActor
 struct UnlockJobUseCase: UseCase {
     let jobsRepository: JobsRepository
-    let spiritsRepository: SpiritsRepository
+    let elementsRepository: ElementsRepository
     let userRepository: UserRepository
 
     func execute(_ request: UnlockJobRequest) async -> UnlockJobResponse {
@@ -33,14 +33,14 @@ struct UnlockJobUseCase: UseCase {
 
         do {
             // 트랜잭션으로 직업 해금 및 정령 차감
-            let (updatedJobs, updatedSpirits) = try await jobsRepository.unlockJobWithTransaction(
+            let (updatedJobs, updatedElements) = try await jobsRepository.unlockJobWithTransaction(
                 playerID: currentUser.playerId,
                 jobKey: request.jobType.rawValue
             )
 
             // Repository 업데이트
             jobsRepository.currentJobs = updatedJobs
-            spiritsRepository.currentSpirits = updatedSpirits
+            elementsRepository.currentElements = updatedElements
 
             ToastManager.shared.show(.unlockJobSuccess(request.jobType.localizedDisplayName))
             return UnlockJobResponse(success: true, jobs: updatedJobs)

@@ -13,7 +13,7 @@ struct ZombieRushApp: App {
     // Repository instances (SSOT) - managed as StateObjects for proper lifecycle
     @StateObject var userRepository: SupabaseUserRepository
     @StateObject var statsRepository: SupabaseStatsRepository
-    @StateObject var spiritsRepository: SupabaseSpiritsRepository
+    @StateObject var elementsRepository: SupabaseElementsRepository
     @StateObject var jobsRepository: SupabaseJobsRepository
 
     // UseCaseFactory with injected repositories
@@ -31,20 +31,20 @@ struct ZombieRushApp: App {
     init() {
         let userRepository = SupabaseUserRepository()
         let statsRepository = SupabaseStatsRepository()
-        let spiritsRepository = SupabaseSpiritsRepository()
+        let elementsRepository = SupabaseElementsRepository()
         let jobsRepository = SupabaseJobsRepository()
         
         // Initialize UseCaseFactory with injected repositories
         let factory = UseCaseFactory(
             userRepository: userRepository,
             statsRepository: statsRepository,
-            spiritsRepository: spiritsRepository,
+            elementsRepository: elementsRepository,
             jobsRepository: jobsRepository
         )
         
         _userRepository = StateObject(wrappedValue: userRepository)
         _statsRepository = StateObject(wrappedValue: statsRepository)
-        _spiritsRepository = StateObject(wrappedValue: spiritsRepository)
+        _elementsRepository = StateObject(wrappedValue: elementsRepository)
         _jobsRepository = StateObject(wrappedValue: jobsRepository)
         _useCaseFactory = StateObject(wrappedValue: factory)
     }
@@ -60,7 +60,7 @@ struct ZombieRushApp: App {
             }
             .environmentObject(userRepository)  // Repositories via EnvironmentKey
             .environmentObject(statsRepository)
-            .environmentObject(spiritsRepository)
+            .environmentObject(elementsRepository)
             .environmentObject(jobsRepository)
             .environmentObject(useCaseFactory)  // UseCaseFactory via EnvironmentKey
             .environment(appRouter)

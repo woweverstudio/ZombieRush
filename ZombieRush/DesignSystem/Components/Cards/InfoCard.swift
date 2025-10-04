@@ -100,30 +100,30 @@ struct SelectionInfoCard: View {
 #Preview {
     VStack(spacing: 16) {
         InfoCard(
-            title: "Fire Spirit",
+            title: "Fire Element",
             iconName: "flame.fill",
             iconColor: .red,
             value: "5"
         )
 
         SelectionInfoCard(
-            title: "Ice Spirit",
+            title: "Ice Element",
             iconName: "snowflake",
             iconColor: .blue,
             value: "3",
             isSelected: true
         ) {
-            print("Ice Spirit selected")
+            print("Ice Element selected")
         }
 
         SelectionInfoCard(
-            title: "Lightning Spirit",
+            title: "Lightning Element",
             iconName: "bolt.fill",
             iconColor: .yellow,
             value: "2",
             isSelected: false
         ) {
-            print("Lightning Spirit selected")
+            print("Lightning Element selected")
         }
     }
     .padding()

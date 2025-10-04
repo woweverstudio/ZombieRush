@@ -50,26 +50,26 @@ enum StatType: String, CaseIterable, Codable {
     var localizedDisplayName: String {
         switch self {
         case .hp:
-            return NSLocalizedString("stat_hp_name", tableName: "Models", comment: "HP stat display name")
+            return NSLocalizedString("models_stat_hp_name", tableName: "Common", comment: "HP stat name")
         case .moveSpeed:
-            return NSLocalizedString("stat_move_speed_name", tableName: "Models", comment: "Move speed stat display name")
+            return NSLocalizedString("models_stat_move_speed_name", tableName: "Common", comment: "Move speed stat name")
         case .energy:
-            return NSLocalizedString("stat_energy_name", tableName: "Models", comment: "Energy stat display name")
+            return NSLocalizedString("models_stat_energy_name", tableName: "Common", comment: "Energy stat name")
         case .attackSpeed:
-            return NSLocalizedString("stat_attack_speed_name", tableName: "Models", comment: "Attack speed stat display name")
+            return NSLocalizedString("models_stat_attack_speed_name", tableName: "Common", comment: "Attack speed stat name")
         }
     }
 
     var localizedDescription: String {
         switch self {
         case .hp:
-            return NSLocalizedString("stat_hp_description", tableName: "Models", comment: "HP stat description")
+            return NSLocalizedString("models_stat_hp_description", tableName: "Common", comment: "HP stat description")
         case .moveSpeed:
-            return NSLocalizedString("stat_move_speed_description", tableName: "Models", comment: "Move speed stat description")
+            return NSLocalizedString("models_stat_move_speed_description", tableName: "Common", comment: "Move speed stat description")
         case .energy:
-            return NSLocalizedString("stat_energy_description", tableName: "Models", comment: "Energy stat description")
+            return NSLocalizedString("models_stat_energy_description", tableName: "Common", comment: "Energy stat description")
         case .attackSpeed:
-            return NSLocalizedString("stat_attack_speed_description", tableName: "Models", comment: "Attack speed stat description")
+            return NSLocalizedString("models_stat_attack_speed_description", tableName: "Common", comment: "Attack speed stat description")
         }
     }
 }

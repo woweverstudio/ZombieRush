@@ -8,10 +8,11 @@
 import SwiftUI
 
 extension SettingsView {
-    static let settingsTitle = NSLocalizedString("설정", tableName: "Settings", comment: "Settings title")
-    static let soundEffectsLabel = NSLocalizedString("효과음", tableName: "Settings", comment: "Sound effects label")
-    static let backgroundMusicLabel = NSLocalizedString("배경음악", tableName: "Settings", comment: "Background music label")
-    static let vibrationLabel = NSLocalizedString("진동", tableName: "Settings", comment: "Vibration label")
+    static let settingsTitle = NSLocalizedString("screen_title_settings", tableName: "View", comment: "Settings screen title")
+    static let soundEffectsLabel = NSLocalizedString("settings_sound_effects_label", tableName: "View", comment: "Settings sound effects label")
+    static let backgroundMusicLabel = NSLocalizedString("settings_background_music_label", tableName: "View", comment: "Settings background music label")
+    static let vibrationLabel = NSLocalizedString("settings_haptic_feedback_label", tableName: "View", comment: "Settings haptic feedback label")
+    static let versionPrefix = NSLocalizedString("settings_version_prefix", tableName: "View", comment: "Settings version prefix")
 }
 
 struct SettingsView: View {
@@ -65,7 +66,7 @@ struct SettingsView: View {
                 }
                 
                 // 현재 버전 표시
-                Text("Version: \(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "2.0.0")")
+                Text("\(SettingsView.versionPrefix)\(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "2.0.0")")
                     .font(.system(size: 14))
                     .foregroundColor(Color.dsTextSecondary)
                     .padding(.top, 20)
