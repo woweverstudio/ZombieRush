@@ -9,10 +9,10 @@ extension MarketView {
 struct MarketView: View {
     @Environment(AppRouter.self) var router
 
-    // 마켓 아이템 데이터 (네모열매만)
-    private var fruitItems: [MarketItem] {
+    // 마켓 아이템 데이터 (네모잼만)
+    private var jamItems: [MarketItem] {
         MarketItemsManager.marketItems.filter { item in
-            if case .fruitPackage = item.type { return true }
+            if case .jamPackage = item.type { return true }
             return false
         }
     }
@@ -34,7 +34,7 @@ struct MarketView: View {
     private var headerView: some View {
         Header(
             title: MarketView.marketTitle,
-            badges: [.nemoFruits],
+            badges: [.nemoJam],
             onBack: {
                 router.goBack()
             }
@@ -47,7 +47,7 @@ struct MarketView: View {
                 GridItem(.flexible(), spacing: 12),
                 GridItem(.flexible(), spacing: 12)
             ], spacing: 12) {
-                ForEach(fruitItems) { item in
+                ForEach(jamItems) { item in
                     MarketItemCard(item: item)
                 }
             }
@@ -63,7 +63,7 @@ struct MarketItemCard: View {
     var body: some View {
         Card(style: .cyberpunk) {
             VStack(spacing: 12) {
-                // 네모열매 아이콘
+                // 네모잼 아이콘
                 Image("nemo_package")
                     .resizable()
                     .scaledToFit()

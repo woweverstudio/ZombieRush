@@ -1,7 +1,7 @@
 import SwiftUI
 
-// MARK: - Nemo Fruit Badge Component (잔여 네모열매 표시)
-struct NemoFruitBadge: View {
+// MARK: - Nemo Jam Badge Component (잔여 네모잼 표시)
+struct NemoJamBadge: View {
     @EnvironmentObject var userRepository: SupabaseUserRepository
     @EnvironmentObject var useCaseFactory: UseCaseFactory
 
@@ -13,8 +13,8 @@ struct NemoFruitBadge: View {
                 .scaledToFit()
                 .frame(width: 20, height: 20)
 
-            // 보유 네모열매 수량 (작게 표시)
-            Text("\(userRepository.currentUser?.nemoFruit ?? 0)")
+            // 보유 네모잼 수량 (작게 표시)
+            Text("\(userRepository.currentUser?.nemoJam ?? 0)")
                 .font(.system(size: 18, weight: .medium, design: .monospaced))
                 .foregroundColor(.cyan)
         }

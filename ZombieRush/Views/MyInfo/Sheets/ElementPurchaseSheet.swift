@@ -4,7 +4,7 @@ extension ElementPurchaseSheet {
     static let purchaseTitle = NSLocalizedString("my_info_element_purchase_title", tableName: "View", comment: "Element purchase sheet title")
     static let exchangeDescription = NSLocalizedString("my_info_element_exchange_description", tableName: "View", comment: "Element exchange description")
     static let purchaseButton = NSLocalizedString("my_info_element_purchase_button", tableName: "View", comment: "Element purchase button")
-    static let insufficientNemoFruits = NSLocalizedString("my_info_insufficient_nemo_fruits", tableName: "View", comment: "Insufficient nemo fruits message")
+    static let insufficientNemoJam = NSLocalizedString("my_info_insufficient_nemo_jam", tableName: "View", comment: "Insufficient nemo jam message")
     static let exchangeArrow = NSLocalizedString("exchange_arrow", tableName: "View", comment: "Exchange arrow symbol")
 }
 
@@ -12,11 +12,11 @@ extension ElementPurchaseSheet {
 struct ElementPurchaseSheet: View {
     let elementType: ElementType
     @Binding var purchaseCount: Int
-    let availableNemoFruits: Int
+    let availableNemoJam: Int
     let onPurchase: () -> Void
 
-    private var hasEnoughNemoFruits: Bool {
-        return availableNemoFruits >= purchaseCount
+    private var hasEnoughNemoJam: Bool {
+        return availableNemoJam >= purchaseCount
     }
 
     var body: some View {
@@ -77,13 +77,13 @@ struct ElementPurchaseSheet: View {
                 Divider()
 
                 PrimaryButton(
-                    title: hasEnoughNemoFruits ? ElementPurchaseSheet.purchaseButton : ElementPurchaseSheet.insufficientNemoFruits,
-                    style: hasEnoughNemoFruits ? .cyan : .disabled,
+                    title: hasEnoughNemoJam ? ElementPurchaseSheet.purchaseButton : ElementPurchaseSheet.insufficientNemoJam,
+                    style: hasEnoughNemoJam ? .cyan : .disabled,
                     fullWidth: true
                 ) {
                     onPurchase()
                 }
-                .disabled(!hasEnoughNemoFruits)
+                .disabled(!hasEnoughNemoJam)
             }
             .frame(maxWidth: .infinity)
             .padding(24)

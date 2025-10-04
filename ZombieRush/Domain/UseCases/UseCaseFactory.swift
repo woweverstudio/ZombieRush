@@ -51,12 +51,12 @@ final class UseCaseFactory: ObservableObject {
         AddExperienceUseCase(userRepository: userRepository)
     }
 
-    var consumeNemoFruits: ConsumeNemoFruitsUseCase {
-        ConsumeNemoFruitsUseCase(userRepository: userRepository)
+    var consumeNemoJam: ConsumeNemoJamUseCase {
+        ConsumeNemoJamUseCase(userRepository: userRepository)
     }
 
-    var addNemoFruits: AddNemoFruitsUseCase {
-        AddNemoFruitsUseCase(userRepository: userRepository)
+    var addNemoJam: AddNemoJamUseCase {
+        AddNemoJamUseCase(userRepository: userRepository)
     }
 
     var purchaseCheerBuff: PurchaseCheerBuffUseCase {

@@ -18,7 +18,7 @@ struct AddElementResponse {
 }
 
 /// 원소 추가 UseCase
-/// 네모열매를 소비하여 특정 원소를 추가 (트랜잭션)
+/// 네모잼을 소비하여 특정 원소를 추가 (트랜잭션)
 @MainActor
 struct AddElementUseCase: UseCase {
     let elementsRepository: ElementsRepository
@@ -32,8 +32,8 @@ struct AddElementUseCase: UseCase {
         }
 
         do {
-            // 트랜잭션으로 네모열매 차감 및 원소 증가
-            let (updatedElements, updatedUser) = try await elementsRepository.exchangeFruitForElement(
+            // 트랜잭션으로 네모잼 차감 및 원소 증가
+            let (updatedElements, updatedUser) = try await elementsRepository.exchangeJamForElement(
                 playerID: currentUser.playerId,
                 elementType: request.elementType.id,
                 amount: request.count
@@ -46,7 +46,7 @@ struct AddElementUseCase: UseCase {
             ToastManager.shared.show(.elementPurchased("\(request.elementType.localizedDisplayName) x\(request.count)"))
             return AddElementResponse(success: true, elements: updatedElements)
         } catch {
-            // 네모열매 부족 등의 에러 처리\
+            // 네모잼 부족 등의 에러 처리\
             ErrorManager.shared.report(.databaseRequestFailed)
             return AddElementResponse(success: false, elements: nil)
         }

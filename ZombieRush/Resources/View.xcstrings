@@ -245,13 +245,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Exchange %d %@ for %d Nemo Fruits"
+            "value" : "Get %d %@ for %d Block Jam."
           }
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "네모잼 %d개로 %@ 원소 %d개를 교환합니다"
+            "state" : "needs_review",
+            "value" : "네모잼 %d개로 %@ 원소 %d개를 얻습니다."
           }
         }
       }
@@ -358,13 +358,13 @@
         }
       }
     },
-    "my_info_insufficient_nemo_fruits" : {
-      "comment" : "Insufficient nemo fruits message",
+    "my_info_insufficient_nemo_jam" : {
+      "comment" : "Insufficient nemo jam message",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Not enough Nemo Fruits"
+            "value" : "Not enough Nemo Jam"
           }
         },
         "ko" : {

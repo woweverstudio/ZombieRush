@@ -22,6 +22,6 @@ protocol ElementsRepository: AnyObject {
     /// 원소 데이터 업데이트
     func updateElements(_ elements: Elements) async throws -> Elements
 
-    /// 네모열매를 소비하여 원소 교환 (트랜잭션)
-    func exchangeFruitForElement(playerID: String, elementType: String, amount: Int) async throws -> (Elements, User)
+    /// 네모잼을 소비하여 원소 교환 (트랜잭션)
+    func exchangeJamForElement(playerID: String, elementType: String, amount: Int) async throws -> (Elements, User)
 }

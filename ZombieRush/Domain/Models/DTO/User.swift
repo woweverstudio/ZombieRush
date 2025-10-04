@@ -12,7 +12,7 @@ struct User: Codable, Identifiable {
     let playerId: String   // Game Center gamePlayerID (계정별 고유 식별자, primary key)
     var nickname: String   // Game Center displayName
     var exp: Int          // 경험치 (레벨은 경험치로부터 계산)
-    var nemoFruit: Int    // 네모 과일 (코인)
+    var nemoJam: Int    // 네모잼 (코인)
     var remainingPoints: Int  // 레벨업 시 증가하는 포인트
     var cheerBuffExpiresAt: Date?   // 네모의 응원 만료 시간
     var createdAt: Date   // 생성일
@@ -40,18 +40,18 @@ struct User: Codable, Identifiable {
         case playerId = "player_id"
         case nickname
         case exp
-        case nemoFruit = "nemo_fruit"
+        case nemoJam = "nemo_jam"
         case remainingPoints = "remaining_points"
         case cheerBuffExpiresAt = "cheer_buff_expires_at"
         case createdAt = "created_at"
         case updatedAt = "updated_at"
     }
 
-    init(playerId: String, nickname: String, exp: Int = 0, nemoFruit: Int = 0, remainingPoints: Int = 0, cheerBuffExpiresAt: Date? = nil) {
+    init(playerId: String, nickname: String, exp: Int = 0, nemoJam: Int = 0, remainingPoints: Int = 0, cheerBuffExpiresAt: Date? = nil) {
         self.playerId = playerId
         self.nickname = nickname
         self.exp = exp
-        self.nemoFruit = nemoFruit
+        self.nemoJam = nemoJam
         self.remainingPoints = remainingPoints
         self.cheerBuffExpiresAt = cheerBuffExpiresAt
         self.createdAt = Date()
