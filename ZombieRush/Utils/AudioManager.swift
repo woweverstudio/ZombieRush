@@ -34,6 +34,20 @@ final class AudioManager: NSObject {
             UserDefaults.standard.set(isSoundEffectsEnabled, forKey: "isSoundEffectsEnabled")
         }
     }
+
+    var masterVolume: Float {
+        didSet {
+            UserDefaults.standard.set(masterVolume, forKey: "masterVolume")
+            // 현재 재생 중인 배경음악 볼륨 업데이트
+            if let player = backgroundMusicPlayer {
+                player.volume = ResourceConstants.Audio.BackgroundMusic.volume * masterVolume
+            }
+            // 버튼 사운드 볼륨 업데이트
+            if let player = buttonSoundPlayer {
+                player.volume = masterVolume
+            }
+        }
+    }
     
     // MARK: - Music Types
     enum MusicType {
@@ -44,9 +58,10 @@ final class AudioManager: NSObject {
     override init() {
         self.isBackgroundMusicEnabled = UserDefaults.standard.bool(forKey: "isBackgroundMusicEnabled", defaultValue: true)
         self.isSoundEffectsEnabled = UserDefaults.standard.bool(forKey: "isSoundEffectsEnabled", defaultValue: true)
-        
+        self.masterVolume = UserDefaults.standard.object(forKey: "masterVolume") as? Float ?? 0.3
+
         super.init()
-        
+
         setupAudioSession()
         setupNotifications()
         preloadButtonSound()   // 버튼 사운드 미리 로드
@@ -136,7 +151,7 @@ final class AudioManager: NSObject {
         do {
             let player = try AVAudioPlayer(contentsOf: url)
             player.numberOfLoops = -1
-            player.volume = ResourceConstants.Audio.BackgroundMusic.volume
+            player.volume = ResourceConstants.Audio.BackgroundMusic.volume * masterVolume
             player.prepareToPlay()
             
             self.backgroundMusicPlayer = player
@@ -161,7 +176,7 @@ final class AudioManager: NSObject {
         guard let url = Bundle.main.url(forResource: "button", withExtension: "mp3") else { return }
         do {
             let player = try AVAudioPlayer(contentsOf: url)
-            player.volume = 0.8
+            player.volume = masterVolume
             player.prepareToPlay()
             self.buttonSoundPlayer = player
         } catch {
@@ -171,13 +186,37 @@ final class AudioManager: NSObject {
     
     func playButtonSound() {
         guard isSoundEffectsEnabled else { return }
-        guard let player = buttonSoundPlayer else { return }
-        
+        guard let player = buttonSoundPlayer else {
+            // 버튼 사운드가 로드되지 않은 경우 재로드 시도
+            preloadButtonSound()
+            return
+        }
+
         if player.isPlaying {
             player.stop()
         }
         player.currentTime = 0
+        // 실시간 볼륨 적용
+        player.volume = masterVolume
         player.play()
+    }
+
+    /// 일반 효과음 재생 (마스터 볼륨 적용)
+    func playSoundEffect(_ soundName: String) {
+        guard isSoundEffectsEnabled else { return }
+
+        guard let url = Bundle.main.url(forResource: soundName, withExtension: nil) else {
+            print("❌ 효과음 파일을 찾을 수 없음: \(soundName)")
+            return
+        }
+
+        do {
+            let player = try AVAudioPlayer(contentsOf: url)
+            player.volume = masterVolume
+            player.play()
+        } catch {
+            print("❌ 효과음 재생 실패: \(soundName), 에러: \(error.localizedDescription)")
+        }
     }
     
     // MARK: - Cleanup

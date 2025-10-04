@@ -143,8 +143,7 @@ class Player: SKSpriteNode {
         isReloading = true
         
         if AudioManager.shared.isSoundEffectsEnabled {
-            let reloadSound = SKAction.playSoundFileNamed(ResourceConstants.Audio.SoundEffects.reload, waitForCompletion: false)
-            run(reloadSound)
+            AudioManager.shared.playSoundEffect(ResourceConstants.Audio.SoundEffects.reload)
         }
         
         let reloadAction = SKAction.sequence([

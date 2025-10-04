@@ -83,8 +83,7 @@ extension PhysicsSystem: SKPhysicsContactDelegate {
 
         // 샷건 총알이 아닐 때만 hit 사운드 플레이
         if AudioManager.shared.isSoundEffectsEnabled && !bullet.getIsShotgunBullet() {
-            let hitSound = SKAction.playSoundFileNamed(ResourceConstants.Audio.SoundEffects.hit, waitForCompletion: false)
-            scene.run(hitSound)
+            AudioManager.shared.playSoundEffect(ResourceConstants.Audio.SoundEffects.hit)
         }
 
         createSparkleEffect(at: bullet.position, in: scene)
@@ -125,8 +124,7 @@ extension PhysicsSystem: SKPhysicsContactDelegate {
         guard let item = item as? Item, let scene = scene as? GameScene else { return }
         
         if AudioManager.shared.isSoundEffectsEnabled {
-            let itemSound = SKAction.playSoundFileNamed(ResourceConstants.Audio.SoundEffects.item, waitForCompletion: false)
-            scene.run(itemSound)
+            AudioManager.shared.playSoundEffect(ResourceConstants.Audio.SoundEffects.item)
         }
         
         HapticManager.shared.playItemHaptic()

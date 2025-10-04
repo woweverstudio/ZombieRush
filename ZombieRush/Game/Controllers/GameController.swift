@@ -308,10 +308,7 @@ class GameController {
     }
     
     private func playSound(_ soundName: String) {
-        guard AudioManager.shared.isSoundEffectsEnabled,
-              let scene = scene else { return }
-        
-        scene.run(SKAction.playSoundFileNamed(soundName, waitForCompletion: false))
+        AudioManager.shared.playSoundEffect(soundName)
     }
     
     // MARK: - UI Visibility Control

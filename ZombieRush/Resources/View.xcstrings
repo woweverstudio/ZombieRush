@@ -559,7 +559,7 @@
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "직업 해금"
+            "value" : "잠금 해제"
           }
         }
       }
@@ -782,6 +782,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "버전: "
+          }
+        }
+      }
+    },
+    "settings_volume_label" : {
+      "comment" : "Settings volume label",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Volume"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "볼륨"
           }
         }
       }

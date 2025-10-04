@@ -80,8 +80,7 @@ class Nuclear {
     /// 핵폭발 사운드 재생
     static func playNuclearSound(in scene: SKScene) {
         if AudioManager.shared.isSoundEffectsEnabled {
-            let nuclearSound = SKAction.playSoundFileNamed("nuclear.wav", waitForCompletion: false)
-            scene.run(nuclearSound)
+            AudioManager.shared.playSoundEffect("nuclear.wav")
         }
     }
 }

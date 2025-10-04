@@ -25,8 +25,6 @@ final class UseCaseFactory: ObservableObject {
         self.statsRepository = statsRepository
         self.elementsRepository = elementsRepository
         self.jobsRepository = jobsRepository
-
-        print("🔧 UseCaseFactory: 외부에서 주입받은 Repository들로 초기화 완료")
     }
 
     // MARK: - Repository Access (for Views to observe state)
