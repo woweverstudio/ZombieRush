@@ -1,20 +1,20 @@
 import SwiftUI
 
-// MARK: - Nemo Jam Badge Component (잔여 네모잼 표시)
-struct NemoJamBadge: View {
+// MARK: - Gem Badge Component (잔여 젬 표시)
+struct GemBadge: View {
     @EnvironmentObject var userRepository: SupabaseUserRepository
     @EnvironmentObject var useCaseFactory: UseCaseFactory
 
     var body: some View {
         HStack(spacing: 4) {
             // 네모 싱글 이미지
-            Image("nemo_single")
+            Image("gem_single")
                 .resizable()
                 .scaledToFit()
                 .frame(width: 20, height: 20)
 
-            // 보유 네모잼 수량 (작게 표시)
-            Text("\(userRepository.currentUser?.nemoJam ?? 0)")
+            // 보유 젬 수량 (작게 표시)
+            Text("\(userRepository.currentUser?.gem ?? 0)")
                 .font(.system(size: 18, weight: .medium, design: .monospaced))
                 .foregroundColor(.cyan)
         }

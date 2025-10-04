@@ -4,7 +4,7 @@ extension ElementPurchaseSheet {
     static let purchaseTitle = NSLocalizedString("my_info_element_purchase_title", tableName: "View", comment: "Element purchase sheet title")
     static let exchangeDescription = NSLocalizedString("my_info_element_exchange_description", tableName: "View", comment: "Element exchange description")
     static let purchaseButton = NSLocalizedString("my_info_element_purchase_button", tableName: "View", comment: "Element purchase button")
-    static let insufficientNemoJam = NSLocalizedString("my_info_insufficient_nemo_jam", tableName: "View", comment: "Insufficient nemo jam message")
+    static let insufficientGem = NSLocalizedString("my_info_insufficient_gem", tableName: "View", comment: "Insufficient gem message")
     static let exchangeArrow = NSLocalizedString("exchange_arrow", tableName: "View", comment: "Exchange arrow symbol")
 }
 
@@ -12,11 +12,11 @@ extension ElementPurchaseSheet {
 struct ElementPurchaseSheet: View {
     let elementType: ElementType
     @Binding var purchaseCount: Int
-    let availableNemoJam: Int
+    let availableGem: Int
     let onPurchase: () -> Void
 
-    private var hasEnoughNemoJam: Bool {
-        return availableNemoJam >= purchaseCount
+    private var hasEnoughGem: Bool {
+        return availableGem >= purchaseCount
     }
 
     var body: some View {
@@ -61,7 +61,7 @@ struct ElementPurchaseSheet: View {
                     }
 
                     HStack {
-                        CommonBadge(image: Image("nemo_single"), value: purchaseCount, size: 28, color: .cyan)
+                        CommonBadge(image: Image("gem_single"), value: purchaseCount, size: 28, color: .cyan)
                         Text(ElementPurchaseSheet.exchangeArrow)
                         CommonBadge(image: Image(systemName: elementType.iconName), value: purchaseCount, size: 28, color: elementType.color)
                     }
@@ -77,13 +77,13 @@ struct ElementPurchaseSheet: View {
                 Divider()
 
                 PrimaryButton(
-                    title: hasEnoughNemoJam ? ElementPurchaseSheet.purchaseButton : ElementPurchaseSheet.insufficientNemoJam,
-                    style: hasEnoughNemoJam ? .cyan : .disabled,
+                    title: hasEnoughGem ? ElementPurchaseSheet.purchaseButton : ElementPurchaseSheet.insufficientGem,
+                    style: hasEnoughGem ? .cyan : .disabled,
                     fullWidth: true
                 ) {
                     onPurchase()
                 }
-                .disabled(!hasEnoughNemoJam)
+                .disabled(!hasEnoughGem)
             }
             .frame(maxWidth: .infinity)
             .padding(24)

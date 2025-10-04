@@ -51,10 +51,10 @@ extension MyInfoView {
         return counts
     }
 
-    // 네모잼 개수 가져오기
-    private func getNemoJamCount() -> Int {
+    // 젬 개수 가져오기
+    private func getGemCount() -> Int {
         guard let user = userRepository.currentUser else { return 0 }
-        return user.nemoJam
+        return user.gem
     }
 }
 
@@ -92,7 +92,7 @@ struct MyInfoView: View {
             ElementPurchaseSheet(
                 elementType: elementType,
                 purchaseCount: $purchaseCount,
-                availableNemoJam: getNemoJamCount(),
+                availableGem: getGemCount(),
                 onPurchase: {
                     Task {
                         let request = AddElementRequest(elementType: elementType, count: purchaseCount)
@@ -136,7 +136,7 @@ extension MyInfoView {
     private var headerView: some View {
         Header(
             title: MyInfoView.myInfoTitle,
-            badges: [.nemoJam],
+            badges: [.gem],
             onBack: {
                 router.goBack()
             },
@@ -145,7 +145,7 @@ extension MyInfoView {
                 HapticManager.shared.playButtonHaptic()
 
                 switch badge {
-                case .nemoJam:
+                case .gem:
                     router.navigate(to: .market)
                 case .statsPoints:
                     // 필요시 다른 액션 추가

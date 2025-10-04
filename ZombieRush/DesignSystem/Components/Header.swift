@@ -3,15 +3,15 @@ import SwiftUI
 // MARK: - Header Badge Types
 enum HeaderBadgeType {
     case statsPoints
-    case nemoJam
+    case gem
 
     @ViewBuilder
     var view: some View {
         switch self {
         case .statsPoints:
             StatsPointBadge()
-        case .nemoJam:
-            NemoJamBadge()
+        case .gem:
+            GemBadge()
         }
     }
 }
@@ -80,10 +80,10 @@ struct Header: View {
 #Preview {
     VStack(spacing: 20) {
         // 배지가 있는 경우 - 타이틀이 중앙에 고정됨
-        Header(title: "내 정보", badges: [.statsPoints, .nemoJam])
+        Header(title: "내 정보", badges: [.statsPoints, .gem])
 
         // 배지가 없는 경우 - 타이틀이 중앙에 고정됨
-        Header(title: "마켓", badges: [.nemoJam])
+        Header(title: "마켓", badges: [.gem])
 
         // 배지와 뒤로가기 버튼이 없는 경우 - 타이틀이 중앙에 고정됨
         Header(title: "설정", showBackButton: false)

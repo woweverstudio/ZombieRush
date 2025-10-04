@@ -56,7 +56,7 @@ final class SupabaseUserRepository: ObservableObject, UserRepository {
             "nickname": user.nickname,
             "level": String(user.level),
             "exp": String(user.exp),
-            "nemo_jam": String(user.nemoJam),
+            "gem": String(user.gem),
             "remaining_points": String(user.remainingPoints)
         ]
 

@@ -188,6 +188,94 @@
         }
       }
     },
+    "market_item_description_20" : {
+      "comment" : "Market item description for 20 Block Gems",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exchange for elements used throughout the game."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "원소로 교환해 다양한 곳에 사용하세요."
+          }
+        }
+      }
+    },
+
+    "market_item_description_55" : {
+      "comment" : "Market item description for 55 Block Gems",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Get more elements and boost your magic power."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "더 많은 원소를 교환하고 마법을 강화하세요."
+          }
+        }
+      }
+    },
+
+    "market_item_description_120" : {
+      "comment" : "Market item description for 120 Block Gems",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Best value! Get more elements with extra Block Gems."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "최고의 가성비! 대량의 젬으로 더 많은 원소를 얻으세요."
+          }
+        }
+      }
+    },
+
+    "market_promotion_description" : {
+      "comment" : "Market promotion description",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elements are used in many parts of the game."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "원소는 다양한 콘텐츠에서 사용됩니다."
+          }
+        }
+      }
+    },
+    "market_promotion_title" : {
+      "comment" : "Market promotion title",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exchange Block Gems for elements to power up your wizard!"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "네모잼으로 원소를 교환해 마법사를 성장시키세요!"
+          }
+        }
+      }
+    },
     "market_purchase_button" : {
       "comment" : "Market purchase button",
       "localizations" : {
@@ -201,6 +289,74 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "구매하기"
+          }
+        }
+      }
+    },
+    "market_purchase_button_template" : {
+      "comment" : "Market purchase button template",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buy %@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "구매하기 %@"
+          }
+        }
+      }
+    },
+    "market_trust_message_1" : {
+      "comment" : "Market trust message 1",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Purchases are securely processed through the App Store."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "결제는 App Store를 통해 안전하게 진행됩니다."
+          }
+        }
+      }
+    },
+    "market_trust_message_2" : {
+      "comment" : "Market trust message 2",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Purchased Block Gems are applied to your account instantly."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "구매한 네모잼은 즉시 계정에 반영됩니다."
+          }
+        }
+      }
+    },
+    "market_trust_message_3" : {
+      "comment" : "Market trust message 3",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prices may vary by region and currency."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "가격은 지역과 통화에 따라 달라질 수 있습니다."
           }
         }
       }
@@ -245,7 +401,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Get %d %@ for %d Block Jam."
+            "value" : "Get %d %@ for %d Block gem."
           }
         },
         "ko" : {
@@ -358,13 +514,13 @@
         }
       }
     },
-    "my_info_insufficient_nemo_jam" : {
-      "comment" : "Insufficient nemo jam message",
+    "my_info_insufficient_gem" : {
+      "comment" : "Insufficient gem message",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Not enough Nemo Jam"
+            "value" : "Not enough Gems"
           }
         },
         "ko" : {

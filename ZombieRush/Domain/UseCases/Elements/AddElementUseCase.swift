@@ -33,7 +33,7 @@ struct AddElementUseCase: UseCase {
 
         do {
             // 트랜잭션으로 네모잼 차감 및 원소 증가
-            let (updatedElements, updatedUser) = try await elementsRepository.exchangeJamForElement(
+            let (updatedElements, updatedUser) = try await elementsRepository.exchangeGemForElement(
                 playerID: currentUser.playerId,
                 elementType: request.elementType.id,
                 amount: request.count
