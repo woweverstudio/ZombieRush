@@ -27,7 +27,7 @@ struct SettingsView: View {
                 Header(
                     title: SettingsView.settingsTitle,
                     onBack: {
-                        router.quitToMain()
+                        router.goBack()
                     }
                 )
                 

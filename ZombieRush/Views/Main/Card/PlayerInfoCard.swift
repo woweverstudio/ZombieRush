@@ -8,26 +8,33 @@ extension PlayerInfoCard {
 
 // MARK: - Player Info Card (프로필 + 스탯 통합)
 struct PlayerInfoCard: View {
+    @Environment(AppRouter.self) var router
     @EnvironmentObject var userRepository: SupabaseUserRepository
     @EnvironmentObject var jobsRepository: SupabaseJobsRepository
     @EnvironmentObject var spiritsRepository: SupabaseSpiritsRepository
     @EnvironmentObject var useCaseFactory: UseCaseFactory
 
     var body: some View {
-
-        HStack(spacing: 12) {
-            VStack(alignment: .leading, spacing: 8) {
-                nameInfo
-                levelInfo
-                expInfo
+        Button(action: {
+            AudioManager.shared.playButtonSound()
+            HapticManager.shared.playButtonHaptic()
+            router.navigate(to: .myInfo)
+        }) {
+            HStack(spacing: 12) {
+                VStack(alignment: .leading, spacing: 8) {
+                    nameInfo
+                    levelInfo
+                    expInfo
+                }
+                Spacer()
+                elementsInfo
             }
-            Spacer()
-            elementsInfo
+            .padding(16)
+            .background(
+                CardBackground()
+            )
         }
-        .padding(16)
-        .background(
-            CardBackground()
-        )
+        .buttonStyle(.plain) // 기본 버튼 스타일 제거
     }
     
     var nameInfo: some View {

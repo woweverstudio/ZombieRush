@@ -138,7 +138,19 @@ extension MyInfoView {
             title: MyInfoView.myInfoTitle,
             badges: [.nemoFruits],
             onBack: {
-                router.quitToMain()
+                router.goBack()
+            },
+            onBadgeTap: { badge in
+                AudioManager.shared.playButtonSound()
+                HapticManager.shared.playButtonHaptic()
+
+                switch badge {
+                case .nemoFruits:
+                    router.navigate(to: .market)
+                case .statsPoints:
+                    // 필요시 다른 액션 추가
+                    break
+                }
             }
         )
     }

@@ -35,7 +35,7 @@ struct MarketView: View {
             title: MarketView.marketTitle,
             badges: [.nemoFruits],
             onBack: {
-                router.quitToMain()
+                router.goBack()
             }
         )
     }

@@ -22,17 +22,20 @@ struct Header: View {
     let showBackButton: Bool
     let badges: [HeaderBadgeType]
     let onBack: (() -> Void)?
+    let onBadgeTap: ((HeaderBadgeType) -> Void)?
 
     init(
         title: String,
         showBackButton: Bool = true,
         badges: [HeaderBadgeType] = [],
-        onBack: (() -> Void)? = nil
+        onBack: (() -> Void)? = nil,
+        onBadgeTap: ((HeaderBadgeType) -> Void)? = nil
     ) {
         self.title = title
         self.showBackButton = showBackButton
         self.badges = badges
         self.onBack = onBack
+        self.onBadgeTap = onBadgeTap
     }
 
     var body: some View {
@@ -57,7 +60,12 @@ struct Header: View {
                 // 우측: 배지들
                 HStack(spacing: 12) {
                     ForEach(badges.indices, id: \.self) { index in
-                        badges[index].view
+                        Button(action: {
+                            onBadgeTap?(badges[index])
+                        }) {
+                            badges[index].view
+                        }
+                        .buttonStyle(.plain) // 기본 버튼 스타일 제거
                     }
                 }
             }
