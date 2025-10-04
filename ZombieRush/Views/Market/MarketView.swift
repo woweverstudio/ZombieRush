@@ -72,10 +72,16 @@ struct MarketView: View {
     }
 
     private var itemsGridView: some View {
-        LazyVGrid(columns: [
-            GridItem(.flexible(), spacing: 12),
-            GridItem(.flexible(), spacing: 12)
-        ], spacing: 12) {
+//        LazyVGrid(columns: [
+//            GridItem(.flexible(), spacing: 12),
+//            GridItem(.flexible(), spacing: 12)
+//        ], spacing: 12) {
+//            ForEach(gemItems) { item in
+//                MarketItemCard(item: item)
+//            }
+//        }
+        
+        VStack(spacing: 12) {
             ForEach(gemItems) { item in
                 MarketItemCard(item: item)
             }

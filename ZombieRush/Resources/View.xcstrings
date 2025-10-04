@@ -228,13 +228,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Exchange for elements used throughout the game."
+            "value" : "Your first step to saving Blocks! Begin your journey today.✨"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "원소로 교환해 다양한 곳에 사용하세요."
+            "value" : "네모 구출을 위한 첫걸음! 새로운 여정을 지금 시작하세요.✨"
           }
         }
       }
@@ -245,13 +245,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Get more elements and boost your magic power."
+            "value" : "A smart choice for stronger magic! Boost your efficiency and rescue more blocks⚔️ "
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "더 많은 원소를 교환하고 마법을 강화하세요."
+            "value" : "더 강력한 마법을 위한 현명한 선택! 효율을 높여 더 많은 네모를 구출하세요.⚔️ "
           }
         }
       }
@@ -262,13 +262,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Best value! Get more elements with extra Block Gems."
+            "value" : "The ultimate pack for seasoned adventurers! Keep your journey going with an abundance of Gems.🏆 "
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "최고의 가성비! 대량의 젬으로 더 많은 원소를 얻으세요."
+            "value" : "오랜 모험가를 위한 최고의 구성! 넉넉한 네모잼으로 끝없는 여정을 이어가세요.🏆 "
           }
         }
       }

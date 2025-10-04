@@ -30,27 +30,28 @@ struct MarketItemCard: View {
 
     var body: some View {
         Card(style: .cyberpunk) {
-            VStack(spacing: 16) {
-                // 젬 아이콘
-                Image("gem_package")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 64, height: 64)
-
-                // 아이템 이름
-                Text(localizedName)
-                    .font(.system(size: 18, weight: .bold, design: .monospaced))
-                    .foregroundColor(Color.dsTextPrimary)
-                    .multilineTextAlignment(.center)
-
-                // 설명 문구
-                Text(localizedDescription)
-                    .font(.system(size: 13, design: .monospaced))
-                    .foregroundColor(.white.opacity(0.8))
-                    .multilineTextAlignment(.center)
-                    .lineLimit(2)
-                    .minimumScaleFactor(0.8)
-                    .frame(height: 40)
+            VStack(spacing: 24) {
+                HStack(spacing: 20) {
+                    Image("gem_package")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 70, height: 70)
+                    
+                    VStack(alignment: .leading, spacing: 20) {
+                        Text(localizedName)
+                            .font(.system(size: 18, weight: .bold, design: .monospaced))
+                            .foregroundColor(Color.dsTextPrimary)
+                            .multilineTextAlignment(.center)
+                        
+                        // 설명 문구
+                        Text(localizedDescription)
+                            .font(.system(size: 13, design: .monospaced))
+                            .foregroundColor(.white.opacity(0.8))
+                            .multilineTextAlignment(.leading)
+                            .lineLimit(nil) // ✅ 줄 제한 해제
+                            .fixedSize(horizontal: false, vertical: true) // ✅ 세로로 크기 확장 허용
+                    }
+                }
 
                 // 구매 버튼
                 Button(action: {
@@ -75,18 +76,22 @@ struct MarketItemCard: View {
 
 // MARK: - Preview
 #Preview {
-    // Mock MarketItem for preview
-    let mockItem = MarketItem(
-        type: .gemPackage(count: 20, price: 2000),
-        name: "젬 20개",
-        englishName: "20 Gems",
-        descriptionKey: "market_item_description_20",
-        iconName: "diamond.fill",
-        price: 2000,
-        currencyType: .won
-    )
-
-    MarketItemCard(item: mockItem)
-        .padding()
-        .background(Color.black)
+    var gemItems: [MarketItem] {
+        MarketItemsManager.marketItems.filter { item in
+            if case .gemPackage = item.type { return true }
+            return false
+        }
+    }
+    
+    VStack(spacing: 12) {
+        ForEach(gemItems) { item in
+            MarketItemCard(item: item)
+                
+        }
+    }
+    .padding(12)
+    .background(Background())
+    .environment(\.locale, .init(identifier: "ko"))
+    
 }
+
