@@ -50,36 +50,6 @@
             endingLineNumber = "106"
             landmarkName = "purchaseProduct(_:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "0B30CF71-E927-42DB-9E16-7B167F236B6A - f7b783e2face185"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(3) suspend resume partial function for ZombieRush.StoreKitManager.purchaseProduct(StoreKit.Product) async -&gt; ()"
-                  moduleName = "ZombieRush.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/minseong/Projects/ZombieRush/ZombieRush/Store/StoreKitManager.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "106"
-                  endingLineNumber = "106">
-               </Location>
-               <Location
-                  uuid = "0B30CF71-E927-42DB-9E16-7B167F236B6A - 284a506566c28b80"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(8) suspend resume partial function for ZombieRush.StoreKitManager.purchaseProduct(StoreKit.Product) async -&gt; ()"
-                  moduleName = "ZombieRush.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/minseong/Projects/ZombieRush/ZombieRush/Store/StoreKitManager.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "106"
-                  endingLineNumber = "106">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
