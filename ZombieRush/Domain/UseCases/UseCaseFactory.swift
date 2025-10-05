@@ -42,6 +42,13 @@ final class UseCaseFactory: ObservableObject {
                             elementsRepository: elementsRepository,
                             jobsRepository: jobsRepository)
     }
+    
+    var loginAsGuest: LoginAsGuestUseCase {
+        LoginAsGuestUseCase(userRepository: userRepository,
+                            statsRepository: statsRepository,
+                            elementsRepository: elementsRepository,
+                            jobsRepository: jobsRepository)
+    }
 
     var addExperience: AddExperienceUseCase {
         AddExperienceUseCase(userRepository: userRepository)

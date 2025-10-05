@@ -55,12 +55,7 @@ final class StoreKitManager {
     }
 
     /// 상품 로드
-    func loadProducts() async throws {
-        guard !isLoading else { return }
-
-        isLoading = true
-        defer { isLoading = false }
-
+    func loadProducts() async -> Bool {
         do {
             // StoreKit에서 상품 로드
             let products = try await Product.products(for: StoreConstants.ProductIDs.all)
@@ -79,9 +74,11 @@ final class StoreKitManager {
                 let order2 = orderDict[product2.id] ?? Int.max
                 return order1 < order2
             }
+            
             self.gemItems = sortedProducts.map { GemItem(from: $0) }
+            return true
         } catch {
-            throw StoreError.productLoadFailed
+            return false
         }
     }
 

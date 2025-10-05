@@ -15,7 +15,6 @@ extension ForceUpdateView {
 
 struct ForceUpdateView: View {
     @Environment(\.dismiss) private var dismiss
-    @State private var versionManager = VersionManager.shared
 
     var body: some View {
         ZStack {
@@ -43,15 +42,6 @@ struct ForceUpdateView: View {
         .statusBar(hidden: true)
         // iOS 15+에서 제스처로 닫는 것을 막음
         .interactiveDismissDisabled(true)
-        // dismiss 방지
-        .onDisappear {
-            // 업데이트가 필요한 경우 다시 표시
-            if versionManager.shouldForceUpdate {
-                DispatchQueue.main.async {
-                    // 다시 표시하는 로직은 필요시 구현
-                }
-            }
-        }
     }
 
     /// App Store로 이동

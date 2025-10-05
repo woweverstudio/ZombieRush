@@ -15,8 +15,6 @@ final class GameKitManager: NSObject {
         /// Game Center gamePlayerID (계정별로 고유한 ID)
         let playerID: String
         let nickname: String
-        
-        static let defaultPlayerInfo: PlayerInfo = PlayerInfo(playerID: "", nickname: "")
     }
 
     // MARK: - UI Callbacks
@@ -35,7 +33,7 @@ final class GameKitManager: NSObject {
     // MARK: - Player Info Loading
 
     /// Async 버전: 플레이어 정보를 가져옵니다.
-    func getPlayerInfoAsync() async -> PlayerInfo {
+    func getPlayerInfoAsync() async -> PlayerInfo? {
         if isAuthenticated {
             // 이미 인증된 경우 바로 데이터 로드
             return await loadPlayerInfoAsync()
@@ -45,16 +43,15 @@ final class GameKitManager: NSObject {
             if success {
                 return await loadPlayerInfoAsync()
             } else {
-                // 인증 실패
-                return PlayerInfo.defaultPlayerInfo
+                return nil
             }
         }
     }
     
     /// 플레이어 정보를 로드하여 반환
-    private func loadPlayerInfoAsync() async -> PlayerInfo {
+    private func loadPlayerInfoAsync() async -> PlayerInfo? {
         guard isAuthenticated, let localPlayer = localPlayer else {
-            return PlayerInfo.defaultPlayerInfo
+            return nil
         }
 
         // 플레이어 기본 정보 가져오기

@@ -9,14 +9,10 @@ import Foundation
 import Supabase
 
 @Observable
-final class VersionManager {
-    static let shared = VersionManager()
-
+final class ConfigManager {
     // MARK: - Properties
-    var shouldForceUpdate = false
-    var hasCheckedVersion = false
-    var isCheckingVersion = false
-    var isServiceAvailable = true
+    var isUnavailableService = false // 서비스 불가능 여부 (true면 서비스 불가)
+    var shouldForceUpdate = false // 강제 업데이트 필요 여부 (true면 강제 업데이트)
 
     // Supabase 설정 - block_buster 프로젝트
     private let supabase = SupabaseClient(
@@ -27,59 +23,34 @@ final class VersionManager {
     // MARK: - Public Methods
 
     /// 앱 시작 시 서비스 사용 가능 여부와 버전 체크 수행
-    func checkAppVersion() async {
-        guard !hasCheckedVersion else { return }
-
-        isCheckingVersion = true
-        defer { isCheckingVersion = false }
-
+    func checkServerConfig() async -> Bool {
         do {
-            // Supabase에서 리모트 설정 정보 한 번만 가져오기
+            // Supabase에서 최소버전 및 서비스 가능 여부 가져오기
             let config = try await fetchRemoteConfig()
-
-            // 1. 서비스 사용 가능 여부 체크 (캐시된 값 사용)
-            checkServiceAvailability(from: config)
-
-            // 2. 서비스가 사용 가능할 때만 버전 체크 진행 (캐시된 값 사용)
-            if isServiceAvailable {
-                checkVersionRequirements(from: config)
+            
+            // 서비스 가능 여부 체크
+            if let serviceAvailable = config["is_service_available"] as? String {
+                self.isUnavailableService = serviceAvailable.lowercased() == "false"
+            } else {
+                return false
             }
-
-            hasCheckedVersion = true
-
+            
+            if let forceUpdateVersion = config["force_update_version"] as? String {
+                self.shouldForceUpdate = needsForceUpdate(currentVersion: getCurrentAppVersion(),
+                                                   forceUpdateVersion: forceUpdateVersion)
+            } else {
+                return false
+            }
+            
+            if (isUnavailableService || shouldForceUpdate) { // 둘 중 하나라도 true면 로딩 중단
+                return false
+            } else {
+                return true // 조회 성공 후 둘 다 해당 사항 없으면 true 리턴 -> 프로세스 계속 진행
+            }
         } catch {
-            // ✅ 네트워크 실패 등 조회 실패시 네트워크 에러 표시
-            print("⚠️ 리모트 설정 조회 실패: \(error.localizedDescription)")
-
-            isServiceAvailable = true
-            hasCheckedVersion = true
+            return false
         }
     }
-
-    /// 서비스 사용 가능 여부 체크 (캐시된 설정 사용)
-    private func checkServiceAvailability(from config: [String: Any]) {
-        if let serviceAvailable = config["is_service_available"] as? String {
-            isServiceAvailable = serviceAvailable.lowercased() == "true"
-            print("📱 Version: 서비스 상태 확인 - \(isServiceAvailable ? "사용 가능" : "사용 불가")")
-        } else {
-            print("⚠️ 서비스 상태 값이 없음, 기본적으로 사용 가능으로 설정")
-            isServiceAvailable = true
-        }
-    }
-
-    /// 버전 요구사항 체크 (캐시된 설정 사용)
-    private func checkVersionRequirements(from config: [String: Any]) {
-        if let forceUpdateVersion = config["force_update_version"] as? String {
-            shouldForceUpdate = needsForceUpdate(currentVersion: getCurrentAppVersion(),
-                                               forceUpdateVersion: forceUpdateVersion)
-            print("📱 Version: 버전 체크 완료 - 강제 업데이트: \(shouldForceUpdate)")
-        } else {
-            print("⚠️ 강제 업데이트 버전 값이 없음, 업데이트 필요 없음으로 설정")
-            shouldForceUpdate = false
-        }
-    }
-
-    // MARK: - Private Methods
 
     /// Supabase에서 remote_config 테이블 데이터 가져오기
     private func fetchRemoteConfig() async throws -> [String: Any] {
