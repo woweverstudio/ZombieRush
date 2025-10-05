@@ -46,7 +46,7 @@ struct LoadingView: View {
                     ZStack(alignment: .leading) {
                         // 배경 바
                         RoundedRectangle(cornerRadius: 4)
-                            .fill(Color.dsCard)
+                            .fill(Color.dsSurface)
                             .frame(height: 8)
 
                         // 진행 바

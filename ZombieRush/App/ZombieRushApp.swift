@@ -27,8 +27,6 @@ struct ZombieRushApp: App {
     @State private var errorManager = ErrorManager.shared
     @State private var toastManager = ToastManager.shared
 
-    @Environment(\.scenePhase) private var scenePhase  // 앱 상태 모니터링
-
     init() {
         let userRepository = SupabaseUserRepository()
         let statsRepository = SupabaseStatsRepository()
@@ -81,18 +79,8 @@ struct ZombieRushApp: App {
                 let type = toast?.type ?? .complete
                 return AlertToast(displayMode: .banner(.pop), type: .systemImage(type.imageName, type.color) , title: toast?.title, subTitle: toast?.description)
             }
-        }
-        .onChange(of: scenePhase) { oldPhase, newPhase in
-            // 앱 상태 변화 감지 및 GameStateManager에 전달
-            switch newPhase {
-            case .active:
-                gameStateManager.setAppActive(true)
-
-            case .inactive, .background:
-                gameStateManager.setAppActive(false)
-                
-            @unknown default:
-                break
+            .task {
+                try? await UNUserNotificationCenter.current().setBadgeCount(0)
             }
         }
     }
