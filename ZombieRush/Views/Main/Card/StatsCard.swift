@@ -67,11 +67,11 @@ struct StatsCard: View {
                 .padding(8)
 
                 ForEach(StatType.allCases, id: \.self) { statType in
-                    if let jobs = jobsRepository.currentJobs, let currentStats = statsRepository.currentStats {
+                    if let currentStats = statsRepository.currentStats {
                         StatTableRow(
                             icon: statType.iconName,
                             label: statType.localizedDisplayName,
-                            baseValue: JobStats.getStat(job: jobs.selectedJobType, stat: statType),
+                            baseValue: JobStats.getStat(job: jobsRepository.selectedJobType, stat: statType),
                             upgradeValue: currentStats[statType],
                             color: statType.color,
                             canUpgrade: (userRepository.currentUser?.remainingPoints ?? 0) > 0 && !isUpgrading

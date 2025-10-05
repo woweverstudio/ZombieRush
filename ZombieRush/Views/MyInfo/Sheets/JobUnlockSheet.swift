@@ -96,14 +96,13 @@ struct JobUnlockSheet: View {
 
                 // 해금하기 버튼
                 let canUnlock = canUnlockJob(jobType, currentLevel: currentLevel, elementCounts: elementCounts)
-                    PrimaryButton(
-                        title: JobUnlockSheet.jobUnlockButton,
-                        style: canUnlock ? .cyan : .disabled,
-                        fullWidth: true
-                    ) {
-                    if canUnlock {
-                        onUnlock()
-                    }
+                
+                PrimaryButton(
+                    title: JobUnlockSheet.jobUnlockButton,
+                    style: canUnlock ? .cyan : .disabled,
+                    fullWidth: true
+                ) {
+                    if canUnlock { onUnlock() }
                 }
                 .disabled(!canUnlock)
             }

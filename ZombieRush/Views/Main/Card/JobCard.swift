@@ -5,7 +5,7 @@ struct JobCard: View {
     @EnvironmentObject var jobsRepository: SupabaseJobsRepository
     @EnvironmentObject var useCaseFactory: UseCaseFactory
     
-    @State private var selectedJob: JobType = .novice
+    @State private var selectedJobtype: JobType = .novice
 
     // 이전/다음 탭으로 이동 (해금된 직업만)
     private func previousTab() {
@@ -14,11 +14,11 @@ struct JobCard: View {
         let unlockedJobs = jobs.unlockedJobs
 
         withAnimation {
-            if let currentIndex = unlockedJobs.firstIndex(where: { $0 == selectedJob }) {
+            if let currentIndex = unlockedJobs.firstIndex(where: { $0 == selectedJobtype }) {
                 let prevIndex = currentIndex > 0 ? currentIndex - 1 : unlockedJobs.count - 1
                 let newJobType = unlockedJobs[prevIndex]
                 
-                selectedJob = newJobType
+                selectedJobtype = newJobType
             }
         }
     }
@@ -29,11 +29,11 @@ struct JobCard: View {
         let unlockedJobs = jobs.unlockedJobs
         
         withAnimation {
-            if let currentIndex = unlockedJobs.firstIndex(where: { $0 == selectedJob }) {
+            if let currentIndex = unlockedJobs.firstIndex(where: { $0 == selectedJobtype }) {
                 let nextIndex = currentIndex < unlockedJobs.count - 1 ? currentIndex + 1 : 0
                 let newJobType = unlockedJobs[nextIndex]
                 
-                selectedJob = newJobType
+                selectedJobtype = newJobType
             }
         }
     }
@@ -42,7 +42,7 @@ struct JobCard: View {
         ZStack {
             // TabView로 해금된 job 표시 (indicator 제거)
             if let jobs = jobsRepository.currentJobs {
-                TabView(selection: $selectedJob) {
+                TabView(selection: $selectedJobtype) {
                     ForEach(jobs.unlockedJobs, id: \.rawValue) { jobType in
                         JobDetailView(jobType: jobType)
                             .tag(jobType)
@@ -79,9 +79,12 @@ struct JobCard: View {
         .background (
             CardBackground()
         )
+        .onChange(of: self.selectedJobtype) {
+            jobsRepository.selectedJobType = self.selectedJobtype
+        }
         .onAppear {
             guard let jobs = jobsRepository.currentJobs else { return }
-            selectedJob = jobs.selectedJobType
+            selectedJobtype = jobs.selectedJobType
         }
     }
     
@@ -114,7 +117,7 @@ struct JobCard: View {
                             .minimumScaleFactor(0.8)
                             .frame(width: 80, alignment: .leading)
 
-                        Text("\(JobStats.getStat(job: self.selectedJob, stat: statType))")
+                        Text("\(JobStats.getStat(job: self.selectedJobtype, stat: statType))")
                             .font(.system(size: 10, weight: .bold, design: .monospaced))
                             .foregroundColor(.white.opacity(0.9))
                             .minimumScaleFactor(0.8)

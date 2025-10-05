@@ -14,6 +14,7 @@ import SwiftUI
 final class SupabaseJobsRepository: ObservableObject, JobsRepository {
     // Observable properties for View observation
     @Published var currentJobs: Jobs?
+    @Published var selectedJobType: JobType = .novice
 
     private let supabase: SupabaseClient
 
@@ -84,20 +85,12 @@ final class SupabaseJobsRepository: ObservableObject, JobsRepository {
         // JSON 파싱 (RPC custom date format 지원)
         let response = try RPCDecoder.decode(TransactionUnlockResponse.self, from: data)
 
-        // 성공 여부 확인
-        guard response.success else {
-            throw NSError(domain: "UnlockJobError", code: 0, userInfo: [NSLocalizedDescriptionKey: response.error ?? "Unknown error"])
-        }
-
         return (jobs: response.jobs, elements: response.elements)
     }
 
     // 트랜잭션 응답 구조체
     private struct TransactionUnlockResponse: Codable {
-        let success: Bool
         let jobs: Jobs
         let elements: Elements
-        let error: String?
     }
-
 }

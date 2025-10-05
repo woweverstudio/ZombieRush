@@ -38,23 +38,23 @@ struct RequirementsTable: View {
         // 표 내용
         HStack(spacing: 0) {
             Text("\(currentValue)")
-                .font(.system(size: 12, weight: .bold, design: .monospaced))
+                .font(.system(size: 16, weight: .bold, design: .monospaced))
                 .foregroundColor(isMet ? .green : .white)
                 .frame(maxWidth: .infinity, alignment: .center)
 
             Text("\(requiredValue)")
-                .font(.system(size: 12, weight: .bold, design: .monospaced))
+                .font(.system(size: 16, weight: .bold, design: .monospaced))
                 .foregroundColor(.cyan)
                 .frame(maxWidth: .infinity, alignment: .center)
 
             if isMet {
                 Image(systemName: "checkmark.circle.fill")
-                    .font(.system(size: 14))
+                    .font(.system(size: 16))
                     .foregroundColor(.green)
                     .frame(maxWidth: .infinity, alignment: .center)
             } else {
                 Image(systemName: "xmark.circle.fill")
-                    .font(.system(size: 14))
+                    .font(.system(size: 16))
                     .foregroundColor(.red)
                     .frame(maxWidth: .infinity, alignment: .center)
             }

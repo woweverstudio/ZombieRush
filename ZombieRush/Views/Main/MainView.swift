@@ -6,7 +6,8 @@ struct MainView: View {
     @Environment(AppRouter.self) var router
     @Environment(GameKitManager.self) var gameKitManager
     @Environment(GameStateManager.self) var gameStateManager
-
+    @EnvironmentObject var useCaseFactory: UseCaseFactory
+    
     @State private var isDataLoaded: Bool = false
     @State private var lastRefreshTime: Date? = nil
 
@@ -33,6 +34,11 @@ struct MainView: View {
                 .scrollBounceBehavior(.basedOnSize)
                 // 게임 시작 버튼
                 PrimaryButton(title: MainMenuPanel.startButton, style: .cyan, fullWidth: true) {
+                    Task {
+                        let request = AddExperienceRequest(expToAdd: 30)
+                        let _ = await useCaseFactory.addExperience.execute(request)
+                    }
+                    
                     
                 }
                 .padding(18)
