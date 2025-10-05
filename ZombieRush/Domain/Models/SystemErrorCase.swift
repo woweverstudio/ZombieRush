@@ -10,7 +10,10 @@ enum SystemErrorCase {
     case dataNotFound
     case databaseRequestFailed
 
-    
+    // IAP 관련 에러 케이스
+    case iapProductsLoadFailed
+    case iapPurchaseFailed
+
     var error: SystemError {
         switch self {
         case .userNotFound:
@@ -20,6 +23,11 @@ enum SystemErrorCase {
         case .databaseRequestFailed:
             return SystemError(source: .database, severity: .retry, message: .databaseReadFailed)
 
+        // IAP 관련 에러
+        case .iapProductsLoadFailed:
+            return SystemError(source: .iap, severity: .retry, message: .iapLoadFailed)
+        case .iapPurchaseFailed:
+            return SystemError(source: .iap, severity: .retry, message: .iapPurchaseFailed)
         }
     }
 }

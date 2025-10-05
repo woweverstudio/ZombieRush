@@ -9,18 +9,17 @@ extension MarketView {
     static let trustMessage1 = NSLocalizedString("market_trust_message_1", tableName: "View", comment: "Market trust message 1")
     static let trustMessage2 = NSLocalizedString("market_trust_message_2", tableName: "View", comment: "Market trust message 2")
     static let trustMessage3 = NSLocalizedString("market_trust_message_3", tableName: "View", comment: "Market trust message 3")
+    static let refundPolicy = NSLocalizedString("market_refund_policy", tableName: "View", comment: "Market refund policy notice")
 }
 
 // MARK: - Market View
 struct MarketView: View {
     @Environment(AppRouter.self) var router
+    @Environment(StoreKitManager.self) var storeKitManager
 
-    // 마켓 아이템 데이터 (젬만)
-    private var gemItems: [MarketItem] {
-        MarketItemsManager.marketItems.filter { item in
-            if case .gemPackage = item.type { return true }
-            return false
-        }
+    // 마켓 아이템 데이터 (젬 패키지)
+    private var gemItems: [GemItem] {
+        storeKitManager.gemItems
     }
 
     var body: some View {
@@ -30,8 +29,10 @@ struct MarketView: View {
             
             VStack {
                 headerView
+
                 ScrollView {
                     VStack(spacing: 24) {
+                        MarketErrorCard()
                         promotionSection
                         itemsGridView
                         trustSection
@@ -40,7 +41,7 @@ struct MarketView: View {
                 }
                 .scrollIndicators(.hidden)
             }
-            .padding()            
+            .padding()
             .ignoresSafeArea(edges: .bottom)
         }
     }
@@ -80,7 +81,7 @@ struct MarketView: View {
 //                MarketItemCard(item: item)
 //            }
 //        }
-        
+
         VStack(spacing: 12) {
             ForEach(gemItems) { item in
                 MarketItemCard(item: item)
@@ -93,15 +94,9 @@ struct MarketView: View {
             messages: [
                 MarketView.trustMessage1,
                 MarketView.trustMessage2,
-                MarketView.trustMessage3
+                MarketView.trustMessage3,
+                MarketView.refundPolicy
             ]
         )
     }
-}
-
-
-// MARK: - Preview
-#Preview {
-    MarketView()
-        .environment(AppRouter())
 }

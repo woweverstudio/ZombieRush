@@ -18,6 +18,7 @@ extension SettingsView {
 
 struct SettingsView: View {
     @Environment(AppRouter.self) var router
+    @EnvironmentObject var useCaseFactory: UseCaseFactory
     
     var body: some View {
         ZStack {
@@ -73,7 +74,6 @@ struct SettingsView: View {
                         AudioManager.shared.masterVolume = newValue
                     }
 
-                    
                 }
                 
                 // 현재 버전 표시
@@ -86,6 +86,7 @@ struct SettingsView: View {
             .padding()
         }
     }
+
 }
 
 struct SettingRow: View {

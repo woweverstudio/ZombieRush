@@ -9,5 +9,7 @@
 	</array>
 	<key>UILaunchScreen</key>
 	<dict/>
+	<key>SKReceiptValidation</key>
+	<true/>
 </dict>
 </plist>

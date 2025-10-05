@@ -22,7 +22,8 @@ struct ZombieRushApp: App {
     @State private var appRouter = AppRouter()
     @State private var gameKitManager = GameKitManager()
     @State private var gameStateManager = GameStateManager()
-    
+    @State private var storeKitManager: StoreKitManager
+
     @State private var errorManager = ErrorManager.shared
     @State private var toastManager = ToastManager.shared
 
@@ -33,7 +34,13 @@ struct ZombieRushApp: App {
         let statsRepository = SupabaseStatsRepository()
         let elementsRepository = SupabaseElementsRepository()
         let jobsRepository = SupabaseJobsRepository()
-        
+
+        // StateObject 먼저 초기화
+        _userRepository = StateObject(wrappedValue: userRepository)
+        _statsRepository = StateObject(wrappedValue: statsRepository)
+        _elementsRepository = StateObject(wrappedValue: elementsRepository)
+        _jobsRepository = StateObject(wrappedValue: jobsRepository)
+
         // Initialize UseCaseFactory with injected repositories
         let factory = UseCaseFactory(
             userRepository: userRepository,
@@ -41,12 +48,8 @@ struct ZombieRushApp: App {
             elementsRepository: elementsRepository,
             jobsRepository: jobsRepository
         )
-        
-        _userRepository = StateObject(wrappedValue: userRepository)
-        _statsRepository = StateObject(wrappedValue: statsRepository)
-        _elementsRepository = StateObject(wrappedValue: elementsRepository)
-        _jobsRepository = StateObject(wrappedValue: jobsRepository)
         _useCaseFactory = StateObject(wrappedValue: factory)
+        _storeKitManager = State(initialValue: StoreKitManager(useCaseFactory: factory))
     }
 
     var body: some Scene {
@@ -66,6 +69,7 @@ struct ZombieRushApp: App {
             .environment(appRouter)
             .environment(gameKitManager)
             .environment(gameStateManager)
+            .environment(storeKitManager)
             .environment(errorManager)
             .toast(
                 item: $toastManager.currentToast,
@@ -90,4 +94,5 @@ struct ZombieRushApp: App {
             }
         }
     }
+
 }

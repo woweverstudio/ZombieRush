@@ -3,6 +3,7 @@ import SwiftUI
 // MARK: - NavigationStack Router View
 struct RouterView: View {
     @Environment(AppRouter.self) var router
+    @Environment(StoreKitManager.self) var storeKitManager
 
     var body: some View {
         @Bindable var bRouter = router

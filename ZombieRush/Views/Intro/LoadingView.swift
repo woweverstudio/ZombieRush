@@ -25,6 +25,7 @@ struct LoadingView: View {
     @Environment(GameStateManager.self) var gameStateManager
     @EnvironmentObject var useCaseFactory: UseCaseFactory
     @Environment(AppRouter.self) var router
+    @Environment(StoreKitManager.self) var storeKitManager
 
     @State private var currentStage: LoadingStage = .versionCheck
     @State private var progress: Double = 0.0
@@ -122,10 +123,13 @@ struct LoadingView: View {
         // GameKit에서 얻은 플레이어 정보로 데이터 로드/생성
         let playerID = playerInfo.playerID
         let nickname = playerInfo.nickname
-        
+
         let request = LoadGameDataRequest(playerID: playerID, nickname: nickname)
         let _ = await useCaseFactory.loadGameData.execute(request)
-        
+
+        // IAP 상품 로드
+        await loadStoreItems()
+
         // 단계 4: 완료
         await updateStage(to: .completed)
         isLoading = false
@@ -166,6 +170,16 @@ struct LoadingView: View {
                let rootViewController = windowScene.windows.first?.rootViewController {
                 rootViewController.dismiss(animated: true)
             }
+        }
+    }
+
+    private func loadStoreItems() async {
+        do {
+            try await storeKitManager.loadProducts()
+            print("✅ IAP 상품 로드 완료: \(storeKitManager.gemItems.count)개")
+        } catch {
+            print("❌ IAP 상품 로드 실패: \(error.localizedDescription)")
+            // IAP 로드 실패해도 앱 실행은 계속 진행
         }
     }
 }

@@ -18,6 +18,10 @@ enum ToastMessageCase {
     case lackOfRemaingStatPoints
     case selectJobFailed
 
+    // IAP 관련 메시지
+    case iapPurchaseSuccess(String)  // 구매 성공 (상품명 포함)
+    case iapPurchaseFailed           // 구매 실패
+
     // MARK: - Localized Toast
     var toast: ToastMessage {
         switch self {
@@ -74,6 +78,20 @@ enum ToastMessageCase {
             return ToastMessage(
                 title: NSLocalizedString("models_toast_select_job_failed_title", tableName: "Alert", comment: "Select job failed toast title"),
                 description: NSLocalizedString("models_toast_select_job_failed_description", tableName: "Alert", comment: "Select job failed toast description"),
+                type: .error
+            )
+
+        // IAP 관련 메시지
+        case .iapPurchaseSuccess(let productName):
+            return ToastMessage(
+                title: String(format: NSLocalizedString("models_toast_iap_purchase_success_title", tableName: "Alert", comment: "IAP purchase success toast title"), productName),
+                description: NSLocalizedString("models_toast_iap_purchase_success_description", tableName: "Alert", comment: "IAP purchase success toast description"),
+                type: .celebrate
+            )
+        case .iapPurchaseFailed:
+            return ToastMessage(
+                title: NSLocalizedString("models_toast_iap_purchase_failed_title", tableName: "Alert", comment: "IAP purchase failed toast title"),
+                description: NSLocalizedString("models_toast_iap_purchase_failed_description", tableName: "Alert", comment: "IAP purchase failed toast description"),
                 type: .error
             )
         }

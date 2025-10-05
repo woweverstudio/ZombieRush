@@ -1,0 +1,140 @@
+{
+  "appPolicies" : {
+    "eula" : "",
+    "policies" : [
+      {
+        "locale" : "en_US",
+        "policyText" : "",
+        "policyURL" : ""
+      }
+    ]
+  },
+  "identifier" : "308A11AF",
+  "nonRenewingSubscriptions" : [
+
+  ],
+  "products" : [
+    {
+      "displayPrice" : "5.99",
+      "familyShareable" : false,
+      "internalID" : "6753629051",
+      "localizations" : [
+        {
+          "description" : "Get 120 Block Gems! Exchange for elements used in-game.",
+          "displayName" : "120 Block Gems",
+          "locale" : "en_US"
+        },
+        {
+          "description" : "네모잼 120개 획득! 원소로 교환해 다양한 곳에 사용하세요.",
+          "displayName" : "네모잼 120개",
+          "locale" : "ko"
+        }
+      ],
+      "productID" : "woweverstudio_gem_120",
+      "referenceName" : "gem_120",
+      "type" : "Consumable"
+    },
+    {
+      "displayPrice" : "1.99",
+      "familyShareable" : false,
+      "internalID" : "6753628658",
+      "localizations" : [
+        {
+          "description" : "네모잼 20개 획득! 원소로 교환해 다양한 곳에 사용하세요.",
+          "displayName" : "네모잼 20개",
+          "locale" : "ko"
+        },
+        {
+          "description" : "Get 20 Block Gems! Exchange for elements used in-game.",
+          "displayName" : "20 Block Gems",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "woweverstudio_gem_20",
+      "referenceName" : "gem_20",
+      "type" : "Consumable"
+    },
+    {
+      "displayPrice" : "2.99",
+      "familyShareable" : false,
+      "internalID" : "6753628747",
+      "localizations" : [
+        {
+          "description" : "Get 55 Block Gems! Exchange for elements used in-game.",
+          "displayName" : "55 Block Gems",
+          "locale" : "en_US"
+        },
+        {
+          "description" : "네모잼 55개 획득! 원소로 교환해 다양한 곳에 사용하세요.",
+          "displayName" : "네모잼 55개",
+          "locale" : "ko"
+        }
+      ],
+      "productID" : "woweverstudio_gem_55",
+      "referenceName" : "gem_55",
+      "type" : "Consumable"
+    }
+  ],
+  "settings" : {
+    "_applicationInternalID" : "6751334664",
+    "_developerTeamID" : "F7Z9SYW6N5",
+    "_failTransactionsEnabled" : false,
+    "_lastSynchronizedDate" : 781330095.96675599,
+    "_locale" : "ko",
+    "_storefront" : "KOR",
+    "_storeKitErrors" : [
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Load Products"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Purchase"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Verification"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "App Store Sync"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Subscription Status"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "App Transaction"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Manage Subscriptions Sheet"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Refund Request Sheet"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Offer Code Redeem Sheet"
+      }
+    ]
+  },
+  "subscriptionGroups" : [
+
+  ],
+  "version" : {
+    "major" : 4,
+    "minor" : 0
+  }
+}

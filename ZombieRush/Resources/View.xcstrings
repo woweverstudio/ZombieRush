@@ -228,13 +228,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Your first step to saving Blocks! Begin your journey today.✨"
+            "value" : "Your first step to saving Blocks! Begin your journey today."
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "네모 구출을 위한 첫걸음! 새로운 여정을 지금 시작하세요.✨"
+            "value" : "네모 구출을 위한 첫걸음! 새로운 여정을 지금 시작하세요."
           }
         }
       }
@@ -245,13 +245,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "A smart choice for stronger magic! Boost your efficiency and rescue more blocks⚔️ "
+            "value" : "A smart choice for stronger magic! Boost your efficiency and rescue more blocks"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "더 강력한 마법을 위한 현명한 선택! 효율을 높여 더 많은 네모를 구출하세요.⚔️ "
+            "value" : "더 강력한 마법을 위한 현명한 선택! 효율을 높여 더 많은 네모를 구출하세요."
           }
         }
       }
@@ -262,13 +262,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The ultimate pack for seasoned adventurers! Keep your journey going with an abundance of Gems.🏆 "
+            "value" : "The ultimate pack for seasoned adventurers! Keep your journey going with an abundance of Gems."
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "오랜 모험가를 위한 최고의 구성! 넉넉한 네모잼으로 끝없는 여정을 이어가세요.🏆 "
+            "value" : "오랜 모험가를 위한 최고의 구성! 넉넉한 네모잼으로 끝없는 여정을 이어가세요."
           }
         }
       }
@@ -341,6 +341,23 @@
         }
       }
     },
+    "market_refund_policy" : {
+      "comment" : "Market refund policy notice",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This consumable digital item is non-refundable once delivered.\nRefunds may be issued only in cases of technical failure or delivery issues."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "본 상품은 구매 즉시 사용되는 소모성 디지털 콘텐츠로, 전자상거래법 제17조 제2항 제5호에 따라 청약철회(환불)가 제한됩니다. 단, 콘텐츠 미지급 등 개발자 귀책 사유의 경우 환불이 가능합니다."
+          }
+        }
+      }
+    },
     "market_trust_message_1" : {
       "comment" : "Market trust message 1",
       "localizations" : {
@@ -353,7 +370,7 @@
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "결제는 App Store를 통해 안전하게 진행됩니다."
+            "value" : "결제는 앱스토어를 통해 안전하게 진행됩니다."
           }
         }
       }

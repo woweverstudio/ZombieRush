@@ -24,6 +24,8 @@ enum SystemErrorDescription: String {
     case cannotFoundUser
     case cannotFoundData
     case databaseReadFailed
+    case iapPurchaseFailed
+    case iapLoadFailed
 }
 
 // MARK: - Localized Extensions
@@ -36,6 +38,10 @@ extension SystemErrorDescription {
             return NSLocalizedString("models_error_data_not_found", tableName: "Alert", comment: "Data not found error message")
         case .databaseReadFailed:
             return NSLocalizedString("models_error_database_failed", tableName: "Alert", comment: "Database operation failed error message")
+        case .iapLoadFailed:
+            return "TODO: IAP 로드 실패"
+        case .iapPurchaseFailed:
+            return "TODO: IAP 구입 실패"
         }
     }
 }

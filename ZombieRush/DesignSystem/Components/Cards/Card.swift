@@ -19,6 +19,7 @@ enum CardStyle {
     case disabled
     case cyberpunk
     case locked
+    case error
 
     var backgroundColor: Color {
         switch self {
@@ -32,6 +33,8 @@ enum CardStyle {
             return Color.black.opacity(0.3)
         case .locked:
             return Color.black.opacity(0.3) // cyberpunk와 같은 배경
+        case .error:
+            return Color.red.opacity(0.1)
         }
     }
 
@@ -47,6 +50,8 @@ enum CardStyle {
             return Color.white.opacity(0.1)
         case .locked:
             return Color.white.opacity(0.1) // cyberpunk와 같은 테두리
+        case .error:
+            return Color.red.opacity(0.5)
         }
     }
 

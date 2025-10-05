@@ -18,16 +18,23 @@ struct TrustInfoCard: View {
 
     var body: some View {
         Card(style: style) {
-            VStack(alignment: .leading, spacing: 6) {
+            VStack(alignment: .leading, spacing: 8) {
                 ForEach(messages, id: \.self) { message in
-                    Text(bulletPoint + " " + message)
-                        .font(.system(size: 11, design: .monospaced))
-                        .foregroundColor(.white.opacity(0.7))
+                    HStack(alignment: .top, spacing: 8) {
+                        Text(bulletPoint)
+                            .font(.system(size: 11, design: .monospaced))
+                            .foregroundColor(.white.opacity(0.7))
+
+                        Text(message)
+                            .font(.system(size: 11, design: .monospaced))
+                            .foregroundColor(.white.opacity(0.7))
+                            .multilineTextAlignment(.leading)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
                 }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.vertical, 8)
-            .padding(.horizontal, 12)
+            .padding(8)
         }
     }
 }
@@ -38,7 +45,8 @@ struct TrustInfoCard: View {
         messages: [
             "Purchases are securely processed through the App Store.",
             "Purchased NEMO Jams are applied to your account instantly.",
-            "Prices may vary by region and currency."
+            "Prices may vary by region and currency.",
+            "This consumable digital item is non-refundable once delivered.\nRefunds may be issued only in cases of technical failure or delivery issues."
         ]
     )
     .padding()

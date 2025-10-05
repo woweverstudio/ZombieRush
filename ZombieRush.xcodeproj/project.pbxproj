@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		1F3038E72E76E01300949D80 /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = 1F3038E62E76E01300949D80 /* Supabase */; };
 		1F4651422E86E70500DA8CD3 /* AlertToast in Frameworks */ = {isa = PBXBuildFile; productRef = 1F4651412E86E70500DA8CD3 /* AlertToast */; };
+		1F5A29EF2E91A86300E39C33 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1F5A29EE2E91A86300E39C33 /* StoreKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -23,6 +24,7 @@
 
 /* Begin PBXFileReference section */
 		1F30C2002E8175BC0081C7CE /* ZombieRushTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ZombieRushTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		1F5A29EE2E91A86300E39C33 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		1F70BB842E506D1C0089462F /* ZombieRush.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ZombieRush.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -64,6 +66,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1F5A29EF2E91A86300E39C33 /* StoreKit.framework in Frameworks */,
 				1F3038E72E76E01300949D80 /* Supabase in Frameworks */,
 				1F4651422E86E70500DA8CD3 /* AlertToast in Frameworks */,
 			);
@@ -75,6 +78,7 @@
 		1F3038E52E76E01300949D80 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				1F5A29EE2E91A86300E39C33 /* StoreKit.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";

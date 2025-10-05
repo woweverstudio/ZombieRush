@@ -219,7 +219,7 @@ extension MyInfoView {
                         MyInfoJobCard(
                             jobType: jobType,
                             isUnlocked: isUnlocked,
-                            style: selectedJobFilter == .unlock ? .default : .locked,
+                            style: selectedJobFilter == .unlock ? .cyberpunk : .locked,
                             onTap: {
                                 selectedJobType = jobType
                             }
@@ -236,27 +236,5 @@ extension MyInfoView {
             return selectedJobFilter == .unlock ? isUnlocked : !isUnlocked
         }
     }
-
-}
-
-
-
-
-
-// MARK: - Preview
-#Preview {
-    @Previewable @StateObject var userRepository: SupabaseUserRepository = SupabaseUserRepository()
-    @Previewable @StateObject var statsRepository: SupabaseStatsRepository = SupabaseStatsRepository()
-    @Previewable @StateObject var elementsRepository: SupabaseElementsRepository = SupabaseElementsRepository()
-    @Previewable @StateObject var jobsRepository: SupabaseJobsRepository = SupabaseJobsRepository()
-
-    MyInfoView()
-        .environment(AppRouter())
-        .environmentObject(
-            UseCaseFactory(userRepository: userRepository, statsRepository: statsRepository, elementsRepository: elementsRepository, jobsRepository: jobsRepository)
-        )
-        .environmentObject(userRepository)
-        .environmentObject(elementsRepository)
-        .environmentObject(jobsRepository)
 
 }

@@ -22,7 +22,6 @@ struct MyInfoJobCard: View {
     var body: some View {
         Card(
             style: style,
-            customBackgroundColor: .clear, // 배경을 투명하게 해서 이상한 색 없앰
             contentPadding: EdgeInsets(top: 8, leading: 8, bottom: 8, trailing: 8) // 패딩 최소화
         ) {
             VStack(spacing: 6) {
