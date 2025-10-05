@@ -129,6 +129,9 @@ struct LoadingView: View {
 
         // IAP 상품 로드
         await loadStoreItems()
+        
+        // IAP 트랜잭션 모니터링 시작
+        storeKitManager.startTransactionMonitoring()
 
         // 단계 4: 완료
         await updateStage(to: .completed)

@@ -24,4 +24,7 @@ protocol UserRepository: AnyObject {
 
     /// 게임 데이터 전체 로드 (RPC)
     func loadGameData(playerID: String, nickname: String) async throws -> GameData
+
+    /// 네모잼 구매 트랜잭션 완료 처리 (RPC)
+    func completeGemPurchaseTransaction(transaction: TransactionData) async throws -> Int
 }

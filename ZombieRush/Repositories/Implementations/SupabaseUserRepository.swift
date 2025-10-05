@@ -90,4 +90,16 @@ final class SupabaseUserRepository: ObservableObject, UserRepository {
         return try RPCDecoder.decode(GameData.self, from: data)
     }
 
+    func completeGemPurchaseTransaction(transaction: TransactionData) async throws -> Int {
+        let data = try await supabase
+            .rpc("complete_transaction_with_gem", params: [
+                "p_transaction_id": transaction.transactionId,
+                "p_product_id": transaction.productId
+            ])
+            .execute()
+            .data
+
+        let response = try RPCDecoder.decode(Int.self, from: data)
+        return response
+    }
 }

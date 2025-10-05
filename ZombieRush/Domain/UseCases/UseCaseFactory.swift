@@ -15,21 +15,24 @@ final class UseCaseFactory: ObservableObject {
     private let statsRepository: StatsRepository
     private let elementsRepository: ElementsRepository
     private let jobsRepository: JobsRepository
+    private let transactionRepository: TransactionRepository
 
     // MARK: - Initialization
     init(userRepository: UserRepository,
          statsRepository: StatsRepository,
          elementsRepository: ElementsRepository,
-         jobsRepository: JobsRepository) {
+         jobsRepository: JobsRepository,
+         transactionRepository: TransactionRepository) {
         self.userRepository = userRepository
         self.statsRepository = statsRepository
         self.elementsRepository = elementsRepository
         self.jobsRepository = jobsRepository
+        self.transactionRepository = transactionRepository
     }
 
     // MARK: - Repository Access (for Views to observe state)
-    var repositories: (user: UserRepository, stats: StatsRepository, elements: ElementsRepository, jobs: JobsRepository) {
-        (userRepository, statsRepository, elementsRepository, jobsRepository)
+    var repositories: (user: UserRepository, stats: StatsRepository, elements: ElementsRepository, jobs: JobsRepository, transaction: TransactionRepository) {
+        (userRepository, statsRepository, elementsRepository, jobsRepository, transactionRepository)
     }
     
     @MainActor
@@ -40,28 +43,8 @@ final class UseCaseFactory: ObservableObject {
                             jobsRepository: jobsRepository)
     }
 
-    var updateUser: UpdateUserUseCase {
-        UpdateUserUseCase(userRepository: userRepository)
-    }
-
     var addExperience: AddExperienceUseCase {
         AddExperienceUseCase(userRepository: userRepository)
-    }
-
-    var consumeGem: ConsumeGemUseCase {
-        ConsumeGemUseCase(userRepository: userRepository)
-    }
-
-    var addGem: AddGemUseCase {
-        AddGemUseCase(userRepository: userRepository)
-    }
-
-    var purchaseCheerBuff: PurchaseCheerBuffUseCase {
-        PurchaseCheerBuffUseCase(userRepository: userRepository)
-    }
-
-    var consumeRemainingPoints: ConsumeRemainingPointsUseCase {
-        ConsumeRemainingPointsUseCase(userRepository: userRepository)
     }
 
     var upgradeStat: UpgradeStatUseCase {
@@ -75,6 +58,11 @@ final class UseCaseFactory: ObservableObject {
     var addElement: AddElementUseCase {
         AddElementUseCase(elementsRepository: elementsRepository, userRepository: userRepository)
     }
+    
+    var addGem: AddGemUseCase {
+        AddGemUseCase(userRepository: userRepository)
+    }
+    
     var updateJobs: UpdateJobsUseCase {
         UpdateJobsUseCase(jobsRepository: jobsRepository)
     }
@@ -85,5 +73,9 @@ final class UseCaseFactory: ObservableObject {
 
     var unlockJob: UnlockJobUseCase {
         UnlockJobUseCase(jobsRepository: jobsRepository, elementsRepository: elementsRepository, userRepository: userRepository)
+    }
+
+    var saveTransaction: SaveTransactionUseCase {
+        SaveTransactionUseCase(transactionRepository: transactionRepository, userRepository: userRepository)
     }
 }

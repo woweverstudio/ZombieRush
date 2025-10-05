@@ -34,6 +34,7 @@ struct ZombieRushApp: App {
         let statsRepository = SupabaseStatsRepository()
         let elementsRepository = SupabaseElementsRepository()
         let jobsRepository = SupabaseJobsRepository()
+        let transactionRepository = SupabaseTransactionRepository()
 
         // StateObject 먼저 초기화
         _userRepository = StateObject(wrappedValue: userRepository)
@@ -46,7 +47,8 @@ struct ZombieRushApp: App {
             userRepository: userRepository,
             statsRepository: statsRepository,
             elementsRepository: elementsRepository,
-            jobsRepository: jobsRepository
+            jobsRepository: jobsRepository,
+            transactionRepository: transactionRepository
         )
         _useCaseFactory = StateObject(wrappedValue: factory)
         _storeKitManager = State(initialValue: StoreKitManager(useCaseFactory: factory))

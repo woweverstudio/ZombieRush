@@ -1,4 +1,5 @@
 import SwiftUI
+import StoreKit
 
 extension MarketView {
     static let marketTitle = NSLocalizedString("screen_title_market", tableName: "View", comment: "Market screen title")
@@ -67,6 +68,7 @@ struct MarketView: View {
             title: MarketView.marketTitle,
             badges: [.gem],
             onBack: {
+                storeKitManager.currentError = nil
                 router.goBack()
             }
         )

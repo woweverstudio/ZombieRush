@@ -28,17 +28,31 @@ final class StoreKitManager {
     // MARK: - Private Properties
 
     private var updatesTask: Task<Void, Never>?
-    private var currentEntitlementsTask: Task<Void, Never>?
+    private var unfinishedTask: Task<Void, Never>?
 
     // MARK: - Initialization
     private let useCaseFactory: UseCaseFactory
 
     init(useCaseFactory: UseCaseFactory) {
         self.useCaseFactory = useCaseFactory
-        setupTransactionObserver()
     }
 
     // MARK: - Public Methods
+    /// 로딩 뷰에서 데이터 로드가 다 끝나면 모니터링을 시작함.
+    func startTransactionMonitoring() {
+        // 실시간 트랜잭션 모니터링
+        updatesTask = Task(priority: .background) {
+            for await result in Transaction.updates {
+                await self.handleTransaction(result)
+            }
+        }
+        
+        unfinishedTask = Task(priority: .background) {
+            for await result in Transaction.unfinished {
+                await self.handleTransaction(result)
+            }
+        }
+    }
 
     /// 상품 로드
     func loadProducts() async throws {
@@ -66,11 +80,7 @@ final class StoreKitManager {
                 return order1 < order2
             }
             self.gemItems = sortedProducts.map { GemItem(from: $0) }
-
-            print("✅ 상품 로드 완료: \(products.count)개")
-
         } catch {
-            print("❌ 상품 로드 실패: \(error.localizedDescription)")
             throw StoreError.productLoadFailed
         }
     }
@@ -84,19 +94,26 @@ final class StoreKitManager {
             case .success(let verification):
                 // UI 피드백만 - 실제 보상은 Transaction.updates에서 처리
                 let transaction = try verification.payloadValue
-                print("✅ 구매 성공 (UI): \(product.displayName) - 트랜잭션 ID: \(transaction.id)")
-                // finish()는 Transaction.updates 핸들러에서 호출
+
+                // 트랜잭션 저장 (pending 상태)
+                let transactionData = TransactionData(
+                    transactionId: String(transaction.id),
+                    productId: String(product.id),
+                    purchaseDate: transaction.purchaseDate.ISO8601Format(),
+                    jwsSignature: verification.jwsRepresentation
+                )
+                
+                try await useCaseFactory.saveTransaction.execute(transactionData: transactionData)
+                
+                await handleTransaction(verification)
 
             case .userCancelled:
-                print("ℹ️ 구매 취소됨: \(product.displayName)")
                 throw StoreError.purchaseCancelled
 
             case .pending:
-                print("⏳ 구매 대기 중: \(product.displayName)")
                 throw StoreError.purchasePending
-
             @unknown default:
-                throw StoreError.purchaseFailed
+                return
             }
 
         } catch let error as StoreError {
@@ -105,87 +122,22 @@ final class StoreKitManager {
             self.currentError = .unknownProductType
         }
     }
-
-    // MARK: - Private Methods
-
-    /// 트랜잭션 업데이트 모니터링 설정
-    private func setupTransactionObserver() {
-        // 기존 Task 취소
-        updatesTask?.cancel()
-        currentEntitlementsTask?.cancel()
-
-        // 실시간 트랜잭션 모니터링
-        updatesTask = Task { [weak self] in
-            for await result in Transaction.updates {
-                guard let self = self else { return }
-                await self.handleTransaction(result)
-            }
-        }
-
-        // 현재 entitlements 확인 (앱 시작 시 복원용)
-        currentEntitlementsTask = Task { [weak self] in
-            for await result in Transaction.currentEntitlements {
-                guard let self = self else { return }
-                await self.handleTransaction(result)
-            }
-        }
-    }
-
+    
+    
     /// 트랜잭션 처리 (보상 지급은 여기서만!)
-    private func handleTransaction(_ result: VerificationResult<StoreKit.Transaction>) async {
-        do {
-            let transaction = try result.payloadValue
-
-            print("🔄 트랜잭션 처리 시작: \(transaction.productID) (ID: \(transaction.id))")
-
-            switch transaction.productType {
-            case .consumable:
-                // 소모품 구매 처리 (보상 지급)
-                
-                await deliverContent(for: transaction)
-                await transaction.finish()
-
-            case .nonConsumable:
-                // 비소모품은 현재 지원하지 않음
-                print("ℹ️ 비소모품 감지 (처리 생략): \(transaction.productID)")
-                await transaction.finish()
-
-            case .autoRenewable, .nonRenewable:
-                // 구독은 현재 지원하지 않음
-                print("ℹ️ 구독 감지 (처리 생략): \(transaction.productID)")
-                await transaction.finish()
-
-            default:
-                print("❓ 알 수 없는 상품 타입: \(transaction.productID)")
-                await transaction.finish()
-            }
-
-        } catch {
-            print("❌ 트랜잭션 처리 에러: \(error.localizedDescription)")
-        }
-    }
-
-    /// 컨텐츠 전달 (보상 지급)
-    private func deliverContent(for transaction: StoreKit.Transaction) async {
-        print("🎉 보상 지급: \(transaction.productID)")
-
-        // 상품 ID에 따른 보상 지급
-        let rewardAmount: Int
-        switch transaction.productID {
-        case StoreConstants.ProductIDs.gem20:
-            rewardAmount = 20
-        case StoreConstants.ProductIDs.gem55:
-            rewardAmount = 55
-        case StoreConstants.ProductIDs.gem120:
-            rewardAmount = 120
-        default:
-            rewardAmount = 0
-        }
-
-        if rewardAmount > 0 {
-            // TODO: UserRepository를 통해 젬 지급
-            // 현재는 로그만 출력
-            print("💎 \(rewardAmount) 젬 지급 완료!")
+    private func handleTransaction(_ result: VerificationResult<StoreKit.Transaction>) async {        
+        guard case .verified(let transaction) = result else { return }
+        
+        let transactionData = TransactionData(
+            transactionId: String(transaction.id),
+            productId: String(transaction.productID)
+        )
+        
+        let request = AddGemRequest(transaction: transactionData)
+        let response = await useCaseFactory.addGem.execute(request)
+        
+        if response.success {
+            await transaction.finish()
         }
     }
 }
