@@ -5,7 +5,6 @@ import GameKit
 struct MainView: View {
     @Environment(AppRouter.self) var router
     @Environment(GameKitManager.self) var gameKitManager
-    @Environment(GameStateManager.self) var gameStateManager
     @EnvironmentObject var useCaseFactory: UseCaseFactory
     
     @State private var isDataLoaded: Bool = false

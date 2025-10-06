@@ -33,7 +33,7 @@ struct RouterView: View {
             MainView()
                 .navigationBarBackButtonHidden(true)
         case .game:
-            GameView()
+            EmptyView()
                 .navigationBarBackButtonHidden(true)
         case .settings:
             SettingsView()
@@ -47,16 +47,9 @@ struct RouterView: View {
         case .myInfo:
             MyInfoView()
                 .navigationBarBackButtonHidden(true)
-        case .gameOver(let playTime, let score, let success):
-            GameOverView(
-                playTime: playTime,
-                score: score,
-                success: success,
-                onQuit: {
-                    router.quitToMain()
-                }
-            )
-            .navigationBarBackButtonHidden(true)
+        case .gameOver(let _, let _, let _):
+            EmptyView()
+                .navigationBarBackButtonHidden(true)
         }
     }
 }

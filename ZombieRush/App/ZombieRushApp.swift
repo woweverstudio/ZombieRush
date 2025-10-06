@@ -20,12 +20,14 @@ struct ZombieRushApp: App {
     @StateObject var useCaseFactory: UseCaseFactory
 
     @State private var appRouter = AppRouter()
+    @State private var configManager = ConfigManager()
     @State private var gameKitManager = GameKitManager()
-    @State private var gameStateManager = GameStateManager()
     @State private var storeKitManager: StoreKitManager
-
+    
     @State private var errorManager = ErrorManager.shared
     @State private var toastManager = ToastManager.shared
+    
+    @State private var processor = Processor()
 
     init() {
         let userRepository = SupabaseUserRepository()
@@ -58,7 +60,7 @@ struct ZombieRushApp: App {
                 // 일반 앱 화면
                 RouterView()
                     .preferredColorScheme(.dark)
-                
+
                 ErrorView()
             }
             .environmentObject(userRepository)  // Repositories via EnvironmentKey
@@ -68,7 +70,6 @@ struct ZombieRushApp: App {
             .environmentObject(useCaseFactory)  // UseCaseFactory via EnvironmentKey
             .environment(appRouter)
             .environment(gameKitManager)
-            .environment(gameStateManager)
             .environment(storeKitManager)
             .environment(errorManager)
             .toast(
@@ -78,7 +79,7 @@ struct ZombieRushApp: App {
             ) { toast in
                 let type = toast?.type ?? .complete
                 return AlertToast(displayMode: .banner(.pop), type: .systemImage(type.imageName, type.color) , title: toast?.title, subTitle: toast?.description)
-            }
+            }            
             .task {
                 try? await UNUserNotificationCenter.current().setBadgeCount(0)
             }

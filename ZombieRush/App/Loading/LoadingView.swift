@@ -2,22 +2,17 @@ import SwiftUI
 
 
 // MARK: - Loading View
-
-
-
 struct LoadingView: View {
-    @Environment(GameKitManager.self) var gameKitManager
-    @Environment(GameStateManager.self) var gameStateManager
     @EnvironmentObject var useCaseFactory: UseCaseFactory
-    @Environment(AppRouter.self) var router
+    
     @Environment(StoreKitManager.self) var storeKitManager
-
-    @State var currentStage: LoadingStage = .checkConfig
-    @State var progress: Double = 0.0
-    @State var configManager = ConfigManager()
+    @Environment(ConfigManager.self) var configManager
+    @Environment(GameKitManager.self) var gameKitManager
+    @Environment(Processor.self) var processor
+    @Environment(AppRouter.self) var router
 
     var body: some View {
-        @Bindable var bConfigManager = configManager
+        @Bindable var bindableConfig = configManager
         ZStack {
             // 사이버펑크 배경
             Background(style: .image("background"))
@@ -37,7 +32,7 @@ struct LoadingView: View {
                         // 진행 바
                         RoundedRectangle(cornerRadius: 4)
                             .fill(Color.magenta.opacity(0.8))
-                            .frame(width: progress * 300, height: 8)
+                            .frame(width: processor.progress * 300, height: 8)
                     }
                     .frame(width: 300)
                 }
@@ -48,15 +43,37 @@ struct LoadingView: View {
             .padding(.horizontal, 40)
         }
         .onAppear {
-            startLoadingProcess()
+            processor.start(
+                useCaseFactory: useCaseFactory,
+                configManager: configManager,
+                gameKitManager: gameKitManager,
+                storeKitManager: storeKitManager
+            )
+            
+            moveNextScreen()
         }
-        .fullScreenCover(isPresented: $bConfigManager.shouldForceUpdate) {
+        .fullScreenCover(isPresented: $bindableConfig.shouldForceUpdate) {
             // 강제 업데이트 화면 (닫을 수 없음)
             ForceUpdateView()
         }
-        .fullScreenCover(isPresented: $bConfigManager.isUnavailableService) {
+        .fullScreenCover(isPresented: $bindableConfig.isUnavailableService) {
             // 서비스 이용 불가 화면
             ServiceUnavailableView()
+        }
+    }
+    
+    private func moveNextScreen() {
+        if self.router.currentRoute == .loading {
+            // 앱 처음 실행인지 확인
+            let hasSeenStory = UserDefaults.standard.bool(forKey: "hasSeenStory")
+
+            if hasSeenStory {
+                // 이미 본 적이 있으면 메인 화면으로 이동
+                self.router.navigate(to: .main)
+            } else {
+                // 처음이면 스토리 화면으로 이동
+                self.router.navigate(to: .story)
+            }
         }
     }
 }
