@@ -39,7 +39,7 @@ struct RouterView: View {
             SettingsView()
                 .navigationBarBackButtonHidden(true)
         case .leaderboard:
-            LeaderBoardView()
+            EmptyView()
                 .navigationBarBackButtonHidden(true)
         case .market:
             MarketView()
@@ -47,7 +47,7 @@ struct RouterView: View {
         case .myInfo:
             MyInfoView()
                 .navigationBarBackButtonHidden(true)
-        case .gameOver(let _, let _, let _):
+        case .gameOver(_, _, _):
             EmptyView()
                 .navigationBarBackButtonHidden(true)
         }

@@ -17,40 +17,39 @@ final class Processor {
         configManager: ConfigManager,
         gameKitManager: GameKitManager,
         storeKitManager: StoreKitManager
-    ) {
-        Task {
-            // 단계 1: 버전 체크 (서비스 체크 포함)
-            guard await configManager.checkServerConfig() else {
-                loginAsGuest(useCaseFactory)
-                return
-            }
-            progress = 0.2
-            
-            // 단계 2: Game Center Data 로드
-            guard let playerInfo = await loadGameCenterData(gameKitManager) else {
-                loginAsGuest(useCaseFactory)
-                return
-            }
-            progress = 0.4
-            
-            // 단계 3: Supabase 데이터 로드 (데이터 없을 시 생성)
-            guard await loadServerData(with: playerInfo, using: useCaseFactory) else {
-                loginAsGuest(useCaseFactory)
-                return
-            }
-            progress = 0.6
-            
-            // 단계 4: 마켓 데이터 로드
-            guard await storeKitManager.loadProducts() else {
-                loginAsGuest(useCaseFactory)
-                return
-            }
-            progress = 0.8
-            
-            // 단계 5: StoreKit 트랜잭션 모니터링 시작
-            storeKitManager.startTransactionMonitoring()
-            progress = 1.0
+    ) async {
+        
+        // 단계 1: 버전 체크 (서비스 체크 포함)
+        guard await configManager.checkServerConfig() else {
+            loginAsGuest(useCaseFactory)
+            return
         }
+        progress = 0.2
+        
+        // 단계 2: Game Center Data 로드
+        guard let playerInfo = await loadGameCenterData(gameKitManager) else {
+            loginAsGuest(useCaseFactory)
+            return
+        }
+        progress = 0.4
+        
+        // 단계 3: Supabase 데이터 로드 (데이터 없을 시 생성)
+        guard await loadServerData(with: playerInfo, using: useCaseFactory) else {
+            loginAsGuest(useCaseFactory)
+            return
+        }
+        progress = 0.6
+        
+        // 단계 4: 마켓 데이터 로드
+        guard await storeKitManager.loadProducts() else {
+            loginAsGuest(useCaseFactory)
+            return
+        }
+        progress = 0.8
+        
+        // 단계 5: StoreKit 트랜잭션 모니터링 시작
+        storeKitManager.startTransactionMonitoring()
+        progress = 1.0        
     }
     
     private func loginAsGuest(_ useCaseFactory: UseCaseFactory) {

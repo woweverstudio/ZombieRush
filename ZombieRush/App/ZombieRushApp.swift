@@ -70,8 +70,10 @@ struct ZombieRushApp: App {
             .environmentObject(useCaseFactory)  // UseCaseFactory via EnvironmentKey
             .environment(appRouter)
             .environment(gameKitManager)
+            .environment(configManager)
             .environment(storeKitManager)
             .environment(errorManager)
+            .environment(processor)
             .toast(
                 item: $toastManager.currentToast,
                 duration: toastManager.currentToast?.duration ?? 2,

@@ -10,6 +10,8 @@ struct LoadingView: View {
     @Environment(GameKitManager.self) var gameKitManager
     @Environment(Processor.self) var processor
     @Environment(AppRouter.self) var router
+    
+    @State private var displayProgress: Double = 0.0
 
     var body: some View {
         @Bindable var bindableConfig = configManager
@@ -32,7 +34,7 @@ struct LoadingView: View {
                         // 진행 바
                         RoundedRectangle(cornerRadius: 4)
                             .fill(Color.magenta.opacity(0.8))
-                            .frame(width: processor.progress * 300, height: 8)
+                            .frame(width: displayProgress * 300, height: 8)
                     }
                     .frame(width: 300)
                 }
@@ -42,15 +44,27 @@ struct LoadingView: View {
             }
             .padding(.horizontal, 40)
         }
-        .onAppear {
-            processor.start(
-                useCaseFactory: useCaseFactory,
-                configManager: configManager,
-                gameKitManager: gameKitManager,
-                storeKitManager: storeKitManager
-            )
+        .onChange(of: processor.progress) { _, newValue in
+            withAnimation(.easeInOut(duration: 0.6)) {
+                displayProgress = newValue
+            }
             
-            moveNextScreen()
+            // 게이지가 다 찼을 때만 화면 이동
+            if newValue >= 1.0 {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    moveNextScreen()
+                }
+            }
+        }
+        .onAppear {
+            Task {
+                await processor.start(
+                    useCaseFactory: useCaseFactory,
+                    configManager: configManager,
+                    gameKitManager: gameKitManager,
+                    storeKitManager: storeKitManager
+                )
+            }
         }
         .fullScreenCover(isPresented: $bindableConfig.shouldForceUpdate) {
             // 강제 업데이트 화면 (닫을 수 없음)
