@@ -2,9 +2,13 @@ import SwiftUI
 
 // MARK: - NavigationStack Router View
 struct RouterView: View {
-    @Environment(AppRouter.self) var router
+    @EnvironmentObject var useCaseFactory: UseCaseFactory
     @Environment(StoreKitManager.self) var storeKitManager
-
+    @Environment(ConfigManager.self) var configManager
+    @Environment(GameKitManager.self) var gameKitManager
+    @Environment(Processor.self) var processor
+    @Environment(AppRouter.self) var router
+    
     var body: some View {
         @Bindable var bRouter = router
         NavigationStack(path: $bRouter.path) {
@@ -12,6 +16,16 @@ struct RouterView: View {
             LoadingView()
                 .navigationDestination(for: Route.self) { route in
                     destinationView(for: route)
+                }
+                .onReceive(NotificationCenter.default.publisher(for: .gameCenterLoginSuccess)) { _ in
+                    Task {
+                        await processor.start(
+                            useCaseFactory: useCaseFactory,
+                            configManager: configManager,
+                            gameKitManager: gameKitManager,
+                            storeKitManager: storeKitManager
+                        )
+                    }
                 }
         }
     }

@@ -1,11 +1,21 @@
 import SwiftUI
 
+extension GuestPopup {
+    static let title = NSLocalizedString("guest_popup_title", tableName: "View", comment: "Guest popup title")
+    static let message = NSLocalizedString("guest_popup_message", tableName: "View", comment: "Guest popup main message")
+    static let internetRequired = NSLocalizedString("guest_popup_internet_required", tableName: "View", comment: "Internet connection required text")
+    static let gameCenterRequired = NSLocalizedString("guest_popup_gamecenter_required", tableName: "View", comment: "Game Center login required text")
+    static let dataNotSaved = NSLocalizedString("guest_popup_data_not_saved", tableName: "View", comment: "Game data not saved text")
+    static let confirmButton = NSLocalizedString("guest_popup_confirm_button", tableName: "View", comment: "Guest popup confirm button")
+    static let footerMessage = NSLocalizedString("guest_popup_footer_message", tableName: "View", comment: "Guest popup footer message")
+}
+
 // MARK: - Guest Popup View
 struct GuestPopup: View {
     let onConfirm: () -> Void
     
     var message: some View {
-        Text("인터넷 연결 또는 게임센터 로그인이 필요합니다. 게스트모드는 기존 게임 데이터를 사용하지 않고 임시 데이터를 사용합니다.")
+        Text(GuestPopup.message)
             .font(.system(size: 16, design: .monospaced))
             .foregroundColor(.dsTextSecondary)
             .multilineTextAlignment(.center)
@@ -16,20 +26,20 @@ struct GuestPopup: View {
     var body: some View {
         VStack {
             // 헤더 영역 - 제목
-            Header(title: "게스트 모드", showBackButton: false)
+            Header(title: GuestPopup.title, showBackButton: false)
             Spacer()
             message
             Spacer()
             // 내용 영역
             VStack(spacing: 16) {
                 // 특징 아이콘들
-                HStack {
+                HStack(alignment: .top) {
                     VStack(spacing: 12) {
                         Image(systemName: "wifi.slash")
                             .font(.system(size: 24))
                             .foregroundColor(.red.opacity(0.7))
                             .frame(width: 24, height: 24)
-                        Text("인터넷\n연결 필요")
+                        Text(GuestPopup.internetRequired)
                             .font(.system(size: 11, design: .monospaced))
                             .foregroundColor(.dsTextSecondary)
                             .multilineTextAlignment(.center)
@@ -41,7 +51,7 @@ struct GuestPopup: View {
                             .font(.system(size: 24))
                             .foregroundColor(.orange.opacity(0.7))
                             .frame(width: 24, height: 24)
-                        Text("Game Center\n로그인 필요")
+                        Text(GuestPopup.gameCenterRequired)
                             .font(.system(size: 11, design: .monospaced))
                             .foregroundColor(.dsTextSecondary)
                             .multilineTextAlignment(.center)
@@ -55,7 +65,7 @@ struct GuestPopup: View {
                             .foregroundColor(.cyan.opacity(0.7))
                             .frame(width: 24, height: 24)
                         
-                        Text("게임 내용\n저장되지 않음")
+                        Text(GuestPopup.dataNotSaved)
                             .font(.system(size: 11, design: .monospaced))
                             .foregroundColor(.dsTextSecondary)
                             .multilineTextAlignment(.center)
@@ -70,14 +80,14 @@ struct GuestPopup: View {
             // 버튼 영역
             VStack(spacing: 12) {
                 PrimaryButton(
-                    title: "일단 플레이하기",
+                    title: GuestPopup.confirmButton,
                     style: .cyan,
                     fullWidth: true
                 ) {
                     onConfirm()
                 }
 
-                Text("나중에 로그인할 수 있습니다")
+                Text(GuestPopup.footerMessage)
                     .font(.system(size: 12, design: .monospaced))
                     .foregroundColor(.dsTextDisabled)
             }

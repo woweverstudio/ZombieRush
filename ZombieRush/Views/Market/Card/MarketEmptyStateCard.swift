@@ -1,5 +1,10 @@
 import SwiftUI
 
+extension MarketEmptyStateCard {
+    static let title = NSLocalizedString("market_unavailable_title", tableName: "View", comment: "Market unavailable title")
+    static let message = NSLocalizedString("market_unavailable_message", tableName: "View", comment: "Market unavailable message")
+}
+
 // MARK: - Market Empty State Card
 struct MarketEmptyStateCard: View {
     var body: some View {
@@ -11,18 +16,18 @@ struct MarketEmptyStateCard: View {
                     .fill(Color.cyan.opacity(0.1))
                     .frame(width: 80, height: 80)
 
-                Image(systemName: "wifi.slash")
+                Image(systemName: "cart.badge.questionmark")
                     .font(.system(size: 32))
-                    .foregroundColor(.red.opacity(0.7))
+                    .foregroundColor(.cyan.opacity(0.7))
             }
 
             VStack(spacing: 8) {
-                Text("인터넷 연결이 필요합니다")
+                Text(MarketEmptyStateCard.title)
                     .font(.system(size: 18, weight: .bold, design: .monospaced))
                     .foregroundColor(.dsTextPrimary)
                     .multilineTextAlignment(.center)
 
-                Text("인터넷에 연결하거나\nGame Center에 로그인한 후\n재접속해주세요")
+                Text(MarketEmptyStateCard.message)
                     .font(.system(size: 14, design: .monospaced))
                     .foregroundColor(.dsTextSecondary)
                     .multilineTextAlignment(.center)

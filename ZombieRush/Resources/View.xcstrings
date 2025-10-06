@@ -836,6 +836,159 @@
           }
         }
       }
+    },
+    "guest_popup_title" : {
+      "comment" : "Guest popup title",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Guest Mode"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "게스트 모드"
+          }
+        }
+      }
+    },
+    "guest_popup_message" : {
+      "comment" : "Guest popup main message",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Internet connection and Game Center login are required. Guest mode uses temporary data instead of existing game data."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "인터넷 연결과 게임센터 로그인이 필요합니다. 게스트 모드에서는 기존 게임 데이터가 아닌 임시 데이터를 사용합니다."
+          }
+        }
+      }
+    },
+    "guest_popup_internet_required" : {
+      "comment" : "Internet connection required text",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Internet\nConnection\nRequired"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "인터넷\n연결 필요"
+          }
+        }
+      }
+    },
+    "guest_popup_gamecenter_required" : {
+      "comment" : "Game Center login required text",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Game Center\nLogin\nRequired"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Game Center\n로그인 필요"
+          }
+        }
+      }
+    },
+    "guest_popup_data_not_saved" : {
+      "comment" : "Game data not saved text",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Game Data\nNot Saved"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "게임 내용\n저장되지 않음"
+          }
+        }
+      }
+    },
+    "guest_popup_confirm_button" : {
+      "comment" : "Guest popup confirm button",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Confirm"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "확인"
+          }
+        }
+      }
+    },
+    "guest_popup_footer_message" : {
+      "comment" : "Guest popup footer message",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Guest mode does not save game data."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "게스트모드는 게임 내용을 저장하지 않습니다."
+          }
+        }
+      }
+    },
+    "market_unavailable_title" : {
+      "comment" : "Market unavailable title",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unable to Load Items"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "아이템을 불러올 수 없습니다"
+          }
+        }
+      }
+    },
+    "market_unavailable_message" : {
+      "comment" : "Market unavailable message",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unable to load items due to server issues.\nPlease check your internet or Game Center connection\nand try again."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "서버 문제로 아이템을 불러오지 못했습니다.\n인터넷 또는 게임센터 연결을 확인하고\n재접속 해주세요."
+          }
+        }
+      }
     }
   },
   "version" : "1.0"
