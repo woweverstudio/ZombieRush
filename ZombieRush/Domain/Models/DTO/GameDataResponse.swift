@@ -13,6 +13,6 @@ struct GameData: Codable {
         case stats
         case elements
         case jobs
-        case jobRequirements = "job_requirements" // ✅ 서버 key와 매핑
+        case jobRequirements = "job_requirements"
     }
 }

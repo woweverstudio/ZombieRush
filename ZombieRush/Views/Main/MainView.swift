@@ -10,6 +10,7 @@ struct MainView: View {
     
     @State private var isDataLoaded: Bool = false
     @State private var lastRefreshTime: Date? = nil
+    @State private var showGuestPopup: Bool = false
 
 
     private var isPhoneSize: Bool {
@@ -42,6 +43,17 @@ struct MainView: View {
                     
                 }
                 .padding(18)
+            }
+        }
+        .sheet(isPresented: $showGuestPopup) {
+            GuestPopup {
+                showGuestPopup = false
+            }
+        }
+        .onAppear {
+            // 게스트 유저 확인
+            if useCaseFactory.repositories.user.currentUser?.id == "" {
+                showGuestPopup = true
             }
         }
     }
