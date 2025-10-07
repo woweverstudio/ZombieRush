@@ -163,7 +163,12 @@ public enum ColorStyle {
             Circle().fill(Color(hex: "FF6B6B")).frame(width: 30, height: 30)
             Text("Hex Color").foregroundColor(Color(hex: "FF6B6B"))
         }
+        
+        HStack(spacing: 10) {
+            Circle().fill(Color.dsOverlay).frame(width: 30, height: 30)
+            Text("Hex Color").foregroundColor(Color(hex: "FF6B6B"))
+        }
     }
     .padding()
-    .background(Color.black)
+    .background(Background())
 }

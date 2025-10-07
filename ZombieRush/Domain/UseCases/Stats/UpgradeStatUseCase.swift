@@ -22,11 +22,11 @@ struct UpgradeStatResponse {
 struct UpgradeStatUseCase: UseCase {
     let statsRepository: StatsRepository
     let userRepository: UserRepository
+    let alertManager: AlertManager
 
     func execute(_ request: UpgradeStatRequest) async -> UpgradeStatResponse {
         // 현재 사용자 정보 확인
-        guard let currentUser = userRepository.currentUser else {
-            ErrorManager.shared.report(.userNotFound)
+        guard let currentUser = userRepository.currentUser else {            
             return UpgradeStatResponse(success: false, stats: nil)
         }
 
@@ -41,10 +41,9 @@ struct UpgradeStatUseCase: UseCase {
             userRepository.currentUser = updatedUser
             statsRepository.currentStats = updatedStats
 
-            ToastManager.shared.show(.statPointsIncreased(request.statType.localizedDisplayName, 1))
             return UpgradeStatResponse(success: true, stats: updatedStats)
         } catch {
-            ErrorManager.shared.report(.databaseRequestFailed)
+            alertManager.showError(.serverError)
             return UpgradeStatResponse(success: false, stats: nil)
         }
 

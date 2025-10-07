@@ -12,13 +12,13 @@ import Foundation
 struct SaveTransactionUseCase {
     let transactionRepository: TransactionRepository
     let userRepository: UserRepository
+    let alertManager: AlertManager
 
     /// 트랜잭션을 pending 상태로 저장
-    func execute(transactionData: TransactionData) async throws {
+    func execute(transactionData: TransactionData) async -> Bool {
         // 현재 사용자 정보 확인
-        guard let currentUser = userRepository.currentUser else {
-            ErrorManager.shared.report(.userNotFound)
-            return
+        guard let currentUser = userRepository.currentUser else {            
+            return false
         }
         
         // 현재 사용자 정보에서 직접 플레이어 ID를 가져와서 다시 조합
@@ -31,6 +31,13 @@ struct SaveTransactionUseCase {
             jwsSignature: transactionData.jwsSignature
         )
         
-        try await transactionRepository.saveTransaction(transactionData: newTransaction)
+        do {
+            try await transactionRepository.saveTransaction(transactionData: newTransaction)
+            return true
+        } catch {
+            alertManager.showError(.serverError)
+            return false
+        }
+        
     }
 }

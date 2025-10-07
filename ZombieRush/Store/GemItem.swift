@@ -36,11 +36,11 @@ struct GemItem: Identifiable {
     /// Product ID에 따른 localized description 반환
     private static func getLocalizedDescription(for productId: String) -> String {
         switch productId {
-        case StoreConstants.ProductIDs.gem20:
+        case ProductIDs.gem20:
             return NSLocalizedString("market_item_description_20", tableName: "View", comment: "")
-        case StoreConstants.ProductIDs.gem55:
+        case ProductIDs.gem55:
             return NSLocalizedString("market_item_description_55", tableName: "View", comment: "")
-        case StoreConstants.ProductIDs.gem120:
+        case ProductIDs.gem120:
             return NSLocalizedString("market_item_description_120", tableName: "View", comment: "")
         default:
             return NSLocalizedString("market_item_description_20", tableName: "View", comment: "")
@@ -50,11 +50,11 @@ struct GemItem: Identifiable {
     /// Product ID에 따른 아이콘 이름 반환
     private static func getIconName(for productId: String) -> String {
         switch productId {
-        case StoreConstants.ProductIDs.gem20:
+        case ProductIDs.gem20:
             return "gem_20"
-        case StoreConstants.ProductIDs.gem55:
+        case ProductIDs.gem55:
             return "gem_55"
-        case StoreConstants.ProductIDs.gem120:
+        case ProductIDs.gem120:
             return "gem_120"
         default:
             return "gem_20"

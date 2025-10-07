@@ -23,7 +23,6 @@ struct SelectJobUseCase: UseCase {
     func execute(_ request: SelectJobRequest) async -> SelectJobResponse {
         // 현재 직업 정보 사용 (Repository의 currentJobs)
         guard let currentJobs = await jobsRepository.currentJobs else {
-            ErrorManager.shared.report(.dataNotFound)
             return SelectJobResponse(jobs: nil)
         }
 
@@ -34,8 +33,7 @@ struct SelectJobUseCase: UseCase {
         do {
             let savedJobs = try await jobsRepository.updateJobs(updatedJobs)
             return SelectJobResponse(jobs: savedJobs)
-        } catch {            
-            ToastManager.shared.show(.selectJobFailed)
+        } catch {
             return SelectJobResponse(jobs: nil)
         }
         

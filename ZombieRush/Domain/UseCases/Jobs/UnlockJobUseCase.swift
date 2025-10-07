@@ -23,11 +23,11 @@ struct UnlockJobUseCase: UseCase {
     let jobsRepository: JobsRepository
     let elementsRepository: ElementsRepository
     let userRepository: UserRepository
+    let alertManager: AlertManager
 
     func execute(_ request: UnlockJobRequest) async -> UnlockJobResponse {
         // 현재 사용자 정보 확인
         guard let currentUser = userRepository.currentUser else {
-            ErrorManager.shared.report(.userNotFound)
             return UnlockJobResponse(success: false, jobs: nil)
         }
 
@@ -42,10 +42,10 @@ struct UnlockJobUseCase: UseCase {
             jobsRepository.currentJobs = updatedJobs
             elementsRepository.currentElements = updatedElements
 
-            ToastManager.shared.show(.unlockJobSuccess(request.jobType.localizedDisplayName))
+            alertManager.showToast(.unlockJob(request.jobType.localizedDisplayName))
             return UnlockJobResponse(success: true, jobs: updatedJobs)
         } catch {
-            ErrorManager.shared.report(.databaseRequestFailed)
+            alertManager.showError(.serverError)
             return UnlockJobResponse(success: false, jobs: nil)
         }
     }

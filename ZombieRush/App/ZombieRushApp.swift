@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import AlertToast
+
 
 @main
 struct ZombieRushApp: App {
@@ -22,13 +22,11 @@ struct ZombieRushApp: App {
     @State private var appRouter = AppRouter()
     @State private var configManager = ConfigManager()
     @State private var gameKitManager = GameKitManager()
-    @State private var storeKitManager: StoreKitManager
-    
-    @State private var errorManager = ErrorManager.shared
-    @State private var toastManager = ToastManager.shared
-    
     @State private var processor = Processor()
 
+    @State private var storeKitManager: StoreKitManager
+    @State private var alertManager: AlertManager
+    
     init() {
         let userRepository = SupabaseUserRepository()
         let statsRepository = SupabaseStatsRepository()
@@ -41,50 +39,41 @@ struct ZombieRushApp: App {
         _statsRepository = StateObject(wrappedValue: statsRepository)
         _elementsRepository = StateObject(wrappedValue: elementsRepository)
         _jobsRepository = StateObject(wrappedValue: jobsRepository)
-
+        
+        let alertManager = AlertManager()
+        _alertManager = State(initialValue: alertManager)
+        
         // Initialize UseCaseFactory with injected repositories
         let factory = UseCaseFactory(
             userRepository: userRepository,
             statsRepository: statsRepository,
             elementsRepository: elementsRepository,
             jobsRepository: jobsRepository,
-            transactionRepository: transactionRepository
+            transactionRepository: transactionRepository,
+            alertManager: alertManager
         )
         _useCaseFactory = StateObject(wrappedValue: factory)
-        _storeKitManager = State(initialValue: StoreKitManager(useCaseFactory: factory))
+        
+        let storekit = StoreKitManager(useCaseFactory: factory, alertManager: alertManager)
+        _storeKitManager = State(initialValue: storekit)
     }
 
     var body: some Scene {
         WindowGroup {
-            ZStack {
-                // 일반 앱 화면
-                RouterView()
-                    .preferredColorScheme(.dark)
-
-                ErrorView()
-            }
-            .environmentObject(userRepository)  // Repositories via EnvironmentKey
-            .environmentObject(statsRepository)
-            .environmentObject(elementsRepository)
-            .environmentObject(jobsRepository)
-            .environmentObject(useCaseFactory)  // UseCaseFactory via EnvironmentKey
-            .environment(appRouter)
-            .environment(gameKitManager)
-            .environment(configManager)
-            .environment(storeKitManager)
-            .environment(errorManager)
-            .environment(processor)
-            .toast(
-                item: $toastManager.currentToast,
-                duration: toastManager.currentToast?.duration ?? 2,
-                tapToDismiss: true
-            ) { toast in
-                let type = toast?.type ?? .complete
-                return AlertToast(displayMode: .banner(.pop), type: .systemImage(type.imageName, type.color) , title: toast?.title, subTitle: toast?.description)
-            }            
-            .task {
-                try? await UNUserNotificationCenter.current().setBadgeCount(0)
-            }
+            // 일반 앱 화면
+            RouterView()
+                .preferredColorScheme(.dark)
+                .environmentObject(userRepository)  // Repositories via EnvironmentKey
+                .environmentObject(statsRepository)
+                .environmentObject(elementsRepository)
+                .environmentObject(jobsRepository)
+                .environmentObject(useCaseFactory)  // UseCaseFactory via EnvironmentKey
+                .environment(appRouter)
+                .environment(gameKitManager)
+                .environment(configManager)
+                .environment(storeKitManager)
+                .environment(alertManager)
+                .environment(processor)
         }
     }
 

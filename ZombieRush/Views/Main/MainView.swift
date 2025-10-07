@@ -5,6 +5,7 @@ import GameKit
 struct MainView: View {
     @Environment(AppRouter.self) var router
     @Environment(GameKitManager.self) var gameKitManager
+    @Environment(AlertManager.self) var alertManager
     @EnvironmentObject var useCaseFactory: UseCaseFactory
     
     @State private var isDataLoaded: Bool = false

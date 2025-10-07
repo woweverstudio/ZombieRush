@@ -33,7 +33,6 @@ struct MarketView: View {
 
                 ScrollView {
                     VStack(spacing: 24) {
-                        MarketErrorCard()
                         promotionSection
                         itemsGridView
                         trustSection
@@ -68,7 +67,6 @@ struct MarketView: View {
             title: MarketView.marketTitle,
             badges: [.gem],
             onBack: {
-                storeKitManager.currentError = nil
                 router.goBack()
             }
         )

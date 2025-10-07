@@ -9,7 +9,8 @@
 /* Begin PBXBuildFile section */
 		1F3038E72E76E01300949D80 /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = 1F3038E62E76E01300949D80 /* Supabase */; };
 		1F4651422E86E70500DA8CD3 /* AlertToast in Frameworks */ = {isa = PBXBuildFile; productRef = 1F4651412E86E70500DA8CD3 /* AlertToast */; };
-		1F5A29EF2E91A86300E39C33 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1F5A29EE2E91A86300E39C33 /* StoreKit.framework */; };
+		1F7E14052E95509200E204CC /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1F5A29EE2E91A86300E39C33 /* StoreKit.framework */; };
+		1F7E14062E95509200E204CC /* StoreKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1F5A29EE2E91A86300E39C33 /* StoreKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -21,6 +22,20 @@
 			remoteInfo = ZombieRush;
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		1F7E14072E95509200E204CC /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				1F7E14062E95509200E204CC /* StoreKit.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		1F30C2002E8175BC0081C7CE /* ZombieRushTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ZombieRushTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -66,7 +81,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1F5A29EF2E91A86300E39C33 /* StoreKit.framework in Frameworks */,
+				1F7E14052E95509200E204CC /* StoreKit.framework in Frameworks */,
 				1F3038E72E76E01300949D80 /* Supabase in Frameworks */,
 				1F4651422E86E70500DA8CD3 /* AlertToast in Frameworks */,
 			);
@@ -135,6 +150,7 @@
 				1F70BB802E506D1C0089462F /* Sources */,
 				1F70BB812E506D1C0089462F /* Frameworks */,
 				1F70BB822E506D1C0089462F /* Resources */,
+				1F7E14072E95509200E204CC /* Embed Frameworks */,
 			);
 			buildRules = (
 			);

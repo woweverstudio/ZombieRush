@@ -23,11 +23,11 @@ struct AddElementResponse {
 struct AddElementUseCase: UseCase {
     let elementsRepository: ElementsRepository
     let userRepository: UserRepository
+    let alertManager: AlertManager
 
     func execute(_ request: AddElementRequest) async -> AddElementResponse {
         // 현재 사용자 정보 확인
         guard let currentUser = userRepository.currentUser else {
-            ErrorManager.shared.report(.userNotFound)
             return AddElementResponse(success: false, elements: nil)
         }
 
@@ -42,12 +42,13 @@ struct AddElementUseCase: UseCase {
             // Repository 업데이트
             elementsRepository.currentElements = updatedElements
             userRepository.currentUser = updatedUser
-
-            ToastManager.shared.show(.elementPurchased("\(request.elementType.localizedDisplayName) x\(request.count)"))
+            
+            let element = request.elementType
+            alertManager.showToast(.addElement(element.iconName, element.color, element.localizedDisplayName, request.count))
             return AddElementResponse(success: true, elements: updatedElements)
         } catch {
-            // 네모잼 부족 등의 에러 처리\
-            ErrorManager.shared.report(.databaseRequestFailed)
+            // 네모잼 부족 등의 에러 처리
+            alertManager.showError(.serverError)
             return AddElementResponse(success: false, elements: nil)
         }
     }

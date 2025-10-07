@@ -50,8 +50,6 @@ struct LoadGameDataUseCase: UseCase {
 
             return LoadGameDataResponse(success: true)
         } catch {
-            ErrorManager.shared.report(.databaseRequestFailed)
-            print(error.localizedDescription)
             return LoadGameDataResponse(success: false)
         }
     }

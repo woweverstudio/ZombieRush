@@ -1,4 +1,5 @@
 import SwiftUI
+import AlertToast
 
 // MARK: - NavigationStack Router View
 struct RouterView: View {
@@ -8,9 +9,11 @@ struct RouterView: View {
     @Environment(GameKitManager.self) var gameKitManager
     @Environment(Processor.self) var processor
     @Environment(AppRouter.self) var router
+    @Environment(AlertManager.self) var alertManager
     
     var body: some View {
         @Bindable var bRouter = router
+        @Bindable var bAlert = alertManager
         NavigationStack(path: $bRouter.path) {
             // 초기 화면
             LoadingView()
@@ -27,6 +30,17 @@ struct RouterView: View {
                         )
                     }
                 }
+        }
+        .task {
+            try? await UNUserNotificationCenter.current().setBadgeCount(0)
+        }
+        .toast(item: $bAlert.currentToast, duration: 2, tapToDismiss: true, offsetY: 30) { toast in
+            AlertToast(displayMode: .hud,
+                      type: .systemImage(toast?.icon ?? "sparkle", toast?.color ?? .dsCoin),
+                      title: toast?.message)
+        }
+        .sheet(item: $bAlert.currentError) { error in
+            ErrorView(error: error)
         }
     }
 

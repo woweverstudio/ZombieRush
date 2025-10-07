@@ -21,11 +21,11 @@ struct AddExperienceResponse {
 /// 경험치를 추가하고 레벨업 처리를 수행
 struct AddExperienceUseCase: UseCase {
     let userRepository: UserRepository
+    let alertManager: AlertManager
 
     func execute(_ request: AddExperienceRequest) async -> AddExperienceResponse? {
         // 현재 사용자 정보 사용 (Repository의 currentUser)
         guard let currentUser = await userRepository.currentUser else {
-            ErrorManager.shared.report(.userNotFound)
             return nil
         }
 
@@ -42,7 +42,6 @@ struct AddExperienceUseCase: UseCase {
         // 레벨업 시 remaining_points 증가
         if leveledUp {
             updatedUser.remainingPoints += levelsGained * 3
-            ToastManager.shared.show(.levelUp(newLevel.currentLevel))
         }
 
         // DB 업데이트
@@ -55,7 +54,7 @@ struct AddExperienceUseCase: UseCase {
                 levelsGained: levelsGained
             )
         } catch {
-            ErrorManager.shared.report(.databaseRequestFailed)
+            alertManager.showError(.serverError)
             return nil
         }
     }

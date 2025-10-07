@@ -22,10 +22,6 @@ struct StatsCard: View {
     /// 스탯 업그레이드
     private func upgradeStat(_ statType: StatType) async {
         guard !isUpgrading else { return }
-        guard let user = userRepository.currentUser, user.remainingPoints > 0 else {
-            ToastManager.shared.show(.lackOfRemaingStatPoints)
-            return
-        }
 
         isUpgrading = true
         AudioManager.shared.playButtonSound()

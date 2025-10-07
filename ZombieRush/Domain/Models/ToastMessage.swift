@@ -7,46 +7,61 @@
 
 import SwiftUI
 
-enum ToastType {
-    case complete
-    case celebrate
-    case error
-    
-    var imageName: String {
+enum ToastMessage: Identifiable {
+    case unlockJob(String)
+    case addElement(String, Color, String, Int)
+    case addGem(Int)
+    case iapPending
+
+    var id: String {
         switch self {
-        case .complete:
-            return "checkmark.circle.fill"
-        case .celebrate:
-            return "sparkles"
-        case .error:
-            return "exclamationmark.triangle.fill"
+        case .unlockJob:
+            return "unlockJob"
+        case .addElement:
+            return "addElement"
+        case .addGem:
+            return "addGem"
+        case .iapPending:
+            return "iapPending"
         }
     }
-    
+
+    var icon: String {
+        switch self {
+        case .unlockJob:
+            return "sparkles"
+        case .addElement(let iconName, _, _, _):
+            return iconName
+        case .addGem:
+            return "diamond.fill"
+        case .iapPending:
+            return "hourglass"
+        }
+    }
+
     var color: Color {
         switch self {
-        case .complete:
-            return .green
-        case .celebrate:
+        case .unlockJob:
             return .yellow
-        case .error:
-            return .red
+        case .addElement(_, let color, _, _):
+            return color
+        case .addGem:
+            return Color(hex: "8CFFE4")
+        case .iapPending:
+            return .dsError
         }
     }
-}
 
-struct ToastMessage: Identifiable {
-    let id: UUID
-    let title: String
-    let description: String?
-    let duration: TimeInterval
-    let type: ToastType
-    
-    init(title: String, description: String?, duration: TimeInterval = 2.0, type: ToastType = .complete) {
-        self.id = UUID()
-        self.title = title
-        self.description = description
-        self.duration = duration
-        self.type = type
+    var message: String {
+        switch self {
+        case .unlockJob(let jobName):
+            return String(format: NSLocalizedString("toast_unlock_job", tableName: "Alert", comment: "Toast message for unlocking a job"), jobName)
+        case .addElement(_, _, let elementName, let count):
+            return String(format: NSLocalizedString("toast_add_element", tableName: "Alert", comment: "Toast message for adding elements"), elementName, count)
+        case .addGem(let count):
+            return String(format: NSLocalizedString("toast_add_gem", tableName: "Alert", comment: "Toast message for adding gems"), count)
+        case .iapPending:
+            return NSLocalizedString("toast_iap_pending", tableName: "Alert", comment: "Toast message for IAP pending status")
+        }
     }
 }

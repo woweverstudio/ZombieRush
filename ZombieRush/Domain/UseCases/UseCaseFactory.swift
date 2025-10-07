@@ -16,18 +16,22 @@ final class UseCaseFactory: ObservableObject {
     private let elementsRepository: ElementsRepository
     private let jobsRepository: JobsRepository
     private let transactionRepository: TransactionRepository
+    private let alertManager: AlertManager
 
     // MARK: - Initialization
     init(userRepository: UserRepository,
          statsRepository: StatsRepository,
          elementsRepository: ElementsRepository,
          jobsRepository: JobsRepository,
-         transactionRepository: TransactionRepository) {
+         transactionRepository: TransactionRepository,
+         alertManager: AlertManager
+    ) {
         self.userRepository = userRepository
         self.statsRepository = statsRepository
         self.elementsRepository = elementsRepository
         self.jobsRepository = jobsRepository
         self.transactionRepository = transactionRepository
+        self.alertManager = alertManager
     }
 
     // MARK: - Repository Access (for Views to observe state)
@@ -51,27 +55,25 @@ final class UseCaseFactory: ObservableObject {
     }
 
     var addExperience: AddExperienceUseCase {
-        AddExperienceUseCase(userRepository: userRepository)
+        AddExperienceUseCase(userRepository: userRepository,
+                             alertManager: alertManager)
     }
 
     var upgradeStat: UpgradeStatUseCase {
-        UpgradeStatUseCase(statsRepository: statsRepository, userRepository: userRepository)
-    }
-
-    var updateElements: UpdateElementsUseCase {
-        UpdateElementsUseCase(elementsRepository: elementsRepository)
+        UpgradeStatUseCase(statsRepository: statsRepository,
+                           userRepository: userRepository,
+                           alertManager: alertManager)
     }
 
     var addElement: AddElementUseCase {
-        AddElementUseCase(elementsRepository: elementsRepository, userRepository: userRepository)
+        AddElementUseCase(elementsRepository: elementsRepository,
+                          userRepository: userRepository,
+                          alertManager: alertManager)
     }
     
     var addGem: AddGemUseCase {
-        AddGemUseCase(userRepository: userRepository)
-    }
-    
-    var updateJobs: UpdateJobsUseCase {
-        UpdateJobsUseCase(jobsRepository: jobsRepository)
+        AddGemUseCase(userRepository: userRepository,
+                      alertManager: alertManager)
     }
 
     var selectJob: SelectJobUseCase {
@@ -79,10 +81,15 @@ final class UseCaseFactory: ObservableObject {
     }
 
     var unlockJob: UnlockJobUseCase {
-        UnlockJobUseCase(jobsRepository: jobsRepository, elementsRepository: elementsRepository, userRepository: userRepository)
+        UnlockJobUseCase(jobsRepository: jobsRepository,
+                         elementsRepository: elementsRepository,
+                         userRepository: userRepository,
+                         alertManager: alertManager)
     }
 
     var saveTransaction: SaveTransactionUseCase {
-        SaveTransactionUseCase(transactionRepository: transactionRepository, userRepository: userRepository)
+        SaveTransactionUseCase(transactionRepository: transactionRepository,
+                               userRepository: userRepository,
+                               alertManager: alertManager)
     }
 }
