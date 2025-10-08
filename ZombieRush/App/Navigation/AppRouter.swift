@@ -28,29 +28,35 @@ final class AppRouter {
     func navigate(to route: Route) {
         guard currentRoute != route else { return }
 
-
-        // 오디오 처리
-        handleAudioTransition(to: route)
-
-        // path에 추가 (currentRoute는 자동으로 업데이트됨)
+        // UI 응답성 우선: 먼저 path에 추가하여 즉시 화면 전환
         path.append(route)
+
+        // 오디오 처리는 메인 스레드에서 처리 (AVAudioPlayer 요구사항)
+        DispatchQueue.main.async {
+            self.handleAudioTransition(to: route)
+        }
     }
 
     func goBack() {
         guard canGoBack else { return }
 
-
         // path에서 제거 (currentRoute는 자동으로 업데이트됨)
         path.removeLast()
+
+        // 뒤로가기 후 음악 변경 (메인 스레드에서)
+        DispatchQueue.main.async {
+            self.handleAudioTransition(to: self.currentRoute)
+        }
     }
 
     func quitToMain() {
-
-        // 오디오 처리
-        handleAudioTransition(to: .main)
-
-        // path 재설정 (currentRoute는 자동으로 업데이트됨)
+        // UI 응답성 우선: 먼저 path 재설정하여 즉시 화면 전환
         path = [.main]
+
+        // 오디오 처리는 메인 스레드에서 처리 (AVAudioPlayer 요구사항)
+        DispatchQueue.main.async {
+            self.handleAudioTransition(to: .main)
+        }
     }
 
 
@@ -62,18 +68,18 @@ final class AppRouter {
     private func handleAudioTransition(to route: Route) {
         switch route {
         case .loading, .story:
-            AudioManager.shared.playStoryMusic()
+            AudioManager.shared.playBackgroundMusic(type: .story)
         case .serviceUnavailable:
             // 서비스 이용 불가 화면에서는 배경음악 재생하지 않음
             AudioManager.shared.stopBackgroundMusic()
         case .main, .settings, .leaderboard:
-            AudioManager.shared.playMainMenuMusic()
+            AudioManager.shared.playBackgroundMusic(type: .mainMenu)
         case .market, .myInfo:
-            AudioManager.shared.playMarketMusic()
+            AudioManager.shared.playBackgroundMusic(type: .market)
         case .game:
-            AudioManager.shared.playGameMusic()
+            AudioManager.shared.playBackgroundMusic(type: .game)
         case .gameOver:
-            AudioManager.shared.playMainMenuMusic()
+            AudioManager.shared.playBackgroundMusic(type: .mainMenu)
         }
     }
 }

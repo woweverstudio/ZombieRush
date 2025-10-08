@@ -1,5 +1,5 @@
 {
-  "originHash" : "e00587253d2fac7599888a07f95aefe6f5236a6c5eb88d3cf121bb727726bcf7",
+  "originHash" : "41db70f281ca4add99b26cfe27a144f64636f0a4b871d800420b4bb32a5ad614",
   "pins" : [
     {
       "identity" : "alerttoast",
@@ -15,8 +15,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/supabase/supabase-swift.git",
       "state" : {
-        "revision" : "fecbbc8071a2416e215703d108b5020159217f2d",
-        "version" : "2.31.2"
+        "revision" : "f72fd804ee5c0ea26aaaa53cf7eb2780bcbf1bc5",
+        "version" : "2.33.2"
       }
     },
     {
@@ -51,8 +51,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-crypto.git",
       "state" : {
-        "revision" : "d1c6b70f7c5f19fb0b8750cb8dcdf2ea6e2d8c34",
-        "version" : "3.15.0"
+        "revision" : "95ba0316a9b733e92bb6b071255ff46263bbe7dc",
+        "version" : "3.15.1"
       }
     },
     {
@@ -69,8 +69,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pointfreeco/xctest-dynamic-overlay",
       "state" : {
-        "revision" : "b2ed9eabefe56202ee4939dd9fc46b6241c88317",
-        "version" : "1.6.1"
+        "revision" : "4c27acf5394b645b70d8ba19dc249c0472d5f618",
+        "version" : "1.7.0"
       }
     }
   ],

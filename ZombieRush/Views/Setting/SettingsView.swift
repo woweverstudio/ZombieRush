@@ -41,7 +41,7 @@ struct SettingsView: View {
                         icon: "music.note",
                         initialValue: AudioManager.shared.isBackgroundMusicEnabled
                     ) { newValue in
-                        AudioManager.shared.isBackgroundMusicEnabled = newValue
+                        AudioManager.shared.setBackgroundMusicEnabled(newValue)
                     }
                     .padding(.bottom, 10)
 
@@ -51,7 +51,7 @@ struct SettingsView: View {
                         initialValue: AudioManager.shared.isSoundEffectsEnabled
                     )
                     { newValue in
-                        AudioManager.shared.isSoundEffectsEnabled = newValue
+                        AudioManager.shared.setSoundEffectsEnabled(newValue)
                     }
                     .padding(.bottom, 10)
 
@@ -71,7 +71,7 @@ struct SettingsView: View {
                         icon: "speaker.wave.3.fill",
                         initialValue: AudioManager.shared.masterVolume
                     ) { newValue in
-                        AudioManager.shared.masterVolume = newValue
+                        AudioManager.shared.setMasterVolume(newValue)
                     }
 
                 }

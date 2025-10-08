@@ -18,38 +18,42 @@ final class Processor {
         gameKitManager: GameKitManager,
         storeKitManager: StoreKitManager
     ) async {
-        
+
+        // 단계 0: 오디오 초기화
+        AudioManager.shared.initializeAudioManager()
+        progress = 0.1
+
         // 단계 1: 버전 체크 (서비스 체크 포함)
         guard await configManager.checkServerConfig() else {
             loginAsGuest(useCaseFactory)
             return
         }
-        progress = 0.2
-        
+        progress = 0.3
+
         // 단계 2: Game Center Data 로드
         guard let playerInfo = await loadGameCenterData(gameKitManager) else {
             loginAsGuest(useCaseFactory)
             return
         }
-        progress = 0.4
-        
+        progress = 0.5
+
         // 단계 3: Supabase 데이터 로드 (데이터 없을 시 생성)
         guard await loadServerData(with: playerInfo, using: useCaseFactory) else {
             loginAsGuest(useCaseFactory)
             return
         }
-        progress = 0.6
-        
+        progress = 0.7
+
         // 단계 4: 마켓 데이터 로드
         guard await storeKitManager.loadProducts() else {
             loginAsGuest(useCaseFactory)
             return
         }
-        progress = 0.8
-        
+        progress = 0.9
+
         // 단계 5: StoreKit 트랜잭션 모니터링 시작
         storeKitManager.startTransactionMonitoring()
-        progress = 1.0        
+        progress = 1.0
     }
     
     private func loginAsGuest(_ useCaseFactory: UseCaseFactory) {

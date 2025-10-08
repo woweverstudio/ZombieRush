@@ -24,8 +24,6 @@ struct StatsCard: View {
         guard !isUpgrading else { return }
 
         isUpgrading = true
-        AudioManager.shared.playButtonSound()
-        HapticManager.shared.playButtonHaptic()
 
         let request = UpgradeStatRequest(statType: statType)
         let _ = await useCaseFactory.upgradeStat.execute(request)

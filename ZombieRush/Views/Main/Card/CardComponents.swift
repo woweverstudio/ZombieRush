@@ -91,6 +91,13 @@ struct StatTableRow: View {
 
             // 업그레이드 버튼
             Button(action: {
+                // UI 피드백은 백그라운드에서 처리하여 응답성 향상
+                DispatchQueue.global(qos: .userInteractive).async {
+                    AudioManager.shared.playButtonSound()
+                    HapticManager.shared.playButtonHaptic()
+                }
+
+                // 즉시 액션 실행 (UI 반응성 최우선)
                 Task { await action() }
             }) {
                 Image(systemName: "arrow.up")

@@ -15,8 +15,13 @@ struct PlayerInfoCard: View {
 
     var body: some View {
         Button(action: {
-            AudioManager.shared.playButtonSound()
-            HapticManager.shared.playButtonHaptic()
+            // UI 피드백은 백그라운드에서 처리하여 응답성 향상
+            DispatchQueue.global(qos: .userInteractive).async {
+                AudioManager.shared.playButtonSound()
+                HapticManager.shared.playButtonHaptic()
+            }
+
+            // 즉시 액션 실행 (UI 반응성 최우선)
             router.navigate(to: .myInfo)
         }) {
             HStack(spacing: 12) {
