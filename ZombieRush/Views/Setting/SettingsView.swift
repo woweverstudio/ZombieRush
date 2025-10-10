@@ -25,7 +25,7 @@ struct SettingsView: View {
             // 사이버펑크 배경
             Background()
             
-            VStack(spacing: 20) {
+            VStack(spacing: UIConstants.Spacing.x24) {
                 // 상단 영역 - 제목과 뒤로가기 버튼
                 Header(
                     title: SettingsView.settingsTitle,
@@ -43,7 +43,7 @@ struct SettingsView: View {
                     ) { newValue in
                         AudioManager.shared.setBackgroundMusicEnabled(newValue)
                     }
-                    .padding(.bottom, 10)
+                    .padding(.bottom, UIConstants.Spacing.x8)
 
                     SettingRow(
                         title: SettingsView.soundEffectsLabel,
@@ -53,7 +53,7 @@ struct SettingsView: View {
                     { newValue in
                         AudioManager.shared.setSoundEffectsEnabled(newValue)
                     }
-                    .padding(.bottom, 10)
+                    .padding(.bottom, UIConstants.Spacing.x8)
 
                     SettingRow(
                         title: SettingsView.vibrationLabel,
@@ -63,7 +63,7 @@ struct SettingsView: View {
                     { newValue in
                         HapticManager.shared.isHapticEnabled = newValue
                     }
-                    .padding(.bottom, 10)
+                    .padding(.bottom, UIConstants.Spacing.x8)
 
                     // 볼륨 조절 슬라이더
                     VolumeRow(
@@ -80,10 +80,10 @@ struct SettingsView: View {
                 Text("\(SettingsView.versionPrefix)\(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "2.0.0")")
                     .font(.system(size: 14))
                     .foregroundColor(Color.dsTextSecondary)
-                    .padding(.top, 20)
-                    .padding(.horizontal, 20)
+                    .padding(.top, UIConstants.Spacing.x16)
+                    .padding(.horizontal, UIConstants.Spacing.x16)
             }
-            .padding()
+            .pagePadding()
         }
     }
 
@@ -121,8 +121,8 @@ struct SettingRow: View {
                     onToggle(newValue)
                 }
         }
-        .padding(.horizontal, 20)
-        .padding(.vertical, 15)
+        .padding(.horizontal, UIConstants.Spacing.x16)
+        .padding(.vertical, UIConstants.Spacing.x12)
         .background(
             RoundedRectangle(cornerRadius: 15)
                 .fill(Color.dsOverlay)
@@ -176,8 +176,8 @@ struct VolumeRow: View {
                     onVolumeChange(newValue)
                 }
         }
-        .padding(.horizontal, 20)
-        .padding(.vertical, 15)
+        .padding(.horizontal, UIConstants.Spacing.x16)
+        .padding(.vertical, UIConstants.Spacing.x12)
         .background(
             RoundedRectangle(cornerRadius: 15)
                 .fill(Color.dsOverlay)

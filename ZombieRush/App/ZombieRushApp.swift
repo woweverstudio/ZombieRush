@@ -26,6 +26,7 @@ struct ZombieRushApp: App {
 
     @State private var storeKitManager: StoreKitManager
     @State private var alertManager: AlertManager
+    @State private var mapManager: MapManager
     
     init() {
         let userRepository = SupabaseUserRepository()
@@ -53,6 +54,10 @@ struct ZombieRushApp: App {
             alertManager: alertManager
         )
         _useCaseFactory = StateObject(wrappedValue: factory)
+
+        // MapManager 초기화
+        let mapManager = MapManager(useCaseFactory: factory)
+        _mapManager = State(initialValue: mapManager)
         
         let storekit = StoreKitManager(useCaseFactory: factory, alertManager: alertManager)
         _storeKitManager = State(initialValue: storekit)
@@ -63,11 +68,12 @@ struct ZombieRushApp: App {
             // 일반 앱 화면
             RouterView()
                 .preferredColorScheme(.dark)
-                .environmentObject(userRepository)  // Repositories via EnvironmentKey
+                .environmentObject(userRepository)
                 .environmentObject(statsRepository)
                 .environmentObject(elementsRepository)
                 .environmentObject(jobsRepository)
-                .environmentObject(useCaseFactory)  // UseCaseFactory via EnvironmentKey
+                .environmentObject(useCaseFactory)
+                .environment(mapManager)
                 .environment(appRouter)
                 .environment(gameKitManager)
                 .environment(configManager)

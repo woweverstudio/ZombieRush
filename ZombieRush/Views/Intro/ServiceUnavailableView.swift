@@ -18,7 +18,7 @@ struct ServiceUnavailableView: View {
             // 사이버펑크 배경
             Background()
 
-            VStack(spacing: 40) {
+            VStack(spacing: UIConstants.Spacing.x32) {
                 Spacer()
 
                 // 타이틀
@@ -32,11 +32,11 @@ struct ServiceUnavailableView: View {
                     .font(.system(size: 18, weight: .regular, design: .monospaced))
                     .foregroundColor(.white.opacity(0.8))
                     .multilineTextAlignment(.center)
-                    .lineSpacing(8)
+                    .lineSpacing(UIConstants.Spacing.x8)
 
                 Spacer()
             }
-            .padding(.horizontal, 40)
+            .pagePadding()
         }
         .statusBar(hidden: true)
     }

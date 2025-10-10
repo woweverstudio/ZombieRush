@@ -23,27 +23,25 @@ struct MainView: View {
             Background()
             VStack {
                 ScrollView {
-                    VStack(spacing: 16) {
+                    VStack(spacing: UIConstants.Spacing.x16) {
                         PlayerInfoCard()
                         JobCard()
                         StatsCard()
                         MainMenuPanel()
                     }
-                    .padding(.horizontal, 18)
                 }
                 .scrollIndicators(.hidden)
                 .scrollBounceBehavior(.basedOnSize)
-                // 게임 시작 버튼
+
+                Spacer()
+
+                // CTA: 게임 시작 버튼
                 PrimaryButton(title: MainMenuPanel.startButton, style: .cyan, fullWidth: true) {
-                    Task {
-                        let request = AddExperienceRequest(expToAdd: 30)
-                        let _ = await useCaseFactory.addExperience.execute(request)
-                    }
-                    
-                    
+                    router.navigate(to: .world)
                 }
-                .padding(18)
+                .ctaButtonSpacing()
             }
+            .pagePadding()
         }
         .sheet(isPresented: $showGuestPopup) {
             GuestPopup {

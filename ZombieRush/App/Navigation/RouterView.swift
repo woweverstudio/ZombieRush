@@ -60,6 +60,9 @@ struct RouterView: View {
         case .main:
             MainView()
                 .navigationBarBackButtonHidden(true)
+        case .world:
+            MapView()
+                .navigationBarBackButtonHidden(true)
         case .game:
             EmptyView()
                 .navigationBarBackButtonHidden(true)

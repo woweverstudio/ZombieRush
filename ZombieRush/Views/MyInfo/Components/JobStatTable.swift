@@ -61,6 +61,6 @@ struct JobStatTable: View {
                 )
             }
         }
-        .padding(.horizontal, 4)
+        .padding(.horizontal, UIConstants.Spacing.x4)
     }
 }

@@ -22,7 +22,7 @@ struct ElementCard: View {
     var body: some View {
         Card(style: style) {
             HStack {
-                VStack(spacing: 6){
+                VStack(spacing: UIConstants.Spacing.x4){
                     Image(systemName: elementType.iconName)
                         .font(.system(size: 24))
                         .foregroundColor(elementType.color)
@@ -39,11 +39,11 @@ struct ElementCard: View {
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity, alignment: .center)
             }
-            .padding(8)
+            .padding(UIConstants.Spacing.x8)
         }
         .frame(height: 80)
         .contentShape(Rectangle())
-        .padding(.vertical, 6)
+        .padding(.vertical, UIConstants.Spacing.x4)
         .onTapGesture {
             // UI 피드백은 백그라운드에서 처리하여 응답성 향상
             DispatchQueue.global(qos: .userInteractive).async {

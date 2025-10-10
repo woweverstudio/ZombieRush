@@ -24,23 +24,23 @@ struct StoryView: View {
                 Spacer()
                 nextButton
             }
-            .padding(.horizontal, 30)
+            .padding(.horizontal, UIConstants.Spacing.x24)
 
             VStack(spacing: 0) {
                 Spacer()
 
                 // 스토리 텍스트
-                VStack(spacing: 20) {
+                VStack(spacing: UIConstants.Spacing.x24) {
                     Text(getStoryText(for: currentStoryIndex))
                         .font(.system(size: 18, weight: .medium, design: .default))
                         .foregroundColor(Color.dsTextPrimary)
                         .multilineTextAlignment(.center)
-                        .lineSpacing(8)
-                        .padding(.horizontal, 20)
+                        .lineSpacing(UIConstants.Spacing.x8)
+                        .padding(.horizontal, UIConstants.Spacing.x16)
                         .shadow(color: Color.black.opacity(0.8), radius: 4, x: 0, y: 2)
                 }
-                .padding(.vertical, 20)
-                .padding(.horizontal, 30)
+                .padding(.vertical, UIConstants.Spacing.x24)
+                .padding(.horizontal, UIConstants.Spacing.x24)
                 .frame(maxWidth: .infinity)
                 .frame(height: 100)
                 .background(

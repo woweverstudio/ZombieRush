@@ -21,7 +21,7 @@ struct ForceUpdateView: View {
             // 사이버펑크 배경
             Background()
 
-            VStack(spacing: 40) {
+            VStack(spacing: UIConstants.Spacing.x32) {
                 Spacer()
 
                 // 타이틀
@@ -37,7 +37,7 @@ struct ForceUpdateView: View {
 
                 Spacer()
             }
-            .padding(.horizontal, 40)
+            .pagePadding()
         }
         .statusBar(hidden: true)
         // iOS 15+에서 제스처로 닫는 것을 막음

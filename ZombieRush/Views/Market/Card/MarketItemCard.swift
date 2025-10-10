@@ -8,14 +8,14 @@ struct MarketItemCard: View {
 
     var body: some View {
         Card(style: .cyberpunk) {
-            VStack(spacing: 24) {
-                HStack(spacing: 20) {
+            VStack(spacing: UIConstants.Spacing.x24) {
+                HStack(spacing: UIConstants.Spacing.x16) {
                     Image(item.iconName)
                         .resizable()
                         .scaledToFit()
                         .frame(width: 70, height: 70)
-                    
-                    VStack(alignment: .leading, spacing: 20) {
+
+                    VStack(alignment: .leading, spacing: UIConstants.Spacing.x16) {
                         Text(item.name)
                             .font(.system(size: 18, weight: .bold, design: .monospaced))
                             .foregroundColor(Color.dsTextPrimary)
@@ -40,8 +40,8 @@ struct MarketItemCard: View {
                 }
                 .disabled(isPurchasing)
             }
-            .padding(.vertical, 12)
-            .padding(.horizontal, 8)
+            .padding(.vertical, UIConstants.Spacing.x12)
+            .padding(.horizontal, UIConstants.Spacing.x8)
         }
     }
 }

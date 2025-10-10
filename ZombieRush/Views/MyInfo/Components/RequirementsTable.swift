@@ -30,7 +30,7 @@ struct RequirementsTable: View {
                 .foregroundColor(.white.opacity(0.7))
                 .frame(maxWidth: .infinity, alignment: .center)
         }
-        .padding(.vertical, 6)
+        .padding(.vertical, UIConstants.Spacing.x4)
         .background(Color.white.opacity(0.05))
     }
     
@@ -59,11 +59,11 @@ struct RequirementsTable: View {
                     .frame(maxWidth: .infinity, alignment: .center)
             }
         }
-        .padding(.vertical, 6)
+        .padding(.vertical, UIConstants.Spacing.x4)
     }
-    
+
     var body: some View {
-        VStack(spacing: 6) {
+        VStack(spacing: UIConstants.Spacing.x4) {
             tableHeader
             tableBody
         }

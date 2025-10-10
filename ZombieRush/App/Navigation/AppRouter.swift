@@ -72,7 +72,7 @@ final class AppRouter {
         case .serviceUnavailable:
             // 서비스 이용 불가 화면에서는 배경음악 재생하지 않음
             AudioManager.shared.stopBackgroundMusic()
-        case .main, .settings, .leaderboard:
+        case .main, .settings, .leaderboard, .world:
             AudioManager.shared.playBackgroundMusic(type: .mainMenu)
         case .market, .myInfo:
             AudioManager.shared.playBackgroundMusic(type: .market)

@@ -41,7 +41,7 @@ struct StatsCard: View {
                         .font(.system(size: 12, weight: .medium, design: .monospaced))
                         .foregroundColor(.white.opacity(0.8))
                         .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(.horizontal, 6)
+                        .padding(.horizontal, UIConstants.Spacing.x4)
 
                     Text(StatsCard.increaseAmountHeader)
                         .font(.system(size: 12, weight: .medium, design: .monospaced))
@@ -58,7 +58,7 @@ struct StatsCard: View {
                         .foregroundColor(.white.opacity(0.8))
                         .frame(width: 80, alignment: .center)
                 }
-                .padding(8)
+                .padding(UIConstants.Spacing.x8)
 
                 ForEach(StatType.allCases, id: \.self) { statType in
                     if let currentStats = statsRepository.currentStats {
@@ -77,12 +77,7 @@ struct StatsCard: View {
 
             }
             .background(
-                ZStack{
-                    CardBackground()
-                    RoundedRectangle(cornerRadius: 8)
-                        .fill(Color.black.opacity(0.2))
-                        .padding(1)
-                }
+                CardBackground()
             )
 
             // 남은 스텟 포인트 배지
@@ -100,7 +95,7 @@ struct StatsCard: View {
                         .font(.system(size: 12, weight: .bold))
                         .foregroundColor(Color.dsTextPrimary)
                 }
-                .offset(x: 8, y: -8)
+                .offset(x: UIConstants.Spacing.x8, y: -UIConstants.Spacing.x8)
             }
         }
     }

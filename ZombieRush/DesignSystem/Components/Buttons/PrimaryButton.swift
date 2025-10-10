@@ -94,18 +94,18 @@ enum PrimaryButtonSize {
     var horizontalPadding: CGFloat {
         switch self {
         case .small:
-            return 16
+            return UIConstants.Spacing.x16
         case .medium:
-            return 20
+            return UIConstants.Spacing.x24
         }
     }
 
     var verticalPadding: CGFloat {
         switch self {
         case .small:
-            return 8
+            return UIConstants.Spacing.x8
         case .medium:
-            return 12
+            return UIConstants.Spacing.x12
         }
     }
 }

@@ -59,7 +59,7 @@ struct JobCard: View {
                         Image(systemName: "chevron.left")
                             .font(.system(size: 16, weight: .bold))
                             .foregroundColor(.white.opacity(0.7))
-                            .padding(20)
+                            .padding(UIConstants.Spacing.x16)
                             .clipShape(Rectangle())
                     }
                     
@@ -70,7 +70,7 @@ struct JobCard: View {
                         Image(systemName: "chevron.right")
                             .font(.system(size: 16, weight: .bold))
                             .foregroundColor(.white.opacity(0.7))
-                            .padding(20)
+                            .padding(UIConstants.Spacing.x16)
                             .clipShape(Rectangle())
                     }
                 }
@@ -101,7 +101,7 @@ struct JobCard: View {
                 Text(verbatim: jobType.localizedDisplayName)
                     .font(.system(size: 14, weight: .bold, design: .monospaced))
                     .foregroundColor(Color.dsTextPrimary)
-                    .padding(8)
+                    .padding(UIConstants.Spacing.x8)
                     .multilineTextAlignment(.center)
                 
                 ForEach(StatType.allCases, id: \.self) { statType in
@@ -124,10 +124,10 @@ struct JobCard: View {
                         
                         Spacer()
                     }
-                    .padding(.vertical, 3)
+                    .padding(.vertical, UIConstants.Spacing.x4)
                 }
             }
         }
-        .padding(8)
+        .padding(UIConstants.Spacing.x8)
     }
 }

@@ -7,6 +7,7 @@ enum Route: Hashable {
     case serviceUnavailable
     case story
     case main
+    case world
     case game
     case settings
     case leaderboard
@@ -24,6 +25,8 @@ enum Route: Hashable {
             return "STORY"
         case .main:
             return "NEMO NEMO BEAM"
+        case .world:
+            return "WORLD"
         case .game:
             return "GAME"
         case .settings:
@@ -45,6 +48,7 @@ enum Route: Hashable {
         case .serviceUnavailable: return "service_unavailable"
         case .story: return "story"
         case .main: return "main"
+        case .world: return "world"
         case .game: return "game"
         case .settings: return "settings"
         case .leaderboard: return "leaderboard"

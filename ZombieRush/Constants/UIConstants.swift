@@ -10,6 +10,18 @@ import SpriteKit
 import CoreGraphics
 
 struct UIConstants {
+    // MARK: - Spacing Tokens
+    struct Spacing {
+        static let x4: CGFloat = 4
+        static let x8: CGFloat = 8
+        static let x12: CGFloat = 12
+        static let x16: CGFloat = 16
+        static let x24: CGFloat = 24
+        static let x32: CGFloat = 32
+    }
+
+    // MARK: - Default Page Padding
+    static let pageHorizontal: CGFloat = Spacing.x16
     
     // MARK: - Layout & Positioning
     struct Layout {
@@ -95,6 +107,19 @@ struct UIConstants {
     struct Animation {
         static let transitionDuration: Double = 0.3
     }
+
+    // MARK: - Extended Named Spacing for Semantics (optional convenience)
+    struct Space {
+        static let section = Spacing.x24
+        static let block = Spacing.x16
+        static let item = Spacing.x12
+        static let tight = Spacing.x8
+        static let micro = Spacing.x4
+    }
+
+    // MARK: - CTA Button Spacing (Call-to-Action)
+    static let ctaButtonTopSpacing: CGFloat = Spacing.x32
+    static let ctaButtonBottomSpacing: CGFloat = Spacing.x24
     
     // MARK: - Haptic Feedback
     struct Haptic {

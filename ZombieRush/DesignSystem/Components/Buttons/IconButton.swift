@@ -60,7 +60,7 @@ struct IconButton: View {
             Image(systemName: iconName)
                 .font(.system(size: size))
                 .foregroundColor(style.color)
-                .padding(12)
+                .padding(UIConstants.Spacing.x12)
                 .background(
                     Circle()
                         .fill(Color.black.opacity(0.7))
@@ -119,7 +119,7 @@ struct IconRectButton: View {
                     .foregroundColor(style.color.opacity(0.9))
                     .minimumScaleFactor(0.8)
             }
-            .padding(size * 0.4)
+            .padding(UIConstants.Spacing.x8)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(
                 RoundedRectangle(cornerRadius: 8)

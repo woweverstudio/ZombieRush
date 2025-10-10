@@ -17,9 +17,9 @@ struct ErrorView: View {
     let error: SystemError
 
     var body: some View {
-        VStack(spacing: 24) {
+        VStack(spacing: UIConstants.Spacing.x24) {
             // 에러 콘텐츠
-            VStack(spacing: 16) {
+            VStack(spacing: UIConstants.Spacing.x16) {
                 // 아이콘
                 Image(systemName: error.icon)
                     .font(.system(size: 48, weight: .bold))
@@ -35,12 +35,12 @@ struct ErrorView: View {
                     .font(.system(size: 14, design: .monospaced))
                     .multilineTextAlignment(.center)
                     .foregroundColor(.dsTextSecondary)
-                    .lineSpacing(4)
-                    .padding(.horizontal, 20)
+                    .lineSpacing(UIConstants.Spacing.x4)
+                    .padding(.horizontal, UIConstants.Spacing.x16)
             }
 
             // 버튼 영역
-            VStack(spacing: 12) {
+            VStack(spacing: UIConstants.Spacing.x12) {
                 PrimaryButton(
                     title: ErrorView.confirmButton,
                     style: .cyan,
@@ -51,7 +51,7 @@ struct ErrorView: View {
                 }
             }
         }
-        .padding(20)
+        .pagePadding()
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.gray.opacity(0.05))
         .presentationDetents([.medium])

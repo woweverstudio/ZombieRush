@@ -87,18 +87,18 @@ struct MyInfoView: View {
             // 사이버펑크 배경
             Background()
             
-            VStack(spacing: 20) {
+            VStack(spacing: UIConstants.Spacing.x24) {
                 headerView
                 ScrollView {
-                    VStack(spacing: 24) {
+                    VStack(spacing: UIConstants.Spacing.x24) {
                         elementsSection
                         jobsSection
                     }
-                    .padding(.vertical, 32)
+                    .sectionSpacing(UIConstants.Spacing.x32)
                 }
                 .scrollIndicators(.hidden)
             }
-            .padding()
+            .pagePadding()
             .ignoresSafeArea(edges: .bottom)
         }
         .sheet(item: $selectedElementType) { elementType in
@@ -210,13 +210,13 @@ extension MyInfoView {
                     .tag(JobFilter.lock)
             }
             .pickerStyle(.segmented)
-            .padding(.bottom, 8)
+            .padding(.bottom, UIConstants.Spacing.x8)
 
             if let jobs = jobsRepository.currentJobs {
                 LazyVGrid(columns: [
-                    GridItem(.flexible(), spacing: 12),
-                    GridItem(.flexible(), spacing: 12)
-                ], spacing: 8) {
+                    GridItem(.flexible(), spacing: UIConstants.Spacing.x12),
+                    GridItem(.flexible(), spacing: UIConstants.Spacing.x12)
+                ], spacing: UIConstants.Spacing.x8) {
                     ForEach(filteredJobTypes(jobs: jobs), id: \.self) { jobType in
                         let isUnlocked = jobs.unlockedJobs.contains(jobType)
 

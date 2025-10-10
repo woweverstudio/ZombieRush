@@ -31,10 +31,10 @@ struct GuestPopup: View {
             message
             Spacer()
             // 내용 영역
-            VStack(spacing: 16) {
+            VStack(spacing: UIConstants.Spacing.x16) {
                 // 특징 아이콘들
                 HStack(alignment: .top) {
-                    VStack(spacing: 12) {
+                    VStack(spacing: UIConstants.Spacing.x12) {
                         Image(systemName: "wifi.slash")
                             .font(.system(size: 24))
                             .foregroundColor(.red.opacity(0.7))
@@ -46,7 +46,7 @@ struct GuestPopup: View {
                     }
                     .frame(maxWidth: .infinity, alignment: .center)
                     
-                    VStack(spacing: 12) {
+                    VStack(spacing: UIConstants.Spacing.x12) {
                         Image(systemName: "gamecontroller.fill")
                             .font(.system(size: 24))
                             .foregroundColor(.orange.opacity(0.7))
@@ -59,7 +59,7 @@ struct GuestPopup: View {
                     }
                     .frame(maxWidth: .infinity, alignment: .center)
                     
-                    VStack(spacing: 12) {
+                    VStack(spacing: UIConstants.Spacing.x12) {
                         Image(systemName: "cloud.fill")
                             .font(.system(size: 24))
                             .foregroundColor(.cyan.opacity(0.7))
@@ -78,7 +78,7 @@ struct GuestPopup: View {
             Spacer()
 
             // 버튼 영역
-            VStack(spacing: 12) {
+            VStack(spacing: UIConstants.Spacing.x12) {
                 PrimaryButton(
                     title: GuestPopup.confirmButton,
                     style: .cyan,
@@ -93,7 +93,7 @@ struct GuestPopup: View {
             }
             
         }
-        .padding(20)
+        .pagePadding()
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.gray.opacity(0.05))
         .presentationDetents([.medium]) // Sheet 크기 설정

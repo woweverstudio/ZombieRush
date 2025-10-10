@@ -24,8 +24,8 @@ struct PlayerInfoCard: View {
             // 즉시 액션 실행 (UI 반응성 최우선)
             router.navigate(to: .myInfo)
         }) {
-            HStack(spacing: 12) {
-                VStack(alignment: .leading, spacing: 8) {
+            HStack(spacing: UIConstants.Spacing.x12) {
+                VStack(alignment: .leading, spacing: UIConstants.Spacing.x8) {
                     nameInfo
                     levelInfo
                     expInfo
@@ -33,7 +33,7 @@ struct PlayerInfoCard: View {
                 Spacer()
                 elementsInfo
             }
-            .padding(16)
+            .padding(UIConstants.Spacing.x16)
             .background(
                 CardBackground()
             )
@@ -66,7 +66,7 @@ struct PlayerInfoCard: View {
     }
     
     var expInfo: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: UIConstants.Spacing.x12) {
             if let user = userRepository.currentUser {
                 let levelInfo = user.levelInfo
                 let currentLevelExp = levelInfo.currentExp - levelInfo.levelMinExp
@@ -108,7 +108,7 @@ struct PlayerInfoCard: View {
     
     private func elementCard(for elementType: ElementType) -> some View {
         Card(style: .default) {
-            HStack(spacing: 8) {
+            HStack(spacing: UIConstants.Spacing.x8) {
                 Image(systemName: elementType.iconName)
                     .foregroundColor(elementType.color)
                     .frame(width: 12)

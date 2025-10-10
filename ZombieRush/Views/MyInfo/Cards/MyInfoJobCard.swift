@@ -22,9 +22,9 @@ struct MyInfoJobCard: View {
     var body: some View {
         Card(
             style: style,
-            contentPadding: EdgeInsets(top: 8, leading: 8, bottom: 8, trailing: 8) // 패딩 최소화
+            contentPadding: EdgeInsets(top: UIConstants.Spacing.x8, leading: UIConstants.Spacing.x8, bottom: UIConstants.Spacing.x8, trailing: UIConstants.Spacing.x8)
         ) {
-            VStack(spacing: 6) {
+            VStack(spacing: UIConstants.Spacing.x4) {
                 Image(jobType.imageName)
                     .resizable()
                     .scaledToFit()

@@ -83,7 +83,7 @@ struct CardConfiguration {
     var shadowRadius: CGFloat = 4
     var shadowX: CGFloat = 0
     var shadowY: CGFloat = 2
-    var contentPadding: EdgeInsets = EdgeInsets(top: 12, leading: 16, bottom: 12, trailing: 16)
+    var contentPadding: EdgeInsets = EdgeInsets(top: UIConstants.Spacing.x12, leading: UIConstants.Spacing.x16, bottom: UIConstants.Spacing.x12, trailing: UIConstants.Spacing.x16)
     var maxWidth: CGFloat? = nil
 
     // Computed properties
@@ -120,7 +120,7 @@ struct Card<Content: View>: View {
         shadowRadius: CGFloat = 4,
         shadowX: CGFloat = 0,
         shadowY: CGFloat = 2,
-        contentPadding: EdgeInsets = EdgeInsets(top: 12, leading: 16, bottom: 12, trailing: 16),
+        contentPadding: EdgeInsets = EdgeInsets(top: UIConstants.Spacing.x12, leading: UIConstants.Spacing.x16, bottom: UIConstants.Spacing.x12, trailing: UIConstants.Spacing.x16),
         maxWidth: CGFloat? = nil,
         @ViewBuilder content: () -> Content
     ) {

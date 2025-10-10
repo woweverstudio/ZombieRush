@@ -75,7 +75,7 @@ struct StatTableRow: View {
                     .minimumScaleFactor(0.8)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.horizontal, 6)
+            .padding(.horizontal, UIConstants.Spacing.x4)
 
             // 증가량
             Text(upgradeValue > 0 ? "+\(upgradeValue)" : "-")
@@ -116,7 +116,7 @@ struct StatTableRow: View {
             .frame(width: 80)
             .disabled(!canUpgrade)
         }
-        .padding(8)
+        .padding(UIConstants.Spacing.x8)
         .background(
             Rectangle()
                 .fill(Color.white.opacity(0.02))

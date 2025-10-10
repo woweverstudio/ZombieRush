@@ -18,9 +18,9 @@ struct TrustInfoCard: View {
 
     var body: some View {
         Card(style: style) {
-            VStack(alignment: .leading, spacing: 8) {
+            VStack(alignment: .leading, spacing: UIConstants.Spacing.x8) {
                 ForEach(messages, id: \.self) { message in
-                    HStack(alignment: .top, spacing: 8) {
+                    HStack(alignment: .top, spacing: UIConstants.Spacing.x8) {
                         Text(bulletPoint)
                             .font(.system(size: 11, design: .monospaced))
                             .foregroundColor(.white.opacity(0.7))
@@ -34,7 +34,7 @@ struct TrustInfoCard: View {
                 }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(8)
+            .padding(UIConstants.Spacing.x8)
         }
     }
 }

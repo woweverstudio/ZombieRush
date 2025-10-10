@@ -32,16 +32,16 @@ struct MarketView: View {
                 headerView
 
                 ScrollView {
-                    VStack(spacing: 24) {
+                    VStack(spacing: UIConstants.Spacing.x24) {
                         promotionSection
                         itemsGridView
                         trustSection
                     }
-                    .padding(.vertical, 32)
+                    .sectionSpacing(UIConstants.Spacing.x32)
                 }
                 .scrollIndicators(.hidden)
             }
-            .padding()
+            .pagePadding()
             .ignoresSafeArea(edges: .bottom)
         }
     }
